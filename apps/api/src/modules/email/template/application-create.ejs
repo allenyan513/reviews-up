@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Application Received</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9fafb;
+            color: #333;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 30px;
+        }
+        h1 {
+            font-size: 20px;
+            margin-bottom: 16px;
+            color: #111827;
+        }
+        p {
+            margin: 12px 0;
+        }
+        .info-box {
+            background-color: #f3f4f6;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 16px;
+        }
+        .label {
+            font-weight: bold;
+            color: #374151;
+        }
+        .footer {
+            margin-top: 24px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>We've received your application!</h1>
+    <p>Thank you for submitting your AI tool for inclusion on our platform. Our team will review your submission shortly. Please be patient as this process may take a little time.</p>
+
+    <div class="info-box">
+        <p><span class="label">Website Name:</span> <%= websiteName %></p>
+        <p><span class="label">Website URL:</span> <a href="<%= websiteUrl %>" target="_blank"><%= websiteUrl %></a></p>
+        <p><span class="label">Submit Status:</span> <%= submitStatus %> </p>
+        <p><span class="label">Application Link:</span> <a href="<%= applicationUrl %>" target="_blank"><%= applicationUrl %></a></p>
+    </div>
+
+    <p>If we need more information, we’ll reach out to you via this email address.</p>
+
+    <div class="footer">
+        — FF2050.com
+    </div>
+</div>
+</body>
+</html>

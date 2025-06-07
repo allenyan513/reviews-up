@@ -1,20 +1,14 @@
 {
   "name": "@repo/database",
   "version": "1.0.0",
-  "exports": {
-    ".": "./src/client.ts"
-  },
   "scripts": {
-    "db:migrate:deploy": "prisma migrate deploy",
-    "db:migrate:dev": "prisma migrate dev",
-    "db:push": "prisma db push",
-    "db:seed": "tsx src/seed.ts",
-    "dev": "tsup src/* --watch",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
     "format": "prisma format",
-    "generate": "prisma generate",
     "lint": "eslint . --max-warnings 0",
-    "prebuild": "npm run generate",
-    "predev": "npm run generate",
+    "prebuild": "npm run db:generate",
+    "predev": "npm run db:generate",
     "studio": "prisma studio"
   },
   "dependencies": {
@@ -29,5 +23,8 @@
     "tsup": "^8.0.2",
     "tsx": "4.19.1",
     "typescript": "5.5.4"
+  },
+  "export": {
+    ".": "./src/index.ts"
   }
 }

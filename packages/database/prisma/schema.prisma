@@ -11,9 +11,92 @@ generator client {
   output   = "../generated/client"
 }
 
+enum ReviewStatus {
+  PENDING @map("pending")
+  PUBLIC  @map("public")
+  HIDDEN  @map("hidden")
+}
+
+enum WidgetType {
+  GRID     @map("grid")
+  LIST     @map("list")
+  CAROUSEL @map("carousel")
+  MASONRY  @map("masonry")
+}
+
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime?
+  id                String      @id @default(uuid())
+  provider          String
+  providerAccountId String
+  name              String?
+  email             String?
+  image             String? // Store profile image URL
+  roles             String[]    @default([]) // Example: for user roles
+  idToken           String?
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  lastLogin         DateTime?
+  Workspace         Workspace[]
+  Form              Form[]
+  Widget            Widget[]
+
+  @@unique([provider, providerAccountId])
+}
+
+model Workspace {
+  id        String   @id @default(uuid())
+  name      String
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User     @relation(fields: [userId], references: [id])
+  Form   Form[]
+  Widget Widget[]
+  Review Review[]
+}
+
+model Form {
+  id          String    @id @default(uuid())
+  userId      String
+  workspaceId String
+  name        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+
+  Review Review[]
+}
+
+model Review {
+  id            String       @id @default(uuid())
+  workspaceId   String
+  formId        String
+  reviewerName  String?
+  reviewerImage String?
+  reviewerEmail String?
+  rating        Int?
+  text          String?
+  imageUrl      String?
+  videoUrl      String?
+  twitterUrl    String?
+  status        ReviewStatus @default(PENDING)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  form          Form         @relation(fields: [formId], references: [id])
+  workspace     Workspace    @relation(fields: [workspaceId], references: [id])
+}
+
+model Widget {
+  id          String     @id @default(uuid())
+  userId      String
+  workspaceId String
+  name        String
+  type        WidgetType @default(GRID)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  user      User      @relation(fields: [userId], references: [id])
+  workspace Workspace @relation(fields: [workspaceId], references: [id])
 }

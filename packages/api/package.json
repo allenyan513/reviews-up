@@ -34,12 +34,13 @@
     }
   },
   "dependencies": {
-    "@nestjs/mapped-types": "*"
+    "@nestjs/mapped-types": "*",
+    "class-validator": "^0.14.2"
   },
   "devDependencies": {
+    "@repo/database": "*",
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@repo/database": "*",
     "@types/node": "^20.3.1",
     "ts-loader": "^9.4.3",
     "ts-node": "^10.9.2",

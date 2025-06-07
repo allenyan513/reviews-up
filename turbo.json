@@ -5,12 +5,16 @@
   ],
   "tasks": {
     "dev": {
+      "dependsOn": [
+        "db:generate"
+      ],
       "cache": false,
       "persistent": true
     },
     "build": {
       "dependsOn": [
-        "^build"
+        "^build",
+        "^db:generate"
       ],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -20,23 +24,17 @@
         "dist/**",
         ".next/**",
         "!.next/cache/**"
-      ]
+      ],
+      "env": ["DATABASE_URL", "NEXTAUTH_SECRET", "NEXTAUTH_URL"]
     },
-    "db:migrate:dev": {
+    "db:generate": {
+      "cache": false
+    },
+    "db:migrate": {
       "cache": false,
       "persistent": true
     },
-    "db:migrate:deploy": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
-    },
-    "db:seed": {
-      "cache": false
-    },
-    "generate": {
-      "dependsOn": ["^generate"],
+    "db:deploy": {
       "cache": false
     },
     "lint": {},
