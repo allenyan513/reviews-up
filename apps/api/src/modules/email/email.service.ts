@@ -13,11 +13,11 @@ export class EmailService {
 
   constructor() {
     this.transporter = nodemailer.createTransport({
-      host: 'smtp.mailgun.org',
-      port: 587,
+      host: `${process.env.EMAIL_HOST}`,
+      port: `${process.env.EMAIL_PORT}`,
       auth: {
-        user: 'noreply@ff2050.com', // 替换为你的域名邮箱
-        pass: '8a4f12f6575aa0fbcfbb8894cbc4736d-f3238714-0e19021a',
+        user: `${process.env.EMAIL_USER}`,
+        pass: `${process.env.EMAIL_PASSWORD}`,
       },
     });
   }
