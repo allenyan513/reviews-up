@@ -6,18 +6,32 @@
   "author": "",
   "license": "UNLICENSED",
   "scripts": {
+    "dev:api": "turbo run dev --filter=api",
+    "dev:web": "turbo run dev --filter=web",
+    "build:api": "turbo run build --filter=api",
+    "build:web": "turbo run build --filter=web",
+    "start:api": "turbo run start --filter=api",
+    "start:web": "turbo run start --filter=web",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "db:migrate:deploy": "turbo run db:migrate:deploy",
+    "db:migrate:dev": "turbo run db:migrate:dev",
+    "db:push": "turbo run db:push",
+    "db:seed": "turbo run db:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "latest"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
-    "turbo": "^2.5.4"
+    "turbo": "^2.5.4",
+    "prisma": "latest"
   },
   "engines": {
     "node": ">=18"
@@ -26,5 +40,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "prisma": {
+    "schema": "packages/database/prisma/schema.prisma",
+    "seed": "tsx packages/database/src/seed.ts"
+  }
 }

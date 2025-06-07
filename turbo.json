@@ -12,13 +12,39 @@
       "dependsOn": [
         "^build"
       ],
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        ".env*"
+      ],
       "outputs": [
+        "dist/**",
         ".next/**",
         "!.next/cache/**"
       ]
     },
+    "db:migrate:dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "db:migrate:deploy": {
+      "cache": false
+    },
+    "db:push": {
+      "cache": false
+    },
+    "db:seed": {
+      "cache": false
+    },
+    "generate": {
+      "dependsOn": ["^generate"],
+      "cache": false
+    },
     "lint": {},
     "test": {},
-    "test:e2e": {}
+    "test:e2e": {},
+    "start": {
+      "cache": false,
+      "persistent": true
+    }
   }
 }

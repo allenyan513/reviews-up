@@ -64,7 +64,12 @@ const LinksSectionForTest = () => {
   );
 };
 
-const RootPage = ({ params }: { params: { forTest?: boolean } }) => {
+const RootPage = async (props: {
+  params: Promise<{
+    forTest?: boolean;
+  }>;
+}) => {
+  const { forTest } = await props.params;
   return (
     <main className={styles.main}>
       <div className={styles.description}>
@@ -152,7 +157,7 @@ const RootPage = ({ params }: { params: { forTest?: boolean } }) => {
        *
        * @see https://nextjs.org/docs/app/building-your-application/testing/jest
        */}
-      {params.forTest ? (
+      {forTest ? (
         <LinksSectionForTest />
       ) : (
         <Suspense fallback={'Loading links...'}>{<LinksSection />}</Suspense>
