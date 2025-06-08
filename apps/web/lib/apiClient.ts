@@ -6,6 +6,8 @@ import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dt
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { S3SignedUrlEntity } from '@repo/api/s3/entity/s3-signed-url.entity';
 import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
+import { Review } from '@repo/api/reviews/entities/review.entity';
+import { PaginateResponse } from '@repo/api/common/Paginate';
 
 interface ApiOptions {
   session: Session | null;
@@ -80,13 +82,13 @@ export const api = {
   deleteForm: (id: string, options: ApiOptions) =>
     authFetch(`/forms/${id}`, 'DELETE', {}, options),
 
-  getReviews: (workspaceId: string, options: ApiOptions) =>
+  getReviews: (workspaceId: string, options: ApiOptions): Promise<PaginateResponse<any>> =>
     authFetch(`/reviews/workspaceId/${workspaceId}`, 'GET', {}, options),
 
   getReview: (id: string, options: ApiOptions) =>
     authFetch(`/reviews/${id}`, 'GET', {}, options),
 
-  createReview: (dto: CreateReviewDto, options: ApiOptions) =>
+  createReview: (dto: CreateReviewDto, options: ApiOptions): Promise<Review> =>
     authFetch('/reviews', 'POST', dto, options),
 
   updateReview: (id: string, dto: CreateReviewDto, options: ApiOptions) =>

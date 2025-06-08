@@ -9,14 +9,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useUserContext } from '@/context/UserProvider';
 import React, { useState } from 'react';
 import { api } from '@/lib/apiClient';
 import { useSession } from 'next-auth/react';
 import { BiDownload, BiX } from 'react-icons/bi';
-import ReviewImportManualDialog from '@/components/biz/review-import-manual-dialog';
+import Index from '../review-import-manual-dialog';
+import ReviewImportManualDialog from '../review-import-manual-dialog';
+import ReviewImportXDialog from '@/components/review-x-dialog';
 
 const imports = [
   {
@@ -29,13 +28,12 @@ const imports = [
     title: 'X',
     url: '/import/json',
     icon: BiX,
-    dialog: ReviewImportManualDialog
+    dialog: ReviewImportXDialog
   }
 ];
 
 export default function ReviewImportDialog() {
   const { data: session } = useSession();
-  const { user, defaultWorkspace } = useUserContext();
   const [workspaceName, setWorkspaceName] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -60,7 +58,9 @@ export default function ReviewImportDialog() {
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
           <BiDownload className="text-2xl" />
@@ -76,13 +76,7 @@ export default function ReviewImportDialog() {
         </DialogHeader>
         <div className="grid grid-cols-3 gap-4">
           {imports.map((item) => (
-            // <Button
-            //   size={'lg'}
-            //   key={item.title} className="w-full items-center justify-start" variant="outline">
-            //   <item.icon />
-            //   {item.title}
-            // </Button>
-            <item.dialog key={item.title}/>
+            <item.dialog key={item.title} />
           ))}
         </div>
         <DialogFooter className="">

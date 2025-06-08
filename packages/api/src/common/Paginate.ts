@@ -1,0 +1,17 @@
+export interface PaginationMeta {
+  page: number;
+  pageSize: number;
+  total: number;
+}
+
+export interface PaginateResponse<T> {
+  items: T[];
+  meta: PaginationMeta;
+}
+
+export interface PaginateRequest {
+  page: number;
+  pageSize: number;
+  sortBy: string;
+  sortOrder: 'asc' | 'desc';
+}

@@ -64,16 +64,16 @@ const data = {
     }
   ],
   navSecondary: [
-    {
-      title: 'Settings',
-      url: '/settings',
-      icon: IconSettings
-    },
-    {
-      title: 'feedback',
-      url: '/feedback',
-      icon: IconHelp
-    }
+    // {
+    //   title: 'Settings',
+    //   url: '/settings',
+    //   icon: IconSettings
+    // },
+    // {
+    //   title: 'feedback',
+    //   url: '/feedback',
+    //   icon: IconHelp
+    // }
   ]
 };
 
@@ -112,17 +112,23 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: path.includes('/reviews')
             },
             {
+              title: 'Widgets',
+              url: `/${lang}/${defaultWorkspace?.id}/widgets`,
+              icon: IconChartBar,
+              active: path.includes('/widgets')
+            },
+            {
               title: 'Collect Forms',
               url: `/${lang}/${defaultWorkspace?.id}/forms`,
               icon: IconDashboard,
               active: path.includes('/forms')
             },
             {
-              title: 'Widgets',
-              url: `/${lang}/${defaultWorkspace?.id}/widgets`,
-              icon: IconChartBar,
-              active: path.includes('/widgets')
-            }
+              title: 'Settings',
+              url: `/${lang}/settings`,
+              icon: IconDashboard,
+              active: path.includes('/forms')
+            },
           ]}
         />
         <NavSecondary items={data.navSecondary} className="mt-auto" />

@@ -12,22 +12,31 @@ generator client {
 }
 
 enum ReviewStatus {
-  PENDING @map("pending")
-  PUBLIC  @map("public")
-  HIDDEN  @map("hidden")
+  pending
+  public
+  hidden
+}
+
+enum ReviewSource {
+  manual
+  json
+  twitter
+  google
+  facebook
+  trustpilot
 }
 
 enum WidgetType {
-  GRID     @map("grid")
-  LIST     @map("list")
-  CAROUSEL @map("carousel")
-  MASONRY  @map("masonry")
+  grid
+  list
+  carousel
+  masonry
 }
 
 enum MediaType {
-  IMAGE @map("image")
-  VIDEO @map("video")
-  AUDIO @map("audio")
+  image
+  video
+  audio
 }
 
 model User {
@@ -84,8 +93,9 @@ model Review {
   reviewerEmail String?
   rating        Int?
   text          String?
-  twitterUrl    String?
-  status        ReviewStatus  @default(PENDING)
+  tweetId       String?
+  source        ReviewSource  @default(manual)
+  status        ReviewStatus  @default(pending)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   form          Form?         @relation(fields: [formId], references: [id])
@@ -98,7 +108,7 @@ model ReviewMedia {
   reviewId  String?
   url       String
   thumbnail String?
-  type      MediaType @default(IMAGE)
+  type      MediaType @default(image)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Review    Review?   @relation(fields: [reviewId], references: [id])
@@ -109,7 +119,7 @@ model Widget {
   userId      String
   workspaceId String
   name        String
-  type        WidgetType @default(GRID)
+  type        WidgetType @default(grid)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
   user        User       @relation(fields: [userId], references: [id])

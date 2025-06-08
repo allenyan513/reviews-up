@@ -4,7 +4,6 @@ import { CreateUserDto } from '@repo/api/users/dto/create-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
 import { generateIdToken } from '../../libs/utils';
 import { UpdateUserDto } from '@repo/api/users/dto/update-user.dto';
-import { ReviewStatus, WidgetType } from '@repo/database/generated/client';
 
 @Injectable()
 export class UsersService {
@@ -155,8 +154,7 @@ export class UsersService {
         reviewerEmail: 'anonymous@gmail.com',
         rating: 5,
         text: 'This is a default review.',
-        twitterUrl: 'https://twitter.com/default-review',
-        status: 'PENDING',
+        status: 'pending'
       },
     });
     if (!defaultReview) {
@@ -167,7 +165,7 @@ export class UsersService {
         name: 'Default Widget',
         userId: user.id,
         workspaceId: defaultWorkspace.id,
-        type: WidgetType.GRID,
+        type: 'grid'
       },
     });
     if (!defaultWidget) {

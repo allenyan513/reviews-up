@@ -1,3 +1,4 @@
+import { ReviewSource} from '@repo/database/generated/client/index'
 export class CreateReviewDto {
   workspaceId: string;
   formId?: string;
@@ -6,7 +7,7 @@ export class CreateReviewDto {
   reviewerEmail?: string;
   rating?: number;
   text?: string;
-  twitterUrl?: string;
-  status: string;
+  tweetId?: string;
+  source?: ReviewSource;
   mediaIds?: string[];
 }

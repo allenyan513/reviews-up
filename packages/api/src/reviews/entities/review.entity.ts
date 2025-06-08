@@ -10,9 +10,10 @@ export class Review {
   reviewerEmail?: string;
   rating?: number;
   text?: string;
-  twitterUrl?: string;
+  tweetId?: string;
   status: string;
   createdAt: Date;
   updatedAt: Date;
   medias?: ReviewMedia[];
+  source?: string;
 }

@@ -1,18 +1,17 @@
 'use client';
-import type { Metadata } from 'next';
-// import { Inter } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 
 import '@/app/globals.css';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
-import { SiteHeader } from '@/components/site-header';
 import AuthProvider from '@/context/AuthProvider';
-import { useEffect, useState } from 'react';
-import { User } from '@repo/api/users/entities/user.entity';
-import { api } from '@/lib/apiClient';
+import { useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
+import ToasterContext from '@/context/ToastContext';
 
-// const inter = Inter({ subsets: ['latin'] });
+const openSans = Open_Sans({
+  subsets: ['latin'],
+});
 
 export default function RootLayout(props: {
   params: Promise<{
@@ -28,7 +27,7 @@ export default function RootLayout(props: {
 
   return (
     <html lang={lang}>
-      <body >
+      <body className={openSans.className}>
         <AuthProvider>
           <UserProvider>
             <SidebarProvider
@@ -42,6 +41,10 @@ export default function RootLayout(props: {
               <AppSidebar lang={lang} variant="inset" />
               <SidebarInset>{props.children}</SidebarInset>
             </SidebarProvider>
+
+            <ToasterContext />
+            {/*<Analytics />*/}
+            {/*<SpeedInsights />*/}
           </UserProvider>
         </AuthProvider>
       </body>

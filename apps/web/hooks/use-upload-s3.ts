@@ -42,7 +42,7 @@ export function useUploadS3(): UseUploadS3Result {
       setStatus('success');
       // Return the S3 file URL (you may need to construct it based on your bucket)
       return key
-        ? `https://${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}.s3.amazonaws.com/${key}`
+        ? `https://s3.${process.env.NEXT_PUBLIC_AWS_REGION}.amazonaws.com/${process.env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME}/${key}`
         : null;
     } catch (err: any) {
       setStatus('error');

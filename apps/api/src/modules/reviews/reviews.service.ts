@@ -1,12 +1,16 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { S3Service } from '../s3/s3.service';
 import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
+import { PaginateResponse, PaginateRequest } from '@repo/api/common/paginate';
+import { Review } from '@repo/api/reviews/entities/review.entity';
 
 @Injectable()
 export class ReviewsService {
+  private logger = new Logger('ReviewsService');
+
   constructor(
     private prismaService: PrismaService,
     private s3Service: S3Service,
@@ -32,8 +36,9 @@ export class ReviewsService {
         reviewerEmail: createReviewDto.reviewerEmail,
         rating: createReviewDto.rating,
         text: createReviewDto.text,
-        twitterUrl: createReviewDto.twitterUrl,
-        status: 'PENDING',
+        tweetId: createReviewDto.tweetId,
+        status: 'public',
+        source: createReviewDto.source,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -50,23 +55,46 @@ export class ReviewsService {
         reviewerEmail: createReviewDto.reviewerEmail,
         rating: createReviewDto.rating,
         text: createReviewDto.text,
-        twitterUrl: createReviewDto.twitterUrl,
-        status: 'PENDING',
+        tweetId: createReviewDto.tweetId,
+        status: 'pending',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
   }
 
-  async findAll(workspaceId: string | null) {
-    return this.prismaService.review.findMany({
+  async findAll(workspaceId: string, paginateRequest: PaginateRequest) {
+    this.logger.debug(
+      'Fetching reviews with pagination',
+      workspaceId,
+      paginateRequest,
+    );
+    if (!workspaceId) {
+      throw new Error('Workspace ID is required to fetch reviews');
+    }
+    const total = await this.prismaService.review.count({
+      where: {
+        workspaceId: workspaceId, // Filter by workspace if provided
+      },
+    });
+    const items = await this.prismaService.review.findMany({
       where: {
         workspaceId: workspaceId, // Filter by workspace if provided
       },
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },
+      skip: (paginateRequest.page - 1) * paginateRequest.pageSize,
+      take: paginateRequest.pageSize,
     });
+    return {
+      items: items,
+      meta: {
+        page: paginateRequest.page,
+        pageSize: paginateRequest.pageSize,
+        total: total,
+      },
+    } as PaginateResponse<any>;
   }
 
   async findOne(id: string) {

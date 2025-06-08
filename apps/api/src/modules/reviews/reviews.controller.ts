@@ -23,8 +23,20 @@ export class ReviewsController {
   }
 
   @Get('workspaceId/:workspaceId')
-  async findAll(@Uid() uid: string, @Param('workspaceId') workspaceId: string) {
-    return this.reviewsService.findAll(workspaceId);
+  async findAll(
+    @Uid() uid: string,
+    @Param('workspaceId') workspaceId: string,
+    @Param('page') page: number = 1,
+    @Param('pageSize') pageSize: number = 10,
+    @Param('sortBy') sortBy: string = 'createdAt',
+    @Param('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
+  ) {
+    return this.reviewsService.findAll(workspaceId, {
+      page,
+      pageSize,
+      sortBy,
+      sortOrder,
+    });
   }
 
   @Get(':id')
@@ -47,10 +59,7 @@ export class ReviewsController {
   }
 
   @Post('getSignedUrl')
-  async getSignedUrl(
-    @Uid() uid: string,
-    @Body() dto: S3GetSignedUrlDto,
-  ) {
-    return this.reviewsService.getSignedUrl(uid,dto);
+  async getSignedUrl(@Uid() uid: string, @Body() dto: S3GetSignedUrlDto) {
+    return this.reviewsService.getSignedUrl(uid, dto);
   }
 }
