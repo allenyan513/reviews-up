@@ -35,6 +35,9 @@ import { useSession, signOut } from 'next-auth/react';
 import { useEffect, useState } from 'react';
 import { User } from '@repo/api/users/entities/user.entity';
 import { api } from '@/lib/apiClient';
+import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import { usePathname } from 'next/navigation';
+import { useUserContext } from '@/context/UserProvider';
 
 const data = {
   title: 'ReviewUp',
@@ -77,21 +80,9 @@ const data = {
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = props.lang;
   const { data: session } = useSession();
-  const [userProfile, setUserProfile] = useState<User | null>(null);
-  const [defaultWorkspaceId, setDefaultWorkspaceId] = useState<string | null>(null);
-  useEffect(() => {
-    if (!session) return;
-    console.log('session', session);
-    api
-      .getUserProfile({
-        session: session
-      })
-      .then((profile) => {
-        console.log(profile);
-        setUserProfile(profile);
-        setDefaultWorkspaceId(profile.Workspace ? profile.Workspace[0]?.id || null : null);
-      });
-  }, [session]);
+
+  const {defaultWorkspace} = useUserContext();
+  const path = usePathname()
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -112,21 +103,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain
+          workspace={defaultWorkspace}
           items={[
             {
               title: 'Reviews',
-              url: `/${lang}/${defaultWorkspaceId}/reviews`,
-              icon: IconListDetails
+              url: `/${lang}/${defaultWorkspace?.id}/reviews`,
+              icon: IconListDetails,
+              active: path.includes('/reviews')
             },
             {
               title: 'Collect Forms',
-              url: `/${lang}/${defaultWorkspaceId}/forms`,
-              icon: IconDashboard
+              url: `/${lang}/${defaultWorkspace?.id}/forms`,
+              icon: IconDashboard,
+              active: path.includes('/forms')
             },
             {
               title: 'Widgets',
-              url: `/${lang}/${defaultWorkspaceId}/widgets`,
-              icon: IconChartBar
+              url: `/${lang}/${defaultWorkspace?.id}/widgets`,
+              icon: IconChartBar,
+              active: path.includes('/widgets')
             }
           ]}
         />

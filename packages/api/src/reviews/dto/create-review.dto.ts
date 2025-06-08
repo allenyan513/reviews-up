@@ -1,14 +1,12 @@
 export class CreateReviewDto {
   workspaceId: string;
-  formId: string;
-
+  formId?: string;
   reviewerName: string;
-  reviewerImage: string;
-  reviewerEmail: string;
-  rating: number;
-  text: string;
-  imageUrl: string;
-  videoUrl: string;
-  twitterUrl: string;
+  reviewerImage?: string;
+  reviewerEmail?: string;
+  rating?: number;
+  text?: string;
+  twitterUrl?: string;
   status: string;
+  mediaIds?: string[];
 }

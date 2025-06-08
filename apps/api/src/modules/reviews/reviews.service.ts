@@ -2,10 +2,15 @@ import { Injectable } from '@nestjs/common';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { S3Service } from '../s3/s3.service';
+import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 
 @Injectable()
 export class ReviewsService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private s3Service: S3Service,
+  ) {}
 
   async create(uid: string, createReviewDto: CreateReviewDto) {
     // Ensure formId is belonging to the user
@@ -27,8 +32,6 @@ export class ReviewsService {
         reviewerEmail: createReviewDto.reviewerEmail,
         rating: createReviewDto.rating,
         text: createReviewDto.text,
-        imageUrl: createReviewDto.imageUrl,
-        videoUrl: createReviewDto.videoUrl,
         twitterUrl: createReviewDto.twitterUrl,
         status: 'PENDING',
         createdAt: new Date(),
@@ -39,7 +42,7 @@ export class ReviewsService {
 
   async createPublic(createReviewDto: CreateReviewDto) {
     return this.prismaService.review.create({
-      data:{
+      data: {
         workspaceId: createReviewDto.workspaceId,
         formId: createReviewDto.formId,
         reviewerName: createReviewDto.reviewerName,
@@ -47,14 +50,12 @@ export class ReviewsService {
         reviewerEmail: createReviewDto.reviewerEmail,
         rating: createReviewDto.rating,
         text: createReviewDto.text,
-        imageUrl: createReviewDto.imageUrl,
-        videoUrl: createReviewDto.videoUrl,
         twitterUrl: createReviewDto.twitterUrl,
         status: 'PENDING',
         createdAt: new Date(),
         updatedAt: new Date(),
-      }
-    })
+      },
+    });
   }
 
   async findAll(workspaceId: string | null) {
@@ -91,5 +92,9 @@ export class ReviewsService {
         id: id,
       },
     });
+  }
+
+  async getSignedUrl(uid: string, dto: S3GetSignedUrlDto) {
+    return this.s3Service.getSignedUrl(dto.fileName, dto.fileType);
   }
 }

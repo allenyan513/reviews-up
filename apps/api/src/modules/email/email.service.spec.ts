@@ -1,5 +1,4 @@
 import { Test, TestingModule} from '@nestjs/testing';
-import { ConfigModule } from '@nestjs/config';
 import { EmailService } from './email.service';
 import { EMAIL_FROM, EMAIL_SUBJECTS } from './email.constants';
 import { beforeEach, describe, expect, it } from '@jest/globals';

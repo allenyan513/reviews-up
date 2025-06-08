@@ -24,6 +24,12 @@ enum WidgetType {
   MASONRY  @map("masonry")
 }
 
+enum MediaType {
+  IMAGE @map("image")
+  VIDEO @map("video")
+  AUDIO @map("audio")
+}
+
 model User {
   id                String      @id @default(uuid())
   provider          String
@@ -70,22 +76,32 @@ model Form {
 }
 
 model Review {
-  id            String       @id @default(uuid())
+  id            String        @id @default(uuid())
   workspaceId   String
-  formId        String
-  reviewerName  String?
+  formId        String?
+  reviewerName  String
   reviewerImage String?
   reviewerEmail String?
   rating        Int?
   text          String?
-  imageUrl      String?
-  videoUrl      String?
   twitterUrl    String?
-  status        ReviewStatus @default(PENDING)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  form          Form         @relation(fields: [formId], references: [id])
-  workspace     Workspace    @relation(fields: [workspaceId], references: [id])
+  status        ReviewStatus  @default(PENDING)
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  form          Form?         @relation(fields: [formId], references: [id])
+  workspace     Workspace     @relation(fields: [workspaceId], references: [id])
+  medias        ReviewMedia[]
+}
+
+model ReviewMedia {
+  id        String    @id @default(uuid())
+  reviewId  String?
+  url       String
+  thumbnail String?
+  type      MediaType @default(IMAGE)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Review    Review?   @relation(fields: [reviewId], references: [id])
 }
 
 model Widget {
@@ -96,7 +112,6 @@ model Widget {
   type        WidgetType @default(GRID)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-
-  user      User      @relation(fields: [userId], references: [id])
-  workspace Workspace @relation(fields: [workspaceId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
 }

@@ -1,8 +1,11 @@
-// app/lib/api.ts
-
 import { Session } from 'next-auth';
 import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
-import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto'; // Import Session type for type safety
+import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
+import { User } from '@repo/api/users/entities/user.entity';
+import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
+import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import { S3SignedUrlEntity } from '@repo/api/s3/entity/s3-signed-url.entity';
+import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 
 interface ApiOptions {
   session: Session | null;
@@ -38,7 +41,6 @@ async function authFetch(
 
   try {
     const response = await fetch(url, config);
-
     if (!response.ok) {
       if (response.status === 401) {
         // Handle unauthorized specifically, maybe log out or redirect
@@ -46,7 +48,6 @@ async function authFetch(
       }
       throw new Error(`Failed to fetch data: ${response.statusText}`);
     }
-
     return await response.json();
   } catch (error) {
     console.error(`Error ${method}ing data from ${endpoint}:`, error);
@@ -56,8 +57,13 @@ async function authFetch(
 
 // Define your API methods, each accepting the session object
 export const api = {
-  getUserProfile: (options: ApiOptions) =>
+  getUserProfile: (options: ApiOptions): Promise<User> =>
     authFetch('/users/profile', 'GET', {}, options),
+
+  createWorkspace: (
+    dto: CreateWorkspaceDto,
+    options: ApiOptions,
+  ): Promise<Workspace> => authFetch('/workspaces', 'POST', dto, options),
 
   getForms: (workspaceId: string, options: ApiOptions) =>
     authFetch(`/forms/workspaceId/${workspaceId}`, 'GET', {}, options),
@@ -89,5 +95,9 @@ export const api = {
   deleteReview: (id: string, options: ApiOptions) =>
     authFetch(`/reviews/${id}`, 'DELETE', {}, options),
 
-
+  getSignedUrl: (
+    dto: S3GetSignedUrlDto,
+    options: ApiOptions,
+  ): Promise<S3SignedUrlEntity> =>
+    authFetch('/reviews/getSignedUrl', 'POST', dto, options),
 };

@@ -6,7 +6,7 @@ export class User {
   email: string;
   image: string;
   idToken: string;
-  Workspace?: Workspace[]
+  Workspace?: Workspace[];
   constructor(partial: Partial<User>) {
     Object.assign(this, partial);
   }

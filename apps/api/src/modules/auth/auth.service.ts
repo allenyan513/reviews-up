@@ -7,8 +7,11 @@ import { User } from '@repo/api/users/entities/user.entity';
 @Injectable()
 export class AuthService {
   private logger = new Logger(AuthService.name);
-  constructor(private prismaService: PrismaService,
-              private usersService: UsersService) {}
+
+  constructor(
+    private prismaService: PrismaService,
+    private usersService: UsersService,
+  ) {}
 
   async handleCallback(dto: AuthProviderCallbackDto) {
     this.logger.log('handleGithubCallback', dto);
@@ -16,7 +19,7 @@ export class AuthService {
     let user = await this.usersService.findByProviderAccountId(
       provider,
       providerAccountId,
-    )
+    );
     if (!user) {
       user = await this.usersService.create({
         provider: provider,
@@ -24,7 +27,7 @@ export class AuthService {
         email: email,
         name: name,
         image: image,
-      })
+      });
     } else {
       // Update existing user's login time and potentially other info
       user = await this.usersService.update({
@@ -33,7 +36,7 @@ export class AuthService {
         email: email,
         name: name,
         image: image,
-      })
+      });
     }
     return {
       id: user.id,
@@ -41,25 +44,26 @@ export class AuthService {
       email: user.email,
       image: user.image,
       idToken: user.idToken, // Return the generated idToken
-    } as User
+    } as User;
   }
 
+  /**
+   *
+   * @param idToken
+   * @throws Error if user not found
+   */
   async decodeIdToken(idToken: string) {
-    this.logger.log('decodeIdToken', idToken);
-    try {
-      const user = await this.usersService.findByIdToken(idToken);
-      if (!user) {
-        throw new Error('User not found');
-      }
-      return {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-        image: user.image,
-        idToken: user.idToken, // Return the idToken
-      } as User;
-    } catch (error) {
-      this.logger.error(error);
+    // this.logger.debug('decodeIdToken', idToken);
+    const user = await this.usersService.findByIdToken(idToken);
+    if (!user) {
+      throw new Error('User not found');
     }
+    return {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      idToken: user.idToken, // Return the idToken
+    } as User;
   }
 }

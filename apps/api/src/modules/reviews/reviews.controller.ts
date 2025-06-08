@@ -11,13 +11,14 @@ import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { Uid } from '../../middleware/uid.decorator';
+import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @Post()
-  create(@Uid() uid: string, @Body() createReviewDto: CreateReviewDto) {
+  async create(@Uid() uid: string, @Body() createReviewDto: CreateReviewDto) {
     return this.reviewsService.create(uid, createReviewDto);
   }
 
@@ -43,5 +44,13 @@ export class ReviewsController {
   @Delete(':id')
   async remove(@Uid() uid: string, @Param('id') id: string) {
     return this.reviewsService.remove(uid, id);
+  }
+
+  @Post('getSignedUrl')
+  async getSignedUrl(
+    @Uid() uid: string,
+    @Body() dto: S3GetSignedUrlDto,
+  ) {
+    return this.reviewsService.getSignedUrl(uid,dto);
   }
 }

@@ -5,6 +5,7 @@
   "description": "",
   "author": "",
   "license": "UNLICENSED",
+  "packageManager": "npm@11.4.1",
   "scripts": {
     "dev:api": "turbo run dev --filter=api",
     "dev:web": "turbo run dev --filter=web",
@@ -29,13 +30,12 @@
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "prettier": "^3.2.5",
-    "turbo": "^2.5.4",
-    "prisma": "latest"
+    "prisma": "latest",
+    "turbo": "^2.5.4"
   },
   "engines": {
     "node": ">=18"
   },
-  "packageManager": "npm@11.4.1",
   "workspaces": [
     "apps/*",
     "packages/*"

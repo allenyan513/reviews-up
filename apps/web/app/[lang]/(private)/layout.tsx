@@ -1,6 +1,6 @@
 'use client';
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+// import { Inter } from 'next/font/google';
 
 import '@/app/globals.css';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
@@ -9,9 +9,10 @@ import { SiteHeader } from '@/components/site-header';
 import AuthProvider from '@/context/AuthProvider';
 import { useEffect, useState } from 'react';
 import { User } from '@repo/api/users/entities/user.entity';
-import {api} from '@/lib/apiClient'
+import { api } from '@/lib/apiClient';
+import { UserProvider } from '@/context/UserProvider';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout(props: {
   params: Promise<{
@@ -25,23 +26,23 @@ export default function RootLayout(props: {
     setLang(params.lang);
   });
 
-
-
   return (
     <html lang={lang}>
-      <body className={inter.className}>
+      <body >
         <AuthProvider>
-          <SidebarProvider
-            style={
-              {
-                '--sidebar-width': 'calc(var(--spacing) * 72)',
-                '--header-height': 'calc(var(--spacing) * 12)',
-              } as React.CSSProperties
-            }
-          >
-            <AppSidebar lang={lang} variant="inset" />
-            <SidebarInset>{props.children}</SidebarInset>
-          </SidebarProvider>
+          <UserProvider>
+            <SidebarProvider
+              style={
+                {
+                  '--sidebar-width': 'calc(var(--spacing) * 72)',
+                  '--header-height': 'calc(var(--spacing) * 12)',
+                } as React.CSSProperties
+              }
+            >
+              <AppSidebar lang={lang} variant="inset" />
+              <SidebarInset>{props.children}</SidebarInset>
+            </SidebarProvider>
+          </UserProvider>
         </AuthProvider>
       </body>
     </html>

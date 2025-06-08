@@ -17,7 +17,7 @@ export class AuthFilterMiddleware implements NestMiddleware {
   constructor(private authService: AuthService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    this.logger.debug(`req.baseUrl: ${req.baseUrl}`);
+    // this.logger.debug(`req.baseUrl: ${req.baseUrl}`);
     let idToken: string | null = req.get('idToken') || null;
     const baseUrl = req.baseUrl;
     if (this.streamPaths.includes(baseUrl)) {
@@ -37,18 +37,17 @@ export class AuthFilterMiddleware implements NestMiddleware {
       }
     } else {
       try {
-        this.logger.debug(`idToken: ${idToken}`);
+        // this.logger.debug(`idToken: ${idToken}`);
         const user = await this.authService.decodeIdToken(idToken);
         if (!user) {
           res.status(401).send('Unauthorized');
         } else {
-          console.log(user)
           req.headers['userId'] = user.id;
           req['userId'] = user.id;
           next();
         }
       } catch (error) {
-        console.error(error);
+        this.logger.error(error);
         res.status(401).send('Unauthorized');
       }
     }

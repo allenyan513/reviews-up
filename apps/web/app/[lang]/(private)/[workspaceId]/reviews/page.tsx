@@ -1,47 +1,11 @@
 'use client';
-//
-// import { useEffect, useState } from 'react';
-// import { useSession } from 'next-auth/react';
-//
-// export default function Page(props:{
-//   params: Promise<{
-//     lang: string;
-//     workspaceId: string;
-//   }>
-// }) {
-//   const session = useSession({
-//     required: true,
-//   });
-//
-//   const [params, setParams] = useState<{
-//     lang: string;
-//     workspaceId: string;
-//   } | null>(null);
-//   useEffect(() => {
-//     props.params.then(setParams);
-//   }, []);
-//
-//   if (!params) {
 
-//     return <div>Loading...</div>;
-//   }
-//   return (
-//     <div className="flex flex-col items-center justify-center h-screen">
-//       <h1 className="text-2xl font-bold mb-4">Reviews List Page </h1>
-//       <p>Lang: {params.lang}</p>
-//       <p>WorkspaceId: {params.workspaceId}</p>
-//     </div>
-//   )
-// }
-
-// This is a conceptual outline and requires further implementation for full functionality.
-
+import { Button } from '@/components/ui/button';
 import React, { useState } from 'react';
-// Assuming you have SVG icons or use a library like Heroicons.
-// For demonstration, we'll use placeholder SVGs or simple text for icons.
+import { BiDownload } from 'react-icons/bi';
+import ReviewImportDialog from '@/components/biz/review-import-dialog';
 
 const TestimonialsPage = () => {
-  // Dummy data to demonstrate the structure. In a real app, this would come from an API.
   const [testimonials, setTestimonials] = useState([
     {
       id: 1,
@@ -143,49 +107,16 @@ const TestimonialsPage = () => {
       <div className="flex justify-between items-start mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-1">
-            Testimonials
+            Reviews
           </h1>
           <p className="text-gray-600">
             Organize the testimonials you have received or imported.
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          {/* Google Reviews Schema link */}
-          <a
-            href="#"
-            className="flex items-center text-blue-600 hover:text-blue-800 transition-colors"
-          >
-            <img
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/200px-Google_%22G%22_Logo.svg.png" // Placeholder Google logo
-              alt="Google"
-              className="h-5 w-5 mr-1"
-            />
-            G Google Reviews Schema
-            <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-green-100 text-green-800 rounded-full">
-              New
-            </span>
-          </a>
-          {/* Import Button */}
-          <button className="flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg shadow-md hover:bg-blue-700 transition-colors duration-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 mr-2"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-              />
-            </svg>
-            Import
-          </button>
+          <ReviewImportDialog/>
         </div>
       </div>
-
       {/* Filters and Search Bar */}
       <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-sm mb-6 border border-gray-200">
         <div className="flex flex-wrap gap-2 mb-4 md:mb-0">

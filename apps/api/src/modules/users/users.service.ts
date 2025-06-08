@@ -25,8 +25,6 @@ export class UsersService {
         Workspace: true
       }
     });
-    console.log(user)
-
     const userProfile: User = {
       id: user.id,
       name: user.name,
@@ -157,8 +155,6 @@ export class UsersService {
         reviewerEmail: 'anonymous@gmail.com',
         rating: 5,
         text: 'This is a default review.',
-        imageUrl: 'https://example.com/default-review-image.png',
-        videoUrl: 'https://example.com/default-review-video.mp4',
         twitterUrl: 'https://twitter.com/default-review',
         status: 'PENDING',
       },

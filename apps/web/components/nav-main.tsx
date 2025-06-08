@@ -11,47 +11,38 @@ import {
   SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
+import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import WorkspaceChangeButton from '@/components/biz/workspace-change-button';
 
-export function NavMain({
-  items,
-}: {
+export function NavMain(props: {
+  workspace: Workspace | null | undefined;
   items: {
     title: string;
     url: string;
     icon?: Icon;
+    active?: boolean;
   }[];
 }) {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
+        <WorkspaceChangeButton />
         <SidebarMenu>
-          <SidebarMenuItem className="flex items-center gap-2">
-            <SidebarMenuButton
-              tooltip="Quick Create"
-              className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-            >
-              <IconCirclePlusFilled />
-              <span>Quick Create</span>
-            </SidebarMenuButton>
-            <Button
-              size="icon"
-              className="size-8 group-data-[collapsible=icon]:opacity-0"
-              variant="outline"
-            >
-              <IconMail />
-              <span className="sr-only">Inbox</span>
-            </Button>
-          </SidebarMenuItem>
-        </SidebarMenu>
-        <SidebarMenu>
-          {items.map((item) => (
+          {props.items.map((item) => (
             <SidebarMenuItem className="cursor-pointer" key={item.title}>
-              <Link href={item.url} key={item.title} className="cursor-pointer">
-                <SidebarMenuButton tooltip={item.title}>
+              <SidebarMenuButton
+                isActive={item.active}
+                size={'lg'}
+                tooltip={item.title}
+              >
+                <Link
+                  href={item.url}
+                  className="cursor-pointer flex flex-row gap-2 w-full items-center justify-start"
+                >
                   {item.icon && <item.icon />}
-                  <span>{item.title}</span>
-                </SidebarMenuButton>
-              </Link>
+                  <span className={'text-[14px]'}>{item.title}</span>
+                </Link>
+              </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
         </SidebarMenu>
