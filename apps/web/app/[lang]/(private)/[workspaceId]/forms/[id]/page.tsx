@@ -1,30 +1,47 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import { BiArrowBack, BiPlus, BiSave } from 'react-icons/bi';
+import { api } from '@/lib/apiClient';
+import toast from 'react-hot-toast';
+import { FormEntity } from '@repo/api/forms/entities/form.entity';
+import { PublicFormPage } from '@/app/[lang]/(public)/forms/[shortId]/page';
+import { redirect } from 'next/navigation';
 
-export default function Page(props:{
-  params: Promise<{
-    lang: string;
-    workspaceId: string;
-    id: string;
-  }>
-}) {
-  const [params, setParams] = useState<{ lang: string; workspaceId: string; id: string } | null>(null);
+interface PageParams {
+  lang: string;
+  workspaceId: string;
+  id: string;
+}
+
+export default function Page(props: { params: Promise<PageParams> }) {
+  const session = useSession({
+    required: true,
+  });
+  const [params, setParams] = useState<PageParams>();
+  const [form, setForm] = useState<FormEntity>();
+
   useEffect(() => {
     props.params.then(setParams);
   }, []);
 
+  useEffect(() => {
+    if (!session.data || !params) return;
+    api
+      .getForm(params.id, {
+        session: session.data,
+      })
+      .then((response) => {
+        setForm(response);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  }, [session, params]);
 
-  if(!params) {
-    return <div>Loading...</div>;
-  }
+  if (!form || !params) return null;
 
-  return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <h1 className="text-2xl font-bold mb-4">Forms List Page </h1>
-      <p>Lang: {params.lang}</p>
-      <p>WorkspaceId: {params.workspaceId}</p>
-      <p>FormId: {params.id}</p>
-    </div>
-  )
+  redirect( `/${params.lang}/${params.workspaceId}/forms/${form.id}/default` )
 }
+

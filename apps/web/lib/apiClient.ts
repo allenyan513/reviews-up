@@ -8,6 +8,11 @@ import { S3SignedUrlEntity } from '@repo/api/s3/entity/s3-signed-url.entity';
 import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 import { Review } from '@repo/api/reviews/entities/review.entity';
 import { PaginateResponse } from '@repo/api/common/Paginate';
+import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
+import { Form, Showcase } from '@repo/database/generated/client/client';
+import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
+import { FormEntity } from '@repo/api/forms/entities/form.entity';
+import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
 
 interface ApiOptions {
   session: Session | null;
@@ -24,7 +29,6 @@ async function authFetch(
     'Content-Type': 'application/json',
     idToken: options?.session?.user?.idToken || '', // Ensure your NextAuth config provides idToken
   };
-
   const config: RequestInit = {
     method,
     headers,
@@ -32,12 +36,12 @@ async function authFetch(
 
   let url = `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`;
 
-  if (method === 'GET') {
+  if (method === 'GET' || method === 'DELETE') {
     const queryString = new URLSearchParams(data).toString();
     if (queryString) {
       url += `?${queryString}`;
     }
-  } else if (method === 'POST') {
+  } else if (method === 'POST'  || method === 'PATCH') {
     config.body = JSON.stringify(data);
   }
 
@@ -67,29 +71,38 @@ export const api = {
     options: ApiOptions,
   ): Promise<Workspace> => authFetch('/workspaces', 'POST', dto, options),
 
-  getForms: (workspaceId: string, options: ApiOptions) =>
+  getForms: (workspaceId: string, options: ApiOptions): Promise<FormEntity[]> =>
     authFetch(`/forms/workspaceId/${workspaceId}`, 'GET', {}, options),
 
-  getForm: (id: string, options: ApiOptions) =>
+  getForm: (id: string, options: ApiOptions): Promise<FormEntity> =>
     authFetch(`/forms/${id}`, 'GET', {}, options),
 
-  createForm: (dto: CreateFormDto, options: ApiOptions) =>
+  getFormByShortId: (
+    shortId: string,
+    options: ApiOptions,
+  ): Promise<FormEntity> =>
+    authFetch(`/forms/shortId/${shortId}`, 'GET', {}, options),
+
+  createForm: (dto: CreateFormDto, options: ApiOptions): Promise<Form> =>
     authFetch('/forms', 'POST', dto, options),
 
-  updateForm: (id: string, dto: CreateFormDto, options: ApiOptions) =>
+  updateForm: (id: string, dto: UpdateFormDto, options: ApiOptions) =>
     authFetch(`/forms/${id}`, 'PATCH', dto, options),
 
   deleteForm: (id: string, options: ApiOptions) =>
     authFetch(`/forms/${id}`, 'DELETE', {}, options),
 
-  getReviews: (workspaceId: string, options: ApiOptions): Promise<PaginateResponse<any>> =>
+  getReviews: (
+    workspaceId: string,
+    options: ApiOptions,
+  ): Promise<PaginateResponse<any>> =>
     authFetch(`/reviews/workspaceId/${workspaceId}`, 'GET', {}, options),
 
   getReview: (id: string, options: ApiOptions) =>
     authFetch(`/reviews/${id}`, 'GET', {}, options),
 
-  createReview: (dto: CreateReviewDto, options: ApiOptions): Promise<Review> =>
-    authFetch('/reviews', 'POST', dto, options),
+  submitReview: (dto: CreateReviewDto, options: ApiOptions): Promise<Review> =>
+    authFetch('/reviews/submit', 'POST', dto, options),
 
   updateReview: (id: string, dto: CreateReviewDto, options: ApiOptions) =>
     authFetch(`/reviews/${id}`, 'PATCH', dto, options),
@@ -102,4 +115,23 @@ export const api = {
     options: ApiOptions,
   ): Promise<S3SignedUrlEntity> =>
     authFetch('/reviews/getSignedUrl', 'POST', dto, options),
+
+  getShowcases: (
+    workspaceId: string,
+    options: ApiOptions,
+  ): Promise<PaginateResponse<Showcase>> =>
+    authFetch(`/showcases/workspaceId/${workspaceId}`, 'GET', {}, options),
+  getShowcase: (id: string, options: ApiOptions): Promise<ShowcaseEntity> =>
+    authFetch(`/showcases/${id}`, 'GET', {}, options),
+  getShowcaseByShortId: (
+    shortId: string,
+    options: ApiOptions,
+  ): Promise<ShowcaseEntity> =>
+    authFetch(`/showcases/shortId/${shortId}`, 'GET', {}, options),
+  createShowcase: (dto: CreateShowcaseDto, options: ApiOptions) =>
+    authFetch('/showcases', 'POST', dto, options),
+  updateShowcase: (id: string, dto: CreateShowcaseDto, options: ApiOptions) =>
+    authFetch(`/showcases/${id}`, 'PATCH', dto, options),
+  deleteShowcase: (id: string, options: ApiOptions) =>
+    authFetch(`/showcases/${id}`, 'DELETE', {}, options),
 };

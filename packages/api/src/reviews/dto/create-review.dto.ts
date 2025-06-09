@@ -1,6 +1,6 @@
 import { ReviewSource} from '@repo/database/generated/client/index'
 export class CreateReviewDto {
-  workspaceId: string;
+  workspaceId?: string;
   formId?: string;
   reviewerName: string;
   reviewerImage?: string;

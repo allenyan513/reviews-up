@@ -1,18 +1,29 @@
+import { cn } from '@/lib/utils';
 import React from 'react';
 
 export default function StarRating(props: {
   value: number;
   onChange: (val: number) => void;
+  className?: string;
+  size?: 'sm' | 'md' | 'lg';
 }) {
   return (
-    <div className="flex space-x-1">
+    <div className={`flex space-x-1 ${props.className || ''}`}>
       {[...Array(5)].map((_, i) => (
         <svg
           key={i}
           onClick={() => props.onChange(i + 1)}
-          className={`w-6 h-6 cursor-pointer ${
-            props.value > i ? 'text-yellow-400' : 'text-gray-300'
-          }`}
+          className={cn(
+            'cursor-pointer',
+            props.size === 'sm'
+              ? 'w-4 h-4'
+              : props.size === 'md'
+                ? 'w-6 h-6'
+                : props.size === 'lg'
+                  ? 'w-16 h-16'
+                  : 'w-6 h-6',
+            props.value > i ? 'text-yellow-400' : 'text-gray-300',
+          )}
           // className="w-6 h-6 text-gray-300 cursor-pointer hover:text-yellow-400"
           fill="currentColor"
           viewBox="0 0 20 20"

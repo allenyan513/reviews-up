@@ -9,7 +9,7 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
 import { UsersModule } from './modules/users/users.module';
 import { FormsModule } from './modules/forms/forms.module';
 import { ReviewsModule } from './modules/reviews/reviews.module';
-import { WidgetsModule } from './modules/widgets/widgets.module';
+import { ShowcasesModule } from './modules/showcases/showcases.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
@@ -29,7 +29,7 @@ import { S3Module } from './modules/s3/s3.module';
     UsersModule,
     FormsModule,
     ReviewsModule,
-    WidgetsModule,
+    ShowcasesModule,
     AuthModule,
     S3Module,
   ],

@@ -13,6 +13,7 @@ import {
 import Link from 'next/link';
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import WorkspaceChangeButton from '@/components/biz/workspace-change-button';
+import { cn } from '@/lib/utils';
 
 export function NavMain(props: {
   workspace: Workspace | null | undefined;
@@ -29,21 +30,19 @@ export function NavMain(props: {
         <WorkspaceChangeButton />
         <SidebarMenu>
           {props.items.map((item) => (
-            <SidebarMenuItem className="cursor-pointer" key={item.title}>
-              <SidebarMenuButton
-                isActive={item.active}
-                size={'lg'}
-                tooltip={item.title}
-              >
-                <Link
-                  href={item.url}
-                  className="cursor-pointer flex flex-row gap-2 w-full items-center justify-start"
-                >
-                  {item.icon && <item.icon />}
-                  <span className={'text-[14px]'}>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            <Link
+              key={item.title}
+              href={item.url}
+              className={cn(
+                'cursor-pointer flex flex-row gap-2 w-full items-center justify-start h-12 rounded px-4 font-semibold',
+                item.active
+                  ? 'bg-red-100 text-red-400'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+              )}
+            >
+              {item.icon && <item.icon />}
+              <span className={'text-[14px]'}>{item.title}</span>
+            </Link>
           ))}
         </SidebarMenu>
       </SidebarGroupContent>

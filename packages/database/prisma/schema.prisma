@@ -26,11 +26,13 @@ enum ReviewSource {
   trustpilot
 }
 
-enum WidgetType {
+enum ShowcaseType {
   grid
   list
   carousel
   masonry
+  marquee
+  flow
 }
 
 enum MediaType {
@@ -53,41 +55,44 @@ model User {
   lastLogin         DateTime?
   Workspace         Workspace[]
   Form              Form[]
-  Widget            Widget[]
+  Showcase          Showcase[]
 
   @@unique([provider, providerAccountId])
 }
 
 model Workspace {
   id        String   @id @default(uuid())
+  shortId   String   @unique
   name      String
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  user      User     @relation(fields: [userId], references: [id])
 
-  user   User     @relation(fields: [userId], references: [id])
-  Form   Form[]
-  Widget Widget[]
-  Review Review[]
+  Form     Form[]
+  Review   Review[]
+  Showcase Showcase[]
 }
 
 model Form {
   id          String    @id @default(uuid())
+  shortId     String    @unique
   userId      String
   workspaceId String
   name        String
+  config      Json?     @default("{}")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   user        User      @relation(fields: [userId], references: [id])
   workspace   Workspace @relation(fields: [workspaceId], references: [id])
-
-  Review Review[]
+  Review      Review[]
 }
 
 model Review {
   id            String        @id @default(uuid())
   workspaceId   String
   formId        String?
+  userId        String?
   reviewerName  String
   reviewerImage String?
   reviewerEmail String?
@@ -114,14 +119,15 @@ model ReviewMedia {
   Review    Review?   @relation(fields: [reviewId], references: [id])
 }
 
-model Widget {
-  id          String     @id @default(uuid())
+model Showcase {
+  id          String       @id @default(uuid())
+  shortId     String       @unique
   userId      String
   workspaceId String
   name        String
-  type        WidgetType @default(grid)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id])
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  type        ShowcaseType @default(grid)
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+  user        User         @relation(fields: [userId], references: [id])
+  Workspace   Workspace    @relation(fields: [workspaceId], references: [id])
 }

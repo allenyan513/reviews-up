@@ -20,19 +20,28 @@ export class FormsController {
   create(@Uid() uid: string, @Body() createFormDto: CreateFormDto) {
     return this.formsService.create(uid, createFormDto);
   }
+
   @Get('')
   findAll(@Uid() uid: string) {
     return this.formsService.findAll(uid, null);
   }
 
   @Get('/workspaceId/:workspaceId')
-  findAllWithWorkspaceId(@Uid() uid: string, @Param('workspaceId') workspaceId: string) {
+  findAllWithWorkspaceId(
+    @Uid() uid: string,
+    @Param('workspaceId') workspaceId: string,
+  ) {
     return this.formsService.findAll(uid, workspaceId);
   }
 
   @Get(':id')
   findOne(@Uid() uid: string, @Param('id') id: string) {
     return this.formsService.findOne(uid, id);
+  }
+
+  @Get('shortId/:shortId')
+  findOneByShortId(@Param('shortId') shortId: string) {
+    return this.formsService.findOneByShortId(shortId);
   }
 
   @Patch(':id')

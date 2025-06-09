@@ -6,7 +6,8 @@
   "tasks": {
     "dev": {
       "dependsOn": [
-        "db:generate"
+        "^generate-embed",
+        "^db:generate"
       ],
       "cache": false,
       "persistent": true
@@ -35,6 +36,9 @@
       "persistent": true
     },
     "db:deploy": {
+      "cache": false
+    },
+    "generate-embed": {
       "cache": false
     },
     "lint": {},

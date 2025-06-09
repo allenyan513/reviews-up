@@ -17,9 +17,9 @@ import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
-  @Post()
-  async create(@Uid() uid: string, @Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.create(uid, createReviewDto);
+  @Post('submit')
+  async submit(@Body() createReviewDto: CreateReviewDto) {
+    return this.reviewsService.submit(createReviewDto);
   }
 
   @Get('workspaceId/:workspaceId')
@@ -52,6 +52,7 @@ export class ReviewsController {
   ) {
     return this.reviewsService.update(uid, id, updateReviewDto);
   }
+
 
   @Delete(':id')
   async remove(@Uid() uid: string, @Param('id') id: string) {

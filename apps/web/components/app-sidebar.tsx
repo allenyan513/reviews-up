@@ -58,7 +58,7 @@ const data = {
       icon: IconListDetails
     },
     {
-      title: 'Widgets',
+      title: 'Showcases',
       url: '#',
       icon: IconChartBar
     }
@@ -112,10 +112,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: path.includes('/reviews')
             },
             {
-              title: 'Widgets',
-              url: `/${lang}/${defaultWorkspace?.id}/widgets`,
+              title: 'Showcases',
+              url: `/${lang}/${defaultWorkspace?.id}/showcases`,
               icon: IconChartBar,
-              active: path.includes('/widgets')
+              active: path.includes('/showcases')
             },
             {
               title: 'Collect Forms',
@@ -127,7 +127,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               title: 'Settings',
               url: `/${lang}/settings`,
               icon: IconDashboard,
-              active: path.includes('/forms')
+              active: path.includes('/settings')
             },
           ]}
         />

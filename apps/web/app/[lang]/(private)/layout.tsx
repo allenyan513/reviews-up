@@ -33,7 +33,7 @@ export default function RootLayout(props: {
             <SidebarProvider
               style={
                 {
-                  '--sidebar-width': 'calc(var(--spacing) * 72)',
+                  '--sidebar-width': 'calc(var(--spacing) * 62)',
                   '--header-height': 'calc(var(--spacing) * 12)',
                 } as React.CSSProperties
               }
@@ -41,7 +41,6 @@ export default function RootLayout(props: {
               <AppSidebar lang={lang} variant="inset" />
               <SidebarInset>{props.children}</SidebarInset>
             </SidebarProvider>
-
             <ToasterContext />
             {/*<Analytics />*/}
             {/*<SpeedInsights />*/}

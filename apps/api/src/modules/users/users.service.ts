@@ -4,25 +4,30 @@ import { CreateUserDto } from '@repo/api/users/dto/create-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
 import { generateIdToken } from '../../libs/utils';
 import { UpdateUserDto } from '@repo/api/users/dto/update-user.dto';
+import { generateShortId } from '../../libs/shortId';
+import { FormsService } from '../forms/forms.service';
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(private prismaServer: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private formService: FormsService,
+  ) {}
 
   async getProfile(userId: string): Promise<User> {
     if (!userId) {
       throw new Error('User ID is required');
     }
-    const user = await this.prismaServer.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         id: userId,
       },
-      include:{
+      include: {
         //how to rename Workspace to workspace?
-        Workspace: true
-      }
+        Workspace: true,
+      },
     });
     const userProfile: User = {
       id: user.id,
@@ -37,7 +42,7 @@ export class UsersService {
 
   async getUserByUid(uid: string) {
     this.logger.log(`Fetching user by UID: ${uid}`);
-    const user = await this.prismaServer.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: { id: uid },
     });
     if (!user) {
@@ -47,7 +52,7 @@ export class UsersService {
   }
 
   async findByIdToken(idToken: string): Promise<User | null> {
-    return this.prismaServer.user.findFirst({
+    return this.prismaService.user.findFirst({
       where: {
         idToken: idToken,
       },
@@ -61,7 +66,7 @@ export class UsersService {
     this.logger.log(
       `Finding user by provider: ${provider}, accountId: ${providerAccountId}`,
     );
-    const user = await this.prismaServer.user.findUnique({
+    const user = await this.prismaService.user.findUnique({
       where: {
         provider_providerAccountId: {
           provider,
@@ -76,7 +81,7 @@ export class UsersService {
   }
 
   async create(dto: CreateUserDto): Promise<User> {
-    const newUser = await this.prismaServer.user.create({
+    const newUser = await this.prismaService.user.create({
       data: {
         provider: dto.provider,
         providerAccountId: dto.providerAccountId,
@@ -94,7 +99,7 @@ export class UsersService {
   }
 
   async update(dto: UpdateUserDto): Promise<User> {
-    return this.prismaServer.user.update({
+    return this.prismaService.user.update({
       where: {
         provider_providerAccountId: {
           provider: dto.provider,
@@ -126,8 +131,9 @@ export class UsersService {
       throw new Error('User is required to create default workspace and form');
     }
     this.logger.log(`Creating default workspace and form for user: ${user.id}`);
-    const defaultWorkspace = await this.prismaServer.workspace.create({
+    const defaultWorkspace = await this.prismaService.workspace.create({
       data: {
+        shortId: generateShortId(),
         name: 'Default Workspace',
         userId: user.id,
       },
@@ -135,17 +141,14 @@ export class UsersService {
     if (!defaultWorkspace) {
       throw new Error('Unable to create default workspace');
     }
-    const defaultForm = await this.prismaServer.form.create({
-      data: {
-        name: 'Default Form',
-        userId: user.id,
-        workspaceId: defaultWorkspace.id,
-      },
+    const defaultForm = await this.formService.create(user.id, {
+      name: 'Default Form',
+      workspaceId: defaultWorkspace.id,
     });
     if (!defaultForm) {
       throw new Error('Unable to create default workspace');
     }
-    const defaultReview = await this.prismaServer.review.create({
+    const defaultReview = await this.prismaService.review.create({
       data: {
         workspaceId: defaultWorkspace.id,
         formId: defaultForm.id,
@@ -154,22 +157,23 @@ export class UsersService {
         reviewerEmail: 'anonymous@gmail.com',
         rating: 5,
         text: 'This is a default review.',
-        status: 'pending'
+        status: 'pending',
       },
     });
     if (!defaultReview) {
       throw new Error('Unable to create default workspace');
     }
-    const defaultWidget = await this.prismaServer.widget.create({
+    const defaultShowcase = await this.prismaService.showcase.create({
       data: {
-        name: 'Default Widget',
+        shortId: generateShortId(),
+        name: 'Default Showcase',
         userId: user.id,
         workspaceId: defaultWorkspace.id,
-        type: 'grid'
+        type: 'grid',
       },
     });
-    if (!defaultWidget) {
-      throw new Error('Unable to create default widget');
+    if (!defaultShowcase) {
+      throw new Error('Unable to create default showcase');
     }
   }
 }

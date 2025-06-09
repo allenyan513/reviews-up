@@ -35,9 +35,9 @@ const TestimonialsPage = () => {
   }, [defaultWorkspace, session]);
 
   return (
-    <div className="min-h-screen p-6 md:p-10">
+    <div className="min-h-screen p-6 md:p-8">
       {/* Header Section */}
-      <div className="flex justify-between items-start mb-8">
+      <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-1">Reviews</h1>
           <p className="text-gray-600">

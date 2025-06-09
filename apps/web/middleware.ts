@@ -34,6 +34,7 @@ export function middleware(request: NextRequest) {
       '/favicon.ico',
       '/google.png',
       '/robots.txt',
+      '/js/embed.js',
       // Your other files in `public`
     ].includes(pathname)
   )

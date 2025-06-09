@@ -16,36 +16,7 @@ export class ReviewsService {
     private s3Service: S3Service,
   ) {}
 
-  async create(uid: string, createReviewDto: CreateReviewDto) {
-    // Ensure formId is belonging to the user
-    const form = await this.prismaService.form.findFirst({
-      where: {
-        id: createReviewDto.formId,
-        userId: uid, // Check if the form belongs to the user
-      },
-    });
-    if (!form) {
-      throw new Error('Form not found or does not belong to the user');
-    }
-    return this.prismaService.review.create({
-      data: {
-        workspaceId: createReviewDto.workspaceId,
-        formId: createReviewDto.formId,
-        reviewerName: createReviewDto.reviewerName,
-        reviewerImage: createReviewDto.reviewerImage,
-        reviewerEmail: createReviewDto.reviewerEmail,
-        rating: createReviewDto.rating,
-        text: createReviewDto.text,
-        tweetId: createReviewDto.tweetId,
-        status: 'public',
-        source: createReviewDto.source,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      },
-    });
-  }
-
-  async createPublic(createReviewDto: CreateReviewDto) {
+  async submit(createReviewDto: CreateReviewDto) {
     return this.prismaService.review.create({
       data: {
         workspaceId: createReviewDto.workspaceId,
@@ -57,10 +28,15 @@ export class ReviewsService {
         text: createReviewDto.text,
         tweetId: createReviewDto.tweetId,
         status: 'pending',
+        source: createReviewDto.source,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
+  }
+
+  async create(uid: string, createReviewDto: CreateReviewDto) {
+    return this.submit(createReviewDto);
   }
 
   async findAll(workspaceId: string, paginateRequest: PaginateRequest) {

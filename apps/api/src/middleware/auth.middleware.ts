@@ -7,23 +7,24 @@ import { AuthService } from '../modules/auth/auth.service';
 export class AuthFilterMiddleware implements NestMiddleware {
   private readonly logger = new Logger(AuthFilterMiddleware.name);
   private skipPaths: string[] = [
-    '/auth/callback',
     '/health',
+    '/auth/callback',
     '/strapi/webhook',
-    '/crawler/cron',
+    '/showcases/shortId/:shortId',
+    '/forms/shortId/:shortId',
+    '/reviews/submit'
   ];
   private streamPaths = ['/docs/chat'];
 
   constructor(private authService: AuthService) {}
 
   async use(req: Request, res: Response, next: NextFunction) {
-    // this.logger.debug(`req.baseUrl: ${req.baseUrl}`);
+    this.logger.debug(`req.baseUrl: ${req.baseUrl}`);
     let idToken: string | null = req.get('idToken') || null;
     const baseUrl = req.baseUrl;
     if (this.streamPaths.includes(baseUrl)) {
       idToken = req.query.idToken as string;
     }
-
     const isSkipPath = this.skipPaths.some((path) => {
       const { regexp } = pathToRegexp(path);
       return regexp.test(baseUrl);

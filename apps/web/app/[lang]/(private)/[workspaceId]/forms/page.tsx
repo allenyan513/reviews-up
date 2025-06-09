@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
-import { Form } from '@repo/api/forms/entities/form.entity';
+import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { api } from '@/lib/apiClient';
 import {
   BiEdit,
@@ -13,6 +13,9 @@ import {
   BiTrash,
 } from 'react-icons/bi';
 import { ActionIcon } from '@/components/action-icon';
+import { Button } from '@/components/ui/button';
+import CreateFormDialog from '@/components/biz/create-form-dialog';
+import Link from 'next/link';
 
 export default function Page(props: {
   params: Promise<{
@@ -24,34 +27,34 @@ export default function Page(props: {
     required: true,
   });
 
-  const [forms, setForms] = useState<Form[]>([]);
+  const [forms, setForms] = useState<FormEntity[]>([]);
   const [params, setParams] = useState<{
     lang: string;
     workspaceId: string;
-  } | null>(null);
+  }>();
 
   useEffect(() => {
-    props.params.then(setParams);
-  }, []);
+    if (!session || !session.data) return;
+    props.params.then((params) => {
+      if (!params.workspaceId) return;
+      setParams(params);
+      api
+        .getForms(params.workspaceId, {
+          session: session.data,
+        })
+        .then((response) => {
+          setForms(response);
+        })
+        .catch((error) => {
+          console.error('Error fetching forms:', error);
+        });
+    });
+  }, [session]);
 
-  useEffect(() => {
-    if (!session.data || !params) return;
-    api
-      .getForms(params.workspaceId, {
-        session: session.data,
-      })
-      .then((response) => {
-        console.log(response);
-        setForms(response);
-      });
-  }, [session, params]);
-
-  if (!params) {
-    return null
-  }
+  if (!forms.length) return null;
 
   return (
-    <div className="min-h-screen p-6 md:p-10">
+    <div className="min-h-screen p-6 md:p-8">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div>
@@ -60,52 +63,48 @@ export default function Page(props: {
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <button className="flex items-center px-6 py-3 bg-black text-white rounded-lg shadow-md hover:bg-gray-800 transition-colors duration-200">
-          <BiPlus className='text-2xl mr-2'/> New form
-        </button>
+        <CreateFormDialog/>
       </div>
 
       {/* Forms List */}
       <div className="space-y-4">
         {forms.map((form) => (
-          <div
+          <Link
+            href={`/${params?.lang}/${params?.workspaceId}/forms/${form.id}`}
             key={form.id}
-            className="flex items-center justify-between bg-white rounded-lg shadow-sm p-4 border border-gray-200"
+            className="flex items-center justify-between bg-white rounded-lg shadow-sm p-4 border border-gray-200 cursor-pointer hover:shadow-md transition-shadow duration-200"
           >
             <div className="flex items-center">
               <div className="p-3 bg-gray-100 rounded-md mr-4">
-                {/* Placeholder for file icon */}
-                <BiFile  className='text-2xl'/>
+                <BiFile className="text-2xl" />
               </div>
               <div>
                 <h2 className="text-lg font-medium text-gray-900">
                   {form.name}
                 </h2>
-                <p className="text-sm text-gray-500 mt-0.5">
-                  <span className="font-semibold">
-                    {form.name} responses
-                  </span>{' '}
-                  • created on {form.createdAt.toLocaleString()}
+                <p className="text-sm text-gray-500 mt-0.5 flex flex-row items-center gap-2 ">
+                  <span className="font-semibold">{form.reviewCount} responses</span>
+                  <span>•</span>
+                  <span> created on {form.createdAt.toLocaleString()} </span>
                 </p>
               </div>
             </div>
-
             {/* Action Icons */}
             <div className="flex items-center space-x-1">
               <ActionIcon label="Invite">
-                <BiMailSend className='text-2xl'/>
+                <BiMailSend className="text-2xl" />
               </ActionIcon>
               <ActionIcon label="Link">
-                <BiShare className='text-2xl'/>
+                <BiShare className="text-2xl" />
               </ActionIcon>
               <ActionIcon label="Edit">
-                <BiEdit className='text-2xl'/>
+                <BiEdit className="text-2xl" />
               </ActionIcon>
               <ActionIcon label="Delete">
-                <BiTrash className='text-2xl text-red-500'/>
+                <BiTrash className="text-2xl text-red-500" />
               </ActionIcon>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

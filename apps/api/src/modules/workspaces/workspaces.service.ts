@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from '@repo/api/workspaces/dto/update-workspace.dto';
 import { PrismaService } from '../prisma/prisma.service';
+import { generateShortId } from '../../libs/shortId';
 
 @Injectable()
 export class WorkspacesService {
@@ -10,6 +11,7 @@ export class WorkspacesService {
   async create(uid: string, dto: CreateWorkspaceDto) {
     return this.prismaService.workspace.create({
       data: {
+        shortId: generateShortId(),
         name: dto.name,
         userId: uid, // Assuming uid is the user ID
       },
