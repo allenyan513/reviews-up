@@ -74,6 +74,9 @@ export default function TestimonialsPage() {
         columns={columns}
         fetchData={fetchReviews}
         totalRowCount={totalServerRowCount}
+        onRowItemClick={(row) => {
+          console.log(row)
+        }}
       />
     </div>
   );

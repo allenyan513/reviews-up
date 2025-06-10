@@ -97,6 +97,19 @@ export const columns: ColumnDef<ReviewEntity>[] = [
         </Button>
       );
     },
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('createdAt'));
+      // 获取浏览器语言
+      const locale = typeof navigator !== 'undefined' ? navigator.language : 'en-US';
+      const formattedDate = new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      }).format(date);
+      return (
+        <span>{formattedDate}</span>
+      )
+    }
   },
   {
     id: 'actions',

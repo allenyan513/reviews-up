@@ -11,16 +11,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
-import { BiSortAlt2 } from 'react-icons/bi';
-import { useUserContext } from '@/context/UserProvider';
 import { useState } from 'react';
 import { api } from '@/lib/apiClient';
 import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 export default function WorkspaceAddButton(props: {}) {
   const { data: session } = useSession();
-  const { user, defaultWorkspace } = useUserContext();
   const [workspaceName, setWorkspaceName] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
@@ -35,12 +32,12 @@ export default function WorkspaceAddButton(props: {}) {
         },
       )
       .then((response) => {
-        console.log('Workspace created:', response);
         setWorkspaceName('');
         setIsOpen(false);
+        toast.success('Workspace created successfully!');
       })
       .catch((error) => {
-        console.error('Error creating workspace:', error);
+        toast.error('Failed to create workspace. Please try again.');
       });
   };
 

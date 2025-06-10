@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
-import WorkspaceChangeButton from '@/components/biz/workspace-change-button';
+import WorkspaceSwitchButton from '@/components/biz/workspace-switch-button';
 import { cn } from '@/lib/utils';
 
 export function NavMain(props: {
@@ -27,7 +27,7 @@ export function NavMain(props: {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <WorkspaceChangeButton />
+        <WorkspaceSwitchButton />
         <SidebarMenu>
           {props.items.map((item) => (
             <Link

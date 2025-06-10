@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import CreateFormDialog from '@/components/biz/create-form-dialog';
 
@@ -9,26 +9,17 @@ export default function Page(props: {
     lang: string;
   }>;
 }) {
+  const params = use(props.params);
   const session = useSession({
     required: true,
   });
 
-  const [params, setParams] = useState<{
-    lang: string;
-  } | null>(null);
-  useEffect(() => {
-    props.params.then(setParams);
-  }, []);
 
-  if (!params) {
-    return <div>Loading...</div>;
-  }
   return (
     <div className="min-h-screen p-6 md:p-8">
-      {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Settings</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">My Account</h1>
           <p className="mt-1 text-gray-600">
             Easily collect testimonials from your customers using a simple link
           </p>

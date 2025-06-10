@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
     totalRowCount: number;
   } | null>;
   totalRowCount: number;
+  onRowItemClick: (row: TData) => void;
 }
 
 const statusOptions = [
@@ -66,6 +67,7 @@ export function DataTable<TData, TValue>({
   // data,
   fetchData,
   totalRowCount,
+  onRowItemClick,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -197,6 +199,10 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
+                  className='cursor-pointer'
+                  onClick={()=>{
+                    onRowItemClick(row.original as TData);
+                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

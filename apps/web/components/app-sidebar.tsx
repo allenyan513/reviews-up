@@ -5,19 +5,16 @@ import {
   IconCamera,
   IconChartBar,
   IconDashboard,
-  IconDatabase,
-  IconFileAi,
-  IconFileDescription,
-  IconFileWord,
-  IconFolder,
-  IconHelp,
   IconInnerShadowTop,
   IconListDetails,
-  IconReport,
-  IconSearch,
   IconSettings,
-  IconUsers
+  IconStar,
+  IconCode,
+  IconTable,
+  IconUser,
+
 } from '@tabler/icons-react';
+
 
 import { NavMain } from '@/components/nav-main';
 import { NavSecondary } from '@/components/nav-secondary';
@@ -32,48 +29,12 @@ import {
   SidebarMenuItem
 } from '@/components/ui/sidebar';
 import { useSession, signOut } from 'next-auth/react';
-import { useEffect, useState } from 'react';
-import { User } from '@repo/api/users/entities/user.entity';
-import { api } from '@/lib/apiClient';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { usePathname } from 'next/navigation';
 import { useUserContext } from '@/context/UserProvider';
 
 const data = {
   title: 'ReviewUp',
-  user: {
-    name: 'shadcn',
-    email: 'm@example.com',
-    avatar: '/avatars/shadcn.jpg'
-  },
-  navMain: [
-    {
-      title: 'Forms',
-      url: '/',
-      icon: IconDashboard
-    },
-    {
-      title: 'Reviews',
-      url: '#',
-      icon: IconListDetails
-    },
-    {
-      title: 'Showcases',
-      url: '#',
-      icon: IconChartBar
-    }
-  ],
   navSecondary: [
-    // {
-    //   title: 'Settings',
-    //   url: '/settings',
-    //   icon: IconSettings
-    // },
-    // {
-    //   title: 'feedback',
-    //   url: '/feedback',
-    //   icon: IconHelp
-    // }
   ]
 };
 
@@ -108,26 +69,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {
               title: 'Reviews',
               url: `/${lang}/${defaultWorkspace?.id}/reviews`,
-              icon: IconListDetails,
+              icon: IconStar,
               active: path.includes('/reviews')
             },
             {
               title: 'Showcases',
               url: `/${lang}/${defaultWorkspace?.id}/showcases`,
-              icon: IconChartBar,
+              icon: IconCode,
               active: path.includes('/showcases')
             },
             {
               title: 'Collect Forms',
               url: `/${lang}/${defaultWorkspace?.id}/forms`,
-              icon: IconDashboard,
+              icon: IconTable,
               active: path.includes('/forms')
             },
             {
               title: 'Settings',
               url: `/${lang}/settings`,
-              icon: IconDashboard,
+              icon: IconSettings,
               active: path.includes('/settings')
+            },
+            {
+              title: 'Account',
+              url: `/${lang}/account`,
+              icon: IconUser,
+              active: path.includes('/account')
             },
           ]}
         />

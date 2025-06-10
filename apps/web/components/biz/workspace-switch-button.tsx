@@ -1,26 +1,23 @@
-import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { useUserContext } from '@/context/UserProvider';
 import WorkspaceAddButton from '@/components/biz/workspace-add-button';
+import { useState } from 'react';
+import toast from 'react-hot-toast';
 
-export default function WorkspaceChangeButton(props: {}) {
-  const { user, defaultWorkspace } = useUserContext();
-
+export default function WorkspaceSwitchButton(props: {}) {
+  const { user, defaultWorkspace, switchDefaultWorkspace } = useUserContext();
+  const [open, setOpen] = useState(false);
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <div className="flex flex-row items-center justify-between border border-gray-300 rounded-lg p-4 mb-2 gap-1 hover:border-gray-500 cursor-pointer">
           <div className="flex flex-col gap-2">
@@ -44,28 +41,25 @@ export default function WorkspaceChangeButton(props: {}) {
               {user.Workspace.map((workspace: Workspace) => (
                 <div
                   key={workspace.id}
-                  className="flex flex-row w-full justify-between p-4 border border-gray-300 rounded-lg hover:border-gray-500 cursor-pointer"
+                  className="flex flex-row w-full justify-between items-center p-6 border border-gray-300 rounded-lg hover:border-gray-500 cursor-pointer"
                   onClick={() => {
-                    // Handle workspace change logic here
-                    console.log(`Switching to workspace: ${workspace.name}`);
+                    switchDefaultWorkspace(workspace);
+                    setOpen(false);
+                    toast.success(`Switch Workspace to ${workspace.name}`);
                   }}
                 >
-                  <div className="">{workspace.name}</div>
-                  <p>Current</p>
+                  <span>{workspace.name}</span>
+                  {defaultWorkspace?.id === workspace.id ? (
+                    <span className='text-white bg-black py-1 px-2 rounded text-xs'>Current</span>
+                  ) : (
+                    <></>
+                  )}
                 </div>
               ))}
             </div>
           )}
-          <WorkspaceAddButton/>
-          {/*<p className='text-sm mt-4 cursor-pointer'>+ <span className='underline'>Creat a new workspace</span></p>*/}
+          <WorkspaceAddButton />
         </div>
-        {/*<DialogFooter className="sm:justify-start">*/}
-        {/*  <DialogClose asChild>*/}
-        {/*    <Button type="button" variant="secondary">*/}
-        {/*      Close*/}
-        {/*    </Button>*/}
-        {/*  </DialogClose>*/}
-        {/*</DialogFooter>*/}
       </DialogContent>
     </Dialog>
   );
