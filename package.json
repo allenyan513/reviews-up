@@ -26,12 +26,14 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.826.0",
     "@aws-sdk/s3-request-presigner": "^3.826.0",
-    "@prisma/client": "latest"
+    "@prisma/client": "latest",
+    "ejs": "^3.1.10"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
     "@types/express": "^5.0.3",
+    "@types/jest": "^29.5.14",
     "@types/node": "^24.0.0",
     "@types/supertest": "^6.0.3",
     "prettier": "^3.2.5",

@@ -1,7 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "globalDependencies": [
-    "**/.env.*local"
+    "**/.env"
   ],
   "tasks": {
     "dev": {
@@ -26,7 +26,13 @@
         ".next/**",
         "!.next/cache/**"
       ],
-      "env": ["DATABASE_URL", "NEXTAUTH_SECRET", "NEXTAUTH_URL"]
+      "env": [
+        "API_HOST",
+        "API_PORT",
+        "DATABASE_URL",
+        "NEXTAUTH_SECRET",
+        "NEXTAUTH_URL"
+      ]
     },
     "db:generate": {
       "cache": false
