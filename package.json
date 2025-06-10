@@ -24,11 +24,16 @@
     "db:deploy": "turbo run db:deploy"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.826.0",
+    "@aws-sdk/s3-request-presigner": "^3.826.0",
     "@prisma/client": "latest"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.0.0",
+    "@types/supertest": "^6.0.3",
     "prettier": "^3.2.5",
     "prisma": "latest",
     "turbo": "^2.5.4"
