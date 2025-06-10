@@ -8,7 +8,7 @@ import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { S3SignedUrlEntity } from '@repo/api/s3/entity/s3-signed-url.entity';
 import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
-import { PaginateResponse } from '@repo/api/common/Paginate';
+import { PaginateResponse } from '@repo/api/common/paginate';
 import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
 import { Form, Showcase } from '@repo/database/generated/client/client';
 import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
