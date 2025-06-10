@@ -13,7 +13,7 @@ export function ReviewItem(props: { review: Review; className?: string }) {
     <div
       key={props.review.id}
       className={cn(
-        'bg-white p-4 border rounded shadow flex flex-row gap-4',
+        'bg-white py-4 pl-4 pr-12 border rounded shadow flex flex-row gap-4',
         props.className,
       )}
     >

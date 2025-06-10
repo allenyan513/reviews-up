@@ -15,6 +15,7 @@ import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
 import { FindAllReviewRequest } from '@repo/api/reviews/find-all-review.dto';
+import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
 
 interface ApiOptions {
   session: Session | null;
@@ -145,7 +146,7 @@ export const api = {
     authFetch(`/showcases/shortId/${shortId}`, 'GET', {}, options),
   createShowcase: (dto: CreateShowcaseDto, options: ApiOptions) =>
     authFetch('/showcases', 'POST', dto, options),
-  updateShowcase: (id: string, dto: CreateShowcaseDto, options: ApiOptions) =>
+  updateShowcase: (id: string, dto: UpdateShowcaseDto, options: ApiOptions) =>
     authFetch(`/showcases/${id}`, 'PATCH', dto, options),
   deleteShowcase: (id: string, options: ApiOptions) =>
     authFetch(`/showcases/${id}`, 'DELETE', {}, options),

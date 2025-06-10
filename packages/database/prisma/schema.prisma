@@ -26,15 +26,6 @@ enum ReviewSource {
   trustpilot
 }
 
-enum ShowcaseType {
-  grid
-  list
-  carousel
-  masonry
-  marquee
-  flow
-}
-
 enum MediaType {
   image
   video
@@ -120,14 +111,14 @@ model ReviewMedia {
 }
 
 model Showcase {
-  id          String       @id @default(uuid())
-  shortId     String       @unique
+  id          String    @id @default(uuid())
+  shortId     String    @unique
   userId      String
   workspaceId String
   name        String
-  type        ShowcaseType @default(grid)
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
-  user        User         @relation(fields: [userId], references: [id])
-  Workspace   Workspace    @relation(fields: [workspaceId], references: [id])
+  config      Json?     @default("{}")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  Workspace   Workspace @relation(fields: [workspaceId], references: [id])
 }

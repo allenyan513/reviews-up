@@ -1,21 +1,14 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import { useSession } from 'next-auth/react';
-import {
-  BiEdit,
-  BiFile,
-  BiMailSend,
-  BiPlus,
-  BiShare,
-  BiTrash,
-} from 'react-icons/bi';
+import { BiCodeAlt, BiFile, BiShow, BiTrash } from 'react-icons/bi';
 import { ActionIcon } from '@/components/action-icon';
 import { Showcase } from '@repo/database/generated/client/client';
 import { api } from '@/lib/apiClient';
 import { PaginateResponse } from '@repo/api/common/paginate';
-import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import DialogNewShowcase from '@/app/[lang]/(private)/[workspaceId]/showcases/dialog-new-showcase';
 
 export default function Page(props: {
   params: Promise<{
@@ -23,38 +16,28 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
+  const params = use(props.params);
   const session = useSession({
     required: true,
   });
   const [showcases, setShowcases] = useState<PaginateResponse<Showcase>>();
-  const [params, setParams] = useState<{
-    lang: string;
-    workspaceId: string;
-  } | null>(null);
-
   useEffect(() => {
-    props.params.then(setParams);
-  }, []);
-
-  useEffect(() => {
-    if (!session.data || !params) return;
+    if (!session.data) return;
     api
       .getShowcases(params.workspaceId, {
         session: session.data,
       })
       .then((response) => {
-        console.log(response);
         setShowcases(response);
       });
-  }, [session, params]);
+  }, [session]);
 
-  if (!params) {
+  if (!showcases) {
     return null;
   }
 
   return (
     <div className="min-h-screen p-6 md:p-8">
-      {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900">Showcases</h1>
@@ -62,9 +45,7 @@ export default function Page(props: {
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <Button size={'lg'}>
-          <BiPlus className="text-2xl" />New Showcase
-        </Button>
+        <DialogNewShowcase />
       </div>
 
       {/* Showcase List */}
@@ -85,22 +66,19 @@ export default function Page(props: {
                     {item.name}
                   </h2>
                   <p className="text-sm text-gray-500 mt-0.5">
-                    <span className="font-semibold uppercase">{item.type} Type</span>{' '}
-                    • created on {item.createdAt.toLocaleString()}
+                    {/*<span className="font-semibold uppercase">{item.type} Type</span>{' '}*/}
+                    created on {item.createdAt.toLocaleString()}
                   </p>
                 </div>
               </div>
 
               {/* Action Icons */}
               <div className="flex items-center space-x-1">
-                <ActionIcon label="Invite">
-                  <BiMailSend className="text-2xl" />
+                <ActionIcon label="Embed">
+                  <BiCodeAlt className="text-2xl" />
                 </ActionIcon>
-                <ActionIcon label="Link">
-                  <BiShare className="text-2xl" />
-                </ActionIcon>
-                <ActionIcon label="Edit">
-                  <BiEdit className="text-2xl" />
+                <ActionIcon label="View">
+                  <BiShow className="text-2xl" />
                 </ActionIcon>
                 <ActionIcon label="Delete">
                   <BiTrash className="text-2xl text-red-500" />

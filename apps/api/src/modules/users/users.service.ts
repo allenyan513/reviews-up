@@ -6,6 +6,7 @@ import { generateIdToken } from '../../libs/utils';
 import { UpdateUserDto } from '@repo/api/users/dto/update-user.dto';
 import { generateShortId } from '../../libs/shortId';
 import { FormsService } from '../forms/forms.service';
+import { ShowcasesService } from '../showcases/showcases.service';
 
 @Injectable()
 export class UsersService {
@@ -14,6 +15,7 @@ export class UsersService {
   constructor(
     private prismaService: PrismaService,
     private formService: FormsService,
+    private showcasesService: ShowcasesService,
   ) {}
 
   async getProfile(userId: string): Promise<User> {
@@ -163,14 +165,9 @@ export class UsersService {
     if (!defaultReview) {
       throw new Error('Unable to create default workspace');
     }
-    const defaultShowcase = await this.prismaService.showcase.create({
-      data: {
-        shortId: generateShortId(),
-        name: 'Default Showcase',
-        userId: user.id,
-        workspaceId: defaultWorkspace.id,
-        type: 'grid',
-      },
+    const defaultShowcase = await this.showcasesService.create(user.id, {
+      workspaceId: defaultWorkspace.id,
+      name: 'Default Showcase',
     });
     if (!defaultShowcase) {
       throw new Error('Unable to create default showcase');

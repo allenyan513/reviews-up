@@ -9,7 +9,7 @@ export const ActionIcon = ({
 }) => (
   <button
     onClick={onClick}
-    className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200"
+    className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 cursor-pointer"
     aria-label={label}
   >
     {children}

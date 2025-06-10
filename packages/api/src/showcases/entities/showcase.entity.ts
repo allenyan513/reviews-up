@@ -10,3 +10,7 @@ export interface ShowcaseEntity extends Showcase {
   workspace?: Workspace;
   reviews?: Review[];
 }
+
+export interface ShowcaseConfig {
+  type?: string
+}

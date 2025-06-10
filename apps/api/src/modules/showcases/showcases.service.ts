@@ -10,6 +10,9 @@ import { generateShortId } from '../../libs/shortId';
 @Injectable()
 export class ShowcasesService {
   private logger = new Logger('ShowcasesService');
+  private defaultConfig = {
+    type: 'list', // Default type for showcases
+  };
 
   constructor(private prismaService: PrismaService) {}
 
@@ -20,7 +23,7 @@ export class ShowcasesService {
         userId: uid,
         workspaceId: createShowcaseDto.workspaceId,
         name: createShowcaseDto.name,
-        type: createShowcaseDto.type,
+        config: this.defaultConfig,
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -98,7 +101,14 @@ export class ShowcasesService {
     } as ShowcaseEntity;
   }
 
+  /**
+   * update showcase 可以修改 name 或者 config
+   * @param uid
+   * @param id
+   * @param dto
+   */
   async update(uid: string, id: string, dto: UpdateShowcaseDto) {
+    this.logger.debug('Updating showcase', id, 'for user', uid, dto);
     return this.prismaService.showcase.update({
       where: {
         id: id,
@@ -106,7 +116,7 @@ export class ShowcasesService {
       },
       data: {
         name: dto.name,
-        type: dto.type,
+        config: dto.config,
         updatedAt: new Date(),
       },
     });

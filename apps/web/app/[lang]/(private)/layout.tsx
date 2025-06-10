@@ -5,7 +5,7 @@ import '@/app/globals.css';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import { AppSidebar } from '@/components/app-sidebar';
 import AuthProvider from '@/context/AuthProvider';
-import { useState } from 'react';
+import { use, useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 import ToasterContext from '@/context/ToastContext';
 
@@ -19,12 +19,7 @@ export default function RootLayout(props: {
   }>;
   children: React.ReactNode;
 }) {
-  const [lang, setLang] = useState<string>('en');
-
-  props.params.then((params) => {
-    setLang(params.lang);
-  });
-
+  const { lang } = use(props.params);
   return (
     <html lang={lang}>
       <body className={openSans.className}>
