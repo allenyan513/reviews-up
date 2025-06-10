@@ -15,14 +15,13 @@ interface UseUploadS3Result {
 }
 
 export function useUploadS3(): UseUploadS3Result {
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const [status, setStatus] = useState<UploadStatus>('idle');
   const [error, setError] = useState<string | null>(null);
 
   const uploadFile = async (file: File): Promise<string | null> => {
     setStatus('uploading');
     setError(null);
-
     try {
       // 1. Get pre-signed URL from your backend
       const { signedUrl, key } = await api.getSignedUrl(
@@ -30,7 +29,7 @@ export function useUploadS3(): UseUploadS3Result {
           fileName: file.name,
           fileType: file.type,
         },
-        { session: session },
+        { session: null },
       );
       // 2. Upload file to S3
       const uploadRes = await fetch(signedUrl, {

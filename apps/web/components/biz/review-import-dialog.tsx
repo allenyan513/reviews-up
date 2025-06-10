@@ -22,14 +22,23 @@ const imports = [
     title: 'Manual Import',
     url: '/import/csv',
     icon: BiDownload,
-    dialog: ReviewImportManualDialog
+    node: <ReviewImportManualDialog/>
   },
   {
     title: 'X',
     url: '/import/json',
     icon: BiX,
-    dialog: ReviewImportXDialog
-  }
+    node: (
+      <ReviewImportXDialog
+        onClickImport={() => {}}
+        onTweetIdChange={(tweetId) => {
+          console.log('Tweet ID changed:', tweetId);
+        }}
+      >
+        <div></div>
+      </ReviewImportXDialog>
+    ),
+  },
 ];
 
 export default function ReviewImportDialog() {
@@ -58,9 +67,7 @@ export default function ReviewImportDialog() {
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={setIsOpen}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
           <BiDownload className="text-2xl" />
@@ -75,9 +82,9 @@ export default function ReviewImportDialog() {
           </DialogDescription>
         </DialogHeader>
         <div className="grid grid-cols-3 gap-4">
-          {imports.map((item) => (
-            <item.dialog key={item.title} />
-          ))}
+          {/*{imports.map((item) => (*/}
+          {/*  <item.node/>*/}
+          {/*))}*/}
         </div>
         <DialogFooter className="">
           <DialogClose asChild>

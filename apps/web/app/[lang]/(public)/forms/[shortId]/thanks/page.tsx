@@ -1,6 +1,6 @@
 'use client';
 import { api } from '@/lib/apiClient';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, use } from 'react';
 import toast from 'react-hot-toast';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,26 +13,23 @@ import { FormConfig } from '@repo/api/forms/entities/form-config.entity';
 export default function PublicFormThanksRoute(props: {
   params: Promise<PageParams>;
 }) {
-  const [params, setParams] = useState<PageParams | null>(null);
+  const params = use(props.params);
   const [form, setForm] = useState<FormEntity | null>(null);
 
   useEffect(() => {
-    props.params.then((p) => {
-      setParams(p);
-      api
-        .getFormByShortId(p.shortId, {
-          session: null,
-        })
-        .then((response) => {
-          setForm(response);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    });
-  }, [props.params]);
+    api
+      .getFormByShortId(params.shortId, {
+        session: null,
+      })
+      .then((response) => {
+        setForm(response);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
+  }, []);
 
-  if (!form || !params){
+  if (!form || !params) {
     return null;
   }
 
@@ -48,27 +45,11 @@ export default function PublicFormThanksRoute(props: {
 }
 
 export function PublicFormThanksPage(props: PageParams) {
-  const [form, setForm] = useState<FormEntity>();
-
-  useEffect(() => {
-    api
-      .getFormByShortId(props.shortId, {
-        session: null,
-      })
-      .then((response) => {
-        setForm(response);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  }, []);
-
-  if (!form) {
+  if (!props.form || !props.config) {
     return null;
   }
-
   return (
-    <div className="flex flex-col items-center pb-32 bg-gray-50">
+    <div className="flex flex-col items-center justify-center bg-gray-50 h-screen">
       <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
         <Lottie animationData={thanks} />
         <div className="flex flex-col gap-4">

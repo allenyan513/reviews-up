@@ -15,6 +15,7 @@ export class FormsService {
       name: 'My Awesome App',
       logo: '/logo.png',
       slogan: 'Empowering Your Experience',
+      url: 'https://myawesomeapp.com',
     },
     welcome: {
       title: 'Welcome to My Awesome App',

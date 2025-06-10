@@ -6,12 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { Uid } from '../../middleware/uid.decorator';
-import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
+import { findAllReviewRequestSchema } from '@repo/api/reviews/find-all-review.dto';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -26,17 +27,14 @@ export class ReviewsController {
   async findAll(
     @Uid() uid: string,
     @Param('workspaceId') workspaceId: string,
-    @Param('page') page: number = 1,
-    @Param('pageSize') pageSize: number = 10,
-    @Param('sortBy') sortBy: string = 'createdAt',
-    @Param('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
+    @Query() query: any,
   ) {
-    return this.reviewsService.findAll(workspaceId, {
-      page,
-      pageSize,
-      sortBy,
-      sortOrder,
+    const input = findAllReviewRequestSchema.parse({
+      uid,
+      workspaceId,
+      ...query,
     });
+    return this.reviewsService.findAll(input);
   }
 
   @Get(':id')
@@ -53,14 +51,8 @@ export class ReviewsController {
     return this.reviewsService.update(uid, id, updateReviewDto);
   }
 
-
   @Delete(':id')
   async remove(@Uid() uid: string, @Param('id') id: string) {
     return this.reviewsService.remove(uid, id);
-  }
-
-  @Post('getSignedUrl')
-  async getSignedUrl(@Uid() uid: string, @Body() dto: S3GetSignedUrlDto) {
-    return this.reviewsService.getSignedUrl(uid, dto);
   }
 }

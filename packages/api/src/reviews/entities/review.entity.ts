@@ -1,19 +1,6 @@
-import { Workspace } from '../../workspaces/entities/workspace.entity';
-import { FormEntity } from '../../forms/entities/form.entity';
 import { ReviewMedia } from './review-media.entity';
+import { Review } from '@repo/database/generated/client';
 
-export class Review {
-  workspace: Workspace;
-  form?: FormEntity;
-  reviewerName: string;
-  reviewerImage?: string;
-  reviewerEmail?: string;
-  rating?: number;
-  text?: string;
-  tweetId?: string;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
+export interface ReviewEntity extends Review {
   medias?: ReviewMedia[];
-  source?: string;
 }

@@ -1,18 +1,20 @@
 import { Session } from 'next-auth';
 import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
+import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { User } from '@repo/api/users/entities/user.entity';
 import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { S3SignedUrlEntity } from '@repo/api/s3/entity/s3-signed-url.entity';
 import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
-import { Review } from '@repo/api/reviews/entities/review.entity';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { PaginateResponse } from '@repo/api/common/Paginate';
 import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
 import { Form, Showcase } from '@repo/database/generated/client/client';
 import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
+import { FindAllReviewRequest } from '@repo/api/reviews/find-all-review.dto';
 
 interface ApiOptions {
   session: Session | null;
@@ -41,7 +43,7 @@ async function authFetch(
     if (queryString) {
       url += `?${queryString}`;
     }
-  } else if (method === 'POST'  || method === 'PATCH') {
+  } else if (method === 'POST' || method === 'PATCH') {
     config.body = JSON.stringify(data);
   }
 
@@ -93,18 +95,31 @@ export const api = {
     authFetch(`/forms/${id}`, 'DELETE', {}, options),
 
   getReviews: (
-    workspaceId: string,
+    request: FindAllReviewRequest,
     options: ApiOptions,
-  ): Promise<PaginateResponse<any>> =>
-    authFetch(`/reviews/workspaceId/${workspaceId}`, 'GET', {}, options),
+  ): Promise<PaginateResponse<ReviewEntity>> =>
+    authFetch(
+      `/reviews/workspaceId/${request.workspaceId}`,
+      'GET',
+      {
+        page: request.page,
+        pageSize: request.pageSize,
+        sortBy: request.sortBy,
+        sortOrder: request.sortOrder,
+      },
+      options,
+    ),
 
   getReview: (id: string, options: ApiOptions) =>
     authFetch(`/reviews/${id}`, 'GET', {}, options),
 
-  submitReview: (dto: CreateReviewDto, options: ApiOptions): Promise<Review> =>
+  submitReview: (
+    dto: CreateReviewDto,
+    options: ApiOptions,
+  ): Promise<ReviewEntity> =>
     authFetch('/reviews/submit', 'POST', dto, options),
 
-  updateReview: (id: string, dto: CreateReviewDto, options: ApiOptions) =>
+  updateReview: (id: string, dto: UpdateReviewDto, options: ApiOptions) =>
     authFetch(`/reviews/${id}`, 'PATCH', dto, options),
 
   deleteReview: (id: string, options: ApiOptions) =>
@@ -114,7 +129,7 @@ export const api = {
     dto: S3GetSignedUrlDto,
     options: ApiOptions,
   ): Promise<S3SignedUrlEntity> =>
-    authFetch('/reviews/getSignedUrl', 'POST', dto, options),
+    authFetch('/s3/getSignedUrl', 'POST', dto, options),
 
   getShowcases: (
     workspaceId: string,

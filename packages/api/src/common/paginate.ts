@@ -9,9 +9,9 @@ export interface PaginateResponse<T> {
   meta: PaginationMeta;
 }
 
-export interface PaginateRequest {
+export type PaginateRequest = {
   page: number;
   pageSize: number;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
-}
+};

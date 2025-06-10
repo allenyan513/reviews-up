@@ -1,42 +1,64 @@
 'use client';
 
-import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
-import { BiDownload } from 'react-icons/bi';
 import ReviewImportDialog from '@/components/biz/review-import-dialog';
-import StarRating from '@/components/review-import-manual-dialog/star-rating';
-import { PaginateResponse } from '@repo/api/common/Paginate';
 import { useUserContext } from '@/context/UserProvider';
 import { useSession } from 'next-auth/react';
 import { api } from '@/lib/apiClient';
-import { Review } from '@repo/api/reviews/entities/review.entity';
+import { columns } from './columens';
+import { DataTable } from './data-table';
 
-const TestimonialsPage = () => {
+export default function TestimonialsPage() {
   const { data: session } = useSession();
   const { defaultWorkspace } = useUserContext();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(25); // Corresponds to "25 per page" dropdown
-  const [reviews, setReviews] = useState<PaginateResponse<any>>();
 
-  const getReviews = async () => {
-    try {
-      const res = await api.getReviews(defaultWorkspace?.id || '', {
-        session: session,
-      });
-      setReviews(res);
-    } catch (error) {
-      console.error('Failed to fetch reviews:', error);
+  const [totalServerRowCount, setTotalServerRowCount] = useState(0); // Optional: to display total count
+
+  const fetchReviews = async (
+    pageIndex: number,
+    pageSize: number,
+    sorting: any, // Use actual SortingState type if imported
+    columnFilters: any, // Use actual ColumnFiltersState type if imported
+  ) => {
+    if (!session || !defaultWorkspace) {
+      return null;
     }
+    // Construct your API endpoint based on pagination, sorting, and filters
+    const params = new URLSearchParams();
+    params.append('page', (pageIndex + 1).toString()); // Backend often expects 1-indexed pages
+    params.append('limit', pageSize.toString());
+    // Add sorting parameters
+    if (sorting.length > 0) {
+      params.append('sortBy', sorting[0].id);
+      params.append('sortOrder', sorting[0].desc ? 'desc' : 'asc');
+    }
+    // Add filtering parameters
+    columnFilters.forEach((filter: any) => {
+      params.append(filter.id, filter.value);
+    });
+    const res = await api.getReviews(
+      {
+        uid: session?.user?.userId || '',
+        workspaceId: defaultWorkspace?.id || '',
+        page: parseInt(params.get('page') || '1'),
+        pageSize: parseInt(params.get('limit') || '10'),
+        sortBy: 'createdAt',
+        sortOrder: 'desc',
+      },
+      {
+        session: session,
+      },
+    );
+    setTotalServerRowCount(res.meta.total); // Update total count if you need to display it
+    return {
+      data: res.items,
+      pageCount: res.meta.total,
+      totalRowCount: res.meta.total, // Pass totalRowCount if your pagination component uses it
+    };
   };
-
-  useEffect(() => {
-    if (!defaultWorkspace || !session) return;
-    getReviews();
-  }, [defaultWorkspace, session]);
 
   return (
     <div className="min-h-screen p-6 md:p-8">
-      {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-1">Reviews</h1>
@@ -48,339 +70,11 @@ const TestimonialsPage = () => {
           <ReviewImportDialog />
         </div>
       </div>
-      {/* Filters and Search Bar */}
-      <div className="flex flex-col md:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-sm mb-6 border border-gray-200">
-        <div className="flex flex-wrap gap-2 mb-4 md:mb-0">
-          {['Show All', 'Pending', 'Public', 'Hidden'].map((filter) => (
-            <button
-              key={filter}
-              className={`px-4 py-2 text-sm rounded-full ${
-                filter === 'Show All'
-                  ? 'bg-blue-100 text-blue-700 font-medium'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
-          <button className="flex items-center px-4 py-2 text-sm rounded-full bg-gray-100 text-gray-700 hover:bg-gray-200">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01.293.707V19a2 2 0 01-2 2H4a2 2 0 01-2-2V7.293a1 1 0 01.293-.707L3 4z"
-              />
-            </svg>
-            Filters
-          </button>
-        </div>
-        <div className="relative w-full md:w-auto">
-          <input
-            type="text"
-            placeholder="Search a testimonial..."
-            className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          />
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-400"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              />
-            </svg>
-          </div>
-        </div>
-      </div>
-
-      {/* Testimonials Summary and Pagination Controls */}
-      <div className="flex flex-col sm:flex-row justify-between items-center mb-4">
-        <div className="flex items-center space-x-2 mb-4 sm:mb-0">
-          <StarRating value={5} onChange={(val) => {}} />
-          <span className="text-gray-700">
-            Rated <span className="font-semibold">5 out of 5</span> |{' '}
-            {reviews?.items?.length} reviews
-          </span>
-        </div>
-        <div className="flex items-center space-x-2">
-          <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-            value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(Number(e.target.value))}
-          >
-            <option value="10">10 per page</option>
-            <option value="25">25 per page</option>
-            <option value="50">50 per page</option>
-          </select>
-          <button
-            className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <span className="px-3 py-1 bg-blue-600 text-white rounded-lg font-medium">
-            {currentPage}
-          </span>
-          <button
-            className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100"
-            disabled={
-              currentPage * itemsPerPage >= (reviews?.items?.length || 0)
-            }
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
-
-      {/* Testimonials Table */}
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-8">
-                <input
-                  type="checkbox"
-                  className="form-checkbox h-4 w-4 text-blue-600 rounded"
-                />
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Reviewer
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Testimonial
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Source
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Status
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Date
-              </th>
-              <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {reviews?.items?.map((item) => (
-              <tr key={item.id}>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <input
-                    type="checkbox"
-                    className="form-checkbox h-4 w-4 text-blue-600 rounded"
-                  />
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    {item.reviewerImage ? (
-                      <img
-                        className="h-8 w-8 rounded-full object-cover mr-3"
-                        src={item.reviewerImage}
-                        alt={item.reviewerName}
-                      />
-                    ) : (
-                      <div className="h-8 w-8 rounded-full flex items-center justify-center bg-red-500 text-white text-sm font-bold mr-3">
-                        {item.reviewerImage}
-                      </div>
-                    )}
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {item.reviewerName}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {item.reviewerEmail}
-                      </div>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-4 py-4 max-w-xs overflow-hidden text-ellipsis whitespace-normal text-sm text-gray-900">
-                  {item.text}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {item.source === '' ? 'X' : item.source}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap">
-                  <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-                    {item.status}
-                  </span>
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
-                  {item.createdAt}
-                </td>
-                <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
-                  <div className="flex items-center space-x-1">
-                    {/* View Icon */}
-                    <button className="text-gray-600 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
-                        />
-                      </svg>
-                    </button>
-                    {/* Edit Icon */}
-                    <button className="text-gray-600 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                        />
-                      </svg>
-                    </button>
-                    {/* Delete Icon */}
-                    <button className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-5 w-5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      {/* Bottom Pagination */}
-      <div className="flex justify-between items-center mt-6">
-        <div className="text-sm text-gray-700">
-          Showing {reviews?.items?.length || 0 > 0 ? 1 : 0} to{' '}
-          {reviews?.items?.length} of {reviews?.items?.length} results
-        </div>
-        <div className="flex items-center space-x-2">
-          <select
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-            value={itemsPerPage}
-            onChange={(e) => setItemsPerPage(Number(e.target.value))}
-          >
-            <option value="10">10 per page</option>
-            <option value="25">25 per page</option>
-            <option value="50">50 per page</option>
-          </select>
-          <button
-            className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100"
-            disabled={currentPage === 1}
-            onClick={() => setCurrentPage(currentPage - 1)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
-          </button>
-          <span className="px-3 py-1 bg-blue-600 text-white rounded-lg font-medium">
-            {currentPage}
-          </span>
-          <button
-            className="p-2 border border-gray-300 rounded-lg hover:bg-gray-100"
-            disabled={
-              currentPage * itemsPerPage >= (reviews?.items?.length || 0)
-            }
-            onClick={() => setCurrentPage(currentPage + 1)}
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 text-gray-600"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
-          </button>
-        </div>
-      </div>
+      <DataTable
+        columns={columns}
+        fetchData={fetchReviews}
+        totalRowCount={totalServerRowCount}
+      />
     </div>
   );
-};
-
-export default TestimonialsPage;
+}

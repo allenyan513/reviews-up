@@ -12,7 +12,8 @@ export class AuthFilterMiddleware implements NestMiddleware {
     '/strapi/webhook',
     '/showcases/shortId/:shortId',
     '/forms/shortId/:shortId',
-    '/reviews/submit'
+    '/reviews/submit',
+    '/s3/getSignedUrl',
   ];
   private streamPaths = ['/docs/chat'];
 

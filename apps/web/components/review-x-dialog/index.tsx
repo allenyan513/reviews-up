@@ -21,65 +21,70 @@ import { Input } from '../ui/input';
 import { Tweet } from 'react-tweet';
 import { useTweet } from 'react-tweet';
 
-export default function ReviewImportXDialog(props: {}) {
-  const { data: session } = useSession();
+export default function ReviewImportXDialog(props: {
+  onImport: (tweetId: string) => void;
+  children: React.ReactNode;
+}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultWorkspace } = useUserContext();
+  // const { data: session } = useSession();
+  // const { defaultWorkspace } = useUserContext();
   const [tweetId, setTweetId] = useState<string | null>(null);
+  // const { isLoading, data, error } = useTweet(tweetId || undefined);
 
-  const [status, setStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error'
-  >('idle');
-  const { isLoading, data, error } = useTweet(tweetId || undefined);
-
-  const createReview = async () => {
-    try {
-      if (!tweetId || !data) {
-        toast.error('Tweet ID is missing');
-        return;
-      }
-      setStatus('loading');
-      await api.createReview(
-        {
-          workspaceId: defaultWorkspace?.id || '',
-          reviewerName: data.user.name,
-          reviewerImage: data.user.profile_image_url_https,
-          reviewerEmail: '',
-          rating: 5,
-          text: data.text,
-          tweetId: tweetId,
-          source: 'twitter',
-        },
-        {
-          session: session,
-        },
-      );
-      toast.success('Review created successfully!');
-      setStatus('success');
-      setIsOpen(false);
-    } catch (error) {
-      toast('Failed to create review. Please try again.');
-      setStatus('error');
-      return;
+  const handleTweetIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    if (inputValue.match(/https:\/\/x\.com\/\w+\/status\/\d+/)) {
+      const tweetId = inputValue.match(/status\/(\d+)/)?.[1] || null;
+      setTweetId(tweetId);
+    } else {
+      setTweetId(null);
     }
   };
+  // const createReview = async () => {
+  //   try {
+  //     if (!tweetId || !data) {
+  //       toast.error('Tweet ID is missing');
+  //       return;
+  //     }
+  //     await api.submitReview(
+  //       {
+  //         workspaceId: defaultWorkspace?.id || '',
+  //         reviewerName: data.user.name,
+  //         reviewerImage: data.user.profile_image_url_https,
+  //         reviewerEmail: '',
+  //         rating: 5,
+  //         text: data.text,
+  //         tweetId: tweetId,
+  //         source: 'twitter',
+  //       },
+  //       {
+  //         session: session,
+  //       },
+  //     );
+  //     toast.success('Review created successfully!');
+  //     setIsOpen(false);
+  //   } catch (error) {
+  //     toast('Failed to create review. Please try again.');
+  //     return;
+  //   }
+  // };
 
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
-        setTweetId(null);
       }}
     >
       <DialogTrigger asChild>
-        <Button
-          size={'lg'}
-          className="w-full items-center justify-start"
-          variant="outline"
-        >
-          <BiDownload />X
-        </Button>
+        {/*<Button*/}
+        {/*  size={'lg'}*/}
+        {/*  className="w-full items-center justify-start"*/}
+        {/*  variant="outline"*/}
+        {/*>*/}
+        {/*  <BiDownload />X*/}
+        {/*</Button>*/}
+        {props.children}
       </DialogTrigger>
       <DialogContent className="sm:max-w-4xl overflow-x-scroll max-h-screen">
         <DialogHeader>
@@ -98,16 +103,7 @@ export default function ReviewImportXDialog(props: {}) {
             </label>
             <Input
               id="tweetUrl"
-              onChange={(e) => {
-                const inputValue = e.target.value;
-                if (inputValue.match(/https:\/\/x\.com\/\w+\/status\/\d+/)) {
-                  const tweetId =
-                    inputValue.match(/status\/(\d+)/)?.[1] || null;
-                  setTweetId(tweetId);
-                } else {
-                  setTweetId(null);
-                }
-              }}
+              onChange={handleTweetIdChange}
               placeholder="https://x.com/username/status/1234567890123456789"
             ></Input>
           </div>
@@ -125,7 +121,10 @@ export default function ReviewImportXDialog(props: {}) {
           <Button
             size={'lg'}
             type="submit"
-            onClick={createReview}
+            onClick={() => {
+              props.onImport(tweetId || '');
+              setIsOpen(false);
+            }}
             className="ml-2"
           >
             Import

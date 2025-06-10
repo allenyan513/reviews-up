@@ -2,72 +2,90 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { S3Service } from '../s3/s3.service';
-import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
 import { PaginateResponse, PaginateRequest } from '@repo/api/common/paginate';
-import { Review } from '@repo/api/reviews/entities/review.entity';
+import { FindAllReviewRequest } from '@repo/api/reviews/find-all-review.dto';
 
 @Injectable()
 export class ReviewsService {
   private logger = new Logger('ReviewsService');
 
-  constructor(
-    private prismaService: PrismaService,
-    private s3Service: S3Service,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
-  async submit(createReviewDto: CreateReviewDto) {
-    return this.prismaService.review.create({
+  async submit(dto: CreateReviewDto) {
+    const review = await this.prismaService.review.create({
       data: {
-        workspaceId: createReviewDto.workspaceId,
-        formId: createReviewDto.formId,
-        reviewerName: createReviewDto.reviewerName,
-        reviewerImage: createReviewDto.reviewerImage,
-        reviewerEmail: createReviewDto.reviewerEmail,
-        rating: createReviewDto.rating,
-        text: createReviewDto.text,
-        tweetId: createReviewDto.tweetId,
+        workspaceId: dto.workspaceId,
+        formId: dto.formId,
+        reviewerName: dto.fullName,
+        reviewerImage: '',
+        reviewerEmail: dto.email,
+        rating: dto.rating,
+        text: dto.message,
+        tweetId: dto.tweetId,
         status: 'pending',
-        source: createReviewDto.source,
+        source: 'manual',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
+    if (dto.imageUrls && dto.imageUrls.length > 0) {
+      for (const imageUrl of dto.imageUrls) {
+        await this.prismaService.reviewMedia.create({
+          data: {
+            reviewId: review.id,
+            type: 'image',
+            url: imageUrl,
+          },
+        });
+      }
+    }
+    if (dto.videoUrl) {
+      await this.prismaService.reviewMedia.create({
+        data: {
+          reviewId: review.id,
+          type: 'video',
+          url: dto.videoUrl,
+        },
+      });
+    }
+    return review;
   }
 
   async create(uid: string, createReviewDto: CreateReviewDto) {
     return this.submit(createReviewDto);
   }
 
-  async findAll(workspaceId: string, paginateRequest: PaginateRequest) {
+  async findAll(request: FindAllReviewRequest) {
     this.logger.debug(
       'Fetching reviews with pagination',
-      workspaceId,
-      paginateRequest,
+      request,
     );
-    if (!workspaceId) {
+    if (!request.workspaceId) {
       throw new Error('Workspace ID is required to fetch reviews');
     }
     const total = await this.prismaService.review.count({
       where: {
-        workspaceId: workspaceId, // Filter by workspace if provided
+        workspaceId: request.workspaceId, // Filter by workspace if provided
       },
     });
     const items = await this.prismaService.review.findMany({
       where: {
-        workspaceId: workspaceId, // Filter by workspace if provided
+        workspaceId: request.workspaceId, // Filter by workspace if provided
       },
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },
-      skip: (paginateRequest.page - 1) * paginateRequest.pageSize,
-      take: paginateRequest.pageSize,
+      include: {
+        medias: true,
+      },
+      skip: (request.page - 1) * request.pageSize,
+      take: request.pageSize,
     });
     return {
       items: items,
       meta: {
-        page: paginateRequest.page,
-        pageSize: paginateRequest.pageSize,
+        page: request.page,
+        pageSize: request.pageSize,
         total: total,
       },
     } as PaginateResponse<any>;
@@ -77,6 +95,9 @@ export class ReviewsService {
     return this.prismaService.review.findFirst({
       where: {
         id: id,
+      },
+      include: {
+        medias: true,
       },
     });
   }
@@ -96,9 +117,5 @@ export class ReviewsService {
         id: id,
       },
     });
-  }
-
-  async getSignedUrl(uid: string, dto: S3GetSignedUrlDto) {
-    return this.s3Service.getSignedUrl(dto.fileName, dto.fileType);
   }
 }
