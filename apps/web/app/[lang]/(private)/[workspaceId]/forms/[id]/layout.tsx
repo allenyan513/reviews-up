@@ -10,7 +10,6 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { BsBoxArrowUpRight, BsCodeSlash, BsShare } from 'react-icons/bs';
-import { PublicFormPage } from '@/app/[lang]/(public)/forms/[shortId]/page';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 

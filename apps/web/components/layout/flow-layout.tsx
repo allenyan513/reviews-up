@@ -52,7 +52,7 @@ export default function FlowLayout<T>({
     // 在 useEffect 中进行实际的高度测量和分配
     items.forEach((item, idx) => {
       // 先将所有 item 放入一个临时结构，方便在渲染后获取其高度
-      newRenderedColumns[idx % columns].push(
+      newRenderedColumns[idx % columns]?.push(
         <div
           key={idx}
           ref={(el) => {
@@ -111,7 +111,7 @@ export default function FlowLayout<T>({
         </div>
       );
 
-      tempColumns[minHeightColumnIndex].push(itemElement);
+      tempColumns[minHeightColumnIndex]?.push(itemElement);
       // 注意：这里我们不能立即更新 newColumnHeights，因为 itemElement 的高度还未测量到
       // 我们需要在下一次 effect 循环或 layout effect 中获取高度
 
@@ -143,7 +143,7 @@ export default function FlowLayout<T>({
         const minHeight = Math.min(...finalColumnHeights);
         const minHeightColumnIndex = finalColumnHeights.indexOf(minHeight);
 
-        finalRenderedColumns[minHeightColumnIndex].push(
+        finalRenderedColumns[minHeightColumnIndex]?.push(
           <div
             key={idx}
             // 再次设置 ref，确保在重新渲染时仍然能正确关联

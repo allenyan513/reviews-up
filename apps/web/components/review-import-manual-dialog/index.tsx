@@ -49,14 +49,16 @@ export default function ReviewImportManualDialog(props: {
     console.log(formData);
     try {
       setAddStatus('loading');
-      const res = await api.createReview(
+      const res = await api.submitReview(
         {
           workspaceId: formData.workspaceId,
-          reviewerName: formData.fullName,
-          reviewerImage: formData.profilePicture,
-          reviewerEmail: formData.email,
+          fullName: formData.fullName,
+          email: formData.email,
           rating: formData.rating,
-          text: formData.message,
+          message: formData.message,
+          imageUrls: [],
+          videoUrl: '',
+          tweetId: '',
         },
         {
           session: session,

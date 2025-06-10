@@ -114,7 +114,7 @@ function distributeItems<T>(items: T[], numRows: number): T[][] {
 
   for (let i = 0; i < items.length; i++) {
     const rowIdx = Math.floor(i / itemsPerSlice); // Simple sequential distribution
-    result[rowIdx % numRows].push(items[i]);
+    result[rowIdx % numRows]?.push(items[i] || ({} as T)); // Ensure we don't push undefined
   }
   return result;
 }

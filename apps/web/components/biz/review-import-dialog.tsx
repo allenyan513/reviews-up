@@ -22,7 +22,7 @@ const imports = [
     title: 'Manual Import',
     url: '/import/csv',
     icon: BiDownload,
-    node: <ReviewImportManualDialog/>
+    node: <ReviewImportManualDialog />,
   },
   {
     title: 'X',
@@ -30,8 +30,7 @@ const imports = [
     icon: BiX,
     node: (
       <ReviewImportXDialog
-        onClickImport={() => {}}
-        onTweetIdChange={(tweetId) => {
+        onImport={(tweetId) => {
           console.log('Tweet ID changed:', tweetId);
         }}
       >

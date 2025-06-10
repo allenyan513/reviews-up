@@ -11,8 +11,8 @@ import {
 } from '@/components/ui/popover';
 
 export default function DataPicker(props: {
-  value: Date | null;
-  onChange: (date: Date | null) => void;
+  value: Date | undefined;
+  onChange: (date: Date | undefined) => void;
 }) {
   const [open, setOpen] = useState(false);
   return (

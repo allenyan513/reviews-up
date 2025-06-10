@@ -5,9 +5,9 @@ import { useSession } from 'next-auth/react';
 import { api } from '@/lib/apiClient';
 import toast from 'react-hot-toast';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
-import { PublicFormThanksPage } from '@/app/[lang]/(public)/forms/[shortId]/thanks/page';
 import { Button } from '@/components/ui/button';
 import { FormConfig } from '@repo/api/forms/entities/form-config.entity';
+import { PageFormThanksReview } from '@/views/page-form-thanks-review';
 
 interface PageParams {
   lang: string;
@@ -116,7 +116,7 @@ export default function Page(props: { params: Promise<PageParams> }) {
         <Button onClick={updateFormConfig}>Save</Button>
       </div>
       <div className="w-full border border-gray-300 rounded-lg">
-        <PublicFormThanksPage
+        <PageFormThanksReview
           mode={'edit'}
           lang={params.lang}
           shortId={form.shortId}
