@@ -19,9 +19,9 @@ export default async function RootLayout(props: {
     <html lang={lang}>
       <body className={cn(openSans.className, 'flex min-h-screen flex-col items-center w-full')}>
         <Header
-          websiteName={'ReviewUp'}
-          githubLink="https://github.com/allenyan513/ReviewsUp"
-          appLink="https://app.reviewup.com"
+          websiteName={'ReviewsUp.io'}
+          githubLink="https://github.com/allenyan513/reviews-up"
+          appLink="https://app.reviewsup.io"
           items={[
             { title: 'Home', href: '/' },
             { title: 'Features', href: '/#features' },
@@ -30,11 +30,11 @@ export default async function RootLayout(props: {
         />
         <main className="flex-1">{props.children}</main>
         <Footer
-          builtBy="Stack Auth"
-          builtByLink="https://stack-auth.com/"
-          githubLink="https://github.com/stack-auth/stack-template"
-          twitterLink="https://twitter.com/stack_auth"
-          linkedinLink="linkedin.com/company/stack-auth"
+          builtBy="ReviewsUp.io"
+          builtByLink="https://reviewsup.io"
+          githubLink="https://github.com/allenyan513/reviews-up"
+          twitterLink="https://x.com/alinlinlink"
+          linkedinLink="https://www.linkedin.com/in/ligangyan/"
         />
       </body>
     </html>

@@ -2,6 +2,33 @@ import { Hero } from '@/components/landing/hero';
 import { FeatureGrid } from '@/components/landing/features';
 import { PricingGrid } from '@/components/landing/pricing';
 import { BsGithub, BsPeople } from 'react-icons/bs';
+import { i18nMetadata } from '@/config/i18n-config';
+import { Metadata } from 'next';
+
+export async function generateMetadata(props: {
+  params: Promise<{
+    lang: string;
+  }>;
+}): Promise<Metadata> {
+  const { lang } = await props.params;
+  return {
+    title: 'ReviewsUp.io - Collect and Show Reviews, Feedback, and Testimonials',
+    description: 'ReviewsUp.io is an open-source platform for collecting and showing reviews, feedback, and testimonials. Built with Next.js, Nest.js, Postgres, and Next Auth, it offers a modern solution for developers.',
+    keywords:[
+      'open source reviews',
+    ],
+    icons:{
+      icon: '/favicon.ico',
+    },
+    alternates: {
+      canonical: `${process.env.NEXT_PUBLIC_LANDING_URL}/${lang}`,
+    }
+  }
+}
+
+export async function generateStaticParams() {
+  return i18nMetadata;
+}
 
 export default async function LandingPage(props: {
   params: Promise<{
@@ -14,23 +41,23 @@ export default async function LandingPage(props: {
     <>
       <Hero
         capsuleText="100% Open-Source & Free"
-        capsuleLink="https://stacktemplate.com"
+        capsuleLink="https://github.com/allenyan513/reviews-up"
         title="An Open Source Platform Collect and Manage Reviews Feedback and Testimonials"
         subtitle="Built for developers, by developers. Next.js + Nest.js + Postgres + Next Auth"
         primaryCtaText="Get Started"
-        primaryCtaLink={'https://stacktemplate.com'}
+        primaryCtaLink={'https://app.reviewsup.io'}
         secondaryCtaText="GitHub"
-        secondaryCtaLink="https://github.com/stack-auth/stack-template"
+        secondaryCtaLink="https://github.com/allenyan513/reviews-up"
         credits={
           <>
             Crafted with ❤️ by{" "}
             <a
-              href="https://stack-auth.com"
+              href="https://reviewsup.io"
               target="_blank"
               rel="noreferrer"
               className="underline"
             >
-              Stack Auth
+              ReviewsUp.io
             </a>
           </>
         }
