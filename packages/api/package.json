@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsc -b -v --watch",
     "build": "tsc -b -v",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\""
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "prebuild": "tsc -b -v"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
