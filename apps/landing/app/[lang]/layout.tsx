@@ -19,6 +19,7 @@ export default async function RootLayout(props: {
     <html lang={lang}>
       <body className={cn(openSans.className, 'flex min-h-screen flex-col items-center w-full')}>
         <Header
+          websiteLogo={'/logo-32.png'}
           websiteName={'ReviewsUp.io'}
           githubLink="https://github.com/allenyan513/reviewsup.io"
           appLink="https://app.reviewsup.io"

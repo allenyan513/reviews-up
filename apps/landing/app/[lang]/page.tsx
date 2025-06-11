@@ -42,8 +42,8 @@ export default async function LandingPage(props: {
       <Hero
         capsuleText="100% Open-Source & Free"
         capsuleLink="https://github.com/allenyan513/reviewsup.io"
-        title="An Open Source Platform Collect and Manage Reviews Feedback and Testimonials"
-        subtitle="Built for developers, by developers. Next.js + Nest.js + Postgres + Next Auth"
+        title="Collect and Show Your Reviews and Testimonials"
+        subtitle="Built for developers, by developers. Next.js + Nest.js + Postgres"
         primaryCtaText="Get Started"
         primaryCtaLink={'https://app.reviewsup.io'}
         secondaryCtaText="GitHub"

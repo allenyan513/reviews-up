@@ -34,6 +34,9 @@ export function middleware(request: NextRequest) {
       '/favicon.ico',
       '/google.png',
       '/robots.txt',
+      '/logo-32.png',
+      '/logo-128.png',
+      '/logo-512.png',
       // Your other files in `public`
     ].includes(pathname)
   )

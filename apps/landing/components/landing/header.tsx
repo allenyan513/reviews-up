@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { BsGithub } from 'react-icons/bs';
 
 interface NavProps {
+  websiteLogo?: string;
   websiteName?: string;
   githubLink?: string;
   appLink?: string;
@@ -79,7 +80,10 @@ export function Header(props: NavProps) {
     <header className="fixed w-full z-50 bg-background/80 px-4 md:px-8 backdrop-blur">
       <div className="flex h-18 items-center justify-between py-4">
         <div className="flex items-center gap-4 md:gap-10">
-          <Logo websiteName={props.websiteName} className="hidden md:flex" />
+          <Logo
+            websiteLogo={props.websiteLogo}
+            websiteName={props.websiteName}
+            className="hidden md:flex" />
           {props.items?.length ? <DesktopItems items={props.items} /> : null}
           <Button
             className="space-x-2 md:hidden"
