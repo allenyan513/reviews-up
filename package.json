@@ -30,7 +30,7 @@
   "devDependencies": {
     "@repo/eslint-config": "*",
     "@repo/typescript-config": "*",
-    "@types/jest": "^29.5.14",
+    "@repo/jest-config": "*",
     "prettier": "^3.2.5",
     "prisma": "latest",
     "turbo": "^2.5.4"
