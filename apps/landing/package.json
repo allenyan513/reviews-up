@@ -1,15 +1,12 @@
 {
-  "name": "web",
+  "name": "landing",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 5551 --turbopack",
+    "dev": "next dev --port 5552 --turbopack",
     "build": "next build",
-    "start": "next start --port 5551",
-    "lint": "eslint . --max-warnings 0",
-    "generate-embed": "node scripts/generate-embed.js",
-    "prebuild": "npm run generate-embed",
-    "predev": "npm run generate-embed"
+    "start": "next start --port 5552",
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -40,7 +37,6 @@
     "lucide-react": "^0.513.0",
     "negotiator": "^1.0.0",
     "next": "^15.3.3",
-    "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
     "postcss": "^8.5.4",
     "react": "^19.1.0",
