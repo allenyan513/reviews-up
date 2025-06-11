@@ -7,12 +7,6 @@
   "license": "UNLICENSED",
   "packageManager": "npm@11.4.1",
   "scripts": {
-    "dev:api": "turbo run dev --filter=api",
-    "dev:web": "turbo run dev --filter=web",
-    "build:api": "turbo run build --filter=api",
-    "build:web": "turbo run build --filter=web",
-    "start:api": "turbo run start --filter=api",
-    "start:web": "turbo run start --filter=web",
     "dev": "turbo run dev",
     "build": "turbo run build",
     "test": "turbo run test",
@@ -22,7 +16,9 @@
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate",
     "db:deploy": "turbo run db:deploy",
-    "clean": "sh ./scripts/clean.sh"
+    "clean": "sh ./scripts/clean.sh",
+    "build:api": "turbo run build --filter=api",
+    "deploy:api": "turbo run deploy --filter=api"
   },
   "dependencies": {
     "@prisma/client": "latest"
