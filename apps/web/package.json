@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 5551 --turbopack",
+    "dev": "next dev -p 3000 --turbopack",
     "build": "next build",
-    "start": "next start --port 5551",
+    "start": "next start",
     "lint": "eslint . --max-warnings 0",
     "generate-embed": "node scripts/generate-embed.js",
     "prebuild": "npm run generate-embed",

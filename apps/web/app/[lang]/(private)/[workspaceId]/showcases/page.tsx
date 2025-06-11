@@ -28,6 +28,7 @@ export default function Page(props: {
         session: session.data,
       })
       .then((response) => {
+        console.log(response);
         setShowcases(response);
       });
   }, [session]);

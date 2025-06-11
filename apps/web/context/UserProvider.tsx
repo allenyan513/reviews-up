@@ -18,7 +18,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [defaultWorkspace, setDefaultWorkspace] = useLocalStorageState<
     Workspace | null | undefined
-  >('defaultWorkspace', {
+  >(`${user?.id}_workspace`, {
     defaultValue: null,
   });
   const switchDefaultWorkspace = (workspace: Workspace | null) => {
@@ -38,7 +38,6 @@ export function UserProvider(props: { children: React.ReactNode }) {
       })
       .then((user) => {
         setUser(user);
-
         if (!defaultWorkspace) {
           // If no default workspace is set, use the first workspace from the user
           const firstWorkspace = user.Workspace ? user.Workspace[0] : null;

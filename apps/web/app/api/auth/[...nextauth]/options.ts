@@ -60,11 +60,6 @@ export const options: NextAuthOptions = {
       return data.session;
     },
   },
-  // events:{
-  //   async signIn(data){
-  //     console.log('User signed in via NextAuth.js:', data.user.name);
-  //   }
-  // },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === "development",
 };
