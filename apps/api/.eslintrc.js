@@ -6,4 +6,11 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
+  settings: {
+    'import/resolver': {
+      typescript: {
+        project: ['tsconfig.json'],
+      },
+    },
+  },
 };

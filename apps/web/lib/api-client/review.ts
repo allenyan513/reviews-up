@@ -1,0 +1,24 @@
+import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
+import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { PaginateResponse } from '@repo/api/common/paginate';
+import { FindAllReviewRequest } from '@repo/api/reviews/find-all-review.dto';
+import { authFetch } from './auth-fetch';
+
+export const review = {
+  getReviews: (
+    request: FindAllReviewRequest,
+  ): Promise<PaginateResponse<ReviewEntity>> =>
+    authFetch(`/reviews/workspaceId/${request.workspaceId}`, 'GET', {
+      page: request.page,
+      pageSize: request.pageSize,
+      sortBy: request.sortBy,
+      sortOrder: request.sortOrder,
+    }),
+  getReview: (id: string) => authFetch(`/reviews/${id}`, 'GET', {}),
+  submitReview: (dto: CreateReviewDto): Promise<ReviewEntity> =>
+    authFetch('/reviews/submit', 'POST', dto),
+  updateReview: (id: string, dto: UpdateReviewDto) =>
+    authFetch(`/reviews/${id}`, 'PATCH', dto),
+  deleteReview: (id: string) => authFetch(`/reviews/${id}`, 'DELETE', {}),
+};

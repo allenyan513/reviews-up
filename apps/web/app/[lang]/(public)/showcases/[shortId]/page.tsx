@@ -1,12 +1,12 @@
 'use client';
-import { api } from '@/lib/apiClient';
-import { useEffect, useState } from 'react';
+import { api } from '@/lib/api-client';
+import { use, useEffect, useState } from 'react';
 import {
   ShowcaseConfig,
   ShowcaseEntity,
 } from '@repo/api/showcases/entities/showcase.entity';
 import toast from 'react-hot-toast';
-import ShowcasePageReview from '@/app/[lang]/(private)/[workspaceId]/showcases/[id]/page-review';
+import ShowcasePageReview from '@/app/[lang]/(app)/[workspaceId]/showcases/[id]/page-review';
 
 export default function Page(props: {
   params: Promise<{
@@ -14,21 +14,18 @@ export default function Page(props: {
     shortId: string;
   }>;
 }) {
+  const { lang, shortId } = use(props.params);
   const [showcase, setShowcase] = useState<ShowcaseEntity>();
 
   useEffect(() => {
-    props.params.then((params) => {
-      api
-        .getShowcaseByShortId(params.shortId, {
-          session: null,
-        })
-        .then((response) => {
-          setShowcase(response);
-        })
-        .catch((error) => {
-          toast.error(error.message);
-        });
-    });
+    api.showcase
+      .getShowcaseByShortId(shortId)
+      .then((response) => {
+        setShowcase(response);
+      })
+      .catch((error) => {
+        toast.error(error.message);
+      });
   }, []);
 
   if (!showcase || !showcase.reviews) return null;

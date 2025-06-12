@@ -1,5 +1,5 @@
 'use client';
-import { api } from '@/lib/apiClient';
+import { api } from '@/lib/api-client';
 import { useEffect, useState, use } from 'react';
 import toast from 'react-hot-toast';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
@@ -14,10 +14,8 @@ export default function PublicFormThanksRoute(props: {
   const [form, setForm] = useState<FormEntity | null>(null);
 
   useEffect(() => {
-    api
-      .getFormByShortId(params.shortId, {
-        session: null,
-      })
+    api.form
+      .getFormByShortId(params.shortId)
       .then((response) => {
         setForm(response);
       })
@@ -40,4 +38,3 @@ export default function PublicFormThanksRoute(props: {
     />
   );
 }
-

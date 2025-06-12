@@ -2,7 +2,7 @@ import { PageParams } from '@/types/page-params';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
-import { api } from '@/lib/apiClient';
+import { api } from '@/lib/api-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import StarRating from '@/components/review-import-manual-dialog/star-rating';
@@ -40,23 +40,18 @@ export function PageFormReview(props: PageParams) {
       toast.error('Please fill out the form before submitting.');
       return;
     }
-    api
-      .submitReview(
-        {
-          workspaceId: props.form.workspaceId,
-          formId: props.form.id,
-          rating: submitForm.rating,
-          message: submitForm.message,
-          fullName: submitForm.fullName,
-          email: submitForm.email,
-          imageUrls: submitForm.imageUrls,
-          videoUrl: submitForm.videoUrl,
-          tweetId: submitForm.twitterId,
-        },
-        {
-          session: null, // Adjust session handling as needed
-        },
-      )
+    api.review
+      .submitReview({
+        workspaceId: props.form.workspaceId,
+        formId: props.form.id,
+        rating: submitForm.rating,
+        message: submitForm.message,
+        fullName: submitForm.fullName,
+        email: submitForm.email,
+        imageUrls: submitForm.imageUrls,
+        videoUrl: submitForm.videoUrl,
+        tweetId: submitForm.twitterId,
+      })
       .then(() => {
         toast.success('Review submitted successfully!');
         setSubmitForm({

@@ -2,11 +2,6 @@ import { PropsWithChildren } from 'react';
 import type { Metadata } from 'next';
 
 import '@/app/globals.css';
-import { Open_Sans } from 'next/font/google';
-
-const openSans = Open_Sans({
-  subsets: ['latin'],
-});
 
 export const metadata: Metadata = {
   title: 'Create Turborepo',
@@ -14,9 +9,5 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
-  return (
-    <html lang="en">
-      <body className={openSans.className}>{children}</body>
-    </html>
-  );
+  return <>{children}</>;
 }

@@ -12,9 +12,8 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, { useState, useRef } from 'react';
-import { useSession } from 'next-auth/react';
 import { BiDownload, BiUser, BiX } from 'react-icons/bi';
-import { api } from '@/lib/apiClient';
+import { api } from '@/lib/api-client';
 import { useUserContext } from '@/context/UserProvider';
 
 import AvatarUpload from '@/components/review-import-manual-dialog/avatar-upload';
@@ -24,7 +23,6 @@ import DataPicker from '@/components/review-import-manual-dialog/data-picker';
 export default function ReviewImportManualDialog(props: {
   onOpenCallback?: (open: boolean) => void;
 }) {
-  const { data: session } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { defaultWorkspace } = useUserContext();
   const [formData, setFormData] = useState({
@@ -49,7 +47,7 @@ export default function ReviewImportManualDialog(props: {
     console.log(formData);
     try {
       setAddStatus('loading');
-      const res = await api.submitReview(
+      const res = await api.review.submitReview(
         {
           workspaceId: formData.workspaceId,
           fullName: formData.fullName,
@@ -59,9 +57,6 @@ export default function ReviewImportManualDialog(props: {
           imageUrls: [],
           videoUrl: '',
           tweetId: '',
-        },
-        {
-          session: session,
         },
       );
       toast.success('Review created successfully!');

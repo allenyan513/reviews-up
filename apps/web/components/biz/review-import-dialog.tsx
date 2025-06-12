@@ -7,13 +7,11 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog';
 import React, { useState } from 'react';
-import { api } from '@/lib/apiClient';
-import { useSession } from 'next-auth/react';
+import { api } from '@/lib/api-client';
 import { BiDownload, BiX } from 'react-icons/bi';
-import Index from '../review-import-manual-dialog';
 import ReviewImportManualDialog from '../review-import-manual-dialog';
 import ReviewImportXDialog from '@/components/review-x-dialog';
 
@@ -22,7 +20,7 @@ const imports = [
     title: 'Manual Import',
     url: '/import/csv',
     icon: BiDownload,
-    node: <ReviewImportManualDialog />,
+    node: <ReviewImportManualDialog />
   },
   {
     title: 'X',
@@ -36,25 +34,20 @@ const imports = [
       >
         <div></div>
       </ReviewImportXDialog>
-    ),
-  },
+    )
+  }
 ];
 
 export default function ReviewImportDialog() {
-  const { data: session } = useSession();
   const [workspaceName, setWorkspaceName] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const createWorkspace = () => {
     api
-      .createWorkspace(
-        {
-          name: workspaceName,
-        },
-        {
-          session: session,
-        },
-      )
+      .workspace
+      .createWorkspace({
+        name: workspaceName
+      })
       .then((response) => {
         console.log('Workspace created:', response);
         setWorkspaceName('');

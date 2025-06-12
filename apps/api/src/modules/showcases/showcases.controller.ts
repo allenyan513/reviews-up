@@ -6,16 +6,18 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ShowcasesService } from './showcases.service';
 import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
 import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
-import { Uid } from '../../middleware/uid.decorator';
+import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
+import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 
 @Controller('showcases')
 export class ShowcasesController {
   constructor(private readonly showcasesService: ShowcasesService) {}
-
 
   /** Public endpoints for showcases */
 
@@ -24,21 +26,26 @@ export class ShowcasesController {
     return this.showcasesService.findOneByShortId(shortId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  async create(@Uid() uid: string, @Body() createShowcaseDto: CreateShowcaseDto) {
-    return this.showcasesService.create(uid, createShowcaseDto);
+  async create(
+    @Jwt() jwt: JwtPayload,
+    @Body() createShowcaseDto: CreateShowcaseDto,
+  ) {
+    return this.showcasesService.create(jwt.userId, createShowcaseDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('workspaceId/:workspaceId')
   findAll(
-    @Uid() uid: string,
+    @Jwt() jwt: JwtPayload,
     @Param('workspaceId') workspaceId: string,
     @Param('page') page: number = 1,
     @Param('pageSize') pageSize: number = 10,
     @Param('sortBy') sortBy: string = 'createdAt',
     @Param('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
   ) {
-    return this.showcasesService.findAll(uid, workspaceId, {
+    return this.showcasesService.findAll(jwt.userId, workspaceId, {
       page,
       pageSize,
       sortBy,
@@ -46,25 +53,25 @@ export class ShowcasesController {
     });
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  async findOne(@Uid() uid: string, @Param('id') id: string) {
-    return this.showcasesService.findOne(uid, id);
+  async findOne(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
+    return this.showcasesService.findOne(jwt.userId, id);
   }
 
-
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(
-    @Uid() uid: string,
+    @Jwt() jwt: JwtPayload,
     @Param('id') id: string,
     @Body() updateShowcaseDto: UpdateShowcaseDto,
   ) {
-    return this.showcasesService.update(uid, id, updateShowcaseDto);
+    return this.showcasesService.update(jwt.userId, id, updateShowcaseDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  async remove(@Uid() uid: string, @Param('id') id: string) {
-    return this.showcasesService.remove(uid, id);
+  async remove(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
+    return this.showcasesService.remove(jwt.userId, id);
   }
-
-
 }

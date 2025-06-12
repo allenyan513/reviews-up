@@ -12,25 +12,18 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
-import { api } from '@/lib/apiClient';
-import { useSession } from 'next-auth/react';
+import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
 
 export default function WorkspaceAddButton(props: {}) {
-  const { data: session } = useSession();
   const [workspaceName, setWorkspaceName] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const createWorkspace = () => {
-    api
-      .createWorkspace(
-        {
-          name: workspaceName,
-        },
-        {
-          session: session,
-        },
-      )
+    api.workspace
+      .createWorkspace({
+        name: workspaceName,
+      })
       .then((response) => {
         setWorkspaceName('');
         setIsOpen(false);

@@ -1,20 +1,23 @@
-import { api } from '@/lib/apiClient';
-import { useSession } from 'next-auth/react';
+import { api } from '@/lib/api-client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { User } from '@repo/api/users/entities/user.entity';
 import useLocalStorageState from 'use-local-storage-state';
+import { redirect } from 'next/navigation';
 
 interface UserContextProps {
   user: User | null;
   defaultWorkspace: Workspace | null | undefined;
   switchDefaultWorkspace: (workspace: Workspace | null) => void;
+  googleSignIn?: () => void;
+  githubSignIn?: () => void;
+  emailSignIn?: (email: string, password: string) => void;
+  signOut: () => void;
 }
 
 const UserContext = createContext<UserContextProps | null>(null);
 
 export function UserProvider(props: { children: React.ReactNode }) {
-  const { data: session } = useSession();
   const [user, setUser] = useState<User | null>(null);
   const [defaultWorkspace, setDefaultWorkspace] = useLocalStorageState<
     Workspace | null | undefined
@@ -30,27 +33,33 @@ export function UserProvider(props: { children: React.ReactNode }) {
     setDefaultWorkspace(workspace);
   };
 
+  const googleSignIn = () => {
+    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/google`);
+  };
+
+  const githubSignIn = () => {
+    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/github`);
+  };
+
+  const signOut = () => {
+    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/signOut`);
+  };
+
   useEffect(() => {
-    if (!session) return;
-    api
-      .getUserProfile({
-        session: session,
-      })
-      .then((user) => {
-        setUser(user);
-        if (!defaultWorkspace) {
-          // If no default workspace is set, use the first workspace from the user
-          const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
-          setDefaultWorkspace(firstWorkspace);
-          console.log(
-            'Setting default workspace to first workspace:',
-            firstWorkspace,
-          );
-        } else {
-          console.log('Default workspace already set:', defaultWorkspace);
-        }
-      });
-  }, [session]);
+    api.auth.getSession().then((user) => {
+      if (!user) {
+        // If no user is returned, we might want to handle it (e.g., redirect to login)
+        return redirect('/auth/signin');
+      }
+      setUser(user);
+      if (!defaultWorkspace) {
+        const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
+        setDefaultWorkspace(firstWorkspace);
+      } else {
+        console.log('Default workspace already set:', defaultWorkspace);
+      }
+    });
+  }, []);
 
   return (
     <UserContext.Provider
@@ -58,6 +67,9 @@ export function UserProvider(props: { children: React.ReactNode }) {
         user,
         defaultWorkspace,
         switchDefaultWorkspace,
+        googleSignIn,
+        githubSignIn,
+        signOut,
       }}
     >
       {props.children}

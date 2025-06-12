@@ -5,7 +5,7 @@ const path = require('path');
 const EMBED_JS_PATH = path.join(__dirname, '../public/js/embed.js');
 
 // 从环境变量中读取
-const DOMAIN = process.env.NEXT_PUBLIC_DOMAIN_URL || 'http://localhost:3000';
+const DOMAIN = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
 
 const content = `
 (function() {

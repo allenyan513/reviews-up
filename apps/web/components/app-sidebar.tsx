@@ -2,11 +2,7 @@
 
 import * as React from 'react';
 import {
-  IconCamera,
-  IconChartBar,
-  IconDashboard,
   IconInnerShadowTop,
-  IconListDetails,
   IconSettings,
   IconStar,
   IconCode,
@@ -28,7 +24,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem
 } from '@/components/ui/sidebar';
-import { useSession, signOut } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
 import { useUserContext } from '@/context/UserProvider';
 
@@ -40,11 +35,8 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = props.lang;
-  const { data: session } = useSession();
-
-  const {defaultWorkspace} = useUserContext();
+  const {user, defaultWorkspace, signOut} = useUserContext();
   const path = usePathname()
-
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -103,15 +95,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarFooter>
         <NavUser
           user={{
-            name: session?.user.name || '',
-            email: session?.user.email || '',
-            avatar: session?.user.image || ''
+            name: user?.name || '',
+            email:  user?.email || '',
+            avatar:  user?.image || '',
           }}
-          signOut={() => {
-            signOut({
-              callbackUrl: '/'
-            });
-          }}
+          signOut={signOut}
         />
       </SidebarFooter>
     </Sidebar>

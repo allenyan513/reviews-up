@@ -5,23 +5,26 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Delete, UseGuards
 } from '@nestjs/common';
 import { WorkspacesService } from './workspaces.service';
 import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
 import { UpdateWorkspaceDto } from '@repo/api/workspaces/dto/update-workspace.dto';
-import { Uid } from '../../middleware/uid.decorator';
+import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
+import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
+import { JwtPayload } from '@src/common/types/jwt-payload';
 
 @Controller('workspaces')
 export class WorkspacesController {
   constructor(private readonly workspacesService: WorkspacesService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post()
   async create(
-    @Uid() uid: string,
+    @Jwt() jwt: JwtPayload,
     @Body() createWorkspaceDto: CreateWorkspaceDto,
   ) {
-    return this.workspacesService.create(uid, createWorkspaceDto);
+    return this.workspacesService.create(jwt.userId, createWorkspaceDto);
   }
 
   @Get()
@@ -34,6 +37,7 @@ export class WorkspacesController {
     return this.workspacesService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
     @Param('id') id: string,
@@ -42,6 +46,7 @@ export class WorkspacesController {
     return this.workspacesService.update(+id, updateWorkspaceDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.workspacesService.remove(+id);

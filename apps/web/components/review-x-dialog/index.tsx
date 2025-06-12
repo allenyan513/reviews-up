@@ -1,6 +1,5 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import toast from 'react-hot-toast';
 import {
   Dialog,
   DialogClose,
@@ -12,24 +11,16 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, { useState, useRef } from 'react';
-import { useSession } from 'next-auth/react';
-import { BiDownload, BiUser, BiX } from 'react-icons/bi';
-import { api } from '@/lib/apiClient';
-import { useUserContext } from '@/context/UserProvider';
 
 import { Input } from '../ui/input';
 import { Tweet } from 'react-tweet';
-import { useTweet } from 'react-tweet';
 
 export default function ReviewImportXDialog(props: {
   onImport: (tweetId: string) => void;
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  // const { data: session } = useSession();
-  // const { defaultWorkspace } = useUserContext();
   const [tweetId, setTweetId] = useState<string | null>(null);
-  // const { isLoading, data, error } = useTweet(tweetId || undefined);
 
   const handleTweetIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -58,7 +49,6 @@ export default function ReviewImportXDialog(props: {
   //         source: 'twitter',
   //       },
   //       {
-  //         session: session,
   //       },
   //     );
   //     toast.success('Review created successfully!');

@@ -59,7 +59,8 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   // Matcher ignoring `/_next/` and `/api/`
+  // auth 现在不需要忽略 `/api/`，因为现在不使用 next-auth
   matcher: [
-    '/((?!_next|api|auth).*)'
+    '/((?!_next|api).*)'
   ],
 };

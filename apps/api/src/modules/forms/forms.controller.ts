@@ -6,37 +6,46 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { FormsService } from './forms.service';
 import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
 import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
-import { Uid } from 'src/middleware/uid.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
+import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
+import { JwtPayload } from '@src/common/types/jwt-payload';
 
 @Controller('forms')
 export class FormsController {
   constructor(private readonly formsService: FormsService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Post('')
-  create(@Uid() uid: string, @Body() createFormDto: CreateFormDto) {
-    return this.formsService.create(uid, createFormDto);
+  create(@Jwt() jwt: JwtPayload, @Body() createFormDto: CreateFormDto) {
+    return this.formsService.create(jwt.userId, createFormDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('')
-  findAll(@Uid() uid: string) {
-    return this.formsService.findAll(uid, null);
+  findAll(@Jwt() jwt: JwtPayload) {
+    return this.formsService.findAll(jwt.userId, null);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/workspaceId/:workspaceId')
   findAllWithWorkspaceId(
-    @Uid() uid: string,
+    @Jwt() jwt: JwtPayload,
     @Param('workspaceId') workspaceId: string,
   ) {
-    return this.formsService.findAll(uid, workspaceId);
+    return this.formsService.findAll(jwt.userId, workspaceId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Uid() uid: string, @Param('id') id: string) {
-    return this.formsService.findOne(uid, id);
+  findOne(
+    @Jwt() jwt: JwtPayload,
+    @Param('id') id: string) {
+    return this.formsService.findOne(jwt.userId, id);
   }
 
   @Get('shortId/:shortId')
@@ -44,17 +53,21 @@ export class FormsController {
     return this.formsService.findOneByShortId(shortId);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
   update(
-    @Uid() uid: string,
+    @Jwt() jwt: JwtPayload,
     @Param('id') id: string,
     @Body() updateFormDto: UpdateFormDto,
   ) {
-    return this.formsService.update(uid, id, updateFormDto);
+    return this.formsService.update(jwt.userId, id, updateFormDto);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Uid() uid: string, @Param('id') id: string) {
-    return this.formsService.remove(uid, id);
+  remove(
+    @Jwt() jwt: JwtPayload,
+    @Param('id') id: string) {
+    return this.formsService.remove(jwt.userId, id);
   }
 }

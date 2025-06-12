@@ -11,16 +11,13 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { BiPlus, BiSortAlt2 } from 'react-icons/bi';
 import { useUserContext } from '@/context/UserProvider';
 import { useState } from 'react';
-import { api } from '@/lib/apiClient';
-import { useSession } from 'next-auth/react';
+import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
 
 export default function CreateFormDialog(props: {}) {
-  const { data: session } = useSession();
   const { user, defaultWorkspace } = useUserContext();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formName, setFormName] = useState<string>('');
@@ -30,20 +27,11 @@ export default function CreateFormDialog(props: {}) {
       toast.error('Please select a workspace first.');
       return;
     }
-    if (!session) {
-      toast.error('You must be logged in to create a form.');
-      return;
-    }
-    api
-      .createForm(
-        {
-          workspaceId: defaultWorkspace?.id || '',
-          name: formName,
-        },
-        {
-          session: session,
-        },
-      )
+    api.form
+      .createForm({
+        workspaceId: defaultWorkspace?.id || '',
+        name: formName,
+      })
       .then((response) => {
         setFormName('');
         setIsOpen(false);

@@ -1,8 +1,5 @@
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-
-import { LinksModule } from './modules/links/links.module';
-
 import { AppService } from './app.service';
 import { AppController } from './app.controller';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module';
@@ -13,18 +10,25 @@ import { ShowcasesModule } from './modules/showcases/showcases.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { EmailModule } from './modules/email/email.module';
-import { AuthFilterMiddleware } from './middleware/auth.middleware';
 import { S3Module } from './modules/s3/s3.module';
-
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
     }),
+    JwtModule.register({
+      global: true,
+      secret: process.env.JWT_SECRET,
+      signOptions: {
+        expiresIn: process.env.JWT_EXPIRES,
+      },
+    }),
+    PassportModule,
     EmailModule,
     PrismaModule,
-    LinksModule,
     WorkspacesModule,
     UsersModule,
     FormsModule,
@@ -37,7 +41,4 @@ import { S3Module } from './modules/s3/s3.module';
   providers: [AppService],
 })
 export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthFilterMiddleware).forRoutes('*');
-  }
 }

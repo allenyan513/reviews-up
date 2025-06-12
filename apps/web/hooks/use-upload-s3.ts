@@ -3,8 +3,7 @@
  */
 
 import { useState } from 'react';
-import { api } from '@/lib/apiClient';
-import { useSession } from 'next-auth/react';
+import { api } from '@/lib/api-client';
 
 type UploadStatus = 'idle' | 'uploading' | 'success' | 'error';
 
@@ -15,7 +14,6 @@ interface UseUploadS3Result {
 }
 
 export function useUploadS3(): UseUploadS3Result {
-  // const { data: session } = useSession();
   const [status, setStatus] = useState<UploadStatus>('idle');
   const [error, setError] = useState<string | null>(null);
 
@@ -24,13 +22,10 @@ export function useUploadS3(): UseUploadS3Result {
     setError(null);
     try {
       // 1. Get pre-signed URL from your backend
-      const { signedUrl, key } = await api.getSignedUrl(
-        {
-          fileName: file.name,
-          fileType: file.type,
-        },
-        { session: null },
-      );
+      const { signedUrl, key } = await api.s3.getSignedUrl({
+        fileName: file.name,
+        fileType: file.type,
+      });
       // 2. Upload file to S3
       const uploadRes = await fetch(signedUrl, {
         method: 'PUT',
