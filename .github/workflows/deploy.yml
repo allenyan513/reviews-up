@@ -23,4 +23,5 @@ jobs:
             cd /home/ec2-user/ReviewsUp
             git pull origin main
             npm i 
+            npm run build:api
             npm run deploy:api
