@@ -33,20 +33,33 @@ enum MediaType {
 }
 
 model User {
-  id                String      @id @default(uuid())
+  id        String      @id @default(uuid())
+  email     String      @unique
+  name      String?
+  avatarUrl String?
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+  Workspace Workspace[]
+  Form      Form[]
+  Showcase  Showcase[]
+  Account   Account[]
+}
+
+model Account {
+  id                String   @id @default(uuid())
   provider          String
   providerAccountId String
-  name              String?
-  email             String?
-  image             String? // Store profile image URL
-  roles             String[]    @default([]) // Example: for user roles
+  userId            String
+  accessToken       String?
+  refreshToken      String?
+  expiresIn         Int?
+  tokenType         String?
+  scope             String?
   idToken           String?
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @updatedAt
-  lastLogin         DateTime?
-  Workspace         Workspace[]
-  Form              Form[]
-  Showcase          Showcase[]
+  sessionState      String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id])
 
   @@unique([provider, providerAccountId])
 }

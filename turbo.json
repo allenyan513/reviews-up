@@ -29,9 +29,7 @@
       "env": [
         "API_HOST",
         "API_PORT",
-        "DATABASE_URL",
-        "NEXTAUTH_SECRET",
-        "NEXTAUTH_URL"
+        "DATABASE_URL"
       ]
     },
     "deploy": {

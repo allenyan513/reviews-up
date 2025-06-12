@@ -1,10 +1,12 @@
 import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { AuthProviderCallbackDto } from '@repo/api/auth/dto/auth-provider-callback.dto';
-import { UsersService } from '../users/users.service';
-import { User } from '@repo/api/users/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@src/common/types/jwt-payload';
+import { CreateAccountDto } from '@repo/api/users/dto/create-user.dto';
+import { User } from '@repo/api/users/entities/user.entity';
+import { generateShortId } from '@src/libs/shortId';
+import { ShowcasesService } from '@src/modules/showcases/showcases.service';
+import { FormsService } from '@src/modules/forms/forms.service';
 
 @Injectable()
 export class AuthService {
@@ -12,118 +14,129 @@ export class AuthService {
 
   constructor(
     private prismaService: PrismaService,
-    private usersService: UsersService,
     private jwtService: JwtService,
+    private formService: FormsService,
+    private showcasesService: ShowcasesService,
   ) {}
-
-  async validateUser(username: string, pass: string): Promise<any> {
-    this.logger.log('validateUser', { username, pass });
-    const user = await this.usersService.findByUsername(username);
-    if (user && user.password === pass) {
-      const { password, ...userWithoutPassword } = user;
-      return userWithoutPassword;
-    }
-    return null;
-  }
-
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
 
   generateJwt(payload: JwtPayload): string {
     return this.jwtService.sign(payload);
   }
 
-  async googleSignIn(user: any) {
-    this.logger.log('signIn', user);
-    if (!user) {
-      throw new UnauthorizedException();
+  async validateOAuthLogin(dto: CreateAccountDto): Promise<JwtPayload> {
+    if (!dto || !dto.provider || !dto.providerAccountId || !dto.email) {
+      throw new UnauthorizedException('Invalid OAuth user data');
     }
-    const userExists = await this.prismaService.user.findFirst({
+    let userExist = await this.prismaService.user.findUnique({
       where: {
-        email: user.email,
+        email: dto.email,
       },
     });
-    if (!userExists) {
-      return this.registerUser(user);
+    if (!userExist) {
+      userExist = await this.registerUser(dto);
     }
-    return this.generateJwt({
-      userId: userExists.id,
-      email: userExists.email,
-    } as JwtPayload);
-  }
-
-  async registerUser(user: any) {
-    this.logger.log('registerUser', user);
-    const newUser = await this.prismaService.user.create({
-      data: {
-        email: user.email,
-        name: user.name,
-        image: user.image,
-        provider: user.provider,
-        providerAccountId: user.providerAccountId,
+    let accountExist = await this.prismaService.account.findUnique({
+      where: {
+        provider_providerAccountId: {
+          provider: dto.provider,
+          providerAccountId: dto.providerAccountId,
+        },
       },
     });
-    return this.generateJwt({
-      userId: newUser.id,
-      email: newUser.email,
-    } as JwtPayload);
-  }
-
-  async handleCallback(dto: AuthProviderCallbackDto) {
-    this.logger.log('handleGithubCallback', dto);
-    const { provider, providerAccountId, email, name, image, loginTime } = dto;
-    let user = await this.usersService.findByProviderAccountId(
-      provider,
-      providerAccountId,
-    );
-    if (!user) {
-      user = await this.usersService.create({
-        provider: provider,
-        providerAccountId: providerAccountId,
-        email: email,
-        name: name,
-        image: image,
-      });
-    } else {
-      // Update existing user's login time and potentially other info
-      user = await this.usersService.update({
-        provider: provider,
-        providerAccountId: providerAccountId,
-        email: email,
-        name: name,
-        image: image,
-      });
+    if (!accountExist) {
+      accountExist = await this.createAccount(dto, userExist.id);
     }
     return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      idToken: user.idToken, // Return the generated idToken
-    } as User;
+      userId: userExist.id,
+      email: userExist.email,
+      provider: accountExist.provider,
+      providerAccountId: accountExist.providerAccountId,
+    } as JwtPayload;
+  }
+
+  async registerUser(dto: CreateAccountDto) {
+    this.logger.log('registerUser', dto);
+    const newUser = await this.prismaService.user.create({
+      data: {
+        email: dto.email,
+        name: dto.name,
+        avatarUrl: dto.avatarUrl,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+    await this.onCreateUser(newUser);
+    return newUser;
+  }
+
+  async createAccount(dto: CreateAccountDto, userId: string) {
+    this.logger.log('createAccount', dto);
+    return this.prismaService.account.create({
+      data: {
+        userId: userId,
+        provider: dto.provider,
+        providerAccountId: dto.providerAccountId,
+        accessToken: dto.accessToken,
+        refreshToken: dto.refreshToken,
+        expiresIn: dto.expiresIn,
+        tokenType: dto.tokenType,
+        scope: dto.scope,
+        idToken: dto.idToken,
+        sessionState: dto.sessionState,
+      },
+    });
   }
 
   /**
-   *
-   * @param idToken
-   * @throws Error if user not found
+   * 当新用户创建时调用
+   * 创建一个默认的workspace
+   * workspace下创建一个默认的form
+   * form下创建一个默认的review
+   * form下创建一个默认的widget
    */
-  async decodeIdToken(idToken: string) {
-    // this.logger.debug('decodeIdToken', idToken);
-    const user = await this.usersService.findByIdToken(idToken);
+  async onCreateUser(user: User) {
     if (!user) {
-      throw new Error('User not found');
+      throw new Error('User is required to create default workspace and form');
     }
-    return {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      idToken: user.idToken, // Return the idToken
-    } as User;
+    this.logger.log(`Creating default workspace and form for user: ${user.id}`);
+    const defaultWorkspace = await this.prismaService.workspace.create({
+      data: {
+        shortId: generateShortId(),
+        name: 'Default Workspace',
+        userId: user.id,
+      },
+    });
+    if (!defaultWorkspace) {
+      throw new Error('Unable to create default workspace');
+    }
+    const defaultForm = await this.formService.create(user.id, {
+      name: 'Default Form',
+      workspaceId: defaultWorkspace.id,
+    });
+    if (!defaultForm) {
+      throw new Error('Unable to create default workspace');
+    }
+    const defaultReview = await this.prismaService.review.create({
+      data: {
+        workspaceId: defaultWorkspace.id,
+        formId: defaultForm.id,
+        reviewerName: 'Anonymous',
+        reviewerImage: 'https://example.com/default-avatar.png',
+        reviewerEmail: 'anonymous@gmail.com',
+        rating: 5,
+        text: 'This is a default review.',
+        status: 'pending',
+      },
+    });
+    if (!defaultReview) {
+      throw new Error('Unable to create default workspace');
+    }
+    const defaultShowcase = await this.showcasesService.create(user.id, {
+      workspaceId: defaultWorkspace.id,
+      name: 'Default Showcase',
+    });
+    if (!defaultShowcase) {
+      throw new Error('Unable to create default showcase');
+    }
   }
 }
