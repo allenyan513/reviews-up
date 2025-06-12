@@ -65,6 +65,7 @@ export class AuthController {
     return res.redirect(`${process.env.APP_URL}`);
   }
 
+  @UseGuards(EmailMagicGuard)
   @Post('send-magic-link')
   async sendLink(@Body('email') email: string) {
     return this.authService.sendMagicLink(email);
