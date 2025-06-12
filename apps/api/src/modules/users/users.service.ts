@@ -44,7 +44,7 @@ export class UsersService {
   }
 
   async getUserByUid(uid: string) {
-    this.logger.log(`Fetching user by UID: ${uid}`);
+    this.logger.debug(`Fetching user by UID: ${uid}`);
     const user = await this.prismaService.user.findUnique({
       where: { id: uid },
     });

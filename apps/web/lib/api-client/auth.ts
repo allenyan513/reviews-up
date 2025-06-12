@@ -11,5 +11,15 @@ export const auth = {
   },
   googleSignIn: async (): Promise<User | null> => {
     return await authFetch('/auth/google', 'GET');
-  }
+  },
+
+  sendMagicLink: async (email: string): Promise<void> => {
+    try {
+      await authFetch('/auth/send-magic-link', 'POST', {
+        email: email,
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  },
 };

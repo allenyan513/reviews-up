@@ -8,13 +8,21 @@ import { FormsModule } from '@src/modules/forms/forms.module';
 import { ShowcasesModule } from '@src/modules/showcases/showcases.module';
 import { FormsService } from '@src/modules/forms/forms.service';
 import { ShowcasesService } from '@src/modules/showcases/showcases.service';
+import { EmailMagicStrategy } from '@src/modules/auth/strategies/email-magic.strategy';
 
 @Global()
 @Module({
   imports: [FormsModule, ShowcasesModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy, GoogleStrategy, GithubStrategy, FormsService, ShowcasesService],
-  exports: [AuthService]
+  providers: [
+    AuthService,
+    JwtStrategy,
+    GoogleStrategy,
+    GithubStrategy,
+    EmailMagicStrategy,
+    FormsService,
+    ShowcasesService,
+  ],
+  exports: [AuthService],
 })
-export class AuthModule {
-}
+export class AuthModule {}

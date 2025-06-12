@@ -22,7 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     profile: any,
     done: VerifyCallback,
   ) {
-    this.logger.log('Google validate', profile);
+    this.logger.debug('Google validate', profile);
     const {
       provider,
       id,

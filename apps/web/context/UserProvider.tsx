@@ -11,7 +11,7 @@ interface UserContextProps {
   switchDefaultWorkspace: (workspace: Workspace | null) => void;
   googleSignIn?: () => void;
   githubSignIn?: () => void;
-  emailSignIn?: (email: string, password: string) => void;
+  sendMagicLink: (email: string) => Promise<void>;
   signOut: () => void;
 }
 
@@ -40,6 +40,13 @@ export function UserProvider(props: { children: React.ReactNode }) {
   const githubSignIn = () => {
     redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/github`);
   };
+  const sendMagicLink = async (email: string) => {
+    try {
+      await api.auth.sendMagicLink(email);
+    } catch (error) {
+      throw error;
+    }
+  }
 
   const signOut = () => {
     redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/signOut`);
@@ -69,6 +76,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
         switchDefaultWorkspace,
         googleSignIn,
         githubSignIn,
+        sendMagicLink,
         signOut,
       }}
     >
