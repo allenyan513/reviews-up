@@ -57,10 +57,17 @@ export class AuthController {
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
     this.logger.debug('Github Auth Callback', token);
+    const sameSite = process.env.ENV === 'production' ? 'none' : 'lax';
+    const secure = process.env.ENV === 'production';
+    this.logger.debug('Setting cookie with options', {
+      maxAge: 1000 * 60 * 60 * 1000,
+      sameSite,
+      secure,
+    });
     res.cookie('access_token', token, {
       maxAge: 1000 * 60 * 60 * 1000,
-      sameSite: process.env.ENV === 'production' ? 'none' : 'lax',
-      secure: process.env.ENV === 'production',
+      sameSite: sameSite,
+      secure: secure,
     });
     return res.redirect(`${process.env.APP_URL}`);
   }
