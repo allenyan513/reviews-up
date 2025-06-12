@@ -16,8 +16,11 @@ export async function authFetch(
   if (typeof window == 'undefined') {
     console.error('typeof window is undefined, running on server side');
     const { cookies } = await import('next/headers');
+    console.error(cookies);
     const cookieStore = await cookies();
+    console.error(cookieStore);
     const access_token = cookieStore.get('access_token')?.value;
+    console.log(access_token);
     if (access_token) {
       console.log('Access token found in cookies:', access_token);
       headers.Authorization = `Bearer ${access_token}`;
