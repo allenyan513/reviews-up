@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import '@/app/globals.css';
 import { Open_Sans } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -20,7 +21,10 @@ export default async function RootLayout(props: {
   const { lang } = await props.params;
   return (
     <html lang={lang} translate="no">
-      <body className={openSans.className}>{props.children}</body>
+      <body className={openSans.className}>
+        {props.children}
+        <Analytics />
+      </body>
     </html>
   );
 }
