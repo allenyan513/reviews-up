@@ -13,7 +13,6 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<'form'>) {
   const { googleSignIn, githubSignIn, sendMagicLink } = useUserContext();
-
   const [submitForm, setSubmitForm] = useState<{
     email: string;
   }>({

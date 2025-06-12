@@ -14,11 +14,12 @@ export async function authFetch(
     'Content-Type': 'application/json',
   };
   if (typeof window == 'undefined') {
+    console.error('typeof window is undefined, running on server side');
     const { cookies } = await import('next/headers');
-    console.error(cookies);
     const cookieStore = await cookies();
     const access_token = cookieStore.get('access_token')?.value;
     if (access_token) {
+      console.log('Access token found in cookies:', access_token);
       headers.Authorization = `Bearer ${access_token}`;
     } else {
       console.error('No access token found in cookies');

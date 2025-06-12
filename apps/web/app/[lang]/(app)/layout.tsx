@@ -29,8 +29,6 @@ export default function RootLayout(props: {
           <SidebarInset>{props.children}</SidebarInset>
         </SidebarProvider>
         <ToasterContext />
-        <Analytics />
-        {/*<SpeedInsights />*/}
       </UserProvider>
     </>
   );
