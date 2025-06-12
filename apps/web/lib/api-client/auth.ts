@@ -6,6 +6,7 @@ export const auth = {
     try {
       return await authFetch('/users/profile', 'GET', {});
     } catch (error) {
+      console.error(error);
       return null;
     }
   },
