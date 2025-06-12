@@ -28,11 +28,21 @@ export class AuthService {
   }
 
   async sendMagicLink(email: string) {
-    const user = await this.prismaService.user.findUnique({
+    let user = await this.prismaService.user.findUnique({
       where: { email },
     });
     if (!user) {
-      throw new UnauthorizedException('User not found');
+      const dto: CreateAccountDto = {
+        email: email,
+        name: email.split('@')[0],
+        avatarUrl: '',
+        provider: 'email',
+        providerAccountId: generateShortId(),
+      };
+      const jwtPayload = await this.validateOAuthLogin(dto);
+      user = await this.prismaService.user.findUnique({
+        where: { email: jwtPayload.email },
+      });
     }
     const token = this.generateJwt({
       userId: user.id,
@@ -60,7 +70,7 @@ export class AuthService {
       name: jwtPayload.email.split('@')[0],
       avatarUrl: '',
       provider: 'email',
-      providerAccountId: generateShortId()
+      providerAccountId: generateShortId(),
     };
     return this.validateOAuthLogin(dto);
   }
@@ -140,7 +150,9 @@ export class AuthService {
     if (!user) {
       throw new Error('User is required to create default workspace and form');
     }
-    this.logger.debug(`Creating default workspace and form for user: ${user.id}`);
+    this.logger.debug(
+      `Creating default workspace and form for user: ${user.id}`,
+    );
     const defaultWorkspace = await this.prismaService.workspace.create({
       data: {
         shortId: generateShortId(),
