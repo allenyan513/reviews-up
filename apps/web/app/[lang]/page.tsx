@@ -7,7 +7,7 @@ export default async function Page(props: {
   const { lang } = await props.params;
   const user = await api.auth.getSession();
   if (!user) {
-    redirect(`/${lang}/auth/signin`);
+    return redirect(`/${lang}/auth/signin`);
   }
   return redirect(`/${lang}/${user?.Workspace?.[0]?.id}/reviews`);
 }
