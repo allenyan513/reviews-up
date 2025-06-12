@@ -31,23 +31,51 @@ export class AuthService {
     let user = await this.prismaService.user.findUnique({
       where: { email },
     });
+    let jwtPayload: JwtPayload;
     if (!user) {
+      //如果不存在用户email, 则创建一个新的用户， 同时创建 account, provider为 email ，providerAccountId为随机生成的短id
       const dto: CreateAccountDto = {
         email: email,
         name: email.split('@')[0],
-        avatarUrl: '',
         provider: 'email',
-        providerAccountId: generateShortId(),
+        providerAccountId: email,
       };
-      const jwtPayload = await this.validateOAuthLogin(dto);
-      user = await this.prismaService.user.findUnique({
-        where: { email: jwtPayload.email },
+      jwtPayload = await this.validateOAuthLogin(dto);
+    } else {
+      //如果用户存在, 则检查是否有对应的 account
+      let accountExist = await this.prismaService.account.findUnique({
+        where: {
+          provider_providerAccountId: {
+            provider: 'email',
+            providerAccountId: email,
+          },
+        },
       });
+      if (!accountExist) {
+        // 如果没有对应的 account, 则创建一个新的 account
+        accountExist = await this.prismaService.account.create({
+          data: {
+            userId: user.id,
+            provider: 'email',
+            providerAccountId: email,
+            accessToken: null,
+            refreshToken: null,
+            expiresIn: null,
+            tokenType: null,
+            scope: null,
+            idToken: null,
+            sessionState: null,
+          },
+        });
+      }
+      jwtPayload = {
+        userId: user.id,
+        email: user.email,
+        provider: accountExist.provider,
+        providerAccountId: accountExist.providerAccountId,
+      };
     }
-    const token = this.generateJwt({
-      userId: user.id,
-      email: user.email,
-    });
+    const token = this.generateJwt(jwtPayload);
     const magicLink = `${process.env.API_URL}/auth/magic-login?token=${token}`;
     await this.emailService.send({
       from: EMAIL_FROM,
@@ -68,9 +96,8 @@ export class AuthService {
     const dto: CreateAccountDto = {
       email: jwtPayload.email,
       name: jwtPayload.email.split('@')[0],
-      avatarUrl: '',
       provider: 'email',
-      providerAccountId: generateShortId(),
+      providerAccountId: jwtPayload.email,
     };
     return this.validateOAuthLogin(dto);
   }
