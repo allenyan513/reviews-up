@@ -38,7 +38,7 @@ export class AuthController {
   @Get('callback/google')
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    return res.redirect(`${process.env.APP_URL}/auth/callback?access_token=${token}`);
+    return res.redirect(`${process.env.APP_URL}/en/auth/callback?access_token=${token}`);
   }
 
   @UseGuards(GithubOauthGuard)
@@ -49,7 +49,7 @@ export class AuthController {
   @Get('callback/github')
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    return res.redirect(`${process.env.APP_URL}/auth/callback?access_token=${token}`);
+    return res.redirect(`${process.env.APP_URL}/en/auth/callback?access_token=${token}`);
   }
 
   @Post('send-magic-link')
@@ -62,6 +62,6 @@ export class AuthController {
   async loginWithMagic(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
     console.log('loginWithMagic', token);
-    return res.redirect(`${process.env.APP_URL}/auth/callback?access_token=${token}`);
+    return res.redirect(`${process.env.APP_URL}/en/auth/callback?access_token=${token}`);
   }
 }
