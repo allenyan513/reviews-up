@@ -22,6 +22,6 @@ jobs:
           script: |
             cd /home/ec2-user/ReviewsUp
             git pull origin main
-            npm i 
-            npm run build:api
-            npm run deploy:api
+            npm ci
+            npm run build
+            npm run pm2:start

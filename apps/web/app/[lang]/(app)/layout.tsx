@@ -5,7 +5,6 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { use, useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 import ToasterContext from '@/context/ToastContext';
-import { Analytics } from '@vercel/analytics/next';
 
 export default function RootLayout(props: {
   params: Promise<{
