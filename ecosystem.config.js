@@ -7,13 +7,13 @@ module.exports = {
       watch: false,
     },
     {
-      name: 'reviewsup-web',
+      name: 'reviewsup-app',
       script: 'next',
       args: 'start -p 5551',
       cwd: './apps/web',
     },
     {
-      name: 'reviewsup-landing',
+      name: 'reviewsup-www',
       script: 'next',
       args: 'start -p 5552',
       cwd: './apps/landing',
