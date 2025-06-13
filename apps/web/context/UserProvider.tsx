@@ -9,8 +9,9 @@ interface UserContextProps {
   user: User | null;
   defaultWorkspace: Workspace | null | undefined;
   switchDefaultWorkspace: (workspace: Workspace | null) => void;
-  googleSignIn?: () => void;
-  githubSignIn?: () => void;
+  getSession: () => Promise<User>;
+  googleSignIn: () => void;
+  githubSignIn: () => void;
   sendMagicLink: (email: string) => Promise<void>;
   signOut: () => void;
 }
@@ -46,27 +47,36 @@ export function UserProvider(props: { children: React.ReactNode }) {
     } catch (error) {
       throw error;
     }
-  }
+  };
 
   const signOut = () => {
-    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/signOut`);
+    localStorage.removeItem('access_token');
+    redirect('/auth/signin');
+  };
+  const getSession = async (): Promise<User> => {
+    const user = await api.auth.getSession();
+    if (!user) {
+      return redirect('/auth/signin');
+    }
+    setUser(user);
+    return user;
   };
 
   useEffect(() => {
-    api.auth.getSession().then((user) => {
-      if (!user) {
-        // If no user is returned, we might want to handle it (e.g., redirect to login)
-        return redirect('/auth/signin');
-      }
-      setUser(user);
-      if (!defaultWorkspace) {
-        const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
-        setDefaultWorkspace(firstWorkspace);
-      } else {
-        console.log('Default workspace already set:', defaultWorkspace);
-      }
-    });
+    getSession();
   }, []);
+
+  useEffect(() => {
+    if (!user) {
+      return;
+    }
+    if (!defaultWorkspace) {
+      const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
+      setDefaultWorkspace(firstWorkspace);
+    } else {
+      console.log('Default workspace already set:', defaultWorkspace);
+    }
+  }, [user]);
 
   return (
     <UserContext.Provider
@@ -78,6 +88,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
         githubSignIn,
         sendMagicLink,
         signOut,
+        getSession,
       }}
     >
       {props.children}

@@ -6,9 +6,8 @@ import { useUserContext } from '@/context/UserProvider';
 import { api } from '@/lib/api-client';
 import { columns } from './columens';
 import { DataTable } from './data-table';
-import Link from 'next/link';
 
-export default function TestimonialsPage() {
+export default function ReviewsPage() {
   const { defaultWorkspace } = useUserContext();
 
   const [totalServerRowCount, setTotalServerRowCount] = useState(0); // Optional: to display total count

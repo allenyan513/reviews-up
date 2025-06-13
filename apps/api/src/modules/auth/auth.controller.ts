@@ -37,15 +37,8 @@ export class AuthController {
   @UseGuards(GoogleOauthGuard)
   @Get('callback/google')
   async googleAuthCallback(@Req() req, @Res() res: Response) {
-    const jwtPayload = req.user;
-    const token = this.authService.generateJwt(jwtPayload);
-    this.logger.debug('Google Auth Callback', jwtPayload, token);
-    res.cookie('access_token', token, {
-      maxAge: 1000 * 60 * 60 * 1000,
-      sameSite: process.env.ENV === 'production' ? 'none' : 'lax',
-      secure: process.env.ENV === 'production',
-    });
-    return res.redirect(`${process.env.APP_URL}`);
+    const token = this.authService.generateJwt(req.user);
+    return res.redirect(`${process.env.APP_URL}/auth/callback?access_token=${token}`);
   }
 
   @UseGuards(GithubOauthGuard)
@@ -56,20 +49,7 @@ export class AuthController {
   @Get('callback/github')
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    this.logger.debug('Github Auth Callback', token);
-    const sameSite = process.env.ENV === 'production' ? 'none' : 'lax';
-    const secure = process.env.ENV === 'production';
-    this.logger.debug('Setting cookie with options', {
-      maxAge: 1000 * 60 * 60 * 1000,
-      sameSite,
-      secure,
-    });
-    res.cookie('access_token', token, {
-      maxAge: 1000 * 60 * 60 * 1000,
-      sameSite: sameSite,
-      secure: secure,
-    });
-    return res.redirect(`${process.env.APP_URL}`);
+    return res.redirect(`${process.env.APP_URL}/auth/callback?access_token=${token}`);
   }
 
   @Post('send-magic-link')
@@ -80,14 +60,8 @@ export class AuthController {
   @UseGuards(EmailMagicGuard)
   @Get('magic-login')
   async loginWithMagic(@Req() req, @Res() res: Response) {
-    this.logger.debug('Magic Login Callback', req.user);
-    const jwtPayload = req.user;
-    const token = this.authService.generateJwt(jwtPayload);
-    res.cookie('access_token', token, {
-      maxAge: 1000 * 60 * 60 * 1000,
-      sameSite: process.env.ENV === 'production' ? 'none' : 'lax',
-      secure: process.env.ENV === 'production',
-    });
-    return res.redirect(`${process.env.APP_URL}`);
+    const token = this.authService.generateJwt(req.user);
+    console.log('loginWithMagic', token);
+    return res.redirect(`${process.env.APP_URL}/auth/callback?access_token=${token}`);
   }
 }
