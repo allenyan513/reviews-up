@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "turbo run dev",
     "build": "turbo run build",
+    "start": "turbo run start",
+    "pm2:start": "pm2 startOrReload ecosystem.config.js",
     "test": "turbo run test",
     "test:e2e": "turbo run test:e2e",
     "lint": "turbo run lint",
@@ -16,14 +18,13 @@
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate",
     "db:deploy": "turbo run db:deploy",
-    "clean": "sh ./scripts/clean.sh",
-    "build:api": "turbo run build --filter=api",
-    "deploy:api": "turbo run deploy --filter=api"
+    "clean": "sh ./scripts/clean.sh"
   },
   "dependencies": {
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
     "@prisma/client": "latest",
+    "@tailwindcss/postcss": "^4.1.10",
     "@vercel/analytics": "^1.5.0",
     "cookie": "^1.0.2",
     "passport": "^0.7.0",
@@ -31,7 +32,10 @@
     "passport-github2": "^0.1.12",
     "passport-google-oauth2": "^0.2.0",
     "passport-jwt": "^4.0.1",
-    "passport-local": "^1.0.0"
+    "passport-local": "^1.0.0",
+    "postcss": "^8.5.5",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.1.10"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
