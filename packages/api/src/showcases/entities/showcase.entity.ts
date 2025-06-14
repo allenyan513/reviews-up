@@ -13,13 +13,13 @@ export interface ShowcaseEntity extends Showcase {
 }
 
 export interface ShowcaseConfig {
-  type?: string;
+  type?: string | 'flow' | 'grid' | 'list' | 'carousel' | 'multi-carousel';
   isRatingEnabled?: boolean;
   isSourceEnabled?: boolean;
   isDateEnabled?: boolean;
   isImageEnabled?: boolean;
   isVideoEnabled?: boolean;
-  sortBy?: 'newest' | 'oldest' | 'random' | 'rating' | string
+  sortBy?: 'newest' | 'oldest' | 'random' | 'rating' | string;
   flow?: {
     columns?: number;
   };

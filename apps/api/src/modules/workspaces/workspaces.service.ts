@@ -26,11 +26,41 @@ export class WorkspacesService {
     return `This action returns a #${id} workspace`;
   }
 
-  update(id: number, updateWorkspaceDto: UpdateWorkspaceDto) {
-    return `This action updates a #${id} workspace`;
+  async update(
+    uid: string,
+    id: string,
+    updateWorkspaceDto: UpdateWorkspaceDto,
+  ) {
+    const workspace = await this.prismaService.workspace.findUnique({
+      where: { id: id },
+    });
+    if (!workspace) {
+      throw new Error(`Workspace with ID ${id} not found`);
+    }
+    if (workspace.userId !== uid) {
+      throw new Error(`You do not have permission to update this workspace`);
+    }
+    return this.prismaService.workspace.update({
+      where: { id: id },
+      data: {
+        name: updateWorkspaceDto.name,
+        // Add other fields as necessary
+      },
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} workspace`;
+  async remove(uid: string, id: string) {
+    const workspace = await this.prismaService.workspace.findUnique({
+      where: { id: id },
+    });
+    if (!workspace) {
+      throw new Error(`Workspace with ID ${id} not found`);
+    }
+    if (workspace.userId !== uid) {
+      throw new Error(`You do not have permission to delete this workspace`);
+    }
+    return this.prismaService.workspace.delete({
+      where: { id: id },
+    });
   }
 }
