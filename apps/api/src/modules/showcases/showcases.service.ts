@@ -4,15 +4,27 @@ import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { PaginateRequest, PaginateResponse } from '@repo/api/common/paginate';
 import { Showcase } from '@repo/database/generated/client';
-import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
+import {
+  ShowcaseConfig,
+  ShowcaseEntity,
+} from '@repo/api/showcases/entities/showcase.entity';
 import { generateShortId } from '../../libs/shortId';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 
 @Injectable()
 export class ShowcasesService {
   private logger = new Logger('ShowcasesService');
-  private defaultConfig = {
-    type: 'list', // Default type for showcases
+  private defaultConfig: ShowcaseConfig = {
+    type: 'flow', // Default type for showcases
+    isRatingEnabled: true,
+    isSourceEnabled: true,
+    isDateEnabled: true,
+    isImageEnabled: true,
+    isVideoEnabled: true,
+    sortBy: 'newest',
+    flow: {
+      columns: 4,
+    },
   };
 
   constructor(private prismaService: PrismaService) {}
@@ -24,7 +36,9 @@ export class ShowcasesService {
         userId: uid,
         workspaceId: createShowcaseDto.workspaceId,
         name: createShowcaseDto.name,
-        config: this.defaultConfig,
+        config: {
+          ...this.defaultConfig, // Merge with any provided config
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -138,7 +152,7 @@ export class ShowcasesService {
     const reviews = await this.prismaService.review.findMany({
       where: {
         workspaceId: workspaceId,
-        status: 'public'
+        status: 'public',
       },
       orderBy: {
         createdAt: 'desc',

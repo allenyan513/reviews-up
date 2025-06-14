@@ -8,6 +8,7 @@ import { redirect } from 'next/navigation';
 interface UserContextProps {
   user: User | null;
   defaultWorkspace: Workspace | null | undefined;
+  setDefaultWorkspace: (workspace: Workspace | null) => void;
   switchDefaultWorkspace: (workspace: Workspace | null) => void;
   getSession: () => Promise<User>;
   googleSignIn: () => void;
@@ -83,6 +84,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
       value={{
         user,
         defaultWorkspace,
+        setDefaultWorkspace,
         switchDefaultWorkspace,
         googleSignIn,
         githubSignIn,

@@ -3,9 +3,6 @@
 import { useEffect, useState, use } from 'react';
 import { BiCodeAlt, BiFile, BiShow, BiTrash } from 'react-icons/bi';
 import { ActionIcon } from '@/components/action-icon';
-import { Showcase } from '@repo/database/generated/client/client';
-import { api } from '@/lib/api-client';
-import { PaginateResponse } from '@repo/api/common/paginate';
 import Link from 'next/link';
 import DialogNewShowcase from '@/modules/showcase/dialog-new-showcase';
 import { useShowcaseContext } from '@/modules/showcase/context/ShowcaseProvider';
