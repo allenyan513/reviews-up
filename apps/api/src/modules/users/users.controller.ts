@@ -15,7 +15,6 @@ export class UsersController {
   @UseGuards(JwtAuthGuard)
   @Get('profile')
   async getUserProfile(@Jwt() jwt: JwtPayload) {
-    this.logger.debug(`Fetching profile for user.`, jwt);
     return this.usersService.getProfile(jwt.userId);
   }
 }

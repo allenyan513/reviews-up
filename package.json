@@ -23,6 +23,7 @@
   "dependencies": {
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
+    "@next/third-parties": "^15.3.3",
     "@prisma/client": "latest",
     "@tailwindcss/postcss": "^4.1.10",
     "@types/negotiator": "^0.6.4",
@@ -51,6 +52,7 @@
     "eslint": "^9.28.0",
     "prettier": "^3.2.5",
     "prisma": "latest",
+    "shiki": "^3.6.0",
     "turbo": "^2.5.4"
   },
   "engines": {

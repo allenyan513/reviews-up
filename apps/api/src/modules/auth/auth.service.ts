@@ -3,13 +3,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@src/common/types/jwt-payload';
 import { CreateAccountDto } from '@repo/api/users/dto/create-user.dto';
-import { User } from '@repo/api/users/entities/user.entity';
-import { generateShortId } from '@src/libs/shortId';
-import { ShowcasesService } from '@src/modules/showcases/showcases.service';
-import { FormsService } from '@src/modules/forms/forms.service';
 import { EmailService } from '@src/modules/email/email.service';
 import { EMAIL_FROM } from '@src/modules/email/email.constants';
-import { nanoid } from 'nanoid';
+import { UsersService } from '../users/users.service';
 
 @Injectable()
 export class AuthService {
@@ -18,9 +14,8 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-    private formService: FormsService,
-    private showcasesService: ShowcasesService,
     private emailService: EmailService,
+    private userService: UsersService,
   ) {}
 
   generateJwt(payload: JwtPayload): string {
@@ -53,20 +48,14 @@ export class AuthService {
       });
       if (!accountExist) {
         // 如果没有对应的 account, 则创建一个新的 account
-        accountExist = await this.prismaService.account.create({
-          data: {
-            userId: user.id,
+        accountExist = await this.createAccount(
+          {
+            email: email,
             provider: 'email',
             providerAccountId: email,
-            accessToken: null,
-            refreshToken: null,
-            expiresIn: null,
-            tokenType: null,
-            scope: null,
-            idToken: null,
-            sessionState: null,
           },
-        });
+          user.id,
+        );
       }
       jwtPayload = {
         userId: user.id,
@@ -144,7 +133,7 @@ export class AuthService {
         updatedAt: new Date(),
       },
     });
-    await this.onCreateUser(newUser);
+    await this.userService.addDefaultUserData(newUser);
     return newUser;
   }
 
@@ -164,60 +153,5 @@ export class AuthService {
         sessionState: dto.sessionState,
       },
     });
-  }
-
-  /**
-   * 当新用户创建时调用
-   * 创建一个默认的workspace
-   * workspace下创建一个默认的form
-   * form下创建一个默认的review
-   * form下创建一个默认的widget
-   */
-  async onCreateUser(user: User) {
-    if (!user) {
-      throw new Error('User is required to create default workspace and form');
-    }
-    this.logger.debug(
-      `Creating default workspace and form for user: ${user.id}`,
-    );
-    const defaultWorkspace = await this.prismaService.workspace.create({
-      data: {
-        shortId: generateShortId(),
-        name: 'Default Workspace',
-        userId: user.id,
-      },
-    });
-    if (!defaultWorkspace) {
-      throw new Error('Unable to create default workspace');
-    }
-    const defaultForm = await this.formService.create(user.id, {
-      name: 'Default Form',
-      workspaceId: defaultWorkspace.id,
-    });
-    if (!defaultForm) {
-      throw new Error('Unable to create default workspace');
-    }
-    const defaultReview = await this.prismaService.review.create({
-      data: {
-        workspaceId: defaultWorkspace.id,
-        formId: defaultForm.id,
-        reviewerName: 'Anonymous',
-        reviewerImage: 'https://example.com/default-avatar.png',
-        reviewerEmail: 'anonymous@gmail.com',
-        rating: 5,
-        text: 'This is a default review.',
-        status: 'pending',
-      },
-    });
-    if (!defaultReview) {
-      throw new Error('Unable to create default workspace');
-    }
-    const defaultShowcase = await this.showcasesService.create(user.id, {
-      workspaceId: defaultWorkspace.id,
-      name: 'Default Showcase',
-    });
-    if (!defaultShowcase) {
-      throw new Error('Unable to create default showcase');
-    }
   }
 }

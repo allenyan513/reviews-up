@@ -1,12 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateUserDto } from '@repo/api/users/dto/create-user.dto';
 import { User } from '@repo/api/users/entities/user.entity';
-import { generateIdToken } from '../../libs/utils';
-import { UpdateUserDto } from '@repo/api/users/dto/update-user.dto';
 import { generateShortId } from '../../libs/shortId';
 import { FormsService } from '../forms/forms.service';
 import { ShowcasesService } from '../showcases/showcases.service';
+import { defaultUserData } from './default-data';
 
 @Injectable()
 export class UsersService {
@@ -27,20 +25,10 @@ export class UsersService {
         id: userId,
       },
       include: {
-        //how to rename Workspace to workspace?
         Workspace: true,
       },
     });
-    return user
-    // const userProfile: User = {
-    //   id: user.id,
-    //   name: user.name,
-    //   email: user.email,
-    //   image: user.image,
-    //   idToken: user.idToken,
-    //   Workspace: user.Workspace || [],
-    // };
-    // return userProfile;
+    return user;
   }
 
   async getUserByUid(uid: string) {
@@ -54,4 +42,54 @@ export class UsersService {
     return user;
   }
 
+  /**
+   * 当新用户创建时调用
+   * 创建一个默认的workspace
+   * workspace下创建一个默认的form
+   * form下创建一个默认的review
+   * form下创建一个默认的widget
+   */
+  async addDefaultUserData(user: User) {
+    if (!user) {
+      throw new Error('User is required to create default workspace and form');
+    }
+    const defaultWorkspace = await this.prismaService.workspace.create({
+      data: {
+        shortId: generateShortId(),
+        name: defaultUserData.workspace,
+        userId: user.id,
+      },
+    });
+    if (!defaultWorkspace) {
+      throw new Error('Unable to create default workspace');
+    }
+    const defaultForm = await this.formService.create(user.id, {
+      name: defaultUserData.form,
+      workspaceId: defaultWorkspace.id,
+    });
+    if (!defaultForm) {
+      throw new Error('Unable to create default workspace');
+    }
+    for (const review of defaultUserData.reviews) {
+      await this.prismaService.review.create({
+        data: {
+          workspaceId: defaultWorkspace.id,
+          formId: defaultForm.id,
+          reviewerName: review.reviewerName,
+          reviewerImage: review.reviewerImage,
+          reviewerEmail: review.reviewerEmail,
+          rating: review.rating,
+          text: review.text,
+          status: 'pending'
+        },
+      });
+    }
+    const defaultShowcase = await this.showcasesService.create(user.id, {
+      workspaceId: defaultWorkspace.id,
+      name: defaultUserData.showcase,
+    });
+    if (!defaultShowcase) {
+      throw new Error('Unable to create default showcase');
+    }
+  }
 }

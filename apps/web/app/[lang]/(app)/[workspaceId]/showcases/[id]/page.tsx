@@ -2,16 +2,14 @@
 
 import { useEffect, useState, use } from 'react';
 import { BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow } from 'react-icons/bi';
-import { api } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import {
-  ShowcaseConfig,
-  ShowcaseEntity,
-} from '@repo/api/showcases/entities/showcase.entity';
-import PageConfig from '@/app/[lang]/(app)/[workspaceId]/showcases/[id]/page-config';
-import ShowcasePageReview from '@/app/[lang]/(app)/[workspaceId]/showcases/[id]/page-review';
+import ShowcasePageReview from '@/modules/showcase/showcase-page-review';
+import { BsBoxArrowUpRight, BsShare } from 'react-icons/bs';
+import { DialogEmbedShowcase } from '@/modules/showcase/dialog-embed-showcase';
+import { ShowcasePageConfig } from '@/modules/showcase/showcase-page-config';
+import { useShowcaseContext } from '@/modules/showcase/context/ShowcaseProvider';
 
 export default function Page(props: {
   params: Promise<{
@@ -21,27 +19,16 @@ export default function Page(props: {
   }>;
 }) {
   const params = use(props.params);
-  const [showcase, setShowcase] = useState<ShowcaseEntity>();
-  const [showcaseConfig, setShowcaseConfig] = useState<ShowcaseConfig>({
-    type: '',
-  });
-
+  const { getShowcase, showcase, showcaseConfig } = useShowcaseContext();
   useEffect(() => {
-    api.showcase
-      .getShowcase(params.id )
-      .then((response) => {
-        setShowcase(response);
-        setShowcaseConfig(response.config as ShowcaseConfig);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    if (!params.id) return;
+    getShowcase(params.id);
   }, [params]);
 
   if (!showcase || !showcase.reviews) return null;
 
   return (
-    <div className="min-h-screen p-6 md:p-8">
+    <div className="p-6 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
@@ -58,37 +45,50 @@ export default function Page(props: {
           </p>
         </div>
         <div className={'space-x-2'}>
-          <Button variant="outline" size={'lg'}>
-            <BiCodeAlt className="text-2xl" />
-            Add to your website
+          <DialogEmbedShowcase showcaseId={showcase.shortId}>
+            <Button variant="outline" size={'lg'}>
+              <BiCodeAlt className="text-2xl" />
+              Add to your website
+            </Button>
+          </DialogEmbedShowcase>
+
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.origin}/showcases/${showcase.shortId}`,
+              );
+              toast.success('Link copied to clipboard!');
+            }}
+            variant="outline"
+            size={'lg'}
+          >
+            <BsShare className="text-2xl" />
+            Share
           </Button>
           <Button
             onClick={() => {
               window.open(`/showcases/${showcase.shortId}`, '_blank');
             }}
-            variant="outline"
+            variant="default"
             size={'lg'}
           >
-            <BiShow className="text-2xl" />
-            View
-          </Button>
-          <Button size={'lg'}>
-            <BiSave className="text-2xl" />
-            Save
+            <BsBoxArrowUpRight className="text-2xl" />
+            Open
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-4 gap-4">
-        <PageConfig
-          showcase={showcase}
-          showcaseConfig={showcaseConfig}
-          setShowcaseConfig={setShowcaseConfig}
-        />
-        <ShowcasePageReview
-          showcase={showcase}
-          showcaseConfig={showcaseConfig}
-        />
+      <div className="grid grid-cols-4">
+        <div className={''}>
+          <ShowcasePageConfig />
+        </div>
+        {/*Preview*/}
+        <div className="col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
+          <ShowcasePageReview
+            showcase={showcase}
+            showcaseConfig={showcaseConfig}
+          />
+        </div>
       </div>
     </div>
   );

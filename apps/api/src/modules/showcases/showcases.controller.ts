@@ -25,6 +25,11 @@ export class ShowcasesController {
   async findOneByShortId(@Param('shortId') shortId: string) {
     return this.showcasesService.findOneByShortId(shortId);
   }
+  @UseGuards(JwtAuthGuard)
+  @Get(':id')
+  async findOne(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
+    return this.showcasesService.findOne(jwt.userId, id);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -53,11 +58,7 @@ export class ShowcasesController {
     });
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get(':id')
-  async findOne(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
-    return this.showcasesService.findOne(jwt.userId, id);
-  }
+
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')

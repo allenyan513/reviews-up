@@ -6,6 +6,7 @@ import { PaginateRequest, PaginateResponse } from '@repo/api/common/paginate';
 import { Showcase } from '@repo/database/generated/client';
 import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
 import { generateShortId } from '../../libs/shortId';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 
 @Injectable()
 export class ShowcasesService {
@@ -72,36 +73,6 @@ export class ShowcasesService {
   }
 
   /**
-   * showcase 包含一个workspaceId
-   * workspaceId 可以关联到全部的reviews, 根据showcase自身的preference来筛选reviews, 需要持久化保存这些preferences, 在对外暴露的API中可以使用
-   * @param uid
-   * @param id
-   */
-  async findOne(uid: string, id: string): Promise<ShowcaseEntity> {
-    const showcase = await this.prismaService.showcase.findUnique({
-      where: {
-        id: id,
-      },
-    });
-    if (!showcase || showcase.userId !== uid) {
-      throw new Error('Showcase not found or access denied');
-    }
-    const workspaceId = showcase.workspaceId;
-    const reviews = await this.prismaService.review.findMany({
-      where: {
-        workspaceId: workspaceId,
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
-    });
-    return {
-      ...showcase,
-      reviews: reviews,
-    } as ShowcaseEntity;
-  }
-
-  /**
    * update showcase 可以修改 name 或者 config
    * @param uid
    * @param id
@@ -141,18 +112,50 @@ export class ShowcasesService {
     if (!showcase) {
       throw new Error('Showcase not found');
     }
+    return this.findByShowcase(showcase);
+  }
+
+  /**
+   * showcase 包含一个workspaceId
+   * workspaceId 可以关联到全部的reviews, 根据showcase自身的preference来筛选reviews, 需要持久化保存这些preferences, 在对外暴露的API中可以使用
+   * @param uid
+   * @param id
+   */
+  async findOne(uid: string, id: string): Promise<ShowcaseEntity> {
+    const showcase = await this.prismaService.showcase.findUnique({
+      where: {
+        id: id,
+      },
+    });
+    if (!showcase || showcase.userId !== uid) {
+      throw new Error('Showcase not found or access denied');
+    }
+    return this.findByShowcase(showcase);
+  }
+
+  async findByShowcase(showcase: Showcase): Promise<ShowcaseEntity> {
     const workspaceId = showcase.workspaceId;
     const reviews = await this.prismaService.review.findMany({
       where: {
         workspaceId: workspaceId,
+        status: 'public'
       },
       orderBy: {
         createdAt: 'desc',
       },
+      include: {
+        medias: true,
+      },
     });
     return {
       ...showcase,
-      reviews: reviews,
+      reviews: reviews.map(
+        (review) =>
+          ({
+            ...review,
+            medias: review.medias || [],
+          }) as ReviewEntity,
+      ),
     } as ShowcaseEntity;
   }
 }

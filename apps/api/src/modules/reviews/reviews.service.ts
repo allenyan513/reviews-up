@@ -3,7 +3,7 @@ import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { PaginateResponse, PaginateRequest } from '@repo/api/common/paginate';
-import { FindAllReviewRequest } from '@repo/api/reviews/find-all-review.dto';
+import { FindAllReviewRequest } from '@repo/api/reviews/dto/find-all-review.dto';
 
 @Injectable()
 export class ReviewsService {
@@ -11,19 +11,28 @@ export class ReviewsService {
 
   constructor(private prismaService: PrismaService) {}
 
+  async create(uid: string, createReviewDto: CreateReviewDto) {
+    return this.submit({
+      ...createReviewDto,
+      userId: uid, // Set the user ID from the JWT token
+    });
+  }
+
   async submit(dto: CreateReviewDto) {
     const review = await this.prismaService.review.create({
       data: {
         workspaceId: dto.workspaceId,
         formId: dto.formId,
+        userId: dto.userId,
         reviewerName: dto.fullName,
-        reviewerImage: '',
+        reviewerImage: dto.avatarUrl,
         reviewerEmail: dto.email,
+        reviewerUrl: dto.userUrl,
         rating: dto.rating,
         text: dto.message,
         tweetId: dto.tweetId,
         status: 'pending',
-        source: 'manual',
+        source: dto.source || 'manual',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -51,15 +60,9 @@ export class ReviewsService {
     return review;
   }
 
-  async create(uid: string, createReviewDto: CreateReviewDto) {
-    return this.submit(createReviewDto);
-  }
 
   async findAll(request: FindAllReviewRequest) {
-    this.logger.debug(
-      'Fetching reviews with pagination',
-      request,
-    );
+    this.logger.debug('Fetching reviews with pagination', request);
     if (!request.workspaceId) {
       throw new Error('Workspace ID is required to fetch reviews');
     }
@@ -106,8 +109,12 @@ export class ReviewsService {
     return this.prismaService.review.update({
       where: {
         id: id,
+        userId: uid,
       },
-      data: {},
+      data: {
+        ...updateReviewDto,
+        updatedAt: new Date(), // Update the timestamp
+      },
     });
   }
 

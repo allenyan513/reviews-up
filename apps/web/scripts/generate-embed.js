@@ -11,7 +11,7 @@ const content = `
 (function() {
     const domain = '${DOMAIN}';
     console.log('Embed script running from domain:', domain);
-    window.addEventListener('DOMContentLoaded', () => {
+    // window.addEventListener('DOMContentLoaded', () => {
     const widgets = document.querySelectorAll('[id^="reviewsup-showcase-"]');
 
     widgets.forEach((el) => {
@@ -20,11 +20,11 @@ const content = `
       const iframe = document.createElement('iframe');
       iframe.src = domain + '/showcases/' + widgetId;
       iframe.style.width = '100%';
-      iframe.style.height = '400px';
+      iframe.style.height = '100%';
       iframe.style.border = 'none';
       el.appendChild(iframe);
       });
-    });
+    // });
 })();
 `;
 

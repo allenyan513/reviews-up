@@ -6,7 +6,7 @@ import {
   ShowcaseEntity,
 } from '@repo/api/showcases/entities/showcase.entity';
 import toast from 'react-hot-toast';
-import ShowcasePageReview from '@/app/[lang]/(app)/[workspaceId]/showcases/[id]/page-review';
+import ShowcasePageReview from '@/modules/showcase/showcase-page-review';
 
 export default function Page(props: {
   params: Promise<{

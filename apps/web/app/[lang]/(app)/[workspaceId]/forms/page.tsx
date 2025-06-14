@@ -11,7 +11,7 @@ import {
   BiTrash,
 } from 'react-icons/bi';
 import { ActionIcon } from '@/components/action-icon';
-import CreateFormDialog from '@/components/biz/create-form-dialog';
+import CreateFormDialog from '@/modules/form/create-form-dialog';
 import Link from 'next/link';
 
 export default function Page(props: {

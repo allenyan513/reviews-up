@@ -75,19 +75,7 @@ export default function Layout(props: {
             <BsCodeSlash className="text-2xl" />
             Add to your website
           </Button>
-          <Button
-            onClick={() => {
-              navigator.clipboard.writeText(
-                `${window.location.origin}/forms/${form.shortId}`,
-              );
-              toast.success('Link copied to clipboard!');
-            }}
-            variant="outline"
-            size={'lg'}
-          >
-            <BsShare className="text-2xl" />
-            Share
-          </Button>
+
           <Button
             onClick={() => {
               window.open(`/forms/${form.shortId}`, '_blank');
@@ -98,10 +86,19 @@ export default function Layout(props: {
             <BsBoxArrowUpRight className="text-2xl" />
             View
           </Button>
-          {/*<Button size={'lg'}>*/}
-          {/*  <BiSave className="text-2xl" />*/}
-          {/*  Save*/}
-          {/*</Button>*/}
+          <Button
+            onClick={() => {
+              navigator.clipboard.writeText(
+                `${window.location.origin}/forms/${form.shortId}`,
+              );
+              toast.success('Link copied to clipboard!');
+            }}
+            variant='default'
+            size={'lg'}
+          >
+            <BsShare className="text-2xl" />
+            Share
+          </Button>
         </div>
       </div>
 

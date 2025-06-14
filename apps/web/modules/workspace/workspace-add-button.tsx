@@ -7,76 +7,56 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger
+  DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useState } from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useState } from 'react';
 import { api } from '@/lib/api-client';
-import { BiDownload, BiX } from 'react-icons/bi';
-import ReviewImportManualDialog from '../review-import-manual-dialog';
-import ReviewImportXDialog from '@/components/review-x-dialog';
+import toast from 'react-hot-toast';
 
-const imports = [
-  {
-    title: 'Manual Import',
-    url: '/import/csv',
-    icon: BiDownload,
-    node: <ReviewImportManualDialog />
-  },
-  {
-    title: 'X',
-    url: '/import/json',
-    icon: BiX,
-    node: (
-      <ReviewImportXDialog
-        onImport={(tweetId) => {
-          console.log('Tweet ID changed:', tweetId);
-        }}
-      >
-        <div></div>
-      </ReviewImportXDialog>
-    )
-  }
-];
-
-export default function ReviewImportDialog() {
+export function WorkspaceAddButton(props: {}) {
   const [workspaceName, setWorkspaceName] = useState<string>('');
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   const createWorkspace = () => {
-    api
-      .workspace
+    api.workspace
       .createWorkspace({
-        name: workspaceName
+        name: workspaceName,
       })
       .then((response) => {
-        console.log('Workspace created:', response);
         setWorkspaceName('');
         setIsOpen(false);
+        toast.success('Workspace created successfully!');
       })
       .catch((error) => {
-        console.error('Error creating workspace:', error);
+        toast.error('Failed to create workspace. Please try again.');
       });
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
-        <Button size={'lg'}>
-          <BiDownload className="text-2xl" />
-          Import
-        </Button>
+        <p className="text-sm mt-4 cursor-pointer">
+          + <span className="underline">Creat a new workspace</span>
+        </p>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-3xl">
+      <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Let's import some reviews ✌🏻</DialogTitle>
+          <DialogTitle>New Workspace</DialogTitle>
           <DialogDescription>
             {/*Anyone who has this link will be able to view this.*/}
           </DialogDescription>
         </DialogHeader>
-        <div className="grid grid-cols-3 gap-4">
-          {/*{imports.map((item) => (*/}
-          {/*  <item.node/>*/}
-          {/*))}*/}
+        <div className="flex flex-col gap-2 py-8">
+          <Label htmlFor="workspace-name">Workspace Name</Label>
+          <Input
+            id="workspace-name"
+            placeholder="Enter workspace name"
+            className="w-full"
+            value={workspaceName}
+            onChange={(e) => setWorkspaceName(e.target.value)}
+          />
         </div>
         <DialogFooter className="">
           <DialogClose asChild>

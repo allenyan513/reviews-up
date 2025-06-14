@@ -25,6 +25,8 @@ import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { DataTablePagination } from '@/app/[lang]/(app)/[workspaceId]/reviews/data-table-pagination';
+import { BsEye, BsInfoCircle } from 'react-icons/bs';
+import { BiHide, BiInfoCircle, BiShow } from 'react-icons/bi';
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -42,23 +44,26 @@ interface DataTableProps<TData, TValue> {
   totalRowCount: number;
   onRowItemClick: (row: TData) => void;
 }
-
 const statusOptions = [
   {
     name: 'All',
     value: '',
+    icon: null
   },
   {
     name: 'Pending',
     value: 'pending',
+    icon: <BiInfoCircle />,
   },
   {
     name: 'Public',
     value: 'public',
+    icon: <BiShow />,
   },
   {
     name: 'Hidden',
     value: 'hidden',
+    icon: <BiHide />,
   },
 ];
 
@@ -97,6 +102,8 @@ export function DataTable<TData, TValue>({
       pagination,
     },
   });
+
+
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -153,6 +160,7 @@ export function DataTable<TData, TValue>({
                   table.getColumn('status')?.setFilterValue(filter.value);
                 }}
               >
+                {filter.icon && <span>{filter.icon}</span>}
                 {filter.name}
               </Button>
             ))}

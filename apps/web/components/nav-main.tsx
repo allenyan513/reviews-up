@@ -2,17 +2,14 @@
 
 import { IconCirclePlusFilled, IconMail, type Icon } from '@tabler/icons-react';
 
-import { Button } from '@/components/ui/button';
 import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
-import WorkspaceSwitchButton from '@/components/biz/workspace-switch-button';
+import { WorkspaceSwitchButton } from '@/modules/workspace/workspace-switch-button';
 import { cn } from '@/lib/utils';
 
 export function NavMain(props: {

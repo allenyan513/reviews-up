@@ -9,11 +9,11 @@ import {
 import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { useUserContext } from '@/context/UserProvider';
-import WorkspaceAddButton from '@/components/biz/workspace-add-button';
+import { WorkspaceAddButton } from '@/modules/workspace/workspace-add-button';
 import { useState } from 'react';
 import toast from 'react-hot-toast';
 
-export default function WorkspaceSwitchButton(props: {}) {
+export function WorkspaceSwitchButton(props: {}) {
   const { user, defaultWorkspace, switchDefaultWorkspace } = useUserContext();
   const [open, setOpen] = useState(false);
   return (
@@ -50,7 +50,9 @@ export default function WorkspaceSwitchButton(props: {}) {
                 >
                   <span>{workspace.name}</span>
                   {defaultWorkspace?.id === workspace.id ? (
-                    <span className='text-white bg-black py-1 px-2 rounded text-xs'>Current</span>
+                    <span className="text-white bg-black py-1 px-2 rounded text-xs">
+                      Current
+                    </span>
                   ) : (
                     <></>
                   )}
