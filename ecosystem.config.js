@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'reviewsup-api',
-      script: 'dist/src/main.js',
+      script: 'dist/main.js',
       cwd: './apps/api',
       watch: false,
     },

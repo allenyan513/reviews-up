@@ -7,9 +7,9 @@ import toast from 'react-hot-toast';
 import Link from 'next/link';
 import ShowcasePageReview from '@/modules/showcase/showcase-page-review';
 import { BsBoxArrowUpRight, BsShare } from 'react-icons/bs';
-import { DialogEmbedShowcase } from '@/modules/showcase/dialog-embed-showcase';
 import { ShowcasePageConfig } from '@/modules/showcase/showcase-page-config';
 import { useShowcaseContext } from '@/modules/showcase/context/ShowcaseProvider';
+import { CopyCodeDialog } from '@/components/copy-code-dialog';
 
 export default function Page(props: {
   params: Promise<{
@@ -45,12 +45,19 @@ export default function Page(props: {
           </p>
         </div>
         <div className={'space-x-2'}>
-          <DialogEmbedShowcase showcaseId={showcase.shortId}>
+          <CopyCodeDialog
+            title={'Embed your showcase'}
+            codes={[
+              `<div id="reviewsup-showcase-${showcase.shortId}"></div>`,
+              `<script id="revewsup-embed-js" type="text/javascript"`,
+              `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,
+            ]}
+          >
             <Button variant="outline" size={'lg'}>
               <BiCodeAlt className="text-2xl" />
               Add to your website
             </Button>
-          </DialogEmbedShowcase>
+          </CopyCodeDialog>
 
           <Button
             onClick={() => {

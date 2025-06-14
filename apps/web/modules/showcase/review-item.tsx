@@ -8,22 +8,27 @@ import { ReviewItemSource } from '@/modules/showcase/review-item-source';
 
 export function ReviewItem(props: {
   review: ReviewEntity;
-  isSourceEnabled: boolean | undefined;
-  isVideoEnabled: boolean | undefined;
-  isImageEnabled: boolean | undefined;
-  isDateEnabled: boolean | undefined;
-  isRatingEnabled: boolean | undefined;
+  isSourceEnabled?: boolean | undefined;
+  isVideoEnabled?: boolean | undefined;
+  isImageEnabled?: boolean | undefined;
+  isDateEnabled?: boolean | undefined;
+  isRatingEnabled?: boolean | undefined;
   className?: string;
 }) {
-  if (!props.review) {
-    return <div className="text-gray-500">No review data available.</div>;
+  const {
+    review,
+    className,
+    isSourceEnabled = true,
+    isVideoEnabled = true,
+    isImageEnabled = true,
+    isDateEnabled = true,
+    isRatingEnabled = true,
+  } = props;
+  if (!review) {
+    return null;
   }
-  const imageMedias = props.review.medias?.filter(
-    (media) => media.type === 'image',
-  );
-  const videoMedias = props.review.medias?.filter(
-    (media) => media.type === 'video',
-  );
+  const imageMedias = review.medias?.filter((media) => media.type === 'image');
+  const videoMedias = review.medias?.filter((media) => media.type === 'video');
   /**
    * gird layout for image medias
    * if image length is 1, show it in a single
@@ -93,49 +98,50 @@ export function ReviewItem(props: {
 
   return (
     <div
-      key={props.review.id}
+      key={review.id}
       className={cn(
         'bg-white p-4 border rounded shadow flex flex-col gap-4',
-        props.className,
+        className,
       )}
     >
       <Link
         target="_blank"
-        href={props.review.reviewerUrl || '#'}
+        href={review.reviewerUrl || '#'}
         className="flex flex-row justify-between"
       >
         <div className="flex flex-row gap-4 overflow-x-auto">
           <Avatar className="size-11 shadow-md border">
             <AvatarImage
-              src={props.review.reviewerImage || ''}
-              alt={props.review.reviewerName || 'Reviewer'}
+              src={review.reviewerImage || ''}
+              alt={review.reviewerName || 'Reviewer'}
             />
             <AvatarFallback className="AvatarFallback" delayMs={600}>
-              {props.review.reviewerName.charAt(0).toUpperCase() || 'U'}
+              {review.reviewerName.charAt(0).toUpperCase() || 'U'}
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col justify-center">
             <p className="text-md font-semibold line-clamp-1">
-              {props.review.reviewerName}
+              {review.reviewerName}
             </p>
-            {props.isDateEnabled && (
+            {isDateEnabled && (
               <p className="text-gray-700 text-sm">
-                {toLocalDateString(props.review.createdAt)}
+                {toLocalDateString(review.createdAt)}
               </p>
             )}
           </div>
         </div>
-        {props.isSourceEnabled && (
-          <ReviewItemSource
-            source={props.review.source as string} />
+        {isSourceEnabled && (
+          <ReviewItemSource source={review.source as string} />
         )}
       </Link>
-      {props.isRatingEnabled && (
-        <StarRating value={props.review.rating || 5} onChange={() => {}} />
+      {isRatingEnabled && (
+        <StarRating value={review.rating || 5} onChange={() => {}} />
       )}
-      {props.isImageEnabled && renderImageMedias()}
-      {props.isVideoEnabled && renderVideoMedias()}
-      <p className="text-gray-700 overflow-x-auto whitespace-break-spaces ">{props.review.text}</p>
+      {isImageEnabled && renderImageMedias()}
+      {isVideoEnabled && renderVideoMedias()}
+      <p className="text-gray-700 overflow-x-auto whitespace-break-spaces ">
+        {review.text}
+      </p>
     </div>
   );
 }

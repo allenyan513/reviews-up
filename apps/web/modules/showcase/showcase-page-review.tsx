@@ -12,6 +12,7 @@ import { SortBy } from '@/types/sortby';
 import MultiCarouselLayout from '@/modules/showcase/layout/multi-carousel-layout';
 
 export default function ShowcasePageReview(props: {
+  className?: string;
   showcase: ShowcaseEntity;
   showcaseConfig: ShowcaseConfig | undefined;
 }) {
@@ -51,7 +52,7 @@ export default function ShowcasePageReview(props: {
   }
 
   return (
-    <>
+    <div className={props.className}>
       {type === 'list' && (
         <ListLayout
           items={sortedReviews}
@@ -144,6 +145,6 @@ export default function ShowcasePageReview(props: {
         />
       )}
       <PoweredBy />
-    </>
+    </div>
   );
 }

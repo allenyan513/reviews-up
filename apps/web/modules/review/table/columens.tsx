@@ -7,7 +7,6 @@ import {
   BsCameraVideo,
   BsEye,
   BsImage,
-  BsPencil,
   BsTrash,
 } from 'react-icons/bs';
 import { Button } from '@/components/ui/button';
@@ -20,8 +19,20 @@ import { api } from '@/lib/api-client';
 import { $Enums } from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 import toast from 'react-hot-toast';
-import { AiOutlineClockCircle, AiOutlineEye } from 'react-icons/ai';
 import { BiHide, BiInfoCircle, BiShow } from 'react-icons/bi';
+import ReviewLookupDialog from '@/modules/review/review-lookup-dialog';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
+
 
 const updateReviewStatus = async (
   reviewId: string,
@@ -185,20 +196,34 @@ export const columns: ColumnDef<ReviewEntity>[] = [
     id: 'actions',
     header: 'Actions',
     cell: ({ row }) => {
+      const review = row.original;
       return (
-        <div className="flex items-center space-x-1">
-          {/* View Icon */}
-          <button className="text-gray-600 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100">
-            <BsEye className={'text-xl'} />
-          </button>
-          {/* Edit Icon */}
-          <button className="text-gray-600 hover:text-blue-600 p-2 rounded-full hover:bg-gray-100">
-            <BsPencil className={'text-xl'} />
-          </button>
-          {/* Delete Icon */}
-          <button className="text-red-500 hover:text-red-700 p-2 rounded-full hover:bg-red-50">
-            <BsTrash className={'text-xl'} />
-          </button>
+        <div className="flex items-center space-x-2">
+          <ReviewLookupDialog review={review}>
+            <BsEye className={'text-xl cursor-pointer'} />
+          </ReviewLookupDialog>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <BsTrash className={'text-xl text-red-400 cursor-pointer'} />
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This action cannot be undone. This will permanently delete the
+                  review.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={()=>{
+                    console.log(review);
+                  }}
+                >Continue</AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </div>
       );
     },

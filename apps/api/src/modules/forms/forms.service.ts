@@ -8,33 +8,41 @@ import { FormEntity } from '@repo/api/forms/entities/form.entity';
 @Injectable()
 export class FormsService {
   private logger = new Logger('FormsService');
+
   constructor(private prismaService: PrismaService) {}
 
-  private defaultConfig = {
-    brand: {
-      name: 'My Awesome App',
-      logo: '/logo.png',
-      slogan: 'Empowering Your Experience',
-      url: 'https://myawesomeapp.com',
-    },
-    welcome: {
-      title: 'Welcome to My Awesome App',
-      message:
-        'We are thrilled to have you here! Explore our features and enjoy your stay.',
-    },
-    thankyou: {
-      title: 'Thank You for Visiting!',
-      message: 'We hope you found what you were looking for. Come back soon!',
-    },
-  };
-
-  async create(uid:string, createFormDto: CreateFormDto) {
+  async create(uid: string, createFormDto: CreateFormDto) {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: uid,
+      },
+    });
+    if (!user) {
+      throw new Error('User not found');
+    }
+    const config = {
+      brand: {
+        name: user.name,
+        logo: user.avatarUrl,
+        slogan: user.email,
+        url: '',
+      },
+      welcome: {
+        title: 'Would You mind to give us some feedback?',
+        message:
+          'We are always looking to improve our product. Your feedback is very important to us.',
+      },
+      thankyou: {
+        title: 'Thank You for Submitting',
+        message: 'We hope you found what you were looking for. Come back soon!',
+      },
+    };
     return this.prismaService.form.create({
       data: {
         ...createFormDto,
         shortId: generateShortId(),
         userId: uid,
-        config: this.defaultConfig,
+        config: config,
       },
     });
   }

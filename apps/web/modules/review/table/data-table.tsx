@@ -24,7 +24,7 @@ import {
 import { Button } from '@/components/ui/button';
 import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { DataTablePagination } from '@/app/[lang]/(app)/[workspaceId]/reviews/data-table-pagination';
+import { DataTablePagination } from '@/modules/review/table/data-table-pagination';
 import { BsEye, BsInfoCircle } from 'react-icons/bs';
 import { BiHide, BiInfoCircle, BiShow } from 'react-icons/bi';
 
@@ -207,10 +207,6 @@ export function DataTable<TData, TValue>({
                 <TableRow
                   key={row.id}
                   data-state={row.getIsSelected() && 'selected'}
-                  className='cursor-pointer'
-                  onClick={()=>{
-                    onRowItemClick(row.original as TData);
-                  }}
                 >
                   {row.getVisibleCells().map((cell) => (
                     <TableCell key={cell.id}>

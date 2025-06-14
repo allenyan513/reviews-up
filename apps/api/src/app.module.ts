@@ -13,6 +13,8 @@ import { EmailModule } from './modules/email/email.module';
 import { S3Module } from './modules/s3/s3.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
+import { NotificationsModule } from '@src/modules/notifications/notifications.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,9 +38,9 @@ import { PassportModule } from '@nestjs/passport';
     ShowcasesModule,
     AuthModule,
     S3Module,
+    NotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule {}

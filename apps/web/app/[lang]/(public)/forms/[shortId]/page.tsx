@@ -1,27 +1,20 @@
 'use client';
-import { api } from '@/lib/api-client';
-import { use, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
-import { PageParams } from '@/types/page-params';
-import { FormConfig } from '@repo/api/forms/entities/form-config.entity';
-import { PageFormReview } from '@/views/page-form-review';
+import { use, useEffect } from 'react';
+import { PageFormReview } from '@/modules/form/page-form-review';
+import { useFormContext } from '@/modules/form/context/FormProvider';
 
 export default function PublicFormRoute(props: {
-  params: Promise<PageParams>;
+  params: Promise<{
+    shortId: string;
+    lang: string;
+  }>;
 }) {
-  const params = use(props.params);
-  const [form, setForm] = useState<FormEntity | null>(null);
+  const { lang, shortId } = use(props.params);
+  const { form, fetchFormByShortId } = useFormContext();
   useEffect(() => {
-    api.form
-      .getFormByShortId(params.shortId)
-      .then((response) => {
-        setForm(response);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  }, []);
+    if (!shortId) return;
+    fetchFormByShortId(shortId);
+  }, [shortId]);
 
   if (!form) {
     return null;
@@ -29,11 +22,12 @@ export default function PublicFormRoute(props: {
 
   return (
     <PageFormReview
+      className={'flex flex-col w-full min-h-screen justify-center items-center bg-gray-50'}
+      id={form.id}
+      lang={lang}
+      workspaceId={form.workspaceId}
+      shortId={form.shortId}
       mode={'public'}
-      lang={params.lang}
-      shortId={params.shortId}
-      form={form}
-      config={form.config as FormConfig}
     />
   );
 }

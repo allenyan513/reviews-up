@@ -8,9 +8,7 @@ import {
   IconCode,
   IconTable,
   IconUser,
-
 } from '@tabler/icons-react';
-
 
 import { NavMain } from '@/components/nav-main';
 import { NavSecondary } from '@/components/nav-secondary';
@@ -22,21 +20,22 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem
+  SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { usePathname } from 'next/navigation';
 import { useUserContext } from '@/context/UserProvider';
+import { Logo } from '@/components/logo';
+import Link from 'next/link';
 
 const data = {
   title: 'ReviewUp',
-  navSecondary: [
-  ]
+  navSecondary: [],
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = props.lang;
-  const {user, defaultWorkspace, signOut} = useUserContext();
-  const path = usePathname()
+  const { user, defaultWorkspace, signOut } = useUserContext();
+  const path = usePathname();
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -46,10 +45,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">{data.title}</span>
-              </a>
+              <Link
+                target={'_blank'}
+                href={`${process.env.NEXT_PUBLIC_WWW_URL}`}>
+                <Logo />
+                <h1 className="text-base font-semibold">{data.title}</h1>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -62,31 +63,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               title: 'Reviews',
               url: `/${lang}/${defaultWorkspace?.id}/reviews`,
               icon: IconStar,
-              active: path.includes('/reviews')
+              active: path.includes('/reviews'),
             },
             {
               title: 'Showcases',
               url: `/${lang}/${defaultWorkspace?.id}/showcases`,
               icon: IconCode,
-              active: path.includes('/showcases')
+              active: path.includes('/showcases'),
             },
             {
               title: 'Collect Forms',
               url: `/${lang}/${defaultWorkspace?.id}/forms`,
               icon: IconTable,
-              active: path.includes('/forms')
+              active: path.includes('/forms'),
             },
             {
               title: 'Settings',
               url: `/${lang}/settings`,
               icon: IconSettings,
-              active: path.includes('/settings')
-            },
-            {
-              title: 'Account',
-              url: `/${lang}/account`,
-              icon: IconUser,
-              active: path.includes('/account')
+              active: path.includes('/settings'),
             },
           ]}
         />
@@ -96,8 +91,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <NavUser
           user={{
             name: user?.name || '',
-            email:  user?.email || '',
-            avatar:  user?.avatarUrl || '',
+            email: user?.email || '',
+            avatar: user?.avatarUrl || '',
           }}
           signOut={signOut}
         />

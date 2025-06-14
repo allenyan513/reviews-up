@@ -1,40 +1,24 @@
 'use client';
-import { api } from '@/lib/api-client';
 import { useEffect, useState, use } from 'react';
-import toast from 'react-hot-toast';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
-import { PageParams } from '@/types/page-params';
-import { FormConfig } from '@repo/api/forms/entities/form-config.entity';
-import { PageFormThanksReview } from '@/views/page-form-thanks-review';
+import { PageFormThanksReview } from '@/modules/form/page-form-thanks-review';
+import { useFormContext } from '@/modules/form/context/FormProvider';
 
 export default function PublicFormThanksRoute(props: {
-  params: Promise<PageParams>;
+  params: Promise<{
+    shortId: string;
+    lang: string;
+  }>;
 }) {
-  const params = use(props.params);
-  const [form, setForm] = useState<FormEntity | null>(null);
+  const { shortId } = use(props.params);
+  const { formConfig, fetchFormByShortId } = useFormContext();
 
   useEffect(() => {
-    api.form
-      .getFormByShortId(params.shortId)
-      .then((response) => {
-        setForm(response);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  }, []);
+    if (!shortId) return;
+    fetchFormByShortId(shortId);
+  }, [shortId]);
 
-  if (!form || !params) {
+  if (!formConfig) {
     return null;
   }
-
-  return (
-    <PageFormThanksReview
-      mode={'public'}
-      lang={params.lang}
-      shortId={params.shortId}
-      form={form}
-      config={form.config as FormConfig}
-    />
-  );
+  return <PageFormThanksReview mode={'public'} formConfig={formConfig} />;
 }

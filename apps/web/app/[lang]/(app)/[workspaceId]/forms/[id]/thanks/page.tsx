@@ -1,50 +1,21 @@
 'use client';
 
 import { useEffect, useState, use } from 'react';
-import { api } from '@/lib/api-client';
-import toast from 'react-hot-toast';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { Button } from '@/components/ui/button';
-import { FormConfig } from '@repo/api/forms/entities/form-config.entity';
-import { PageFormThanksReview } from '@/views/page-form-thanks-review';
+import { PageFormThanksReview } from '@/modules/form/page-form-thanks-review';
+import { useFormContext } from '@/modules/form/context/FormProvider';
 
-interface PageParams {
-  lang: string;
-  workspaceId: string;
-  id: string;
-}
-
-export default function Page(props: { params: Promise<PageParams> }) {
-  const params = use(props.params);
-  const [form, setForm] = useState<FormEntity>();
-  const [formConfig, setFormConfig] = useState<FormConfig | null>(null);
-
-  const updateFormConfig = async () => {
-    if (!form || !formConfig) return;
-    try {
-      await api.form.updateForm(form.id, {
-        config: formConfig,
-      });
-      toast.success('Form configuration updated successfully');
-    } catch (error) {
-      toast.error('Failed to update form configuration');
-    }
-  };
-
-  useEffect(() => {
-    api.form
-      .getForm(params.id)
-      .then((response) => {
-        setForm(response);
-        setFormConfig(response.config as FormConfig);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
-  }, []);
-
+export default function Page(props: {
+  params: Promise<{
+    lang: string;
+    workspaceId: string;
+    id: string;
+  }>;
+}) {
+  const { lang, id, workspaceId } = use(props.params);
+  const { form, formConfig, setFormConfig, updateFormConfig } =
+    useFormContext();
   if (!form || !formConfig) return null;
-
   return (
     <div className="flex flex-row">
       <div className="w-1/2 border-l border-gray-300 px-4 flex flex-col gap-4">
@@ -103,13 +74,7 @@ export default function Page(props: { params: Promise<PageParams> }) {
         <Button onClick={updateFormConfig}>Save</Button>
       </div>
       <div className="w-full border border-gray-300 rounded-lg">
-        <PageFormThanksReview
-          mode={'edit'}
-          lang={params.lang}
-          shortId={form.shortId}
-          form={form}
-          config={formConfig}
-        />
+        <PageFormThanksReview mode={'edit'} formConfig={formConfig} />
       </div>
     </div>
   );

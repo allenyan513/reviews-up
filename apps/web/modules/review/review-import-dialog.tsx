@@ -18,6 +18,7 @@ import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
 import { useUserContext } from '@/context/UserProvider';
 import { Tweet } from 'react-tweet/api';
+import { parseTweet } from '@/lib/utils';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -37,31 +38,19 @@ export default function ReviewImportDialog() {
         toast.error('Tweet ID is missing');
         return;
       }
-      console.log(data)
-      const imageUrls = data.photos?.map((photo) => photo.url) || [];
-      const videoUrls =
-        data.video?.variants
-          .map((variant) => {
-            if (variant.type === 'video/mp4') {
-              return variant.src;
-            }
-          })
-          .filter((url) => url !== undefined && url !== null && url !== '') ||
-        [];
-      const videoUrl = videoUrls.length > 0 ? videoUrls[0] : '';
-      const userUrl = `https://x.com/${data.user.screen_name}`;
+      const parseData = parseTweet(data)
       await api.review.createReview({
         workspaceId: defaultWorkspace.id,
         rating: 5,
-        message: data.text,
-        fullName: data.user.name,
-        email: '',
-        userUrl : userUrl,
-        avatarUrl: data.user.profile_image_url_https,
+        message: parseData?.message,
+        fullName: parseData?.fullName,
+        email: parseData?.email,
+        userUrl : parseData?.userUrl,
+        avatarUrl: parseData?.avatarUrl,
         source: 'twitter',
-        imageUrls: imageUrls,
-        videoUrl: videoUrl || '',
-        tweetId: tweetId,
+        imageUrls: parseData?.imageUrls,
+        videoUrl: parseData?.videoUrl,
+        tweetId: parseData?.tweetId
       });
       toast.success('Review created successfully!');
       setIsOpen(false);

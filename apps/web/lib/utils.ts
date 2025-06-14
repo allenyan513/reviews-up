@@ -1,5 +1,7 @@
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { api } from '@/lib/api-client';
+import { Tweet } from 'react-tweet/api';
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -15,4 +17,31 @@ export function toLocalDateString(date: Date | string): string {
     month: 'long',
     day: 'numeric',
   }).format(_date);
+}
+
+export function parseTweet(data: Tweet | undefined | null) {
+  if (!data) {
+    return;
+  }
+  const imageUrls = data.photos?.map((photo) => photo.url) || [];
+  const videoUrls =
+    data.video?.variants
+      .map((variant) => {
+        if (variant.type === 'video/mp4') {
+          return variant.src;
+        }
+      })
+      .filter((url) => url !== undefined && url !== null && url !== '') || [];
+  const videoUrl = videoUrls.length > 0 ? videoUrls[0] : '';
+  const userUrl = `https://x.com/${data.user.screen_name}`;
+  return {
+    fullName: data.user.name,
+    message: data.text,
+    email: '',
+    userUrl: userUrl,
+    avatarUrl: data.user.profile_image_url_https,
+    imageUrls: imageUrls,
+    videoUrl: videoUrl || '',
+    tweetId: data.id_str,
+  };
 }
