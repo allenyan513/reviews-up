@@ -1,7 +1,7 @@
 'use client';
 
 import { use, useEffect, useState } from 'react';
-import CreateFormDialog from '@/components/biz/create-form-dialog';
+import CreateFormDialog from '@/modules/form/create-form-dialog';
 
 export default function Page(props: {
   params: Promise<{

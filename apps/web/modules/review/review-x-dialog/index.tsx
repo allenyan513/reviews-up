@@ -12,15 +12,17 @@ import {
 } from '@/components/ui/dialog';
 import React, { useState, useRef } from 'react';
 
-import { Input } from '../ui/input';
-import { Tweet } from 'react-tweet';
+import { Input } from '@/components/ui/input';
+import { Tweet, useTweet } from 'react-tweet';
+import { Tweet as TweetEntity } from 'react-tweet/api';
 
 export default function ReviewImportXDialog(props: {
-  onImport: (tweetId: string) => void;
+  onImport: (tweetId: string, data: TweetEntity | null | undefined) => void;
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tweetId, setTweetId] = useState<string | null>(null);
+  const { data } = useTweet(tweetId || '');
 
   const handleTweetIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -31,33 +33,6 @@ export default function ReviewImportXDialog(props: {
       setTweetId(null);
     }
   };
-  // const createReview = async () => {
-  //   try {
-  //     if (!tweetId || !data) {
-  //       toast.error('Tweet ID is missing');
-  //       return;
-  //     }
-  //     await api.submitReview(
-  //       {
-  //         workspaceId: defaultWorkspace?.id || '',
-  //         reviewerName: data.user.name,
-  //         reviewerImage: data.user.profile_image_url_https,
-  //         reviewerEmail: '',
-  //         rating: 5,
-  //         text: data.text,
-  //         tweetId: tweetId,
-  //         source: 'twitter',
-  //       },
-  //       {
-  //       },
-  //     );
-  //     toast.success('Review created successfully!');
-  //     setIsOpen(false);
-  //   } catch (error) {
-  //     toast('Failed to create review. Please try again.');
-  //     return;
-  //   }
-  // };
 
   return (
     <Dialog
@@ -66,17 +41,8 @@ export default function ReviewImportXDialog(props: {
         setIsOpen(open);
       }}
     >
-      <DialogTrigger asChild>
-        {/*<Button*/}
-        {/*  size={'lg'}*/}
-        {/*  className="w-full items-center justify-start"*/}
-        {/*  variant="outline"*/}
-        {/*>*/}
-        {/*  <BiDownload />X*/}
-        {/*</Button>*/}
-        {props.children}
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl overflow-x-scroll max-h-screen">
+      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogContent className="sm:max-w-xl overflow-x-scroll max-h-screen">
         <DialogHeader>
           <DialogTitle>Import Review from X</DialogTitle>
           <DialogDescription>
@@ -89,7 +55,7 @@ export default function ReviewImportXDialog(props: {
               htmlFor="tweetUrl"
               className="block text-gray-700 text-sm font-medium mb-1"
             >
-              Tweet URL
+              X URL:
             </label>
             <Input
               id="tweetUrl"
@@ -112,7 +78,7 @@ export default function ReviewImportXDialog(props: {
             size={'lg'}
             type="submit"
             onClick={() => {
-              props.onImport(tweetId || '');
+              props.onImport(tweetId || '', data);
               setIsOpen(false);
             }}
             className="ml-2"

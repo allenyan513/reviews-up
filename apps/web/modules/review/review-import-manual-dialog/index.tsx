@@ -16,9 +16,9 @@ import { BiDownload, BiUser, BiX } from 'react-icons/bi';
 import { api } from '@/lib/api-client';
 import { useUserContext } from '@/context/UserProvider';
 
-import AvatarUpload from '@/components/review-import-manual-dialog/avatar-upload';
-import StarRating from '@/components/review-import-manual-dialog/star-rating';
-import DataPicker from '@/components/review-import-manual-dialog/data-picker';
+import AvatarUpload from '@/modules/review/review-import-manual-dialog/avatar-upload';
+import StarRating from '@/modules/review/review-import-manual-dialog/star-rating';
+import DataPicker from '@/modules/review/review-import-manual-dialog/data-picker';
 
 export default function ReviewImportManualDialog(props: {
   onOpenCallback?: (open: boolean) => void;
@@ -47,7 +47,7 @@ export default function ReviewImportManualDialog(props: {
     console.log(formData);
     try {
       setAddStatus('loading');
-      const res = await api.review.submitReview(
+      const res = await api.review.createReview(
         {
           workspaceId: formData.workspaceId,
           fullName: formData.fullName,
@@ -80,10 +80,10 @@ export default function ReviewImportManualDialog(props: {
       <DialogTrigger asChild>
         <Button
           size={'lg'}
-          className="w-full items-center justify-start"
+          className="w-full items-center justify-center text-lg"
           variant="outline"
         >
-          <BiDownload />
+          <BiDownload  className='text-lg'/>
           Manual Import
         </Button>
       </DialogTrigger>

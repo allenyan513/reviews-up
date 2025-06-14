@@ -5,11 +5,11 @@ import toast from 'react-hot-toast';
 import { api } from '@/lib/api-client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import StarRating from '@/components/review-import-manual-dialog/star-rating';
+import StarRating from '@/modules/review/review-import-manual-dialog/star-rating';
 import { Tweet } from 'react-tweet';
 import { UploadContainer } from '@/components/upload-container';
 import { BiImage, BiLogoTwitter, BiVideo } from 'react-icons/bi';
-import ReviewImportXDialog from '@/components/review-x-dialog';
+import ReviewImportXDialog from '../modules/review/review-x-dialog';
 import PoweredBy from '@/components/powered-by';
 
 export function PageFormReview(props: PageParams) {

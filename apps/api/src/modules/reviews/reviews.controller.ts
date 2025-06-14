@@ -12,21 +12,29 @@ import {
 import { ReviewsService } from './reviews.service';
 import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
-import { findAllReviewRequestSchema } from '@repo/api/reviews/find-all-review.dto';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/common/types/jwt-payload';
+import {
+  findAllReviewRequestSchema,
+  FindAllReviewRequest,
+} from '@repo/api/reviews/dto/find-all-review.dto';
 
 @Controller('reviews')
 export class ReviewsController {
   constructor(private readonly reviewsService: ReviewsService) {}
 
   @UseGuards(JwtAuthGuard)
-  @Post('submit')
-  async submit(
+  @Post('create')
+  async create(
     @Jwt() jwt: JwtPayload,
     @Body() createReviewDto: CreateReviewDto,
   ) {
+    return this.reviewsService.create(jwt.userId, createReviewDto);
+  }
+
+  @Post('submit')
+  async submit(@Body() createReviewDto: CreateReviewDto) {
     return this.reviewsService.submit(createReviewDto);
   }
 
@@ -41,7 +49,7 @@ export class ReviewsController {
       userId: jwt.userId,
       workspaceId,
       ...query,
-    });
+    }) as FindAllReviewRequest;
     return this.reviewsService.findAll(input);
   }
 

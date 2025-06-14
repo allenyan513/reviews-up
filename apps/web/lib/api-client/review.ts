@@ -16,6 +16,18 @@ export const review = {
       sortOrder: request.sortOrder,
     }),
   getReview: (id: string) => authFetch(`/reviews/${id}`, 'GET', {}),
+
+  /**
+   * createReview 是一个受保护的接口，用于创建评论
+   * @param dto
+   */
+  createReview: (dto: CreateReviewDto): Promise<ReviewEntity> =>
+    authFetch('/reviews/create', 'POST', dto),
+
+  /**
+   * submit 是一个公开接口，用于提交评论
+   * @param dto
+   */
   submitReview: (dto: CreateReviewDto): Promise<ReviewEntity> =>
     authFetch('/reviews/submit', 'POST', dto),
   updateReview: (id: string, dto: UpdateReviewDto) =>

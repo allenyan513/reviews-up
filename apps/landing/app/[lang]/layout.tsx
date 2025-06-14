@@ -3,6 +3,7 @@ import './globals.css';
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import { cn } from '@/lib/utils';
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -17,7 +18,12 @@ export default async function RootLayout(props: {
   const { lang } = await props.params;
   return (
     <html lang={lang}>
-      <body className={cn(openSans.className, 'flex min-h-screen flex-col items-center w-full')}>
+      <body
+        className={cn(
+          openSans.className,
+          'flex min-h-screen flex-col items-center w-full',
+        )}
+      >
         <Header
           websiteLogo={'/logo-32.png'}
           websiteName={'ReviewsUp.io'}
@@ -38,6 +44,7 @@ export default async function RootLayout(props: {
           linkedinLink="https://www.linkedin.com/in/ligangyan/"
         />
       </body>
+      <GoogleAnalytics gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`} />
     </html>
   );
 }

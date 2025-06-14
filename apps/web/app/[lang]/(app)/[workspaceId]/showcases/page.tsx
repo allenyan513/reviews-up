@@ -7,7 +7,8 @@ import { Showcase } from '@repo/database/generated/client/client';
 import { api } from '@/lib/api-client';
 import { PaginateResponse } from '@repo/api/common/paginate';
 import Link from 'next/link';
-import DialogNewShowcase from '@/app/[lang]/(app)/[workspaceId]/showcases/dialog-new-showcase';
+import DialogNewShowcase from '@/modules/showcase/dialog-new-showcase';
+import { useShowcaseContext } from '@/modules/showcase/context/ShowcaseProvider';
 
 export default function Page(props: {
   params: Promise<{
@@ -16,12 +17,11 @@ export default function Page(props: {
   }>;
 }) {
   const params = use(props.params);
-  const [showcases, setShowcases] = useState<PaginateResponse<Showcase>>();
+  const { getShowcases, showcases } = useShowcaseContext();
   useEffect(() => {
-    api.showcase.getShowcases(params.workspaceId).then((response) => {
-      setShowcases(response);
-    });
+    getShowcases(params.workspaceId);
   }, []);
+
   if (!showcases) {
     return null;
   }

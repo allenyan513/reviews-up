@@ -13,6 +13,9 @@ import { AuthService } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { GithubOauthGuard } from '@src/modules/auth/guards/github-oauth.guard';
 import { EmailMagicGuard } from '@src/modules/auth/guards/email-magic.guard';
+import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
+import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
+import { JwtPayload } from '@src/common/types/jwt-payload';
 
 @Controller('auth')
 export class AuthController {
@@ -38,7 +41,9 @@ export class AuthController {
   @Get('callback/google')
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    return res.redirect(`${process.env.APP_URL}/en/auth/callback?access_token=${token}`);
+    return res.redirect(
+      `${process.env.APP_URL}/en/auth/callback?access_token=${token}`,
+    );
   }
 
   @UseGuards(GithubOauthGuard)
@@ -49,7 +54,9 @@ export class AuthController {
   @Get('callback/github')
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    return res.redirect(`${process.env.APP_URL}/en/auth/callback?access_token=${token}`);
+    return res.redirect(
+      `${process.env.APP_URL}/en/auth/callback?access_token=${token}`,
+    );
   }
 
   @Post('send-magic-link')
@@ -62,6 +69,14 @@ export class AuthController {
   async loginWithMagic(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
     console.log('loginWithMagic', token);
-    return res.redirect(`${process.env.APP_URL}/en/auth/callback?access_token=${token}`);
+    return res.redirect(
+      `${process.env.APP_URL}/en/auth/callback?access_token=${token}`,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('getSession')
+  async getSession(@Jwt() jwt: JwtPayload) {
+    return jwt;
   }
 }

@@ -1,13 +1,17 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import ReviewImportDialog from '@/components/biz/review-import-dialog';
+import ReviewImportDialog from '@/modules/review/review-import-dialog';
 import { useUserContext } from '@/context/UserProvider';
 import { api } from '@/lib/api-client';
 import { columns } from './columens';
 import { DataTable } from './data-table';
+import { Button } from '@/components/ui/button';
+import { IconCode, IconTable } from '@tabler/icons-react';
+import { useRouter } from 'next/navigation';
 
 export default function ReviewsPage() {
+  const router = useRouter();
   const { defaultWorkspace } = useUserContext();
 
   const [totalServerRowCount, setTotalServerRowCount] = useState(0); // Optional: to display total count
@@ -34,15 +38,13 @@ export default function ReviewsPage() {
     columnFilters.forEach((filter: any) => {
       params.append(filter.id, filter.value);
     });
-    const res = await api.review.getReviews(
-      {
-        workspaceId: defaultWorkspace?.id || '',
-        page: parseInt(params.get('page') || '1'),
-        pageSize: parseInt(params.get('limit') || '10'),
-        sortBy: 'createdAt',
-        sortOrder: 'desc',
-      }
-    );
+    const res = await api.review.getReviews({
+      workspaceId: defaultWorkspace?.id || '',
+      page: parseInt(params.get('page') || '1'),
+      pageSize: parseInt(params.get('limit') || '10'),
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+    });
     setTotalServerRowCount(res.meta.total); // Update total count if you need to display it
     return {
       data: res.items,
@@ -61,6 +63,26 @@ export default function ReviewsPage() {
           </p>
         </div>
         <div className="flex items-center space-x-4">
+          <Button
+            onClick={() => {
+              router.push(`/${defaultWorkspace?.id}/showcases`);
+            }}
+            size={'lg'}
+            variant={'outline'}
+          >
+            <IconCode />
+            Create Showcase
+          </Button>
+          <Button
+            onClick={() => {
+              router.push(`/${defaultWorkspace?.id}/forms`);
+            }}
+            size={'lg'}
+            variant={'outline'}
+          >
+            <IconTable />
+            Create Collect Form
+          </Button>
           <ReviewImportDialog />
         </div>
       </div>
@@ -69,7 +91,7 @@ export default function ReviewsPage() {
         fetchData={fetchReviews}
         totalRowCount={totalServerRowCount}
         onRowItemClick={(row) => {
-          console.log(row)
+          console.log(row);
         }}
       />
     </div>
