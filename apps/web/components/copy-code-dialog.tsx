@@ -15,23 +15,20 @@ import { CodeBlockClient } from '@/components/code-block-client';
 import { BsCopy } from 'react-icons/bs';
 import toast from 'react-hot-toast';
 
-export function DialogEmbedShowcase(props: {
+export function CopyCodeDialog(props: {
+  title: string;
+  codes: string[];
   children: React.ReactNode;
-  showcaseId: string;
 }) {
+  const {title,codes, children} = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const codes = [
-    `<div id="reviewsup-showcase-${props.showcaseId}"></div>`,
-    `<script id="revewsup-embed-js" type="text/javascript"`,
-    `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,
-  ];
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Embed your showcase</DialogTitle>
+          <DialogTitle>{title}</DialogTitle>
           <DialogDescription></DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2 py-8">

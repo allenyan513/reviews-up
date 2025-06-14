@@ -4,12 +4,16 @@ import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { PrismaService } from '../prisma/prisma.service';
 import { PaginateResponse, PaginateRequest } from '@repo/api/common/paginate';
 import { FindAllReviewRequest } from '@repo/api/reviews/dto/find-all-review.dto';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class ReviewsService {
   private logger = new Logger('ReviewsService');
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private notificationService: NotificationsService,
+  ) {}
 
   async create(uid: string, createReviewDto: CreateReviewDto) {
     return this.submit({
@@ -57,9 +61,20 @@ export class ReviewsService {
         },
       });
     }
+    // notify the creator of the form
+    this.notificationService
+      .onReviewSubmitted(review.id)
+      .then(() => {
+        this.logger.debug(`Notification sent for review ${review.id}`);
+      })
+      .catch((error) => {
+        this.logger.error(
+          `Failed to send notification for review ${review.id}`,
+          error,
+        );
+      });
     return review;
   }
-
 
   async findAll(request: FindAllReviewRequest) {
     this.logger.debug('Fetching reviews with pagination', request);
@@ -109,7 +124,6 @@ export class ReviewsService {
     return this.prismaService.review.update({
       where: {
         id: id,
-        userId: uid,
       },
       data: {
         ...updateReviewDto,
@@ -125,4 +139,6 @@ export class ReviewsService {
       },
     });
   }
+
+  async notifyFormCreator(reviewId: string, dto: UpdateReviewDto) {}
 }

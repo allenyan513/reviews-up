@@ -4,8 +4,8 @@ import React, { useEffect, useState } from 'react';
 import ReviewImportDialog from '@/modules/review/review-import-dialog';
 import { useUserContext } from '@/context/UserProvider';
 import { api } from '@/lib/api-client';
-import { columns } from './columens';
-import { DataTable } from './data-table';
+import { columns } from '@/modules/review/table/columens';
+import { DataTable } from '@/modules/review/table/data-table';
 import { Button } from '@/components/ui/button';
 import { IconCode, IconTable } from '@tabler/icons-react';
 import { useRouter } from 'next/navigation';
@@ -13,7 +13,6 @@ import { useRouter } from 'next/navigation';
 export default function ReviewsPage() {
   const router = useRouter();
   const { defaultWorkspace } = useUserContext();
-
   const [totalServerRowCount, setTotalServerRowCount] = useState(0); // Optional: to display total count
 
   const fetchReviews = async (
@@ -90,9 +89,7 @@ export default function ReviewsPage() {
         columns={columns}
         fetchData={fetchReviews}
         totalRowCount={totalServerRowCount}
-        onRowItemClick={(row) => {
-          console.log(row);
-        }}
+        onRowItemClick={(row) => {}}
       />
     </div>
   );

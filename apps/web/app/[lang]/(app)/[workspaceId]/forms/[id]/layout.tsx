@@ -1,26 +1,20 @@
 'use client';
 
 import { useEffect, useState, use } from 'react';
-import { BiArrowBack, BiPlus, BiSave } from 'react-icons/bi';
+import { BiArrowBack, BiCodeAlt, BiPlus, BiSave } from 'react-icons/bi';
 import { BsHeart, BsStar } from 'react-icons/bs';
-import { api } from '@/lib/api-client';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
 import { BsBoxArrowUpRight, BsCodeSlash, BsShare } from 'react-icons/bs';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
-
-interface PageParams {
-  lang: string;
-  workspaceId: string;
-  id: string;
-}
+import { useFormContext } from '@/modules/form/context/FormProvider';
+import { CopyCodeDialog } from '@/components/copy-code-dialog';
 
 const pageItems = [
   {
-    title: 'Default Page',
+    title: 'Form Page',
     url: 'default',
     icon: BsStar,
   },
@@ -32,22 +26,20 @@ const pageItems = [
 ];
 
 export default function Layout(props: {
-  params: Promise<PageParams>;
+  params: Promise<{
+    lang: string;
+    workspaceId: string;
+    id: string;
+  }>;
   children: React.ReactNode;
 }) {
-  const params = use(props.params);
-  const [form, setForm] = useState<FormEntity>();
+  const { lang, workspaceId, id } = use(props.params);
   const path = usePathname();
+  const { fetchForm, form } = useFormContext();
 
   useEffect(() => {
-    api.form
-      .getForm(params.id)
-      .then((response) => {
-        setForm(response);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+    if (!id) return;
+    fetchForm(id);
   }, []);
 
   if (!form) return null;
@@ -58,7 +50,7 @@ export default function Layout(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${params.lang}/${params.workspaceId}/forms`}
+            href={`/${lang}/${workspaceId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl" />
@@ -71,21 +63,19 @@ export default function Layout(props: {
           </p>
         </div>
         <div className={'space-x-2'}>
-          <Button variant="outline" size={'lg'}>
-            <BsCodeSlash className="text-2xl" />
-            Add to your website
-          </Button>
-
-          <Button
-            onClick={() => {
-              window.open(`/forms/${form.shortId}`, '_blank');
-            }}
-            variant="outline"
-            size={'lg'}
+          <CopyCodeDialog
+            title={'Embed your form'}
+            codes={[
+              `<div id="reviewsup-form-${form.shortId}"></div>`,
+              `<script id="revewsup-embed-js" type="text/javascript"`,
+              `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,
+            ]}
           >
-            <BsBoxArrowUpRight className="text-2xl" />
-            View
-          </Button>
+            <Button variant="outline" size={'lg'}>
+              <BiCodeAlt className="text-2xl" />
+              Add to your website
+            </Button>
+          </CopyCodeDialog>
           <Button
             onClick={() => {
               navigator.clipboard.writeText(
@@ -93,22 +83,33 @@ export default function Layout(props: {
               );
               toast.success('Link copied to clipboard!');
             }}
-            variant='default'
+            variant="outline"
             size={'lg'}
           >
             <BsShare className="text-2xl" />
             Share
           </Button>
+          <Button
+            onClick={() => {
+              window.open(`/forms/${form.shortId}`, '_blank');
+            }}
+            variant="default"
+            size={'lg'}
+          >
+            <BsBoxArrowUpRight className="text-2xl" />
+            Open
+          </Button>
+
         </div>
       </div>
 
-      <div className="flex flex-row gap-4">
-        <div className="w-48 flex flex-col">
+      <div className="grid grid-cols-12 gap-4">
+        <div className="col-span-2 flex flex-col">
           <h2 className="mb-4 uppercase">Pages</h2>
           {pageItems.map((item) => (
             <Link
               key={item.title}
-              href={`/${params.lang}/${params.workspaceId}/forms/${params.id}/${item.url}`}
+              href={`/${lang}/${workspaceId}/forms/${id}/${item.url}`}
               className={cn(
                 'cursor-pointer flex flex-row gap-2 w-full items-center justify-start h-12 rounded px-4 font-semibold',
                 path.includes(item.url)
@@ -121,7 +122,7 @@ export default function Layout(props: {
             </Link>
           ))}
         </div>
-        <div className="w-full">{props.children}</div>
+        <div className="col-span-10">{props.children}</div>
       </div>
     </div>
   );
