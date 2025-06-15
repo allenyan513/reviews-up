@@ -15,7 +15,6 @@
     "dev": {
       "dependsOn": [
         "^generate-embed",
-        "^db:migrate",
         "^db:generate"
       ],
       "cache": false,
@@ -25,8 +24,7 @@
       "dependsOn": [
         "^build",
         "^generate-embed",
-        "^db:generate",
-        "^db:migrate"
+        "^db:generate"
       ],
       "inputs": [
         "$TURBO_DEFAULT$",
