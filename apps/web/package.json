@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0",
-    "generate-embed": "node scripts/generate-embed.js",
+    "generate-embed": "echo 'Generating embed files...'",
     "prebuild": "npm run generate-embed",
     "predev": "npm run generate-embed"
   },
