@@ -3,16 +3,47 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - main
+      - feature/githubactions
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
+    env:
+      ZIP_NAME: app.zip
+      REMOTE_PATH: /home/ec2-user/reviewsup.io
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
 
-      - name: Deploy to EC2
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build
+        run: npm run build
+
+      - name: Prepare zip artifact
+        run: |
+          zip -r  ${{ env.ZIP_NAME }} . -x ".git/*" ".github/*" "test/*" "node_modules/*"
+
+      - name: Scp artifact to EC2
+        uses: appleboy/scp-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_KEY }}
+          port: ${{ secrets.EC2_PORT || 22 }}
+          source: ${{ env.ZIP_NAME }}
+          target: ${{ env.REMOTE_PATH }}
+
+      - name: Unzip artifact on EC2
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.EC2_HOST }}
@@ -20,8 +51,7 @@ jobs:
           key: ${{ secrets.EC2_KEY }}
           port: ${{ secrets.EC2_PORT || 22 }}
           script: |
-            cd /home/ec2-user/ReviewsUp
-            git pull origin main
-            npm ci
-            npm run build
+            cd ${{ env.REMOTE_PATH }}
+            unzip -o ${{ env.ZIP_NAME }} && rm -f ${{ env.ZIP_NAME }}
+            npm install --omit=dev
             npm run pm2:start
