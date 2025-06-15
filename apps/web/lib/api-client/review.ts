@@ -2,7 +2,7 @@ import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { PaginateResponse } from '@repo/api/common/paginate';
-import { FindAllReviewRequest } from '@repo/api/reviews/find-all-review.dto';
+import { FindAllReviewRequest } from '@repo/api/reviews/dto/find-all-review.dto';
 import { authFetch } from './auth-fetch';
 
 export const review = {
