@@ -1,11 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
-import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { generateShortId } from '../../libs/shortId';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
-import { EmailService } from '@src/modules/email/email.service';
 import { EMAIL_FROM } from '@src/modules/email/email.constants';
+import { ResendEmailService } from '../email/resend-email.service';
+import { render } from '@react-email/render';
+import * as React from 'react';
+import { StripeWelcomeEmail } from '@src/emails/welcome';
 
 @Injectable()
 export class NotificationsService {
@@ -13,7 +12,7 @@ export class NotificationsService {
 
   constructor(
     private prismaService: PrismaService,
-    private emailService: EmailService,
+    private emailService: ResendEmailService,
   ) {}
 
   /**
@@ -43,11 +42,16 @@ export class NotificationsService {
     if (!owner) {
       throw new Error(`Owner with ID ${ownerId} not found`);
     }
-    const html = await this.emailService.render('review-submitted', {
-      reviewerName: review.reviewerName || 'Anonymous',
-      reviewerEmail: review.reviewerEmail || 'N/A',
-      url: `${process.env.NEXT_PUBLIC_APP_URL}`,
-    });
+    const html = await render(
+      React.createElement(StripeWelcomeEmail, {
+        brand: 'Reviewsup.io',
+      }),
+    );
+    // const html = await render(
+    //   React.createElement(MyEmail, {
+    //     url: 'https://www.google.com'
+    //   }),
+    // )
     await this.emailService.send({
       from: EMAIL_FROM,
       to: owner.email,
