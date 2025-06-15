@@ -3,7 +3,8 @@ name: Deploy to EC2
 on:
   push:
     branches:
-      - feature/githubactions
+      - main
+      - dev
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -31,7 +32,7 @@ jobs:
 
       - name: Prepare zip artifact
         run: |
-          zip -r  ${{ env.ZIP_NAME }} . -x ".git/*" ".github/*" "test/*" "node_modules/*"
+          zip -r  ${{ env.ZIP_NAME }} . -x ".git/*" ".github/*" "test/*" "node_modules/*" 
 
       - name: Scp artifact to EC2
         uses: appleboy/scp-action@v1
