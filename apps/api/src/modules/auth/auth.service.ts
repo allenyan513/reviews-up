@@ -3,9 +3,9 @@ import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@src/common/types/jwt-payload';
 import { CreateAccountDto } from '@repo/api/users/dto/create-user.dto';
-import { EmailService } from '@src/modules/email/email.service';
 import { EMAIL_FROM } from '@src/modules/email/email.constants';
 import { UsersService } from '../users/users.service';
+import { ResendEmailService } from '@src/modules/email/resend-email.service';
 
 @Injectable()
 export class AuthService {
@@ -14,7 +14,7 @@ export class AuthService {
   constructor(
     private prismaService: PrismaService,
     private jwtService: JwtService,
-    private emailService: EmailService,
+    private emailService: ResendEmailService,
     private userService: UsersService,
   ) {}
 

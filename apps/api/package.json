@@ -13,7 +13,8 @@
     "test:watch": "jest --watch",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\""
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "email:dev": "email dev --port 3002 --dir ./src/emails"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.826.0",

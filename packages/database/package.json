@@ -19,7 +19,6 @@
     "@repo/typescript-config": "*",
     "eslint": "^9.28.0",
     "prisma": "latest",
-    "rimraf": "^5.0.5",
     "tsup": "^8.0.2",
     "tsx": "4.19.1",
     "typescript": "5.5.4"
