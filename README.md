@@ -80,15 +80,15 @@ No installation required. Sign up and start collecting reviews in minutes:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/reviewsup.git
-cd reviewsup
+git clone git@github.com:allenyan513/reviewsup.io.git
+cd reviewsup.io
 ```
 
 
 2. Install dependencies:
 
 ```
-pnpm install
+npm install
 ```
 
 3. Set environment variables in .env (see .env.example)

@@ -1,7 +1,7 @@
 {
   "$schema": "https://turborepo.com/schema.json",
   "globalDependencies": [
-    "**/.env"
+    ".env"
   ],
   "tasks": {
     "email:dev": {
@@ -15,6 +15,7 @@
     "dev": {
       "dependsOn": [
         "^generate-embed",
+        "^db:migrate",
         "^db:generate"
       ],
       "cache": false,
@@ -23,7 +24,9 @@
     "build": {
       "dependsOn": [
         "^build",
-        "^db:generate"
+        "^generate-embed",
+        "^db:generate",
+        "^db:migrate"
       ],
       "inputs": [
         "$TURBO_DEFAULT$",
@@ -35,9 +38,35 @@
         "!.next/cache/**"
       ],
       "env": [
+        "ENV",
         "API_HOST",
         "API_PORT",
-        "DATABASE_URL"
+        "APP_URL",
+        "API_URL",
+        "EMAIL_HOST",
+        "EMAIL_PORT",
+        "EMAIL_USER",
+        "EMAIL_PASS",
+        "AWS_ACCESS_KEY_ID",
+        "AWS_SECRET_ACCESS_KEY",
+        "AWS_DEFAULT_REGION",
+        "AWS_S3_BUCKET_NAME",
+        "JWT_SECRET",
+        "JWT_EXPIRES",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "GOOGLE_CALLBACK_URL",
+        "GITHUB_CLIENT_ID",
+        "GITHUB_CLIENT_SECRET",
+        "GITHUB_CALLBACK_URL",
+        "RESEND_API_KEY",
+        "DATABASE_URL",
+        "NEXT_PUBLIC_APP_URL",
+        "NEXT_PUBLIC_API_URL",
+        "NEXT_PUBLIC_WWW_URL",
+        "NEXT_PUBLIC_AWS_REGION",
+        "NEXT_PUBLIC_AWS_S3_BUCKET_NAME",
+        "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID"
       ]
     },
     "deploy": {
@@ -51,10 +80,12 @@
       "cache": false
     },
     "db:migrate": {
-      "cache": false,
-      "persistent": true
+      "cache": false
     },
     "db:deploy": {
+      "cache": false
+    },
+    "db:studio": {
       "cache": false
     },
     "generate-embed": {

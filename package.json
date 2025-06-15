@@ -20,6 +20,7 @@
     "db:generate": "turbo run db:generate",
     "db:migrate": "turbo run db:migrate",
     "db:deploy": "turbo run db:deploy",
+    "db:studio": "turbo run db:studio",
     "clean": "sh ./scripts/clean.sh"
   },
   "dependencies": {
@@ -32,6 +33,7 @@
     "@types/negotiator": "^0.6.4",
     "@vercel/analytics": "^1.5.0",
     "cookie": "^1.0.2",
+    "dotenv": "^16.5.0",
     "negotiator": "^1.0.0",
     "passport": "^0.7.0",
     "passport-custom": "^1.1.1",
@@ -55,13 +57,14 @@
     "@types/passport-local": "^1.0.38",
     "@types/react": "^19.1.0",
     "@types/react-dom": "^19.1.0",
+    "dotenv-cli": "^8.0.0",
     "eslint": "^9.28.0",
     "prettier": "^3.2.5",
     "prisma": "latest",
     "react-email": "^4.0.16",
+    "rimraf": "^5.0.5",
     "shiki": "^3.6.0",
-    "turbo": "^2.5.4",
-    "rimraf": "^5.0.5"
+    "turbo": "^2.5.4"
   },
   "engines": {
     "node": ">=18"

@@ -8,7 +8,6 @@ import { CreateEmailOptions, Resend } from 'resend';
 @Injectable()
 export class ResendEmailService {
   private logger = new Logger('EmailService');
-  private templatesDir = path.join(__dirname, 'template');
   private resend: Resend;
 
   constructor() {
@@ -21,12 +20,5 @@ export class ResendEmailService {
     } catch (error) {
       this.logger.error('Error sending email', error);
     }
-  }
-
-  async render(templateName: string, data: any): Promise<string> {
-    const filePath = path.join(this.templatesDir, `${templateName}.ejs`);
-    const template = await fs.promises.readFile(filePath, 'utf8');
-    const htmlContent = ejs.render(template, data);
-    return htmlContent;
   }
 }
