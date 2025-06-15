@@ -160,3 +160,10 @@ We take security and data privacy seriously.
 reviewsup.io is open-source software licensed under the MIT License.
 
 Made with ❤️ by the reviewsup.io team.
+
+
+
+
+:5500 api
+:5510 web
+:5520 landing

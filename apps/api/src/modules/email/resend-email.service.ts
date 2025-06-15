@@ -1,14 +1,10 @@
 import { Injectable, Logger } from '@nestjs/common';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as ejs from 'ejs';
-
 import { CreateEmailOptions, Resend } from 'resend';
 
 @Injectable()
 export class ResendEmailService {
   private logger = new Logger('EmailService');
-  private resend: Resend;
+  private resend: Resend | null = null;
 
   constructor() {
     this.resend = new Resend(process.env.RESEND_API_KEY);

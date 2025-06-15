@@ -1,6 +1,6 @@
 
 (function() {
-    const domain = 'http://localhost:3000';
+    const domain = 'http://localhost:5510';
     console.log('Embed script running from domain:', domain);
     // window.addEventListener('DOMContentLoaded', () => {
     const widgets = document.querySelectorAll('[id^="reviewsup-showcase-"]');

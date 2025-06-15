@@ -23,9 +23,9 @@ import { NotificationsModule } from '@src/modules/notifications/notifications.mo
     }),
     JwtModule.register({
       global: true,
-      secret: process.env.JWT_SECRET,
+      secret: process.env.JWT_SECRET || 'defaultSecretKey',
       signOptions: {
-        expiresIn: process.env.JWT_EXPIRES,
+        expiresIn: process.env.JWT_EXPIRES || '1h',
       },
     }),
     PassportModule,

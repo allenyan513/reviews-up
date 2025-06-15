@@ -27,8 +27,8 @@ export class AuthController {
   async singOut(@Res() res: Response) {
     this.logger.debug('Sign Out');
     res.clearCookie('access_token', {
-      sameSite: process.env.ENV === 'production' ? 'none' : 'lax',
-      secure: process.env.ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === 'production',
     });
     return res.redirect(`${process.env.APP_URL}`);
   }

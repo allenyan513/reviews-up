@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   GetObjectCommand,
   PutObjectCommand,
@@ -7,20 +7,27 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
-import * as mime from 'mime-types';
-import * as path from 'path';
 import axios from 'axios';
 import { S3SignedUrlEntity } from '@repo/api/s3/entity/s3-signed-url.entity';
 
 @Injectable()
 export class S3Service {
-  private readonly s3Client: S3Client;
-  private readonly bucketName = '';
+  private logger = new Logger('S3Service');
+  private s3Client: S3Client | null = null;
+  private bucketName = '';
+
   constructor(private readonly configService: ConfigService) {
     this.bucketName = this.configService.get('AWS_S3_BUCKET_NAME') || '';
-    const region = this.configService.get('AWS_DEFAULT_REGION');
-    const accessKeyId = this.configService.get('AWS_ACCESS_KEY_ID');
-    const secretAccessKey = this.configService.get('AWS_SECRET_ACCESS_KEY');
+    const region = this.configService.get('AWS_DEFAULT_REGION') || '';
+    const accessKeyId = this.configService.get('AWS_ACCESS_KEY_ID') || '';
+    const secretAccessKey =
+      this.configService.get('AWS_SECRET_ACCESS_KEY') || '';
+    if (!this.bucketName || !region || !accessKeyId || !secretAccessKey) {
+      this.logger.error(
+        'AWS S3 configuration is not properly set in environment variables.',
+      );
+      return;
+    }
     this.s3Client = new S3Client({
       region: region,
       credentials: {
@@ -52,7 +59,7 @@ export class S3Service {
     );
   }
 
-  async getSignedUrl(fileName:string, fileType:string) {
+  async getSignedUrl(fileName: string, fileType: string) {
     const key = `${Date.now()}_${fileName}`;
     const command = new PutObjectCommand({
       Bucket: this.bucketName,
@@ -66,7 +73,7 @@ export class S3Service {
     return {
       signedUrl: signedUrl,
       key: key,
-    } as S3SignedUrlEntity
+    } as S3SignedUrlEntity;
   }
 
   async generatePreSignedUrl(objectKey: string) {

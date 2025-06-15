@@ -3,19 +3,13 @@ import { AppModule } from './app.module';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const appUrl = process.env.APP_URL;
-  const apiPort = process.env.API_PORT;
-  if (!appUrl) {
-    throw new Error('APP_URL is required');
-  }
-  if (!apiPort) {
-    throw new Error('API_PORT is required');
-  }
+  const appUrl = process.env.APP_URL || 'http://localhost:5510';
+  const apiPort = process.env.API_PORT || 5500;
   app.enableCors({
     origin: appUrl,
     credentials: true,
   });
-  await app.listen(apiPort)
+  await app.listen(apiPort);
 }
 
 bootstrap();

@@ -9,13 +9,13 @@ module.exports = {
     {
       name: 'reviewsup-app',
       script: 'next',
-      args: 'start -p 5551',
+      args: 'start -p 5510',
       cwd: './apps/web',
     },
     {
       name: 'reviewsup-www',
       script: 'next',
-      args: 'start -p 5552',
+      args: 'start -p 5520',
       cwd: './apps/landing',
     }
   ],

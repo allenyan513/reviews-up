@@ -9,9 +9,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   constructor(private authService: AuthService) {
     super({
-      clientID: `${process.env.GOOGLE_CLIENT_ID}`,
-      clientSecret: `${process.env.GOOGLE_CLIENT_SECRET}`,
-      callbackURL: `${process.env.GOOGLE_CALLBACK_URL}`,
+      clientID: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL: process.env.GOOGLE_CALLBACK_URL,
       scope: ['email', 'profile'],
     });
   }
@@ -33,14 +33,13 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       picture,
     } = profile;
     return this.authService.validateOAuthLogin({
-      provider:provider,
+      provider: provider,
       providerAccountId: id,
-      email:email,
+      email: email,
       name: displayName,
       avatarUrl: picture,
       accessToken: accessToken,
       refreshToken: refreshToken,
-    })
+    });
   }
-
 }
