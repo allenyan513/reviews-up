@@ -44,7 +44,8 @@
     "postcss": "^8.5.5",
     "resend": "^4.6.0",
     "tailwind-merge": "^3.3.0",
-    "tailwindcss": "^4.1.10"
+    "tailwindcss": "^4.1.10",
+    "shiki": "^3.6.0"
   },
   "devDependencies": {
     "@repo/eslint-config": "*",
@@ -63,7 +64,6 @@
     "prisma": "latest",
     "react-email": "^4.0.16",
     "rimraf": "^5.0.5",
-    "shiki": "^3.6.0",
     "turbo": "^2.5.4"
   },
   "engines": {
