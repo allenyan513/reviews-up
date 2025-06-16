@@ -37,7 +37,6 @@
       ],
       "env": [
         "ENV",
-        "API_HOST",
         "API_PORT",
         "APP_URL",
         "API_URL",
