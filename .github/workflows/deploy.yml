@@ -12,6 +12,35 @@ jobs:
     env:
       ZIP_NAME: app.zip
       REMOTE_PATH: /home/ec2-user/reviewsup.io
+      NODE_ENV: ${{ secrets.NODE_ENV }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      API_PORT: $${ secrets.API_PORT }}
+      API_URL: ${{ secrets.API_URL }}
+      APP_URL: ${{ secrets.APP_URL }}
+      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
+      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
+      EMAIL_USER: ${{ secrets.EMAIL_USER }}
+      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
+      JWT_SECRET: ${{ secrets.JWT_SECRET }}
+      JWT_EXPIRES: ${{ secrets.JWT_EXPIRES }}
+      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+      GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
+      GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
+      GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
+      GITHUB_CALLBACK_URL: ${{ secrets.GITHUB_CALLBACK_URL }}
+      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+      NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
+      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
+      NEXT_PUBLIC_WWW_URL: ${{ secrets.NEXT_PUBLIC_WWW_URL }}
+      NEXT_PUBLIC_AWS_REGION: ${{ secrets.NEXT_PUBLIC_AWS_REGION }}
+      NEXT_PUBLIC_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_PUBLIC_AWS_S3_BUCKET_NAME }}
+      NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
+
 
     steps:
       - name: Checkout code
@@ -26,6 +55,44 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+
+      - name: Write all environment variables to .env file
+        run: |
+          echo "NODE_ENV=${{ env.NODE_ENV }}" >> .env
+          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
+          echo "API_PORT=${{ env.API_PORT }}" >> .env
+          echo "API_URL=${{ env.API_URL }}" >> .env
+          echo "APP_URL=${{ env.APP_URL }}" >> .env
+          echo "EMAIL_HOST=${{ env.EMAIL_HOST }}" >> .env
+          echo "EMAIL_PORT=${{ env.EMAIL_PORT }}" >> .env
+          echo "EMAIL_USER=${{ env.EMAIL_USER }}" >> .env
+          echo "EMAIL_PASS=${{ env.EMAIL_PASS }}" >> .env
+          echo "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" >> .env
+          echo "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" >> .env
+          echo "AWS_DEFAULT_REGION=${{ env.AWS_DEFAULT_REGION }}" >> .env
+          echo "AWS_S3_BUCKET_NAME=${{ env.AWS_S3_BUCKET_NAME }}" >> .env
+          echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> .env
+          echo "JWT_EXPIRES=${{ env.JWT_EXPIRES }}" >> .env
+          echo "GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}" >> .env
+          echo "GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }}" >> .env
+          echo "GOOGLE_CALLBACK_URL=${{ env.GOOGLE_CALLBACK_URL }}" >> .env
+          echo "GITHUB_CLIENT_ID=${{ env.GITHUB_CLIENT_ID }}" >> .env
+          echo "GITHUB_CLIENT_SECRET=${{ env.GITHUB_CLIENT_SECRET }}" >> .env
+          echo "GITHUB_CALLBACK_URL=${{ env.GITHUB_CALLBACK_URL }}" >> .env
+          echo "RESEND_API_KEY=${{ env.RESEND_API_KEY }}" >> .env
+          echo "NEXT_PUBLIC_APP_URL=${{ env.NEXT_PUBLIC_APP_URL }}" >> .env
+          echo "NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}" >> .env
+          echo "NEXT_PUBLIC_WWW_URL=${{ env.NEXT_PUBLIC_WWW_URL }}" >> .env
+          echo "NEXT_PUBLIC_AWS_REGION=${{ env.NEXT_PUBLIC_AWS_REGION }}" >> .env
+          echo "NEXT_PUBLIC_AWS_S3_BUCKET_NAME=${{ env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME }}" >> .env
+          echo "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${{ env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}" >> .env
+
+      - name: cp .env to apps/api apps/web apps/landing packages/database
+        run: |
+          cp .env apps/api/.env
+          cp .env apps/web/.env
+          cp .env apps/landing/.env
+          cp .env packages/database/.env
 
       - name: Build
         run: npm run build

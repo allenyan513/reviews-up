@@ -19,7 +19,7 @@ import { NotificationsModule } from '@src/modules/notifications/notifications.mo
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '../../.env',
+      envFilePath: '.env',
     }),
     JwtModule.register({
       global: true,

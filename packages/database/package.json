@@ -2,10 +2,10 @@
   "name": "@repo/database",
   "version": "1.0.0",
   "scripts": {
-    "db:generate": "dotenv -e ../../.env -- prisma generate",
-    "db:migrate": "dotenv -e ../../.env -- prisma migrate dev",
-    "db:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
-    "format": "dotenv -e ../../.env -- prisma format",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:deploy": "prisma migrate deploy",
+    "format": "prisma format",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
