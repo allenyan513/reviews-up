@@ -14,7 +14,7 @@ jobs:
       REMOTE_PATH: /home/ec2-user/reviewsup.io
       NODE_ENV: ${{ secrets.NODE_ENV }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      API_PORT: $${ secrets.API_PORT }}
+      API_PORT: ${{ secrets.API_PORT }}
       API_URL: ${{ secrets.API_URL }}
       APP_URL: ${{ secrets.APP_URL }}
       EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
