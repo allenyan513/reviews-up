@@ -24,6 +24,13 @@
     "clean": "sh ./scripts/clean.sh"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.826.0",
+    "@aws-sdk/s3-request-presigner": "^3.826.0",
+    "@nestjs/common": "^11.1.3",
+    "@nestjs/config": "^4.0.2",
+    "@nestjs/core": "^11.1.3",
+    "@nestjs/mapped-types": "*",
+    "@nestjs/platform-express": "^11.1.3",
     "@nestjs/jwt": "^11.0.0",
     "@nestjs/passport": "^11.0.5",
     "@next/third-parties": "^15.3.3",
@@ -47,6 +54,9 @@
     "shiki": "^3.6.0"
   },
   "devDependencies": {
+    "@nestjs/cli": "^11.0.7",
+    "@nestjs/schematics": "^11.0.5",
+    "@nestjs/testing": "^11.1.3",
     "@repo/eslint-config": "*",
     "@repo/jest-config": "*",
     "@repo/typescript-config": "*",

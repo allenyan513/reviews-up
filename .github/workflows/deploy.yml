@@ -94,9 +94,6 @@ jobs:
           cp .env apps/landing/.env
           cp .env packages/database/.env
 
-      - name: Install turbo
-        run: npm install -g turbo
-
       - name: Build
         run: npm run build
 
