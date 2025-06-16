@@ -17,7 +17,6 @@
     "email:dev": "email dev --port 3002 --dir ./src/emails"
   },
   "dependencies": {
-
     "@repo/api": "*",
     "@repo/database": "*",
     "axios": "^1.9.0",
@@ -32,7 +31,6 @@
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
-
     "@repo/eslint-config": "*",
     "@repo/jest-config": "*",
     "@repo/typescript-config": "*",

@@ -14,7 +14,6 @@
     },
     "dev": {
       "dependsOn": [
-        "^generate-embed",
         "^db:generate"
       ],
       "cache": false,
@@ -23,7 +22,6 @@
     "build": {
       "dependsOn": [
         "^build",
-        "^generate-embed",
         "^db:generate"
       ],
       "inputs": [
@@ -83,9 +81,6 @@
       "cache": false
     },
     "db:studio": {
-      "cache": false
-    },
-    "generate-embed": {
       "cache": false
     },
     "lint": {},

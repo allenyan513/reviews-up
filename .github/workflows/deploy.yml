@@ -121,5 +121,5 @@ jobs:
           script: |
             cd ${{ env.REMOTE_PATH }}
             unzip -o ${{ env.ZIP_NAME }} && rm -f ${{ env.ZIP_NAME }}
-            npm install --omit=dev
+            npm ci --omit=dev
             npm run pm2:start

@@ -7,10 +7,7 @@
     "dev": "next dev -p 5510 --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint . --max-warnings 0",
-    "generate-embed": "echo 'Generating embed files...'",
-    "prebuild": "npm run generate-embed",
-    "predev": "npm run generate-embed"
+    "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
     "@repo/email": "*",
