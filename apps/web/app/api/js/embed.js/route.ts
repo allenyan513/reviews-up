@@ -1,7 +1,7 @@
 import {NextRequest, NextResponse} from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const domain = process.env.NEXT_PUBLIC_APP_URL
+  const domain = `${process.env.NEXT_PUBLIC_APP_URL}`.trim()
 
   const scriptContent = `
     (function () {
