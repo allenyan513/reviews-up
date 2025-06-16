@@ -30,9 +30,9 @@ jobs:
       GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
       GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
       GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
-      GITHUB_CLIENT_ID: ${{ secrets.GITHUB_CLIENT_ID }}
-      GITHUB_CLIENT_SECRET: ${{ secrets.GITHUB_CLIENT_SECRET }}
-      GITHUB_CALLBACK_URL: ${{ secrets.GITHUB_CALLBACK_URL }}
+      GITHUBS_CLIENT_ID: ${{ secrets.GITHUBS_CLIENT_ID }}
+      GITHUBS_CLIENT_SECRET: ${{ secrets.GITHUBS_CLIENT_SECRET }}
+      GITHUBS_CALLBACK_URL: ${{ secrets.GITHUBS_CALLBACK_URL }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
       NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
       NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
@@ -76,9 +76,9 @@ jobs:
           echo "GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}" >> .env
           echo "GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }}" >> .env
           echo "GOOGLE_CALLBACK_URL=${{ env.GOOGLE_CALLBACK_URL }}" >> .env
-          echo "GITHUB_CLIENT_ID=${{ env.GITHUB_CLIENT_ID }}" >> .env
-          echo "GITHUB_CLIENT_SECRET=${{ env.GITHUB_CLIENT_SECRET }}" >> .env
-          echo "GITHUB_CALLBACK_URL=${{ env.GITHUB_CALLBACK_URL }}" >> .env
+          echo "GITHUBS_CLIENT_ID=${{ env.GITHUBS_CLIENT_ID }}" >> .env
+          echo "GITHUBS_CLIENT_SECRET=${{ env.GITHUBS_CLIENT_SECRET }}" >> .env
+          echo "GITHUBS_CALLBACK_URL=${{ env.GITHUBS_CALLBACK_URL }}" >> .env
           echo "RESEND_API_KEY=${{ env.RESEND_API_KEY }}" >> .env
           echo "NEXT_PUBLIC_APP_URL=${{ env.NEXT_PUBLIC_APP_URL }}" >> .env
           echo "NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}" >> .env
