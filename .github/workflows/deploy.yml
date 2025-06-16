@@ -54,7 +54,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm ci
+        run: npm ci --include dev
 
       - name: Write all environment variables to .env file
         run: |
