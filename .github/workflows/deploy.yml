@@ -54,7 +54,7 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
       - name: Write all environment variables to .env file
         run: |
@@ -93,6 +93,9 @@ jobs:
           cp .env apps/web/.env
           cp .env apps/landing/.env
           cp .env packages/database/.env
+
+      - name: Install turbo
+        run: npm install -g turbo
 
       - name: Build
         run: npm run build
