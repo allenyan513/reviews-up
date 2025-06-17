@@ -5,6 +5,7 @@ import {BsGithub, BsPeople} from 'react-icons/bs';
 import {i18nMetadata} from '@/config/i18n-config';
 import {Metadata} from 'next';
 import {Showcase} from '@repo/reviewsup-react';
+import {HowItWorks} from '@/components/landing/how-it-works';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -43,9 +44,9 @@ export default async function LandingPage(props: {
       <Hero
         capsuleText="100% Open-Source & Free"
         capsuleLink="https://github.com/allenyan513/reviewsup.io"
-        title="Collect and Show Your Reviews and Testimonials"
-        subtitle="Built for developers, by developers. Next.js + Nest.js + Postgres"
-        primaryCtaText="Get Started"
+        title="Real Reviews, Real Trust"
+        subtitle="Embed real reviews with one line of code. Build trust instantly."
+        primaryCtaText="Start Now"
         primaryCtaLink={'https://app.reviewsup.io'}
         secondaryCtaText="GitHub"
         secondaryCtaLink="https://github.com/allenyan513/reviewsup.io"
@@ -64,11 +65,21 @@ export default async function LandingPage(props: {
         }
       />
 
+      <div id="showcase"/>
       <section className='max-w-[64rem] mx-auto px-4 py-8'>
+        <h2 className='w-full text-center text-4xl pb-4 font-semibold'>Reviews Showcase</h2>
+        <h3 className="text-muted-foreground sm:text-lg text-center pb-8">
+          Reviews from our users, displayed in a beautiful and customizable widget.
+        </h3>
+
         <Showcase
           fallback={<div>Loading showcase...</div>}
           showcaseId={'895ef5c94b4'}/>
       </section>
+
+
+      <div id="how-it-works"/>
+      <HowItWorks />
 
       <div id="features"/>
       <FeatureGrid

@@ -25,7 +25,7 @@ export default async function RootLayout(props: {
         )}
       >
         <Header
-          websiteLogo={'/logo-32.png'}
+          websiteLogo={'/img/logo-32.png'}
           websiteName={'Reviewsup.io'}
           githubLink="https://github.com/allenyan513/reviewsup.io"
           appLink="https://app.reviewsup.io"

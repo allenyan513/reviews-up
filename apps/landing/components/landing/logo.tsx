@@ -12,7 +12,7 @@ export function Logo(props: {
       href={props.link ?? '/'}
       className={cn('items-center space-x-2', props.className)}
     >
-      <img className="w-8 h-8" src={props.websiteLogo ?? '/logo-32.png'} alt="Logo" />
+      <img className="w-8 h-8" src={props.websiteLogo ?? '/img/logo-32.png'} alt="Logo" />
       <span className="font-bold sm:inline-block">{props.websiteName}</span>
     </Link>
   );
