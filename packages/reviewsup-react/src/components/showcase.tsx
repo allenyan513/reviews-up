@@ -9,20 +9,16 @@ export type ShowcaseProps = {
 };
 
 export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
-  console.log(showcaseId);
   if (!showcaseId) {
     return <div>No showcase ID provided.</div>;
   }
   let error;
-  console.log(error);
   let showcase = await api.showcase
     .getShowcaseByShortId(showcaseId)
     .catch((err) => {
       console.error(err);
       error = err;
     });
-
-  console.log(showcase);
   if (!showcase) {
     return (
       <div>Error loading showcase: {error?.message || 'Unknown error'}</div>
