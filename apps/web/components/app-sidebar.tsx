@@ -28,7 +28,7 @@ import { Logo } from '@/components/logo';
 import Link from 'next/link';
 
 const data = {
-  title: 'ReviewUp',
+  title: 'Reviewsup.io',
   navSecondary: [],
 };
 

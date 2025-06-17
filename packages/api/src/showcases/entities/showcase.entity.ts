@@ -19,6 +19,7 @@ export interface ShowcaseConfig {
   isDateEnabled?: boolean;
   isImageEnabled?: boolean;
   isVideoEnabled?: boolean;
+  count?: number;
   sortBy?: 'newest' | 'oldest' | 'random' | 'rating' | string;
   flow?: {
     columns?: number;

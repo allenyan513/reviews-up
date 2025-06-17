@@ -72,23 +72,6 @@ function MultiCarouselRow<T>({
   );
 }
 
-// Function to distribute items into N rows
-function distributeItems<T>(items: T[], numRows: number): T[][] {
-  if (numRows <= 0) return [];
-  if (items.length === 0) return Array(numRows).fill([]);
-
-  const result: T[][] = Array(numRows)
-    .fill(null)
-    .map(() => []);
-  const itemsPerSlice = Math.ceil(items.length / numRows); // Calculate average items per slice
-
-  for (let i = 0; i < items.length; i++) {
-    const rowIdx = Math.floor(i / itemsPerSlice); // Simple sequential distribution
-    result[rowIdx % numRows]?.push(items[i] || ({} as T)); // Ensure we don't push undefined
-  }
-  return result;
-}
-
 export default function MultiCarouselLayout<T>({
   items,
   renderItem,

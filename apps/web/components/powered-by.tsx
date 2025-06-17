@@ -12,7 +12,7 @@ export default function PoweredBy() {
         <img
           className="w-4 h-4 ml-2"
           src="/img/logo-32.png" />
-        <span>reviewsup.io</span>
+        <span>Reviewsup.io</span>
       </div>
     </Link>
   );

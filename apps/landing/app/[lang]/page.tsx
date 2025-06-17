@@ -4,7 +4,7 @@ import {PricingGrid} from '@/components/landing/pricing';
 import {BsGithub, BsPeople} from 'react-icons/bs';
 import {i18nMetadata} from '@/config/i18n-config';
 import {Metadata} from 'next';
-import {ReviewsUpShowcaseClient} from '@/app/[lang]/reviewsup-embed';
+import {Showcase} from '@repo/reviewsup-react';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -63,8 +63,12 @@ export default async function LandingPage(props: {
           </>
         }
       />
-      <ReviewsUpShowcaseClient showcaseId={
-        process.env.NODE_ENV === 'production' ? '046fc6704fb' : 'bf2d6c90ef2'}/>
+
+      <section className='max-w-[64rem] mx-auto px-4 py-8'>
+        <Showcase
+          fallback={<div>Loading showcase...</div>}
+          showcaseId={'895ef5c94b4'}/>
+      </section>
 
       <div id="features"/>
       <FeatureGrid

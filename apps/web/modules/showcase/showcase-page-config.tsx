@@ -42,11 +42,11 @@ const layoutOptions = [
   //   label: 'CarouselLayout',
   //   img: '/img/grid-card.webp',
   // },
-  {
-    value: 'list',
-    label: 'ListLayout',
-    img: '/img/list-card.webp',
-  },
+  // {
+  //   value: 'list',
+  //   label: 'ListLayout',
+  //   img: '/img/list-card.webp',
+  // },
 ];
 
 const sortOptions = [
@@ -220,6 +220,27 @@ export function ShowcasePageConfig(props: {}) {
                 />
               </div>
             )}
+
+            <div>
+              <label className="text-sm">Reviews Max Count:</label>
+              <Input
+                type="number"
+                placeholder="Enter max count of reviews"
+                min="1"
+                max="100"
+                className="w-full mt-2"
+                value={showcaseConfig.count || 20}
+                onChange={(e) => {
+                  const value = parseInt(e.target.value, 10);
+                  if (!isNaN(value)) {
+                    setShowcaseConfig({
+                      ...showcaseConfig,
+                      count: value,
+                    });
+                  }
+                }}
+              />
+            </div>
 
             <div>
               <label className="text-sm">Sort by:</label>

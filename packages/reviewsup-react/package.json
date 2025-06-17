@@ -1,0 +1,36 @@
+{
+  "name": "@repo/reviewsup-react",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "tsc -b -v --watch",
+    "build": "tsc",
+    "reviewsup-react:copy": "cp src/styles/* dist/styles/"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*.{js,d.ts,css}"
+  ],
+  "exports": {
+    ".": {
+      "react-server": "./dist/index.js",
+      "default": "./dist/index.client.js"
+    }
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
+  "dependencies": {
+    "clsx": "^2.1.1"
+  },
+  "devDependencies": {
+    "@repo/api": "*",
+    "@repo/database": "*",
+    "@repo/eslint-config": "*",
+    "@repo/typescript-config": "*"
+  }
+}

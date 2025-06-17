@@ -26,7 +26,7 @@ export default async function RootLayout(props: {
       >
         <Header
           websiteLogo={'/logo-32.png'}
-          websiteName={'ReviewsUp.io'}
+          websiteName={'Reviewsup.io'}
           githubLink="https://github.com/allenyan513/reviewsup.io"
           appLink="https://app.reviewsup.io"
           items={[
@@ -37,7 +37,7 @@ export default async function RootLayout(props: {
         />
         <main className="flex-1">{props.children}</main>
         <Footer
-          builtBy="ReviewsUp.io"
+          builtBy="Reviewsup.io"
           builtByLink="https://reviewsup.io"
           githubLink="https://github.com/allenyan513/reviewsup.io"
           twitterLink="https://x.com/alinlinlink"

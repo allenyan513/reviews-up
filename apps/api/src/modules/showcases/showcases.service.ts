@@ -10,6 +10,7 @@ import {
 } from '@repo/api/showcases/entities/showcase.entity';
 import { generateShortId } from '../../libs/shortId';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { SortBy } from '@repo/api/common/sortby';
 
 @Injectable()
 export class ShowcasesService {
@@ -147,6 +148,10 @@ export class ShowcasesService {
     return this.findByShowcase(showcase);
   }
 
+  /**
+   *
+   * @param showcase
+   */
   async findByShowcase(showcase: Showcase): Promise<ShowcaseEntity> {
     const workspaceId = showcase.workspaceId;
     const reviews = await this.prismaService.review.findMany({
@@ -161,9 +166,20 @@ export class ShowcasesService {
         medias: true,
       },
     });
+    const config = showcase.config as ShowcaseConfig;
+    const { count, sortBy } = config || {};
+    // sort first then slice
+    let sortedReviews = this.sortReviewsBy(
+      reviews as ReviewEntity[],
+      sortBy as SortBy,
+      count,
+    );
+    if (count && count > 0) {
+      sortedReviews = sortedReviews.slice(0, count);
+    }
     return {
       ...showcase,
-      reviews: reviews.map(
+      reviews: sortedReviews.map(
         (review) =>
           ({
             ...review,
@@ -171,5 +187,29 @@ export class ShowcasesService {
           }) as ReviewEntity,
       ),
     } as ShowcaseEntity;
+  }
+
+  sortReviewsBy(reviews: ReviewEntity[], sortBy: SortBy, count?: number) {
+    let sortedReviews = [...reviews];
+    if (sortBy === SortBy.newest) {
+      sortedReviews = [...reviews].sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+    } else if (sortBy === SortBy.oldest) {
+      sortedReviews = [...reviews].sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
+      );
+    } else if (sortBy === SortBy.random) {
+      sortedReviews = [...reviews].sort(() => Math.random() - 0.5);
+    } else if (sortBy === SortBy.rating) {
+      sortedReviews = [...reviews].sort(
+        (a, b) => (b.rating || 0) - (a.rating || 0),
+      );
+    } else {
+      sortedReviews = reviews;
+    }
+    return sortedReviews;
   }
 }
