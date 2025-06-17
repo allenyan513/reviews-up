@@ -1,13 +1,14 @@
 {
-  "name": "@repo/reviewsup-react",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@reviewsup/embed-react",
+  "version": "0.0.2",
+  "private": false,
   "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "tsc -b -v --watch",
-    "build": "tsc",
-    "reviewsup-react:copy": "cp src/styles/* dist/styles/"
+    "build": "tsc && npm run reviewsup-react:copy",
+    "reviewsup-react:copy": "mkdir -p dist/styles && cp -r src/styles/* dist/styles",
+    "clean": "rm -rf dist && rm -rf .turbo"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,8 +17,18 @@
   ],
   "exports": {
     ".": {
-      "react-server": "./dist/index.js",
-      "default": "./dist/index.client.js"
+      "default": "./dist/index.js"
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "typesVersions": {
+      "*": {
+        "index": [
+          "dist/index.d.ts"
+        ],
+        "*": []
+      }
     }
   },
   "peerDependencies": {

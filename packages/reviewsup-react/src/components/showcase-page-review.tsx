@@ -8,6 +8,7 @@ import {
 export async function ShowcasePageReview(props: { showcase: ShowcaseEntity }) {
   const reviews = props.showcase.reviews;
   const config = props.showcase.config as ShowcaseConfig;
+  console.log(reviews, config);
   const {
     type,
     flow,

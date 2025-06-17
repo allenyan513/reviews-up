@@ -4,8 +4,9 @@ import {PricingGrid} from '@/components/landing/pricing';
 import {BsGithub, BsPeople} from 'react-icons/bs';
 import {i18nMetadata} from '@/config/i18n-config';
 import {Metadata} from 'next';
-import {Showcase} from '@repo/reviewsup-react';
+import {Showcase} from '@reviewsup/embed-react';
 import {HowItWorks} from '@/components/landing/how-it-works';
+import FAQ from '@/components/landing/faq';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -38,7 +39,8 @@ export default async function LandingPage(props: {
   }>;
 }) {
   const {lang} = await props.params;
-
+  // const showcaseId = process.env.NODE_ENV === 'development' ? '895ef5c94b4' : 'f5f3cdf3bb2';
+  const showcaseId = 'f5f3cdf3bb2';
   return (
     <>
       <Hero
@@ -66,20 +68,22 @@ export default async function LandingPage(props: {
       />
 
       <div id="showcase"/>
-      <section className='max-w-[64rem] mx-auto px-4 py-8'>
+      <section
+        id="showcase"
+        className='container max-w-[64rem] mx-auto py-8 md:py-12 lg:py-24'>
         <h2 className='w-full text-center text-4xl pb-4 font-semibold'>Reviews Showcase</h2>
         <h3 className="text-muted-foreground sm:text-lg text-center pb-8">
           Reviews from our users, displayed in a beautiful and customizable widget.
         </h3>
 
         <Showcase
-          fallback={<div>Loading showcase...</div>}
-          showcaseId={'895ef5c94b4'}/>
+          fallback={null}
+          showcaseId={showcaseId}/>
       </section>
 
 
       <div id="how-it-works"/>
-      <HowItWorks />
+      <HowItWorks/>
 
       <div id="features"/>
       <FeatureGrid
@@ -190,7 +194,7 @@ export default async function LandingPage(props: {
           },
           {
             title: 'Pro',
-            price: '$0.00',
+            price: '$20.00',
             description: 'Ideal for growing teams and businesses.',
             features: [
               'Full source code',
@@ -217,6 +221,32 @@ export default async function LandingPage(props: {
             buttonText: 'Contact Us',
             buttonHref: '',
           },
+        ]}
+      />
+
+      <div id={'faqs'}/>
+      <FAQ
+        data={[
+          {
+            question: 'What is ReviewsUp.io?',
+            answer: 'ReviewsUp.io is an open-source platform for collecting and displaying reviews, feedback, and testimonials. It is built with Next.js, Nest.js, Postgres, and Next Auth.',
+          },
+          {
+            question: 'Is ReviewsUp.io free to use?',
+            answer: 'Yes, ReviewsUp.io is completely free and open-source. You can self-host it or use our hosted version.',
+          },
+          {
+            question: 'How do I get started?',
+            answer: 'You can get started by visiting our website and signing up for an account. You can also check out our documentation for more details.',
+          },
+          {
+            question: 'Can I customize the platform?',
+            answer: 'Yes, ReviewsUp.io is designed to be modular and customizable. You can extend its functionality and customize its appearance to fit your needs.',
+          },
+          {
+            question: 'What technologies does ReviewsUp.io use?',
+            answer: 'ReviewsUp.io is built with Next.js, Nest.js, Postgres, and Next Auth. It leverages modern web technologies for a seamless user experience.',
+          }
         ]}
       />
     </>

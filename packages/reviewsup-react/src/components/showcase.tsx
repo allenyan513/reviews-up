@@ -9,10 +9,12 @@ export type ShowcaseProps = {
 };
 
 export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
+  console.log(showcaseId);
   if (!showcaseId) {
     return <div>No showcase ID provided.</div>;
   }
   let error;
+  console.log(error);
   let showcase = await api.showcase
     .getShowcaseByShortId(showcaseId)
     .catch((err) => {
@@ -20,6 +22,7 @@ export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
       error = err;
     });
 
+  console.log(showcase);
   if (!showcase) {
     return (
       <div>Error loading showcase: {error?.message || 'Unknown error'}</div>
@@ -29,10 +32,7 @@ export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
   return <ShowcasePageReview showcase={showcase} />;
 }
 
-export async function Showcase({
-  fallback = <div>Loading...</div>,
-  ...props
-}: ShowcaseProps) {
+export async function Showcase({ fallback, ...props }: ShowcaseProps) {
   return (
     <Suspense fallback={fallback}>
       <ShowcaseContent {...props} />

@@ -31,8 +31,10 @@ export default async function RootLayout(props: {
           appLink="https://app.reviewsup.io"
           items={[
             { title: 'Home', href: '/' },
+            { title: 'Showcase', href: '/#showcase' },
             { title: 'Features', href: '/#features' },
             { title: 'Pricing', href: '/#pricing' },
+            { title: 'FAQ', href: '/#faq' },
           ]}
         />
         <main className="flex-1">{props.children}</main>
