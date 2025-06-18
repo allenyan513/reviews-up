@@ -63,7 +63,7 @@ export default async function LandingPage(props: {
         title="Reviews Showcase"
         subtitle="Reviews from our users, displayed in a beautiful and customizable widget."
         showcaseId={process.env.NODE_ENV === 'development' ? '25db6a933d3' : 'f5f3cdf3bb2'}
-        formId={process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'f5f3cdf3bb2'}
+        formId={process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'cbfd5a031de'}
       />
 
       <div id="how-it-works"/>
