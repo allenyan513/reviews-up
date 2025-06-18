@@ -89,7 +89,6 @@ export default function Page(props: {
         <div className={''}>
           <ShowcasePageConfig />
         </div>
-        {/*Preview*/}
         <div className="col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
           <ShowcasePageReview
             showcase={showcase}

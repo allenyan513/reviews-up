@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
-import { BiCodeAlt, BiFile, BiShow, BiTrash } from 'react-icons/bi';
-import { ActionIcon } from '@/components/action-icon';
-import Link from 'next/link';
+import React, {useEffect, useState, use} from 'react';
 import DialogNewShowcase from '@/modules/showcase/dialog-new-showcase';
-import { useShowcaseContext } from '@/modules/showcase/context/ShowcaseProvider';
+import {useShowcaseContext} from '@/modules/showcase/context/ShowcaseProvider';
+import {ShowcaseListItem} from '@/modules/showcase/showcase-list-item';
+
 
 export default function Page(props: {
   params: Promise<{
@@ -14,7 +13,7 @@ export default function Page(props: {
   }>;
 }) {
   const params = use(props.params);
-  const { getShowcases, showcases } = useShowcaseContext();
+  const {getShowcases, showcases, deleteShowcase} = useShowcaseContext();
   useEffect(() => {
     getShowcases(params.workspaceId);
   }, []);
@@ -31,47 +30,19 @@ export default function Page(props: {
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <DialogNewShowcase />
+        <DialogNewShowcase/>
       </div>
 
       {/* Showcase List */}
-      <div className="space-y-4">
-        {showcases?.items &&
-          showcases?.items.map((item) => (
-            <Link
-              key={item.id}
-              href={`/${params.lang}/${params.workspaceId}/showcases/${item.id}`}
-              className="flex items-center justify-between bg-white rounded-lg shadow-sm p-4 border border-gray-200 cursor-pointer hover:shadow-md transition-shadow duration-200"
-            >
-              <div className="flex items-center">
-                <div className="p-3 bg-gray-100 rounded-md mr-4">
-                  <BiFile className="text-2xl" />
-                </div>
-                <div>
-                  <h2 className="text-lg font-medium text-gray-900">
-                    {item.name}
-                  </h2>
-                  <p className="text-sm text-gray-500 mt-0.5">
-                    {/*<span className="font-semibold uppercase">{item.type} Type</span>{' '}*/}
-                    created on {item.createdAt.toLocaleString()}
-                  </p>
-                </div>
-              </div>
-
-              {/* Action Icons */}
-              <div className="flex items-center space-x-1">
-                <ActionIcon label="Embed">
-                  <BiCodeAlt className="text-2xl" />
-                </ActionIcon>
-                <ActionIcon label="View">
-                  <BiShow className="text-2xl" />
-                </ActionIcon>
-                <ActionIcon label="Delete">
-                  <BiTrash className="text-2xl text-red-500" />
-                </ActionIcon>
-              </div>
-            </Link>
-          ))}
+      <div className="space-y-4 w-full">
+        {showcases?.items && showcases?.items.map((item) => (
+          <ShowcaseListItem
+            key={item.id}
+            item={item}
+            lang={params.lang}
+            workspaceId={params.workspaceId}
+          />
+        ))}
       </div>
     </div>
   );

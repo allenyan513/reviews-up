@@ -1,15 +1,15 @@
-import { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
+import {useState} from 'react';
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import {Button} from '@/components/ui/button';
 import ReviewImportXDialog from '../review/review-x-dialog';
 import PoweredBy from '@/components/powered-by';
-import { useFormContext } from '@/modules/form/context/FormProvider';
-import { Divider } from '@/components/divider';
-import { BsTwitterX } from 'react-icons/bs';
-import { $Enums } from '@repo/database/generated/client';
+import {useFormContext} from '@/modules/form/context/FormProvider';
+import {Divider} from '@/components/divider';
+import {BsTwitterX} from 'react-icons/bs';
+import {$Enums} from '@repo/database/generated/client';
 import ReviewSource = $Enums.ReviewSource;
-import { SubmitForm } from '@/modules/form/submit-form';
-import { parseTweet } from '@/lib/utils';
+import {SubmitForm} from '@/modules/form/submit-form';
+import {parseTweet} from '@/lib/utils';
 
 export function PageFormReview(props: {
   id: string;
@@ -19,8 +19,8 @@ export function PageFormReview(props: {
   mode: 'edit' | 'public';
   className?: string;
 }) {
-  const { id, workspaceId, lang, shortId, mode, className } = props;
-  const { formConfig } = useFormContext();
+  const {id, workspaceId, lang, shortId, mode, className} = props;
+  const {formConfig} = useFormContext();
   const [reviewSource, setReviewSource] = useState<ReviewSource | null>(null);
   const [initValue, setInitValue] = useState<{
     rating: number;
@@ -48,15 +48,16 @@ export function PageFormReview(props: {
     return null;
   }
 
-  const { brand, welcome } = formConfig;
+  const {brand, welcome} = formConfig;
 
   return (
     <div className={props.className}>
-      <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
+      <div
+        className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
         <div className="flex flex-row gap-4 w-full justify-between items-center">
           <div className="flex flex-row items-center gap-4">
             <Avatar className="size-16 shadow-md border rounded-full">
-              <AvatarImage src={brand.logo} alt={brand.name} />
+              <AvatarImage src={brand.logo} alt={brand.name}/>
               <AvatarFallback className="AvatarFallback" delayMs={600}>
                 {brand.name?.charAt(0).toUpperCase() || 'U'}
               </AvatarFallback>
@@ -75,7 +76,7 @@ export function PageFormReview(props: {
             Visit
           </Button>
         </div>
-        <Divider />
+        <Divider/>
         <div className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-center">{welcome.title}</h2>
           <p className="text-gray-600">{welcome.message}</p>
@@ -103,10 +104,11 @@ export function PageFormReview(props: {
               <Button className="w-full" variant="default" size={'lg'}>
                 Import from
                 <span>
-                  <BsTwitterX />
+                  <BsTwitterX/>
                 </span>
               </Button>
             </ReviewImportXDialog>
+
             <Button
               onClick={() => {
                 setReviewSource(ReviewSource.manual);
@@ -131,8 +133,29 @@ export function PageFormReview(props: {
             initValue={initValue}
           />
         )}
+
+        {reviewSource && (
+          <Button
+            onClick={() => {
+              setReviewSource(null);
+              setInitValue({
+                rating: 0,
+                message: '',
+                fullName: '',
+                email: '',
+                avatarUrl: '',
+                userUrl: '',
+                imageUrls: [],
+                videoUrl: '',
+                twitterId: '',
+              });
+            }}
+            variant={'ghost'}>
+            Back
+          </Button>
+        )}
       </div>
-      <PoweredBy />
+      <PoweredBy/>
     </div>
   );
 }

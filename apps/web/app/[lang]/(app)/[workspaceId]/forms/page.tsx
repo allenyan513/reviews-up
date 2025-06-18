@@ -1,9 +1,9 @@
 'use client';
 
-import { use, useEffect, useState } from 'react';
+import {use, useEffect, useState} from 'react';
 import CreateFormDialog from '@/modules/form/create-form-dialog';
-import { useFormContext } from '@/modules/form/context/FormProvider';
-import { FormItem } from '@/modules/form/form-item';
+import {useFormContext} from '@/modules/form/context/FormProvider';
+import {FormListItem} from '@/modules/form/form-list-item';
 
 export default function Page(props: {
   params: Promise<{
@@ -11,8 +11,8 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
-  const { fetchForms, forms } = useFormContext();
+  const {lang, workspaceId} = use(props.params);
+  const {fetchForms, forms} = useFormContext();
 
   useEffect(() => {
     if (!workspaceId) return;
@@ -33,16 +33,16 @@ export default function Page(props: {
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <CreateFormDialog />
+        <CreateFormDialog/>
       </div>
       {/* Forms List */}
       <div className="space-y-4">
         {forms.map((form) => (
-          <FormItem
+          <FormListItem
             key={form.id}
             lang={lang}
             workspaceId={workspaceId}
-            form={form}
+            item={form}
           />
         ))}
       </div>

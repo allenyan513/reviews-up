@@ -1,13 +1,13 @@
-import { api } from '@/lib/api-client';
-import { createContext, useContext, useState } from 'react';
+import {api} from '@/lib/api-client';
+import {createContext, useContext, useState} from 'react';
 import {
   ShowcaseConfig,
   ShowcaseEntity,
 } from '@repo/api/showcases/entities/showcase.entity';
-import { PaginateResponse } from '@repo/api/common/paginate';
+import {PaginateResponse} from '@repo/api/common/paginate';
 import toast from 'react-hot-toast';
-import { Showcase } from '@repo/database/generated/client/client';
-import { SortBy } from '@/types/sortby';
+import {Showcase} from '@repo/database/generated/client/client';
+import {SortBy} from '@/types/sortby';
 
 const ShowcaseContext = createContext<{
   showcase: ShowcaseEntity | undefined;
@@ -19,12 +19,15 @@ const ShowcaseContext = createContext<{
   getShowcase: (showcaseId: string) => void;
   getShowcases: (workspaceId: string) => void;
   saveChange: () => Promise<void>;
+  deleteShowcase: (showcaseId: string) => Promise<void>;
+  createShowcase: (workspaceId: string, workspaceName: string) => Promise<void>;
 } | null>(null);
 
 export function ShowcaseProvider(props: { children: React.ReactNode }) {
   const [showcases, setShowcases] = useState<PaginateResponse<Showcase>>();
   const [showcase, setShowcase] = useState<ShowcaseEntity>();
   const [showcaseConfig, setShowcaseConfig] = useState<ShowcaseConfig>();
+
 
   const getShowcase = (showcaseId: string) => {
     api.showcase
@@ -43,33 +46,34 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
     });
   };
 
-  // const updateSortBy = (sortBy: SortBy) => {
-  //   if (sortBy == SortBy.newest) {
-  //     // showcase.reviews.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-  //     const newItems = showcases?.items?.sort(
-  //       (a, b) =>
-  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-  //     );
-  //     if (newItems) {
-  //       setShowcases({
-  //         ...showcases,
-  //         items: newItems,
-  //       });
-  //     }
-  //   } else if (sortBy == SortBy.oldest) {
-  //     // showcase.reviews.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-  //     const newItems = showcases?.items?.sort(
-  //       (a, b) =>
-  //         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-  //     );
-  //     if (newItems) {
-  //       setShowcases({
-  //         ...showcases,
-  //         items: newItems,
-  //       });
-  //     }
-  //   }
-  // };
+  const deleteShowcase = async (showcaseId: string) => {
+    if (!showcaseId) return;
+    try {
+      await api.showcase.deleteShowcase(showcaseId);
+      await getShowcases(showcase?.workspaceId || '');
+      toast.success('Showcase deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete showcase');
+    }
+  }
+
+
+  const createShowcase = async (workspaceId: string, workspaceName: string) => {
+    if (!workspaceId || !workspaceName) {
+      toast.error('Please select a workspace first.');
+      return;
+    }
+    try {
+      await api.showcase.createShowcase({
+        workspaceId: workspaceId,
+        name: workspaceName,
+      })
+      await getShowcases(workspaceId)
+      toast.success('Showcase created successfully');
+    } catch (error) {
+      toast.error('Failed to create showcase');
+    }
+  };
 
   const saveChange = async () => {
     if (!showcase) return;
@@ -97,6 +101,9 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
         getShowcase: getShowcase,
         getShowcases: getShowcases,
         saveChange: saveChange,
+
+        deleteShowcase: deleteShowcase,
+        createShowcase: createShowcase,
       }}
     >
       {props.children}

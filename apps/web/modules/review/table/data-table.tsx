@@ -12,7 +12,6 @@ import {
   getFilteredRowModel,
   PaginationState,
 } from '@tanstack/react-table';
-
 import {
   Table,
   TableBody,
@@ -21,16 +20,15 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { Button } from '@/components/ui/button';
-import React, { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { DataTablePagination } from '@/modules/review/table/data-table-pagination';
-import { BsEye, BsInfoCircle } from 'react-icons/bs';
-import { BiHide, BiInfoCircle, BiShow } from 'react-icons/bi';
+import {Button} from '@/components/ui/button';
+import React, {useEffect, useMemo, useState} from 'react';
+import {cn} from '@/lib/utils';
+import {DataTablePagination} from '@/modules/review/table/data-table-pagination';
+import {BiHide, BiInfoCircle, BiShow} from 'react-icons/bi';
+import {getColumns} from "@/modules/review/table/columens";
+
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  // data: TData[];
   fetchData: (
     pageIndex: number,
     pageSize: number,
@@ -42,8 +40,8 @@ interface DataTableProps<TData, TValue> {
     totalRowCount: number;
   } | null>;
   totalRowCount: number;
-  onRowItemClick: (row: TData) => void;
 }
+
 const statusOptions = [
   {
     name: 'All',
@@ -53,27 +51,25 @@ const statusOptions = [
   {
     name: 'Pending',
     value: 'pending',
-    icon: <BiInfoCircle />,
+    icon: <BiInfoCircle/>,
   },
   {
     name: 'Public',
     value: 'public',
-    icon: <BiShow />,
+    icon: <BiShow/>,
   },
   {
     name: 'Hidden',
     value: 'hidden',
-    icon: <BiHide />,
+    icon: <BiHide/>,
   },
 ];
 
-export function DataTable<TData, TValue>({
-  columns,
-  // data,
-  fetchData,
-  totalRowCount,
-  onRowItemClick,
-}: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>(
+  {
+    fetchData,
+    totalRowCount,
+  }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -83,12 +79,14 @@ export function DataTable<TData, TValue>({
   const [data, setData] = useState<TData[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+  const columns = useMemo(() => {
+    return getColumns(setData);
+  }, []);
 
   const table = useReactTable({
-    data,
-    columns,
+    data: data,
+    columns: columns,
     getCoreRowModel: getCoreRowModel(),
-    // getPaginationRowModel: getPaginationRowModel(),
     manualPagination: true,
     pageCount: pageCount,
     onPaginationChange: setPagination,
@@ -104,7 +102,6 @@ export function DataTable<TData, TValue>({
   });
 
 
-
   useEffect(() => {
     const fetchDataFromServer = async () => {
       setIsLoading(true);
@@ -115,7 +112,7 @@ export function DataTable<TData, TValue>({
           sorting,
           columnFilters,
         );
-        if(!response) {
+        if (!response) {
           return;
         }
         setData(response.data);
@@ -180,7 +177,7 @@ export function DataTable<TData, TValue>({
         {/*  </div>*/}
         {/*</div>*/}
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table}/>
       <div className="rounded-md border">
         <Table>
           <TableHeader className="bg-gray-100">
@@ -192,9 +189,9 @@ export function DataTable<TData, TValue>({
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
                     </TableHead>
                   );
                 })}
@@ -231,7 +228,7 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table} />
+      <DataTablePagination table={table}/>
     </div>
   );
 }

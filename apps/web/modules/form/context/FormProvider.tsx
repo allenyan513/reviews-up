@@ -16,6 +16,8 @@ const FormContext = createContext<{
   setFormConfig: (config: FormConfig) => void;
 
   updateFormConfig: () => Promise<void>;
+  deleteForm: (formId: string) => Promise<void>;
+  createForm: (workspaceId: string, formName: string) => Promise<void>;
 } | null>(null);
 
 export function FormProvider(props: { children: React.ReactNode }) {
@@ -70,6 +72,32 @@ export function FormProvider(props: { children: React.ReactNode }) {
       toast.error('Failed to update form configuration');
     }
   };
+  const deleteForm = async (formId: string) => {
+    if (!formId) return;
+    try {
+      await api.form.deleteForm(formId);
+      setForms((prevForms) => prevForms?.filter((f) => f.id !== formId));
+      toast.success('Form deleted successfully');
+    } catch (error) {
+      toast.error('Failed to delete form');
+    }
+  }
+  const createForm = async (workspaceId: string, formName: string) => {
+    if (!workspaceId || !formName) {
+      toast.error('Please select a workspace first.');
+      return;
+    }
+    try {
+      const response = await api.form.createForm({
+        workspaceId: workspaceId,
+        name: formName,
+      });
+      setForms((prevForms) => [...(prevForms || []), response]);
+      toast.success('Form created successfully!');
+    } catch (error) {
+      toast.error('Failed to create form. Please try again.');
+    }
+  }
 
   return (
     <FormContext.Provider
@@ -85,6 +113,8 @@ export function FormProvider(props: { children: React.ReactNode }) {
         setFormConfig,
 
         updateFormConfig,
+        deleteForm,
+        createForm,
       }}
     >
       {props.children}

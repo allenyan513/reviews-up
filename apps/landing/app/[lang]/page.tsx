@@ -8,6 +8,7 @@ import {HowItWorks} from '@/components/landing/how-it-works';
 import FAQ from '@/components/landing/faq';
 import {hero2} from '@/data/hero'
 import {ShowcaseWrapper} from "@/components/landing/showcase";
+import {Badge} from "@/components/badge";
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -233,7 +234,11 @@ export default async function LandingPage(props: {
           }
         ]}
       />
-      <div id='placeholder'></div>
+      <div
+        id='badges'
+        className='py-8'>
+        <Badge/>
+      </div>
     </div>
   );
 }
