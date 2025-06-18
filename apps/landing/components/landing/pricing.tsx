@@ -68,7 +68,7 @@ export function PricingGrid(props: {
   return (
     <section
       id="features"
-      className="container space-y-6 py-8 md:py-12 lg:py-24"
+      className="container space-y-6 p-4"
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
         <h2 className="text-3xl md:text-4xl font-semibold">{props.title}</h2>

@@ -27,10 +27,6 @@ export const howItWorksSteps = [
         lang: "bash",
         content: [
           'npm install reviewsup-react',
-          '',
-          'yarn add reviewsup-react',
-          '',
-          'pnpm add reviewsup-react',
         ].join('\n'),
       },
       {

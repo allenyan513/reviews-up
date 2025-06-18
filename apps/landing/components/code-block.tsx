@@ -12,6 +12,8 @@ export async function CodeBlock(props: {
     theme: theme || 'one-light',
   });
   return <div
-    className={props.className || 'text-sm rounded-md overflow-x-auto'}
+    className={props.className}
     dangerouslySetInnerHTML={{__html: out}}/>;
 }
+
+

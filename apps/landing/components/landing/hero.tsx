@@ -1,5 +1,5 @@
-import { buttonVariants } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+import {buttonVariants} from "@/components/ui/button";
+import {cn} from "@/lib/utils";
 import Link from "next/link";
 
 export function Hero(props: {
@@ -14,8 +14,8 @@ export function Hero(props: {
   secondaryCtaLink: string;
 }) {
   return (
-    <section className="space-y-6 py-32 md:py-48 lg:py-52">
-      <div className="container flex max-w-[64rem] flex-col items-center gap-4 text-center mx-auto">
+    <section className="px-4 pb-4 pt-32 md:pt-48 ">
+      <div className="flex flex-col items-center gap-4 text-center mx-auto">
         <Link
           href={props.capsuleLink}
           className="rounded-2xl bg-muted px-4 py-1.5 text-sm font-medium"
@@ -23,28 +23,31 @@ export function Hero(props: {
         >
           {props.capsuleText}
         </Link>
-        <h1 className="font-heading text-3xl sm:text-5xl lg:text-7xl">
+        <h1 className="font-heading text-4xl md:text-7xl w-full md:max-w-5xl font-bold">
           {props.title}
         </h1>
-        <p className="max-w-[42rem] leading-normal text-muted-foreground sm:text-xl sm:leading-8">
+        <p className="leading-normal text-muted-foreground text-lg  md:text-xl md:leading-8 whitespace-normal w-full md:max-w-2xl">
           {props.subtitle}
         </p>
-        <div className="flex gap-4 flex-wrap justify-center">
+        <div className="flex gap-4 flex-wrap justify-center mt-8">
           <Link
             href={props.primaryCtaLink}
-            className={cn(buttonVariants({ size: "lg" }))}
+            className={cn(buttonVariants({ size: "lg", }),
+              "bg-red-400 hover:bg-red-500 rounded-full h-14")}
           >
             {props.primaryCtaText}
           </Link>
 
-          <Link
-            href={props.secondaryCtaLink}
-            target="_blank"
-            rel="noreferrer"
-            className={cn(buttonVariants({ variant: "outline", size: "lg" }))}
-          >
-            {props.secondaryCtaText}
-          </Link>
+          {props.secondaryCtaLink && (
+            <Link
+              href={props.secondaryCtaLink}
+              target="_blank"
+              rel="noreferrer"
+              className={cn(buttonVariants({variant: "outline", size: "lg"}))}
+            >
+              {props.secondaryCtaText}
+            </Link>
+          )}
         </div>
 
         {props.credits && (

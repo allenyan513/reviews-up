@@ -23,8 +23,8 @@ COPY --from=builder /app/packages /app/packages
 
 RUN npm install --production
 
-EXPOSE 3000
-EXPOSE 3001
+EXPOSE 5510
+EXPOSE 5520
 EXPOSE 5550
 
 CMD ["npm", "run", "start"]

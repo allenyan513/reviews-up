@@ -1,6 +1,4 @@
-import { BsTwitterX } from 'react-icons/bs';
-
-export async function ReviewItemSource(props: {
+export function ReviewItemSource(props: {
   source: string;
   className?: string;
 }) {
@@ -14,8 +12,29 @@ export async function ReviewItemSource(props: {
         fontSize: '0.5rem',
       }}
     >
-      {props.source === 'twitter' && <BsTwitterX />}
-      {props.source !== 'twitter' && <span></span>}
+      {props.source === 'twitter' && (
+        // rounded-full
+        <img
+          style={{
+            width: '1rem',
+            height: '1rem',
+            verticalAlign: 'middle',
+            borderRadius: '50%',
+          }}
+          src="https://abs.twimg.com/favicons/twitter.3.ico"
+        />
+      )}
+      {props.source === 'manual' && (
+        <img
+          style={{
+            width: '1rem',
+            height: '1rem',
+            verticalAlign: 'middle',
+            borderRadius: '50%',
+          }}
+          src='https://app.reviewsup.io/img/logo-32.png'
+        />
+      )}
     </div>
   );
 }

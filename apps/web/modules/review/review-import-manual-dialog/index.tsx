@@ -128,7 +128,7 @@ export default function ReviewImportManualDialog(props: {
                 onChange={(e) =>
                   setFormData({ ...formData, tagline: e.target.value })
                 }
-                placeholder="e.g. Co-founder & CTO at Shapo"
+                placeholder="e.g. Co-founder & CTO"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
@@ -146,7 +146,7 @@ export default function ReviewImportManualDialog(props: {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                placeholder="e.g. john@shapo.com"
+                placeholder="e.g. john@reviewsup.io"
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>

@@ -83,7 +83,9 @@ export function Header(props: NavProps) {
           <Logo
             websiteLogo={props.websiteLogo}
             websiteName={props.websiteName}
-            className="hidden md:flex" />
+            className=""
+            isBeta={true}
+          />
           {props.items?.length ? <DesktopItems items={props.items} /> : null}
           <Button
             className="space-x-2 md:hidden"
@@ -97,8 +99,7 @@ export function Header(props: NavProps) {
               <Menu className="h-6 w-6" />
             )}
           </Button>
-
-          <Logo className="md:hidden" />
+          {/*<Logo className="md:hidden" />*/}
 
           {showMobileMenu && props.items && <MobileItems items={props.items} />}
         </div>
@@ -109,9 +110,11 @@ export function Header(props: NavProps) {
           <Link
             href={props.appLink || ''}
             target="_blank"
-            className={cn(buttonVariants({ size: 'lg' }))}
+            className={cn(buttonVariants({ size: 'lg' }),
+              'rounded-full hidden md:inline-flex'
+              )}
           >
-            Get Started
+           Get Started
           </Link>
         </div>
       </div>

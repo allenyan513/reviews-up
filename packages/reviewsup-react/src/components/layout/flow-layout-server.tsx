@@ -1,37 +1,22 @@
-// No 'use client'
+import { FlowLayoutClient } from './flow-layout-client';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
 
-import { ReactNode } from 'react';
-
-interface FlowLayoutServerProps<T> {
-  items: T[];
-  renderItem: (item: T, index: number) => ReactNode;
-  columns?: number;
+interface FlowLayoutServerProps {
+  items: ReviewEntity[];
+  config?: ShowcaseConfig;
 }
 
-export default function FlowLayoutServer<T>({
+export default function FlowLayoutServer({
   items,
-  renderItem,
-  columns = 3,
-}: FlowLayoutServerProps<T>) {
-  const renderedColumns: ReactNode[][] = Array(columns)
-    .fill(null)
-    .map(() => []);
-
-  items.forEach((item, idx) => {
-    renderedColumns[idx % columns].push(renderItem(item, idx));
-  });
-
+  config,
+}: FlowLayoutServerProps) {
   return (
-    <div style={{ display: 'flex', gap: '16px' }}>
-      {renderedColumns.map((colItems, colIdx) => (
-        <div key={colIdx} style={{ flex: 1 }}>
-          {colItems.map((child, i) => (
-            <div key={i} style={{ marginBottom: '16px' }}>
-              {child}
-            </div>
-          ))}
-        </div>
-      ))}
-    </div>
+    <FlowLayoutClient
+      items={items}
+      config={config}
+      breakpoints={{ sm: 1, md: 2, lg: 3 }}
+      defaultColumns={3}
+    />
   );
 }

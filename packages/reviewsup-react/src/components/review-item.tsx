@@ -154,11 +154,11 @@ export function ReviewItem(props: {
       {isRatingEnabled && (
         <StarRating value={review.rating || 5} onChange={() => {}} />
       )}
-      {isImageEnabled && renderImageMedias()}
-      {isVideoEnabled && renderVideoMedias()}
       <p className="text-gray-700 overflow-x-auto whitespace-break-spaces ">
         {review.text}
       </p>
+      {isImageEnabled && renderImageMedias()}
+      {isVideoEnabled && renderVideoMedias()}
     </div>
   );
 }

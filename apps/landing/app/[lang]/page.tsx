@@ -4,9 +4,10 @@ import {PricingGrid} from '@/components/landing/pricing';
 import {BsGithub, BsPeople} from 'react-icons/bs';
 import {i18nMetadata} from '@/config/i18n-config';
 import {Metadata} from 'next';
-import {Showcase} from '@reviewsup/embed-react';
 import {HowItWorks} from '@/components/landing/how-it-works';
 import FAQ from '@/components/landing/faq';
+import {hero2} from '@/data/hero'
+import {ShowcaseWrapper} from "@/components/landing/showcase";
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -39,48 +40,31 @@ export default async function LandingPage(props: {
   }>;
 }) {
   const {lang} = await props.params;
-  // const showcaseId = process.env.NODE_ENV === 'development' ? '895ef5c94b4' : 'f5f3cdf3bb2';
-  const showcaseId = 'f5f3cdf3bb2';
+
   return (
-    <>
+    <div className='flex flex-col w-full items-center gap-8 md:gap-16'>
       <Hero
-        capsuleText="100% Open-Source & Free"
-        capsuleLink="https://github.com/allenyan513/reviewsup.io"
-        title="Real Reviews, Real Trust"
-        subtitle="Embed real reviews with one line of code. Build trust instantly."
-        primaryCtaText="Start Now"
-        primaryCtaLink={'https://app.reviewsup.io'}
-        secondaryCtaText="GitHub"
-        secondaryCtaLink="https://github.com/allenyan513/reviewsup.io"
+        capsuleText={hero2.capsuleText}
+        capsuleLink={hero2.capsuleLink}
+        title={hero2.title}
+        subtitle={hero2.subtitle}
+        primaryCtaText={hero2.primaryCtaText}
+        primaryCtaLink={hero2.primaryCtaLink}
+        secondaryCtaText={hero2.secondaryCtaText}
+        secondaryCtaLink={hero2.secondaryCtaLink}
         credits={
           <>
-            Crafted with ❤️ by{' '}
-            <a
-              href="https://reviewsup.io"
-              target="_blank"
-              rel="noreferrer"
-              className="underline"
-            >
-              ReviewsUp.io
-            </a>
           </>
         }
       />
 
       <div id="showcase"/>
-      <section
-        id="showcase"
-        className='container max-w-[64rem] mx-auto py-8 md:py-12 lg:py-24'>
-        <h2 className='w-full text-center text-4xl pb-4 font-semibold'>Reviews Showcase</h2>
-        <h3 className="text-muted-foreground sm:text-lg text-center pb-8">
-          Reviews from our users, displayed in a beautiful and customizable widget.
-        </h3>
-
-        <Showcase
-          fallback={null}
-          showcaseId={showcaseId}/>
-      </section>
-
+      <ShowcaseWrapper
+        title="Reviews Showcase"
+        subtitle="Reviews from our users, displayed in a beautiful and customizable widget."
+        showcaseId={process.env.NODE_ENV === 'development' ? '25db6a933d3' : 'f5f3cdf3bb2'}
+        formId={process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'f5f3cdf3bb2'}
+      />
 
       <div id="how-it-works"/>
       <HowItWorks/>
@@ -249,6 +233,7 @@ export default async function LandingPage(props: {
           }
         ]}
       />
-    </>
+      <div id='placeholder'></div>
+    </div>
   );
 }

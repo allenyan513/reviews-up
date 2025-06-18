@@ -1,5 +1,4 @@
 import FlowLayoutServer from './layout/flow-layout-server';
-import { ReviewItem } from './review-item';
 import {
   ShowcaseConfig,
   ShowcaseEntity,
@@ -8,39 +7,14 @@ import {
 export async function ShowcasePageReview(props: { showcase: ShowcaseEntity }) {
   const reviews = props.showcase.reviews;
   const config = props.showcase.config as ShowcaseConfig;
-  console.log(reviews, config);
-  const {
-    type,
-    flow,
-    isSourceEnabled,
-    isVideoEnabled,
-    isImageEnabled,
-    isDateEnabled,
-    isRatingEnabled,
-  } = (config || {}) as ShowcaseConfig;
+  const { type } = (config || {}) as ShowcaseConfig;
   if (!reviews) {
     return null;
   }
 
   return (
     <div>
-      {type === 'flow' && (
-        <FlowLayoutServer
-          items={reviews}
-          renderItem={(review, idx) => (
-            <ReviewItem
-              isSourceEnabled={isSourceEnabled}
-              isVideoEnabled={isVideoEnabled}
-              isImageEnabled={isImageEnabled}
-              isDateEnabled={isDateEnabled}
-              isRatingEnabled={isRatingEnabled}
-              key={review.id}
-              review={review}
-            />
-          )}
-          columns={flow.columns || 3}
-        />
-      )}
+      {type === 'flow' && <FlowLayoutServer items={reviews} config={config} />}
     </div>
   );
 }
