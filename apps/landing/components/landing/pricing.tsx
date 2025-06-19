@@ -24,7 +24,7 @@ type PricingCardProps = {
 export function PricingCard(props: PricingCardProps) {
   return (
     <Card
-      className={`w-full max-w-sm ${
+      className={`w-full ${
         props.isPopular ? "border-primary border-2 shadow-lg" : ""
       }`}
     >
@@ -40,7 +40,7 @@ export function PricingCard(props: PricingCardProps) {
         <ul className="space-y-2">
           {props.features.map((feature, index) => (
             <li key={index} className="flex items-center">
-              <Check className="mr-2 h-4 w-4 text-primary" />
+              <Check className="mr-2 h-5 w-5 p-1 font-bold text-primary bg-green-400 rounded-full" />
               <span>{feature}</span>
             </li>
           ))}
@@ -77,7 +77,7 @@ export function PricingGrid(props: {
         </p>
       </div>
 
-      <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-5xl md:grid-cols-3">
+      <div className="mx-auto grid justify-center gap-4 w-full md:grid-cols-2">
         {props.items.map((item, index) => (
           <PricingCard key={index} {...item} />
         ))}
