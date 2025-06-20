@@ -38,10 +38,10 @@ export function UserProfilePage(props: {
             Visit
           </Button>
         </div>
-        <div className='grid grid-cols-3 gap-4 w-full text-center'>
+        <div className='grid grid-cols-3 gap-4 w-full text-start'>
           <h2 className="text-xl font-semibold">My Reviews</h2>
-          <h2 className="text-xl font-semibold">Reviews</h2>
-          <h2 className="text-xl font-semibold">Reviews</h2>
+          {/*<h2 className="text-xl font-semibold">Reviews</h2>*/}
+          {/*<h2 className="text-xl font-semibold">Reviews</h2>*/}
         </div>
         <ListLayoutClient
           items={user.Review || []}

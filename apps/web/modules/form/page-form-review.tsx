@@ -73,7 +73,7 @@ export function PageFormReview(props: {
   const {brand, welcome} = formConfig;
 
   return (
-    <div className={props.className}>
+    <div className={className}>
       <div
         className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
         <div className="flex flex-row gap-4 w-full justify-between items-center">

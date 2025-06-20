@@ -7,8 +7,9 @@ import {
   Logger,
   Post,
   Body,
+  Session,
 } from '@nestjs/common';
-import { Response } from 'express';
+import { Request,Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { GithubOauthGuard } from '@src/modules/auth/guards/github-oauth.guard';
@@ -72,14 +73,25 @@ export class AuthController {
 
   @UseGuards(TwitterOauthGuard)
   @Get('callback/twitter')
-  async twitterAuthCallback(@Req() req, @Res() res: Response) {
-    const token = this.authService.generateJwt(req.user);
-    const redirectParam = req.query.state as string;
-    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
-    if (redirectParam) {
-      redirectUrl = `${redirectUrl}&redirect=${encodeURIComponent(redirectParam)}`;
-    }
-    return res.redirect(redirectUrl);
+  async twitterAuthCallback(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Session() session: any,
+  ) {
+    //todo
+    session.regenerate(function (err) {
+      if (err) {
+        return res.status(500).json({ error: 'Failed to regenerate session' });
+      }
+      const state = JSON.stringify(session.req.authInfo.state, undefined, 2);
+      const userData = JSON.stringify(req.user, undefined, 2);
+      res.end(
+        `<h1>Authentication succeeded</h1> User data: <pre>${userData}</pre>
+        State:
+        <pre>${state}</pre>
+        `
+      );
+    });
   }
 
   @Post('send-magic-link')

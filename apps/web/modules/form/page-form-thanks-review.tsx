@@ -15,7 +15,7 @@ export function PageFormThanksReview(props: {
     return null;
   }
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-50 h-[760px]">
+    <div className="flex flex-col items-center justify-center bg-gray-100 min-h-screen p-8">
       <div
         className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
         <Lottie animationData={thanks}/>

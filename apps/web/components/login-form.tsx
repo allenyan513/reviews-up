@@ -83,12 +83,12 @@ export function LoginForm(props: {
           <BsGoogle/>
           Continue with Google
         </Button>
-        <Button onClick={() => {
-          twitterSignIn(redirect);
-        }} variant="outline" className="w-full">
-          <BsTwitterX/>
-          Continue with Twitter/X
-        </Button>
+        {/*<Button onClick={() => {*/}
+        {/*  twitterSignIn(redirect);*/}
+        {/*}} variant="outline" className="w-full">*/}
+        {/*  <BsTwitterX/>*/}
+        {/*  Continue with Twitter/X*/}
+        {/*</Button>*/}
         <Button onClick={() => {
           githubSignIn(redirect);
         }} variant="outline" className="w-full">
