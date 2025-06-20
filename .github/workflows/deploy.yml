@@ -34,8 +34,8 @@ jobs:
       GITHUBS_CLIENT_SECRET: ${{ secrets.GITHUBS_CLIENT_SECRET }}
       GITHUBS_CALLBACK_URL: ${{ secrets.GITHUBS_CALLBACK_URL }}
       RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-      TWITTER_CONSUMER_KEY: ${{ secrets.TWITTER_CONSUMER_KEY }}
-      TWITTER_CONSUMER_SECRET: ${{ secrets.TWITTER_CONSUMER_SECRET }}
+      TWITTER_CLIENT_ID: ${{ secrets.TWITTER_CLIENT_ID }}
+      TWITTER_CLIENT_SECRET: ${{ secrets.TWITTER_CLIENT_SECRET }}
       TWITTER_CALLBACK_URL: ${{ secrets.TWITTER_CALLBACK_URL }}
       YT_DLP_SERVER_URL: ${{ secrets.YT_DLP_SERVER_URL }}
 
@@ -85,8 +85,8 @@ jobs:
           echo "GITHUBS_CLIENT_SECRET=${{ env.GITHUBS_CLIENT_SECRET }}" >> .env
           echo "GITHUBS_CALLBACK_URL=${{ env.GITHUBS_CALLBACK_URL }}" >> .env
           echo "RESEND_API_KEY=${{ env.RESEND_API_KEY }}" >> .env
-          echo "TWITTER_CONSUMER_KEY=${{ env.TWITTER_CONSUMER_KEY }}" >> .env
-          echo "TWITTER_CONSUMER_SECRET=${{ env.TWITTER_CONSUMER_SECRET }}" >> .env
+          echo "TWITTER_CLIENT_ID=${{ env.TWITTER_CLIENT_ID }}" >> .env
+          echo "TWITTER_CLIENT_SECRET=${{ env.TWITTER_CLIENT_SECRET }}" >> .env
           echo "TWITTER_CALLBACK_URL=${{ env.TWITTER_CALLBACK_URL }}" >> .env
           echo "YT_DLP_SERVER_URL=${{ env.YT_DLP_SERVER_URL }}" >> .env
           echo "NEXT_PUBLIC_APP_URL=${{ env.NEXT_PUBLIC_APP_URL }}" >> .env
