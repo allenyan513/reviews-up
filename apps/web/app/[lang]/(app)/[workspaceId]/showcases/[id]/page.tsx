@@ -1,15 +1,15 @@
 'use client';
 
-import { useEffect, useState, use } from 'react';
-import { BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow } from 'react-icons/bi';
-import { Button } from '@/components/ui/button';
+import {useEffect, useState, use} from 'react';
+import {BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow} from 'react-icons/bi';
+import {Button} from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 import ShowcasePageReview from '@/modules/showcase/showcase-page-review';
-import { BsBoxArrowUpRight, BsShare } from 'react-icons/bs';
-import { ShowcasePageConfig } from '@/modules/showcase/showcase-page-config';
-import { useShowcaseContext } from '@/modules/showcase/context/ShowcaseProvider';
-import { CopyCodeDialog } from '@/components/copy-code-dialog';
+import {BsBoxArrowUpRight, BsShare} from 'react-icons/bs';
+import {ShowcasePageConfig} from '@/modules/showcase/showcase-page-config';
+import {useShowcaseContext} from '@/modules/showcase/context/ShowcaseProvider';
+import {ShowcaseEmbedDialog} from '@/modules/showcase/showcase-embed-dialog';
 
 export default function Page(props: {
   params: Promise<{
@@ -19,7 +19,7 @@ export default function Page(props: {
   }>;
 }) {
   const params = use(props.params);
-  const { getShowcase, showcase, showcaseConfig } = useShowcaseContext();
+  const {getShowcase, showcase, showcaseConfig} = useShowcaseContext();
   useEffect(() => {
     if (!params.id) return;
     getShowcase(params.id);
@@ -35,7 +35,7 @@ export default function Page(props: {
             href={`/${params.lang}/${params.workspaceId}/showcases`}
             className="flex flex-row items-center gap-2 "
           >
-            <BiArrowBack className="text-2xl" />
+            <BiArrowBack className="text-2xl"/>
             <h1 className="text-3xl font-semibold text-gray-900">
               Edit {showcase.name}
             </h1>
@@ -45,19 +45,12 @@ export default function Page(props: {
           </p>
         </div>
         <div className={'space-x-2'}>
-          <CopyCodeDialog
-            title={'Embed your showcase'}
-            codes={[
-              `<div id="reviewsup-showcase-${showcase.shortId}"></div>`,
-              `<script id="revewsup-embed-js" type="text/javascript"`,
-              `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,
-            ]}
-          >
+          <ShowcaseEmbedDialog showcaseId={showcase.shortId}>
             <Button variant="outline" size={'lg'}>
-              <BiCodeAlt className="text-2xl" />
+              <BiCodeAlt className="text-2xl"/>
               Add to your website
             </Button>
-          </CopyCodeDialog>
+          </ShowcaseEmbedDialog>
 
           <Button
             onClick={() => {
@@ -69,7 +62,7 @@ export default function Page(props: {
             variant="outline"
             size={'lg'}
           >
-            <BsShare className="text-2xl" />
+            <BsShare className="text-2xl"/>
             Share
           </Button>
           <Button
@@ -79,7 +72,7 @@ export default function Page(props: {
             variant="default"
             size={'lg'}
           >
-            <BsBoxArrowUpRight className="text-2xl" />
+            <BsBoxArrowUpRight className="text-2xl"/>
             Open
           </Button>
         </div>
@@ -87,9 +80,10 @@ export default function Page(props: {
 
       <div className="grid grid-cols-4">
         <div className={''}>
-          <ShowcasePageConfig />
+          <ShowcasePageConfig/>
         </div>
-        <div className="col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
+        <div
+          className="col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
           <ShowcasePageReview
             showcase={showcase}
             showcaseConfig={showcaseConfig}
