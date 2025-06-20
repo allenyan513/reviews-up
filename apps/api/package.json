@@ -18,30 +18,6 @@
   },
   "dependencies": {
     "@repo/api": "*",
-    "@repo/database": "*",
-    "axios": "^1.9.0",
-    "nanoid": "^3.3.11",
-    "nodemailer": "^7.0.3",
-    "reflect-metadata": "^0.2.0",
-    "rxjs": "^7.8.2",
-    "ejs": "^3.1.10",
-    "@types/express": "^5.0.3",
-    "@types/node": "^24.0.0",
-    "@types/supertest": "^6.0.3"
-  },
-  "devDependencies": {
-    "@jest/globals": "^29.7.0",
-    "@repo/eslint-config": "*",
-    "@repo/jest-config": "*",
-    "@repo/typescript-config": "*",
-    "globals": "^16.0.0",
-    "jest": "^29.7.0",
-    "source-map-support": "^0.5.21",
-    "supertest": "^6.3.3",
-    "ts-jest": "^29.2.5",
-    "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.2",
-    "tsconfig-paths": "^4.2.0",
-    "typescript": "5.5.4"
+    "@repo/database": "*"
   }
 }

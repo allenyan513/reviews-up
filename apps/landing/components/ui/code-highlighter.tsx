@@ -1,5 +1,4 @@
 import SyntaxHighlighter from 'react-syntax-highlighter';
-import {docco} from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
 export const CodeHighlighter = (props: {
   code: string;
@@ -9,7 +8,7 @@ export const CodeHighlighter = (props: {
   return (
     <div className={props.className}>
       <SyntaxHighlighter
-        language={props.language} style={docco}>
+        language={props.language}>
         {props.code}
       </SyntaxHighlighter>
     </div>

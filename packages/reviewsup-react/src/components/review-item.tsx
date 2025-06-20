@@ -2,7 +2,6 @@ import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import Link from 'next/link';
 import { ReviewItemSource } from './review-item-source';
 import StarRating from './star-rating';
-import '../styles/output.css';
 
 function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
