@@ -3,7 +3,7 @@ import { AuthGuard } from '@nestjs/passport';
 import { Request } from 'express';
 
 @Injectable()
-export class GoogleOauthGuard extends AuthGuard('google') {
+export class TwitterOauthGuard extends AuthGuard('twitter') {
   getAuthenticateOptions(context: ExecutionContext) {
     const request: Request = context.switchToHttp().getRequest<Request>();
     const { redirect } = request.query;

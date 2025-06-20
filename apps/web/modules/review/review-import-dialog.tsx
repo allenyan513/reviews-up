@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+import {Button} from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,20 +9,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useEffect, useState } from 'react';
-import { BiDownload, BiX } from 'react-icons/bi';
-import ReviewImportManualDialog from './review-import-manual-dialog';
-import ReviewImportXDialog from './review-x-dialog';
-import { BsTwitterX } from 'react-icons/bs';
-import { api } from '@/lib/api-client';
+import React, {useEffect, useState} from 'react';
+import {BiDownload, BiX} from 'react-icons/bi';
+import ReviewImportManualDialog from './manual';
+import ReviewImportXDialog from './twitter';
+import {BsTwitterX} from 'react-icons/bs';
+import {api} from '@/lib/api-client';
 import toast from 'react-hot-toast';
-import { useUserContext } from '@/context/UserProvider';
-import { Tweet } from 'react-tweet/api';
-import { parseTweet } from '@/lib/utils';
+import {useUserContext} from '@/context/UserProvider';
+import {Tweet} from 'react-tweet/api';
+import {parseTweet} from '@/lib/utils';
+import ReviewImportTiktokDialog from './tiktok';
+import {YtDlpResponse} from '@repo/api/yt-dlp/yt-dlp-response.dto';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultWorkspace } = useUserContext();
+  const {defaultWorkspace, user, signIn} = useUserContext();
 
   /**
    * 将tweet数据转换成 review数据，然后发送给服务端， 服务端不需要做任何转换
@@ -45,12 +47,43 @@ export default function ReviewImportDialog() {
         message: parseData?.message,
         fullName: parseData?.fullName,
         email: parseData?.email,
-        userUrl : parseData?.userUrl,
+        userUrl: parseData?.userUrl,
         avatarUrl: parseData?.avatarUrl,
         source: 'twitter',
         imageUrls: parseData?.imageUrls,
         videoUrl: parseData?.videoUrl,
-        tweetId: parseData?.tweetId
+        tweetId: parseData?.tweetId,
+        reviewerId: user?.id || ''
+      });
+      toast.success('Review created successfully!');
+      setIsOpen(false);
+    } catch (error) {
+      toast('Failed to create review. Please try again.');
+      return;
+    }
+  };
+
+  const importFromTiktok = async (
+    data: YtDlpResponse | undefined | null,
+  ) => {
+    try {
+      if (!data || !defaultWorkspace) {
+        toast.error('Tweet ID is missing');
+        return;
+      }
+      await api.review.createReview({
+        workspaceId: defaultWorkspace.id,
+        rating: 5,
+        message: data.title,
+        fullName: data.title,
+        email: '',
+        userUrl: '',
+        avatarUrl: '',
+        source: 'manual',
+        imageUrls: [data.thumbnail],
+        videoUrl: data.video_url,
+        tweetId: '',
+        reviewerId: user?.id || ''
       });
       toast.success('Review created successfully!');
       setIsOpen(false);
@@ -64,7 +97,7 @@ export default function ReviewImportDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
-          <BiDownload className="text-2xl" />
+          <BiDownload className="text-2xl"/>
           Import Reviews
         </Button>
       </DialogTrigger>
@@ -78,6 +111,13 @@ export default function ReviewImportDialog() {
         <div className="grid grid-cols-1 gap-4">
           {/*Import from x*/}
           <ReviewImportXDialog
+            beforeOnOpenChange={() => {
+              if (!user) {
+                signIn()
+                return false;
+              }
+              return true;
+            }}
             onImport={(tweetId, data) => {
               importFromX(tweetId, data);
             }}
@@ -87,13 +127,30 @@ export default function ReviewImportDialog() {
                 size={'lg'}
                 className="w-full items-center justify-center text-lg"
               >
-                <BsTwitterX className="text-xl" />
+                <BsTwitterX className="text-xl"/>
                 Import from X
               </Button>
             </div>
           </ReviewImportXDialog>
+          <ReviewImportTiktokDialog
+            onImport={(response: YtDlpResponse | undefined) => {
+              importFromTiktok(response);
+            }}
+          >
+            <div>
+              <Button
+                size={'lg'}
+                className="w-full items-center justify-center text-lg"
+              >
+                <BsTwitterX className="text-xl"/>
+                Import from Tiktok
+              </Button>
+            </div>
+          </ReviewImportTiktokDialog>
+
+
           {/*Import from manual*/}
-          <ReviewImportManualDialog />
+          <ReviewImportManualDialog/>
         </div>
       </DialogContent>
     </Dialog>

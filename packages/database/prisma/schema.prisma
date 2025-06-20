@@ -43,6 +43,7 @@ model User {
   Form      Form[]
   Showcase  Showcase[]
   Account   Account[]
+  Review    Review[]
 }
 
 model Account {
@@ -97,6 +98,7 @@ model Review {
   workspaceId   String
   formId        String?
   userId        String?
+  reviewerId    String?
   reviewerName  String
   reviewerImage String?
   reviewerEmail String?
@@ -110,6 +112,7 @@ model Review {
   updatedAt     DateTime      @updatedAt
   form          Form?         @relation(fields: [formId], references: [id])
   workspace     Workspace     @relation(fields: [workspaceId], references: [id])
+  reviewer      User?         @relation(fields: [reviewerId], references: [id])
   medias        ReviewMedia[]
 }
 

@@ -42,6 +42,17 @@ export class UsersService {
     return user;
   }
 
+  async findOneBySlug(slug: string) {
+    this.logger.debug(`Fetching user by Slug: ${slug}`);
+    return this.prismaService.user.findUnique({
+      where: { id: slug },
+      include: {
+        Workspace: true,
+        Review:true
+      },
+    });
+  }
+
   /**
    * 当新用户创建时调用
    * 创建一个默认的workspace
@@ -80,7 +91,7 @@ export class UsersService {
           reviewerEmail: review.reviewerEmail,
           rating: review.rating,
           text: review.text,
-          status: 'pending'
+          status: 'pending',
         },
       });
     }

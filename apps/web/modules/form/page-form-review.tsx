@@ -1,7 +1,7 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Button} from '@/components/ui/button';
-import ReviewImportXDialog from '../review/review-x-dialog';
+import ReviewImportXDialog from '../review/twitter';
 import PoweredBy from '@/components/powered-by';
 import {useFormContext} from '@/modules/form/context/FormProvider';
 import {Divider} from '@/components/divider';
@@ -10,7 +10,13 @@ import {$Enums} from '@repo/database/generated/client';
 import ReviewSource = $Enums.ReviewSource;
 import {SubmitForm} from '@/modules/form/submit-form';
 import {parseTweet} from '@/lib/utils';
+import {useSession, useUserContext} from "@/context/UserProvider";
 
+/**
+ *
+ * @param props
+ * @constructor
+ */
 export function PageFormReview(props: {
   id: string;
   workspaceId: string;
@@ -20,6 +26,10 @@ export function PageFormReview(props: {
   className?: string;
 }) {
   const {id, workspaceId, lang, shortId, mode, className} = props;
+  const {signIn} = useUserContext();
+  const {user} = useSession({
+    required: false
+  })
   const {formConfig} = useFormContext();
   const [reviewSource, setReviewSource] = useState<ReviewSource | null>(null);
   const [initValue, setInitValue] = useState<{
@@ -32,6 +42,8 @@ export function PageFormReview(props: {
     imageUrls: string[];
     videoUrl: string;
     twitterId: string;
+    source?: ReviewSource;
+    reviewerId?: string;
   }>({
     rating: 0,
     message: '',
@@ -42,7 +54,17 @@ export function PageFormReview(props: {
     imageUrls: [],
     videoUrl: '',
     twitterId: '',
+    reviewerId: user?.id || '',
   });
+
+  useEffect(() => {
+    if (!user) return
+    setInitValue((prev) => ({
+      ...prev,
+      reviewerId: user?.id || '',
+    }));
+  }, [user])
+
 
   if (!formConfig || !formConfig.brand || !formConfig.welcome) {
     return null;
@@ -85,7 +107,18 @@ export function PageFormReview(props: {
         {!reviewSource && (
           <div className="flex flex-col gap-2 w-full">
             <ReviewImportXDialog
+              beforeOnOpenChange={() => {
+                if (!user) {
+                  signIn()
+                  return false;
+                }
+                return true;
+              }}
               onImport={(tweetId, data) => {
+                if (!user) {
+                  signIn()
+                  return;
+                }
                 const parseData = parseTweet(data);
                 setInitValue({
                   rating: 5,
@@ -97,11 +130,16 @@ export function PageFormReview(props: {
                   imageUrls: parseData?.imageUrls || [],
                   videoUrl: parseData?.videoUrl || '',
                   twitterId: parseData?.tweetId || '',
+                  source: ReviewSource.twitter,
+                  reviewerId: user.id,
                 });
                 setReviewSource(ReviewSource.twitter);
               }}
             >
-              <Button className="w-full" variant="default" size={'lg'}>
+              <Button
+                className="w-full"
+                variant="default"
+                size={'lg'}>
                 Import from
                 <span>
                   <BsTwitterX/>
@@ -111,12 +149,15 @@ export function PageFormReview(props: {
 
             <Button
               onClick={() => {
+                if (!user) {
+                  signIn()
+                  return;
+                }
                 setReviewSource(ReviewSource.manual);
               }}
               className="w-full"
               variant="outline"
-              size={'lg'}
-            >
+              size={'lg'}>
               Manual
             </Button>
           </div>
@@ -148,6 +189,7 @@ export function PageFormReview(props: {
                 imageUrls: [],
                 videoUrl: '',
                 twitterId: '',
+                reviewerId: user?.id || '',
               });
             }}
             variant={'ghost'}>

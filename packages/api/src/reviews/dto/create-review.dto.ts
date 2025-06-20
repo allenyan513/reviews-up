@@ -7,6 +7,7 @@ export const createReviewSchema = z.object({
   formId: z.string(),
   rating: z.number().min(1).max(5).optional(),
   message: z.string().optional(),
+  reviewerId: z.string().optional(),
   fullName: z.string().min(1, 'Full name is required'),
   email: z.string().optional(),
   userUrl: z.string().url().optional(),

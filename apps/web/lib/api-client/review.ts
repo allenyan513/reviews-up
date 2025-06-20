@@ -1,9 +1,11 @@
-import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
-import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
-import { PaginateResponse } from '@repo/api/common/paginate';
-import { FindAllReviewRequest } from '@repo/api/reviews/dto/find-all-review.dto';
-import { authFetch } from './auth-fetch';
+import {CreateReviewDto} from '@repo/api/reviews/dto/create-review.dto';
+import {UpdateReviewDto} from '@repo/api/reviews/dto/update-review.dto';
+import {ReviewEntity} from '@repo/api/reviews/entities/review.entity';
+import {PaginateResponse} from '@repo/api/common/paginate';
+import {FindAllReviewRequest} from '@repo/api/reviews/dto/find-all-review.dto';
+import {authFetch} from './auth-fetch';
+import {YtDlpRequest} from '@repo/api/yt-dlp/yt-dlp-request.dto';
+import {YtDlpResponse} from '@repo/api/yt-dlp/yt-dlp-response.dto';
 
 export const review = {
   getReviews: (
@@ -24,13 +26,10 @@ export const review = {
   createReview: (dto: CreateReviewDto): Promise<ReviewEntity> =>
     authFetch('/reviews/create', 'POST', dto),
 
-  /**
-   * submit 是一个公开接口，用于提交评论
-   * @param dto
-   */
-  submitReview: (dto: CreateReviewDto): Promise<ReviewEntity> =>
-    authFetch('/reviews/submit', 'POST', dto),
   updateReview: (id: string, dto: UpdateReviewDto) =>
     authFetch(`/reviews/${id}`, 'PATCH', dto),
   deleteReview: (id: string) => authFetch(`/reviews/${id}`, 'DELETE', {}),
+
+  parse: (request: YtDlpRequest): Promise<YtDlpResponse> =>
+    authFetch('/reviews/parse', 'POST', request),
 };

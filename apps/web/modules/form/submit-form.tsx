@@ -2,15 +2,20 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { api } from '@/lib/api-client';
-import StarRating from '@/modules/review/review-import-manual-dialog/star-rating';
+import StarRating from '@/modules/review/manual/star-rating';
 import { UploadContainer } from '@/components/upload-container';
 import { BiImage, BiLogoTwitter, BiVideo } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
 import { ReviewSource } from '@repo/database/generated/client/client';
 import { Required } from '@/components/required';
-import AvatarUpload from '@/modules/review/review-import-manual-dialog/avatar-upload';
+import AvatarUpload from '@/modules/review/manual/avatar-upload';
 import { Textarea } from '@/components/ui/textarea';
 
+/**
+ * 从 /forms/[shortId] 提交的表单
+ * @param props
+ * @constructor
+ */
 export function SubmitForm(props: {
   id: string;
   workspaceId: string;
@@ -28,6 +33,7 @@ export function SubmitForm(props: {
     imageUrls: string[];
     videoUrl: string;
     twitterId: string;
+    reviewerId?: string;
   };
 }) {
   const router = useRouter();
@@ -44,6 +50,7 @@ export function SubmitForm(props: {
     imageUrls: string[];
     videoUrl: string;
     twitterId: string;
+    reviewerId?: string;
   }>({
     rating: initValue.rating,
     message: initValue.message,
@@ -54,6 +61,7 @@ export function SubmitForm(props: {
     imageUrls: initValue.imageUrls || [],
     videoUrl: initValue.videoUrl || '',
     twitterId: initValue.twitterId || '',
+    reviewerId: initValue.reviewerId || '',
   });
 
   const handleSubmit = () => {
@@ -66,17 +74,19 @@ export function SubmitForm(props: {
     }
     setIsSubmitting(true);
     api.review
-      .submitReview({
+      .createReview({
         workspaceId: workspaceId,
         formId: id,
         rating: submitForm.rating,
         message: submitForm.message,
         fullName: submitForm.fullName,
         email: submitForm.email,
+        userUrl: submitForm.userUrl,
         avatarUrl: submitForm.avatarUrl,
         imageUrls: submitForm.imageUrls,
         videoUrl: submitForm.videoUrl,
         tweetId: submitForm.twitterId,
+        reviewerId: submitForm.reviewerId,
       })
       .then(() => {
         setIsSubmitting(false);

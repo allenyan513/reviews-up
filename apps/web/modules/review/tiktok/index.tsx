@@ -1,5 +1,5 @@
 'use client';
-import { Button } from '@/components/ui/button';
+import {Button} from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -10,28 +10,33 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useState, useRef } from 'react';
+import React, {useState, useRef} from 'react';
+import {api} from '@/lib/api-client';
 
-import { Input } from '@/components/ui/input';
-import { Tweet, useTweet } from 'react-tweet';
-import { Tweet as TweetEntity } from 'react-tweet/api';
+import {Input} from '@/components/ui/input';
+import {YtDlpResponse} from '@repo/api/yt-dlp/yt-dlp-response.dto';
+import toast from "react-hot-toast";
 
-export default function ReviewImportXDialog(props: {
-  onImport: (tweetId: string, data: TweetEntity | null | undefined) => void;
+export default function ReviewImportTiktokDialog(props: {
+  onImport: (response: YtDlpResponse | undefined) => void;
   children: React.ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [tweetId, setTweetId] = useState<string | null>(null);
-  const { data } = useTweet(tweetId || '');
+  const [tiktokUrl, setTiktokUrl] = useState<string>('');
+  const [ytDlpResponse, setYtDlpResponse] = useState<YtDlpResponse | undefined>();
 
-  const handleTweetIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    if (inputValue.match(/https:\/\/x\.com\/\w+\/status\/\d+/)) {
-      const tweetId = inputValue.match(/status\/(\d+)/)?.[1] || null;
-      setTweetId(tweetId);
-    } else {
-      setTweetId(null);
-    }
+    setTiktokUrl(inputValue);
+    api.review.parse({
+      url: inputValue,
+    }).then((response) => {
+      if (response) {
+        setYtDlpResponse(response);
+      }
+    }).catch((error) => {
+      toast.error('Error parsing TikTok URL:', error);
+    })
   };
 
   return (
@@ -55,17 +60,14 @@ export default function ReviewImportXDialog(props: {
               htmlFor="tweetUrl"
               className="block text-gray-700 text-sm font-medium mb-1"
             >
-              X URL:
+              Tiktok URL:
             </label>
             <Input
-              id="tweetUrl"
-              onChange={handleTweetIdChange}
+              id="tiktokUrl"
+              value={tiktokUrl}
+              onChange={onChange}
               placeholder="https://x.com/username/status/1234567890123456789"
             ></Input>
-          </div>
-          {/*preview*/}
-          <div className="items-center justify-between">
-            {tweetId && <Tweet id={tweetId} />}
           </div>
         </div>
         <DialogFooter className="">
@@ -78,7 +80,7 @@ export default function ReviewImportXDialog(props: {
             size={'lg'}
             type="submit"
             onClick={() => {
-              props.onImport(tweetId || '', data);
+              props.onImport(ytDlpResponse);
               setIsOpen(false);
             }}
             className="ml-2"

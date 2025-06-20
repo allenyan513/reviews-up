@@ -9,6 +9,7 @@ import { ShowcasesModule } from '@src/modules/showcases/showcases.module';
 import { FormsService } from '@src/modules/forms/forms.service';
 import { ShowcasesService } from '@src/modules/showcases/showcases.service';
 import { EmailMagicStrategy } from '@src/modules/auth/strategies/email-magic.strategy';
+import { TwitterStrategy } from '@src/modules/auth/strategies/twitter.strategy';
 
 @Global()
 @Module({
@@ -20,6 +21,7 @@ import { EmailMagicStrategy } from '@src/modules/auth/strategies/email-magic.str
     GoogleStrategy,
     GithubStrategy,
     EmailMagicStrategy,
+    TwitterStrategy,
     FormsService,
     ShowcasesService,
   ],

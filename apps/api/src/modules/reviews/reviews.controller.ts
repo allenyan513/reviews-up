@@ -19,10 +19,15 @@ import {
   findAllReviewRequestSchema,
   FindAllReviewRequest,
 } from '@repo/api/reviews/dto/find-all-review.dto';
+import { YtDlpService } from '../yt-dlp/yt-dlp.service';
+import { YtDlpRequest } from '@repo/api/yt-dlp/yt-dlp-request.dto';
 
 @Controller('reviews')
 export class ReviewsController {
-  constructor(private readonly reviewsService: ReviewsService) {}
+  constructor(
+    private readonly reviewsService: ReviewsService,
+    private ytdlpService: YtDlpService,
+  ) {}
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -31,11 +36,6 @@ export class ReviewsController {
     @Body() createReviewDto: CreateReviewDto,
   ) {
     return this.reviewsService.create(jwt.userId, createReviewDto);
-  }
-
-  @Post('submit')
-  async submit(@Body() createReviewDto: CreateReviewDto) {
-    return this.reviewsService.submit(createReviewDto);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -72,5 +72,11 @@ export class ReviewsController {
   @Delete(':id')
   async remove(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
     return this.reviewsService.remove(jwt.userId, id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('parse')
+  async parse(@Jwt() jwt: JwtPayload, @Body() request: YtDlpRequest) {
+    return this.ytdlpService.parse(request);
   }
 }

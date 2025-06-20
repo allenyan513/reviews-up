@@ -1,6 +1,6 @@
 'use client';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import StarRating from '@/modules/review/review-import-manual-dialog/star-rating';
+import StarRating from '@/modules/review/manual/star-rating';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { cn, toLocalDateString } from '@/lib/utils';
 import Link from 'next/link';

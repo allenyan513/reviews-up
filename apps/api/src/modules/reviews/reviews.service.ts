@@ -15,19 +15,14 @@ export class ReviewsService {
     private notificationService: NotificationsService,
   ) {}
 
-  async create(uid: string, createReviewDto: CreateReviewDto) {
-    return this.submit({
-      ...createReviewDto,
-      userId: uid, // Set the user ID from the JWT token
-    });
-  }
-
-  async submit(dto: CreateReviewDto) {
+  async create(uid: string, dto: CreateReviewDto) {
+    this.logger.debug(`Creating review for user ${uid}`, dto);
     const review = await this.prismaService.review.create({
       data: {
         workspaceId: dto.workspaceId,
         formId: dto.formId,
-        userId: dto.userId,
+        userId: uid,
+        reviewerId: dto.reviewerId || uid, // Use userId if reviewerId is not provided
         reviewerName: dto.fullName,
         reviewerImage: dto.avatarUrl,
         reviewerEmail: dto.email,

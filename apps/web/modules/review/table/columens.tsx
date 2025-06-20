@@ -13,7 +13,7 @@ import {Button} from '@/components/ui/button';
 import {ArrowUpDown} from 'lucide-react';
 import {ReviewMedia} from '@repo/api/reviews/entities/review-media.entity';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import StarRating from '@/modules/review/review-import-manual-dialog/star-rating';
+import StarRating from '@/modules/review/manual/star-rating';
 import {ReviewItemSource} from '@/modules/showcase/review-item-source';
 import {api} from '@/lib/api-client';
 import {$Enums} from '@repo/database/generated/client';

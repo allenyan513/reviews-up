@@ -1,18 +1,19 @@
 'use client';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { BsGithub, BsGoogle } from 'react-icons/bs';
-import { useUserContext } from '@/context/UserProvider';
-import { useState } from 'react';
+import {cn} from '@/lib/utils';
+import {Button} from '@/components/ui/button';
+import {Input} from '@/components/ui/input';
+import {Label} from '@/components/ui/label';
+import {BsGithub, BsGoogle, BsTwitterX} from 'react-icons/bs';
+import {useUserContext} from '@/context/UserProvider';
+import {useState} from 'react';
 import toast from 'react-hot-toast';
 
-export function LoginForm({
-  className,
-  ...props
-}: React.ComponentProps<'form'>) {
-  const { googleSignIn, githubSignIn, sendMagicLink } = useUserContext();
+export function LoginForm(props: {
+  redirect?: string;
+  className?: string;
+}) {
+  const {className, redirect} = props;
+  const {googleSignIn, githubSignIn , twitterSignIn, sendMagicLink} = useUserContext();
   const [submitForm, setSubmitForm] = useState<{
     email: string;
   }>({
@@ -22,10 +23,10 @@ export function LoginForm({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!submitForm.email) return;
-    sendMagicLink(submitForm.email)
+    sendMagicLink(submitForm.email, redirect)
       .then(() => {
         toast.success('Magic link sent to your email!');
-        setSubmitForm({ email: '' });
+        setSubmitForm({email: ''});
       })
       .catch((error) => {
         console.error(error);
@@ -49,7 +50,7 @@ export function LoginForm({
             type="email"
             value={submitForm.email}
             onChange={(e) =>
-              setSubmitForm({ ...submitForm, email: e.target.value })
+              setSubmitForm({...submitForm, email: e.target.value})
             }
             placeholder="john.smith@gmail.com"
             required
@@ -70,17 +71,28 @@ export function LoginForm({
         <Button onClick={handleSubmit} type="submit" className="w-full">
           Send Magic Link
         </Button>
-        <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
+        <div
+          className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             Or continue with
           </span>
         </div>
-        <Button onClick={googleSignIn} variant="outline" className="w-full">
-          <BsGoogle />
+        <Button onClick={() => {
+          googleSignIn(redirect);
+        }} variant="outline" className="w-full">
+          <BsGoogle/>
           Continue with Google
         </Button>
-        <Button onClick={githubSignIn} variant="outline" className="w-full">
-          <BsGithub />
+        <Button onClick={() => {
+          twitterSignIn(redirect);
+        }} variant="outline" className="w-full">
+          <BsTwitterX/>
+          Continue with Twitter/X
+        </Button>
+        <Button onClick={() => {
+          githubSignIn(redirect);
+        }} variant="outline" className="w-full">
+          <BsGithub/>
           Continue with GitHub
         </Button>
       </div>

@@ -16,6 +16,7 @@ import { EmailMagicGuard } from '@src/modules/auth/guards/email-magic.guard';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/common/types/jwt-payload';
+import { TwitterOauthGuard } from '@src/modules/auth/guards/twitter-oauth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -41,9 +42,12 @@ export class AuthController {
   @Get('callback/google')
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    return res.redirect(
-      `${process.env.APP_URL}/en/auth/callback?access_token=${token}`,
-    );
+    const redirectParam = req.query.state as string;
+    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    if (redirectParam) {
+      redirectUrl = `${redirectUrl}&redirect=${encodeURIComponent(redirectParam)}`;
+    }
+    return res.redirect(redirectUrl);
   }
 
   @UseGuards(GithubOauthGuard)
@@ -54,24 +58,48 @@ export class AuthController {
   @Get('callback/github')
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    return res.redirect(
-      `${process.env.APP_URL}/en/auth/callback?access_token=${token}`,
-    );
+    const redirectParam = req.query.state as string;
+    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    if (redirectParam) {
+      redirectUrl = `${redirectUrl}&redirect=${encodeURIComponent(redirectParam)}`;
+    }
+    return res.redirect(redirectUrl);
+  }
+
+  @UseGuards(TwitterOauthGuard)
+  @Get('twitter')
+  async twitterAuth() {}
+
+  @UseGuards(TwitterOauthGuard)
+  @Get('callback/twitter')
+  async twitterAuthCallback(@Req() req, @Res() res: Response) {
+    const token = this.authService.generateJwt(req.user);
+    const redirectParam = req.query.state as string;
+    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    if (redirectParam) {
+      redirectUrl = `${redirectUrl}&redirect=${encodeURIComponent(redirectParam)}`;
+    }
+    return res.redirect(redirectUrl);
   }
 
   @Post('send-magic-link')
-  async sendLink(@Body('email') email: string) {
-    return this.authService.sendMagicLink(email);
+  async sendLink(
+    @Body('email') email: string,
+    @Body('redirect') redirect?: string,
+  ) {
+    return this.authService.sendMagicLink(email, redirect);
   }
 
   @UseGuards(EmailMagicGuard)
   @Get('magic-login')
   async loginWithMagic(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
-    console.log('loginWithMagic', token);
-    return res.redirect(
-      `${process.env.APP_URL}/en/auth/callback?access_token=${token}`,
-    );
+    const encodedRedirect = req.query.redirect as string;
+    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    if (encodedRedirect) {
+      redirectUrl = `${redirectUrl}&redirect=${encodedRedirect}`;
+    }
+    return res.redirect(redirectUrl);
   }
 
   @UseGuards(JwtAuthGuard)

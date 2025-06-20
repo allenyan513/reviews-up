@@ -22,7 +22,8 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 
-  async sendMagicLink(email: string) {
+  async sendMagicLink(email: string, redirect?: string) {
+    this.logger.log(`Sending Magic Link: ${email}, Redirect: ${redirect}`);
     let user = await this.prismaService.user.findUnique({
       where: { email },
     });
@@ -65,7 +66,8 @@ export class AuthService {
       };
     }
     const token = this.generateJwt(jwtPayload);
-    const magicLink = `${process.env.API_URL}/auth/magic-login?token=${token}`;
+    const encodedRedirect = encodeURIComponent(redirect);
+    const magicLink = `${process.env.API_URL}/auth/magic-login?token=${token}&redirect=${encodedRedirect}`;
     await this.emailService.send({
       from: EMAIL_FROM,
       to: email,

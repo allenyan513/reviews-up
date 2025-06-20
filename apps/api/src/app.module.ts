@@ -14,6 +14,7 @@ import { S3Module } from './modules/s3/s3.module';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { NotificationsModule } from '@src/modules/notifications/notifications.module';
+import { YtDlpModule } from '@src/modules/yt-dlp/yt-dlp.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { NotificationsModule } from '@src/modules/notifications/notifications.mo
     AuthModule,
     S3Module,
     NotificationsModule,
+    YtDlpModule,
   ],
   controllers: [AppController],
   providers: [AppService],

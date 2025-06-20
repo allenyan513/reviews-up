@@ -16,9 +16,9 @@ import { BiDownload, BiUser, BiX } from 'react-icons/bi';
 import { api } from '@/lib/api-client';
 import { useUserContext } from '@/context/UserProvider';
 
-import AvatarUpload from '@/modules/review/review-import-manual-dialog/avatar-upload';
-import StarRating from '@/modules/review/review-import-manual-dialog/star-rating';
-import DataPicker from '@/modules/review/review-import-manual-dialog/data-picker';
+import AvatarUpload from '@/modules/review/manual/avatar-upload';
+import StarRating from '@/modules/review/manual/star-rating';
+import DataPicker from '@/modules/review/manual/data-picker';
 
 export default function ReviewImportManualDialog(props: {
   onOpenCallback?: (open: boolean) => void;

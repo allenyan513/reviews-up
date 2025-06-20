@@ -1,9 +1,9 @@
-import type { NextRequest } from 'next/server';
-import { NextResponse } from 'next/server';
+import type {NextRequest} from 'next/server';
+import {NextResponse} from 'next/server';
 
-import { i18n } from '@/config/i18n-config';
+import {i18n} from '@/config/i18n-config';
 
-import { match as matchLocale } from '@formatjs/intl-localematcher';
+import {match as matchLocale} from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
 function getLocale(request: NextRequest): string | undefined {
@@ -12,7 +12,7 @@ function getLocale(request: NextRequest): string | undefined {
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
   // Use negotiator and intl-localematcher to get best locale
-  let languages = new Negotiator({ headers: negotiatorHeaders }).languages();
+  let languages = new Negotiator({headers: negotiatorHeaders}).languages();
   // @ts-ignore locales are readonly
   const locales: string[] = i18n.locales;
   try {
@@ -25,6 +25,7 @@ function getLocale(request: NextRequest): string | undefined {
 
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
+  const searchParams = request.nextUrl.searchParams;
 
   // // `/_next/` and `/api/` are ignored by the watcher, but we need to ignore files in `public` manually.
   // // If you have one
@@ -57,10 +58,10 @@ export function middleware(request: NextRequest) {
   if (pathnameIsMissingLocale) {
     const locale = getLocale(request);
     // e.g. incoming request is /products
+    const newUrl = new URL(`/${locale}${pathname}`, request.url);
+    newUrl.search = searchParams.toString();
     // The new URL is now /en-US/products
-    return NextResponse.redirect(
-      new URL(`/${locale}/${pathname}`, request.url),
-    );
+    return NextResponse.redirect(newUrl);
   }
 }
 

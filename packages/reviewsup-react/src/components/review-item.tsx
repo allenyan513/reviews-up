@@ -121,7 +121,7 @@ export function ReviewItem(props: {
     >
       <Link
         target="_blank"
-        href={review.reviewerUrl || '#'}
+        href={`${process.env.NEXT_PUBLIC_APP_URL}/profile/${review.reviewerId}`}
         className="flex flex-row justify-between"
       >
         <div className="flex flex-row gap-2 overflow-x-auto">
