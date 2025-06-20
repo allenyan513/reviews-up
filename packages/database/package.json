@@ -9,16 +9,10 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@prisma/client": "latest"
+
   },
   "devDependencies": {
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "eslint": "^9.28.0",
-    "prisma": "latest",
-    "tsup": "^8.0.2",
-    "tsx": "4.19.1",
-    "typescript": "5.5.4"
+
   },
   "export": {
     ".": "./src/index.ts"

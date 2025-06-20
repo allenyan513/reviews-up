@@ -33,17 +33,5 @@
       "import": "./dist/*.js",
       "require": "./dist/*.js"
     }
-  },
-  "dependencies": {
-    "@nestjs/mapped-types": "*",
-    "class-validator": "^0.14.2"
-  },
-  "devDependencies": {
-    "@repo/database": "*",
-    "@repo/eslint-config": "*",
-    "@repo/typescript-config": "*",
-    "ts-loader": "^9.4.3",
-    "ts-node": "^10.9.2",
-    "typescript": "5.5.4"
   }
 }
