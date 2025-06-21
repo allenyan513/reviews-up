@@ -15,6 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { NotificationsModule } from '@src/modules/notifications/notifications.module';
 import { YtDlpModule } from '@src/modules/yt-dlp/yt-dlp.module';
+import { CampaignsModule } from './modules/campaigns/campaigns.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { YtDlpModule } from '@src/modules/yt-dlp/yt-dlp.module';
     S3Module,
     NotificationsModule,
     YtDlpModule,
+    CampaignsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

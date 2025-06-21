@@ -37,9 +37,18 @@ export async function authFetch(
     );
   }
   if (!response.ok) {
-    throw new Error(
-      `Failed to fetch data: ${response.status} ${response.statusText}`,
-    );
+    let errorMessage = `Failed to fetch data: ${response.status} ${response.statusText}`;
+    try {
+      const errorBody = await response.json();
+      if (errorBody?.message) {
+        errorMessage = Array.isArray(errorBody.message)
+          ? errorBody.message.join(', ')
+          : errorBody.message;
+      }
+    } catch (e) {
+      // ignore parse error and keep default error message
+    }
+    throw new Error(errorMessage);
   }
   return await response.json();
 }

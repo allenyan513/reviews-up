@@ -10,7 +10,6 @@ import { BsBoxArrowUpRight, BsCodeSlash, BsShare } from 'react-icons/bs';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import { useFormContext } from '@/modules/form/context/FormProvider';
-import { CopyCodeDialog } from '@/components/copy-code-dialog';
 
 const pageItems = [
   {
@@ -63,19 +62,19 @@ export default function Layout(props: {
           </p>
         </div>
         <div className={'space-x-2'}>
-          <CopyCodeDialog
-            title={'Embed your form'}
-            codes={[
-              `<div id="reviewsup-form-${form.shortId}"></div>`,
-              `<script id="revewsup-embed-js" type="text/javascript"`,
-              `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,
-            ]}
-          >
-            <Button variant="outline" size={'lg'}>
-              <BiCodeAlt className="text-2xl" />
-              Add to your website
-            </Button>
-          </CopyCodeDialog>
+          {/*<CopyCodeDialog*/}
+          {/*  title={'Embed your form'}*/}
+          {/*  codes={[*/}
+          {/*    `<div id="reviewsup-form-${form.shortId}"></div>`,*/}
+          {/*    `<script id="revewsup-embed-js" type="text/javascript"`,*/}
+          {/*    `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,*/}
+          {/*  ]}*/}
+          {/*>*/}
+          {/*  <Button variant="outline" size={'lg'}>*/}
+          {/*    <BiCodeAlt className="text-2xl" />*/}
+          {/*    Add to your website*/}
+          {/*  </Button>*/}
+          {/*</CopyCodeDialog>*/}
           <Button
             onClick={() => {
               navigator.clipboard.writeText(

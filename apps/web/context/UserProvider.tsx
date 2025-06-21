@@ -1,7 +1,7 @@
 import {api} from '@/lib/api-client';
 import {createContext, useContext, useEffect, useState} from 'react';
 import {Workspace} from '@repo/api/workspaces/entities/workspace.entity';
-import {User} from '@repo/api/users/entities/user.entity';
+import {User} from '@repo/api/users/index';
 import useLocalStorageState from 'use-local-storage-state';
 import {redirect, useRouter} from 'next/navigation';
 

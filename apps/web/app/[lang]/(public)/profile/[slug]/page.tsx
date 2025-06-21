@@ -1,6 +1,6 @@
 'use client';
 import {use, useEffect, useState} from 'react';
-import {User} from '@repo/api/users/entities/user.entity';
+import {User} from '@repo/api/users/index';
 import {api} from "@/lib/api-client";
 import {UserProfilePage} from '@/modules/profile/user-profile-page';
 import toast from "react-hot-toast";

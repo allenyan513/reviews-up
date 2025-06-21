@@ -2,7 +2,7 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { JwtPayload } from '@src/common/types/jwt-payload';
-import { CreateAccountDto } from '@repo/api/users/dto/create-user.dto';
+import { CreateAccountDto } from '@repo/api/users/index';
 import { EMAIL_FROM } from '@src/modules/email/email.constants';
 import { UsersService } from '../users/users.service';
 import { ResendEmailService } from '@src/modules/email/resend-email.service';

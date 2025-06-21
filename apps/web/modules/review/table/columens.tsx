@@ -79,6 +79,8 @@ export function getColumns(setData: any): ColumnDef<any>[] {
       {
         id: 'reviewer',
         header: 'Reviewer',
+        enableResizing: true,
+        size:100,
         accessorFn: (row) => ({
           name: row.reviewerName,
           email: row.reviewerEmail,

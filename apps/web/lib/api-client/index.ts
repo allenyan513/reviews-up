@@ -1,10 +1,11 @@
-import { form } from './form';
-import { auth } from './auth';
-import { showcase } from './showcase';
-import { s3 } from './s3';
-import { review } from './review';
-import { workspace } from './workspace';
-import { user } from './user';
+import {form} from './form';
+import {auth} from './auth';
+import {showcase} from './showcase';
+import {s3} from './s3';
+import {review} from './review';
+import {workspace} from './workspace';
+import {user} from './user';
+import {campaign} from './campaign';
 
 export const api = {
   form: form,
@@ -14,4 +15,5 @@ export const api = {
   review: review,
   workspace: workspace,
   user: user,
+  campaign: campaign,
 };

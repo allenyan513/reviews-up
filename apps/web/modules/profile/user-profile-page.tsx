@@ -1,4 +1,4 @@
-import {User} from "@repo/api/users/entities/user.entity";
+import {User} from "@repo/api/users/index";
 import clsx from "clsx";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar";
 import {Button} from "@/components/ui/button";
