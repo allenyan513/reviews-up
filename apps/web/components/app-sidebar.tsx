@@ -7,7 +7,7 @@ import {
   IconStar,
   IconCode,
   IconTable,
-  IconUser,
+  IconUser, IconMail,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -76,6 +76,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               url: `/${lang}/${defaultWorkspace?.id}/forms`,
               icon: IconTable,
               active: path.includes('/forms'),
+            },
+            {
+              title: 'Campaigns',
+              url: `/${lang}/${defaultWorkspace?.id}/campaigns`,
+              icon: IconMail,
+              active: path.includes('/campaigns'),
             },
             {
               title: 'Settings',

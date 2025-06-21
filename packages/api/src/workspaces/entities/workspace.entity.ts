@@ -1,6 +1,6 @@
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../users/index';
 
-export class Workspace{
+export class Workspace {
   id: string;
   name: string;
   userId: string;

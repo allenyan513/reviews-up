@@ -1,6 +1,6 @@
 'use client';
 
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import ReviewImportDialog from '@/modules/review/review-import-dialog';
 import {useUserContext} from '@/context/UserProvider';
 import {api} from '@/lib/api-client';
@@ -8,11 +8,38 @@ import {DataTable} from '@/modules/review/table/data-table';
 import {Button} from '@/components/ui/button';
 import {IconCode, IconTable} from '@tabler/icons-react';
 import {useRouter} from 'next/navigation';
+import {BiHide, BiInfoCircle, BiShow} from "react-icons/bi";
+import {cn} from "@/lib/utils";
+
+
+const statusOptions = [
+  {
+    name: 'All',
+    value: '',
+    icon: null
+  },
+  {
+    name: 'Pending',
+    value: 'pending',
+    icon: <BiInfoCircle/>,
+  },
+  {
+    name: 'Public',
+    value: 'public',
+    icon: <BiShow/>,
+  },
+  {
+    name: 'Hidden',
+    value: 'hidden',
+    icon: <BiHide/>,
+  },
+];
 
 export default function ReviewsPage() {
   const router = useRouter();
   const {defaultWorkspace} = useUserContext();
   const [totalServerRowCount, setTotalServerRowCount] = useState(0); // Optional: to display total count
+  const [filterValue, setFilterValue] = useState<string>('');
 
   const fetchReviews = async (
     pageIndex: number,
@@ -84,10 +111,39 @@ export default function ReviewsPage() {
           <ReviewImportDialog/>
         </div>
       </div>
-      <DataTable
-        fetchData={fetchReviews}
-        totalRowCount={totalServerRowCount}
-      />
+      <div className='flex flex-col '>
+        <div className="flex flex-col md:flex-row justify-between items-center">
+          <div className="flex flex-row items-center space-x-4">
+            <div className="flex flex-wrap mb-4 md:mb-0 ">
+              {statusOptions.map((filter, index) => (
+                <Button
+                  className={cn(
+                    'rounded-none w-24',
+                    index === 0 ? 'rounded-l-lg' : '',
+                    index === 3 ? 'rounded-r-lg' : '',
+                    filterValue === filter.value
+                      ? 'bg-gray-100'
+                      : 'bg-white',
+                  )}
+                  key={filter.value}
+                  variant={'outline'}
+                  size={'lg'}
+                  onClick={() => {
+                    // table.getColumn('status')?.setFilterValue(filter.value);
+                    setFilterValue(filter.value);
+                  }}
+                >
+                  {filter.icon && <span>{filter.icon}</span>}
+                  {filter.name}
+                </Button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <DataTable
+          fetchData={fetchReviews}
+        />
+      </div>
     </div>
   );
 }

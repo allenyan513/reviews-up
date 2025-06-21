@@ -8,12 +8,6 @@
     "format": "prisma format",
     "lint": "eslint . --max-warnings 0"
   },
-  "dependencies": {
-
-  },
-  "devDependencies": {
-
-  },
   "export": {
     ".": "./src/index.ts"
   }

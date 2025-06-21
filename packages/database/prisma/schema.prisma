@@ -26,6 +26,11 @@ enum ReviewSource {
   trustpilot
 }
 
+enum SubscriptionTier {
+  free
+  pro
+}
+
 enum MediaType {
   image
   video
@@ -33,17 +38,29 @@ enum MediaType {
 }
 
 model User {
-  id        String      @id @default(uuid())
-  email     String      @unique
-  name      String?
-  avatarUrl String?
-  createdAt DateTime    @default(now())
-  updatedAt DateTime    @updatedAt
-  Workspace Workspace[]
-  Form      Form[]
-  Showcase  Showcase[]
-  Account   Account[]
-  Review    Review[]
+  id               String           @id @default(uuid())
+  email            String           @unique
+  name             String?
+  avatarUrl        String?
+  bio              String?
+  website          String?
+  twitter          String?
+  github           String?
+  linkedin         String?
+  facebook         String?
+  instagram        String?
+  youtube          String?
+  tiktok           String?
+  pinterest        String?
+  subscriptionTier SubscriptionTier @default(free)
+  createdAt        DateTime         @default(now())
+  updatedAt        DateTime         @updatedAt
+  Workspace        Workspace[]
+  Form             Form[]
+  Showcase         Showcase[]
+  Account          Account[]
+  Review           Review[]
+  Campaign         Campaign[]
 }
 
 model Account {
@@ -77,20 +94,22 @@ model Workspace {
   Form     Form[]
   Review   Review[]
   Showcase Showcase[]
+  Campaign Campaign[]
 }
 
 model Form {
-  id          String    @id @default(uuid())
-  shortId     String    @unique
+  id          String     @id @default(uuid())
+  shortId     String     @unique
   userId      String
   workspaceId String
   name        String
-  config      Json?     @default("{}")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  user        User      @relation(fields: [userId], references: [id])
-  workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  config      Json?      @default("{}")
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  user        User       @relation(fields: [userId], references: [id])
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
   Review      Review[]
+  Campaign    Campaign[]
 }
 
 model Review {
@@ -138,4 +157,25 @@ model Showcase {
   updatedAt   DateTime  @updatedAt
   user        User      @relation(fields: [userId], references: [id])
   Workspace   Workspace @relation(fields: [workspaceId], references: [id])
+}
+
+//邮件营销活动表
+model Campaign {
+  id          String    @id @default(uuid())
+  userId      String
+  workspaceId String
+  formId      String
+  name        String
+  fromName    String
+  fromEmail   String
+  toEmails    String[]
+  subject     String
+  content     String
+  isTest      Boolean   @default(false)
+  buttonText  String    @default("Leave a review")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  user        User      @relation(fields: [userId], references: [id])
+  form        Form      @relation(fields: [formId], references: [id])
+  workspace   Workspace @relation(fields: [workspaceId], references: [id])
 }

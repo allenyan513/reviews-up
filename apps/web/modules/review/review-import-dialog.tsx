@@ -132,21 +132,21 @@ export default function ReviewImportDialog() {
               </Button>
             </div>
           </ReviewImportXDialog>
-          <ReviewImportTiktokDialog
-            onImport={(response: YtDlpResponse | undefined) => {
-              importFromTiktok(response);
-            }}
-          >
-            <div>
-              <Button
-                size={'lg'}
-                className="w-full items-center justify-center text-lg"
-              >
-                <BsTwitterX className="text-xl"/>
-                Import from Tiktok
-              </Button>
-            </div>
-          </ReviewImportTiktokDialog>
+          {/*<ReviewImportTiktokDialog*/}
+          {/*  onImport={(response: YtDlpResponse | undefined) => {*/}
+          {/*    importFromTiktok(response);*/}
+          {/*  }}*/}
+          {/*>*/}
+          {/*  <div>*/}
+          {/*    <Button*/}
+          {/*      size={'lg'}*/}
+          {/*      className="w-full items-center justify-center text-lg"*/}
+          {/*    >*/}
+          {/*      <BsTwitterX className="text-xl"/>*/}
+          {/*      Import from Tiktok*/}
+          {/*    </Button>*/}
+          {/*  </div>*/}
+          {/*</ReviewImportTiktokDialog>*/}
 
 
           {/*Import from manual*/}
