@@ -11,11 +11,11 @@ export default function PoweredBy(props: {
       target="_blank"
       rel="noopener noreferrer"
     >
-      <div className={cn("flex items-center justify-center text-xs gap-1 text-gray-400 py-8", props.className)}>
+      <div className={cn("flex items-center justify-center text-xs gap-1 text-gray-400", props.className)}>
         <span>Powered by </span>
-        <img
-          className="w-4 h-4 ml-2"
-          src="/img/logo-32.png"/>
+        {/*<img*/}
+        {/*  className="w-4 h-4 ml-2"*/}
+        {/*  src="/img/logo-32.png"/>*/}
         <span>Reviewsup.io</span>
       </div>
     </Link>

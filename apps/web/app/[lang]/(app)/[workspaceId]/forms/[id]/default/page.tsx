@@ -16,12 +16,12 @@ export default function Page(props: {
   const { form, formConfig } = useFormContext();
   if (!form || !formConfig) return null;
   return (
-    <div className="grid grid-cols-12">
-      <div className="col-span-4 border-l border-gray-300 px-4 flex flex-col gap-4">
+    <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
+      <div className="md:col-span-4 border-l md:border-gray-300 px-4 flex flex-col gap-4">
         <FormPageConfig />
       </div>
       <PageFormReview
-        className="col-span-8 flex flex-col w-full h-[760px] overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center"
+        className="md:col-span-8 flex flex-col w-full h-[760px] overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center"
         id={id}
         lang={lang}
         shortId={form.shortId}

@@ -28,7 +28,7 @@ export default function Page(props: {
   if (!showcase || !showcase.reviews) return null;
 
   return (
-    <div className="p-6 md:p-8">
+    <div className="p-4 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
@@ -36,19 +36,19 @@ export default function Page(props: {
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl"/>
-            <h1 className="text-3xl font-semibold text-gray-900">
+            <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">
               Edit {showcase.name}
             </h1>
           </Link>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 hidden md:flex">
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <div className={'space-x-2'}>
+        <div className={'flex flex-row gap-1'}>
           <ShowcaseEmbedDialog showcaseId={showcase.shortId}>
             <Button variant="outline" size={'lg'}>
               <BiCodeAlt className="text-2xl"/>
-              Add to your website
+              <span className='hidden md:flex'>Add to your website</span>
             </Button>
           </ShowcaseEmbedDialog>
 
@@ -63,7 +63,7 @@ export default function Page(props: {
             size={'lg'}
           >
             <BsShare className="text-2xl"/>
-            Share
+            <span className='hidden md:flex'>Share</span>
           </Button>
           <Button
             onClick={() => {
@@ -73,17 +73,17 @@ export default function Page(props: {
             size={'lg'}
           >
             <BsBoxArrowUpRight className="text-2xl"/>
-            Open
+            <span className='hidden md:flex'>Open</span>
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-4">
-        <div className={''}>
+      <div className="flex  flex-col  md:grid md:grid-cols-4 gap-4">
+        <div className={'flex flex-col md:col-span-1 w-full gap-2'}>
           <ShowcasePageConfig/>
         </div>
         <div
-          className="col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
+          className="md:col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
           <ShowcasePageReview
             showcase={showcase}
             showcaseConfig={showcaseConfig}

@@ -5,6 +5,7 @@ import { AppSidebar } from '@/components/app-sidebar';
 import { use, useState } from 'react';
 import { UserProvider } from '@/context/UserProvider';
 import ToasterContext from '@/context/ToastContext';
+import { SiteHeader } from '@/components/site-header';
 
 export default function RootLayout(props: {
   params: Promise<{
@@ -25,7 +26,10 @@ export default function RootLayout(props: {
           }
         >
           <AppSidebar lang={lang} variant="inset" />
-          <SidebarInset>{props.children}</SidebarInset>
+          <SidebarInset>
+            <SiteHeader />
+            {props.children}
+          </SidebarInset>
         </SidebarProvider>
         <ToasterContext />
       </UserProvider>

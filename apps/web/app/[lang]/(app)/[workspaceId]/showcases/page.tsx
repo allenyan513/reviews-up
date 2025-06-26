@@ -26,7 +26,7 @@ export default function Page(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900">Showcases</h1>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 hidden md:flex">
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
