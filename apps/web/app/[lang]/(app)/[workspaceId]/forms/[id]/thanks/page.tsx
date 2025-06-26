@@ -17,8 +17,8 @@ export default function Page(props: {
     useFormContext();
   if (!form || !formConfig) return null;
   return (
-    <div className="flex flex-row">
-      <div className="w-1/2 border-l border-gray-300 px-4 flex flex-col gap-4">
+    <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
+      <div className="md:col-span-4 border-l border-gray-300 px-4 flex flex-col gap-4">
         <div className="flex flex-col gap-1">
           <h2 className="uppercase">Page Config</h2>
           <p className="text-xs text-gray-500">
@@ -73,7 +73,7 @@ export default function Page(props: {
         </div>
         <Button onClick={updateFormConfig}>Save</Button>
       </div>
-      <div className="w-full border border-gray-300 rounded-lg">
+      <div className="md:col-span-8 border border-gray-300 rounded-lg">
         <PageFormThanksReview mode={'edit'} formConfig={formConfig} />
       </div>
     </div>

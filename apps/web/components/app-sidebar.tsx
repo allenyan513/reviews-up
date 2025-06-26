@@ -72,7 +72,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: path.includes('/showcases'),
             },
             {
-              title: 'Collect Forms',
+              title: 'Forms',
               url: `/${lang}/${defaultWorkspace?.id}/forms`,
               icon: IconTable,
               active: path.includes('/forms'),

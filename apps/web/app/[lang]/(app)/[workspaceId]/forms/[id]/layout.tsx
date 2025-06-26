@@ -44,7 +44,7 @@ export default function Layout(props: {
   if (!form) return null;
 
   return (
-    <div className="min-h-screen p-6 md:p-8">
+    <div className="min-h-screen p-4 md:p-8">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-8">
         <div>
@@ -53,15 +53,15 @@ export default function Layout(props: {
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl" />
-            <h1 className="text-3xl font-semibold text-gray-900">
+            <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
               Edit {form.name}
             </h1>
           </Link>
-          <p className="mt-1 text-gray-600">
+          <p className="mt-1 text-gray-600 hidden md:flex">
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <div className={'space-x-2'}>
+        <div className={'flex flex-row gap-1'}>
           {/*<CopyCodeDialog*/}
           {/*  title={'Embed your form'}*/}
           {/*  codes={[*/}
@@ -86,7 +86,7 @@ export default function Layout(props: {
             size={'lg'}
           >
             <BsShare className="text-2xl" />
-            Share
+            <span className="hidden md:inline">Share</span>
           </Button>
           <Button
             onClick={() => {
@@ -96,14 +96,14 @@ export default function Layout(props: {
             size={'lg'}
           >
             <BsBoxArrowUpRight className="text-2xl" />
-            Open
+            <span className="hidden md:inline">Preview</span>
           </Button>
 
         </div>
       </div>
 
-      <div className="grid grid-cols-12 gap-4">
-        <div className="col-span-2 flex flex-col">
+      <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
+        <div className="md:col-span-2 flex flex-col">
           <h2 className="mb-4 uppercase">Pages</h2>
           {pageItems.map((item) => (
             <Link
@@ -121,7 +121,7 @@ export default function Layout(props: {
             </Link>
           ))}
         </div>
-        <div className="col-span-10">{props.children}</div>
+        <div className="md:col-span-10">{props.children}</div>
       </div>
     </div>
   );

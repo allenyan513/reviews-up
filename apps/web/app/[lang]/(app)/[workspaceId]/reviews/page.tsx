@@ -79,16 +79,17 @@ export default function ReviewsPage() {
   };
 
   return (
-    <div className="min-h-screen p-6 md:p-8">
+    <div className="min-h-screen p-4 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 mb-1">Reviews</h1>
-          <p className="text-gray-600">
+          <p className="hidden md:flex text-gray-600">
             Organize the testimonials you have received or imported.
           </p>
         </div>
         <div className="flex items-center space-x-4">
           <Button
+            className='hidden md:flex'
             onClick={() => {
               router.push(`/${defaultWorkspace?.id}/showcases`);
             }}
@@ -96,9 +97,10 @@ export default function ReviewsPage() {
             variant={'outline'}
           >
             <IconCode/>
-            Create Showcase
+            <span>Create Showcase</span>
           </Button>
           <Button
+            className='hidden md:flex'
             onClick={() => {
               router.push(`/${defaultWorkspace?.id}/forms`);
             }}
@@ -106,39 +108,34 @@ export default function ReviewsPage() {
             variant={'outline'}
           >
             <IconTable/>
-            Create Collect Form
+            <span>Create Collect Form</span>
           </Button>
           <ReviewImportDialog/>
         </div>
       </div>
       <div className='flex flex-col '>
-        <div className="flex flex-col md:flex-row justify-between items-center">
-          <div className="flex flex-row items-center space-x-4">
-            <div className="flex flex-wrap mb-4 md:mb-0 ">
-              {statusOptions.map((filter, index) => (
-                <Button
-                  className={cn(
-                    'rounded-none w-24',
-                    index === 0 ? 'rounded-l-lg' : '',
-                    index === 3 ? 'rounded-r-lg' : '',
-                    filterValue === filter.value
-                      ? 'bg-gray-100'
-                      : 'bg-white',
-                  )}
-                  key={filter.value}
-                  variant={'outline'}
-                  size={'lg'}
-                  onClick={() => {
-                    // table.getColumn('status')?.setFilterValue(filter.value);
-                    setFilterValue(filter.value);
-                  }}
-                >
-                  {filter.icon && <span>{filter.icon}</span>}
-                  {filter.name}
-                </Button>
-              ))}
-            </div>
-          </div>
+        <div className="flex flex-row">
+          {statusOptions.map((filter, index) => (
+            <Button
+              className={cn(
+                'rounded-none ',
+                index === 0 ? 'rounded-l-lg' : '',
+                index === 3 ? 'rounded-r-lg' : '',
+                filterValue === filter.value
+                  ? 'bg-gray-100'
+                  : 'bg-white',
+              )}
+              key={filter.value}
+              variant={'outline'}
+              onClick={() => {
+                // table.getColumn('status')?.setFilterValue(filter.value);
+                setFilterValue(filter.value);
+              }}
+            >
+              {filter.icon && <span>{filter.icon}</span>}
+              {filter.name}
+            </Button>
+          ))}
         </div>
         <DataTable
           fetchData={fetchReviews}

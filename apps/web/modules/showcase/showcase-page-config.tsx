@@ -1,8 +1,8 @@
-import { Button } from '@/components/ui/button';
-import { useShowcaseContext } from './context/ShowcaseProvider';
-import { Input } from '@/components/ui/input';
-import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
-import { useState } from 'react';
+import {Button} from '@/components/ui/button';
+import {useShowcaseContext} from './context/ShowcaseProvider';
+import {Input} from '@/components/ui/input';
+import {ShowcaseEntity} from '@repo/api/showcases/entities/showcase.entity';
+import {useState} from 'react';
 import {
   Select,
   SelectContent,
@@ -20,8 +20,8 @@ import {
   BsGear,
   BsLayers,
 } from 'react-icons/bs';
-import { cn } from '@/lib/utils';
-import { SortBy } from '@/types/sortby';
+import {cn} from '@/lib/utils';
+import {SortBy} from '@/types/sortby';
 
 const layoutOptions = [
   {
@@ -80,7 +80,7 @@ function LayoutToggleButton(props: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }) {
-  const { isOpen, setIsOpen, title, icon } = props;
+  const {isOpen, setIsOpen, title, icon} = props;
   return (
     <div
       onClick={() => props.setIsOpen(!isOpen)}
@@ -107,18 +107,18 @@ function LayoutToggleButton(props: {
       </div>
       {isOpen ? (
         <div>
-          <BsCaretDown />
+          <BsCaretDown/>
         </div>
       ) : (
         <div>
-          <BsCaretUp />
+          <BsCaretUp/>
         </div>
       )}
     </div>
   );
 }
 
-const ToggleOption = ({ label, checked, onChange }: ToggleOptionProps) => (
+const ToggleOption = ({label, checked, onChange}: ToggleOptionProps) => (
   <div className="flex flex-row justify-between items-center w-full">
     <label className="text-sm">{label}</label>
     <Input
@@ -130,7 +130,9 @@ const ToggleOption = ({ label, checked, onChange }: ToggleOptionProps) => (
   </div>
 );
 
-export function ShowcasePageConfig(props: {}) {
+export function ShowcasePageConfig(props: {
+  className?: string;
+}) {
   const {
     showcase,
     showcaseConfig,
@@ -145,12 +147,12 @@ export function ShowcasePageConfig(props: {}) {
     return null;
   }
   return (
-    <div className="flex flex-col col-span-1 w-full gap-2">
+    <div className={cn("", props.className)}>
       <div className="w-full h-[700px] overflow-y-auto py-2">
         <div className="space-y-4 w-full pr-4 ">
           <LayoutToggleButton
             title="Layout"
-            icon={<BsLayers className="h-4 w-4" />}
+            icon={<BsLayers className="h-4 w-4"/>}
             isOpen={isLayoutOpen}
             setIsOpen={setIsLayoutOpen}
           />
@@ -187,7 +189,7 @@ export function ShowcasePageConfig(props: {}) {
 
           <LayoutToggleButton
             title="Settings"
-            icon={<BsGear className="h-4 w-4" />}
+            icon={<BsGear className="h-4 w-4"/>}
             isOpen={isSettingOpen}
             setIsOpen={setIsSettingOpen}
           />
@@ -254,7 +256,7 @@ export function ShowcasePageConfig(props: {}) {
                 }}
               >
                 <SelectTrigger className="w-full mt-2">
-                  <SelectValue placeholder="Select sort option" />
+                  <SelectValue placeholder="Select sort option"/>
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -282,7 +284,7 @@ export function ShowcasePageConfig(props: {}) {
               label="Show Date"
               checked={showcaseConfig.isDateEnabled || false}
               onChange={(checked) =>
-                setShowcaseConfig({ ...showcaseConfig, isDateEnabled: checked })
+                setShowcaseConfig({...showcaseConfig, isDateEnabled: checked})
               }
             />
             <ToggleOption

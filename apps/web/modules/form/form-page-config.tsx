@@ -27,7 +27,7 @@ export function FormPageConfig() {
       <div>
         <label className="text-sm font-medium mb-2">
           <span className="text-red-500">*</span>
-          Brand Name
+          Product Name
         </label>
         <input
           type="text"
@@ -49,7 +49,7 @@ export function FormPageConfig() {
       <div>
         <label className="text-sm font-medium mb-2">
           <span className="text-red-500">*</span>
-          Brand Logo URL
+          Product Logo URL
         </label>
         <input
           type="text"
@@ -71,7 +71,7 @@ export function FormPageConfig() {
       <div>
         <label className="text-sm font-medium mb-2">
           <span className="text-red-500">*</span>
-          Brand Slogan
+          Product Slogan
         </label>
         <input
           type="text"
@@ -93,7 +93,7 @@ export function FormPageConfig() {
       <div>
         <label className="text-sm font-medium mb-2">
           <span className="text-red-500">*</span>
-          Brand URL
+          Product URL
         </label>
         <input
           type="text"
@@ -141,7 +141,7 @@ export function FormPageConfig() {
         </label>
         <textarea
           id="welcomeTitle"
-          rows={5}
+          rows={10}
           value={formConfig?.welcome?.message}
           onChange={(e) =>
             setFormConfig({
