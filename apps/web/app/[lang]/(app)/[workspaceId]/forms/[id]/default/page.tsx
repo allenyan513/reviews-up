@@ -1,9 +1,6 @@
 'use client';
 
-import { use } from 'react';
-import { PageFormReview } from '@/modules/form/page-form-review';
-import { useFormContext } from '@/modules/form/context/FormProvider';
-import { FormPageConfig } from '@/modules/form/form-page-config';
+import FormDefaultPage from "@/modules/form/default/form-default-page";
 
 export default function Page(props: {
   params: Promise<{
@@ -12,22 +9,5 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
-  const { id, lang, workspaceId } = use(props.params);
-  const { form, formConfig } = useFormContext();
-  if (!form || !formConfig) return null;
-  return (
-    <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
-      <div className="md:col-span-4 border-l md:border-gray-300 px-4 flex flex-col gap-4">
-        <FormPageConfig />
-      </div>
-      <PageFormReview
-        className="md:col-span-8 flex flex-col w-full h-[760px] overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center"
-        id={id}
-        lang={lang}
-        shortId={form.shortId}
-        workspaceId={workspaceId}
-        mode={'edit'}
-      />
-    </div>
-  );
+  return <FormDefaultPage params={props.params}/>
 }

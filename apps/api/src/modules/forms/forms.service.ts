@@ -2,7 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
 import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
 import { PrismaService } from '../prisma/prisma.service';
-import { generateShortId } from '../../libs/shortId';
+import { generateShortId } from '@src/libs/shortId';
 import { FormEntity } from '@repo/api/forms/entities/form.entity';
 
 @Injectable()
@@ -110,10 +110,29 @@ export class FormsService {
   }
 
   async remove(uid: string, id: string) {
-    return this.prismaService.form.delete({
+    const form = await this.prismaService.form.findFirst({
       where: {
         id: id,
+        userId: uid,
       },
     });
+
+    if (!form) {
+      throw new Error('Form not found or does not belong to the user');
+    }
+
+    const [, deletedForm] = await this.prismaService.$transaction([
+      this.prismaService.campaign.deleteMany({
+        where: {
+          formId: id,
+        },
+      }),
+      this.prismaService.form.delete({
+        where: {
+          id: id,
+        },
+      }),
+    ]);
+    return deletedForm;
   }
 }

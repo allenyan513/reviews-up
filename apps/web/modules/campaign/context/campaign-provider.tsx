@@ -4,16 +4,13 @@ import toast from 'react-hot-toast';
 import {CampaignEntity, CreateCampaignDto, createCampaignSchema} from "@repo/api/campaign/index";
 import {useUserContext} from "@/context/UserProvider";
 import {FormEntity} from "@repo/api/forms/entities/form.entity";
-import {ZodError} from "zod";
 
 const CampaignContext = createContext<{
   forms: FormEntity[] | undefined;
-  campaigns: CampaignEntity[] | undefined;
-  campaign: CampaignEntity | undefined;
-  findAll: (workspaceId: string) => void;
-  findOne: (id: string) => void;
-  update: () => Promise<void>;
-  deleteOne: (id: string) => Promise<void>;
+  findAll: (pageIndex: number, pageSize: number) => Promise<any>;
+  findOne: (id: string) => Promise<CampaignEntity | null>;
+  // update: () => Promise<void>;
+  // deleteOne: (id: string) => Promise<void>;
   create: (dto: CreateCampaignDto) => Promise<void>;
 
   submitForm: CreateCampaignDto | undefined;
@@ -24,8 +21,6 @@ const CampaignContext = createContext<{
 
 export function CampaignProvider(props: { children: React.ReactNode }) {
   const {defaultWorkspace, user} = useUserContext()
-  const [campaigns, setCampaigns] = useState<CampaignEntity[]>();
-  const [campaign, setCampaign] = useState<CampaignEntity>();
   const [forms, setForms] = useState<FormEntity[]>();
 
   const [submitForm, setSubmitForm] = useState<CreateCampaignDto>()
@@ -41,55 +36,63 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
       });
   }
 
-  const findAll = (workspaceId: string) => {
-    api.campaign
-      .findAll(workspaceId)
-      .then((response) => {
-        setCampaigns(response);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+  const findAll = async (
+    pageIndex: number,
+    pageSize: number
+  ) => {
+    if (!defaultWorkspace) {
+      return null
+    }
+    const res = await api.campaign.findAll({
+      workspaceId: defaultWorkspace?.id || '',
+      page: pageIndex + 1,
+      pageSize: pageSize,
+      sortBy: 'createdAt',
+      sortOrder: 'desc',
+    });
+    return {
+      data: res.items,
+      pageCount: res.meta.total,
+      totalRowCount: res.meta.total,
+    }
   };
 
-  const findOne = (id: string) => {
-    api.campaign
-      .findOne(id)
-      .then((response) => {
-        setCampaign(response);
-      })
-      .catch((error) => {
-        toast.error(error.message);
-      });
+  const findOne = async (id: string) => {
+    try {
+      return await api.campaign.findOne(id)
+    } catch (error) {
+      console.error('Failed to find campaign:', error);
+      return null
+    }
   };
 
-  const update = async () => {
-    if (!campaign || !campaign.id) {
-      toast.error('No campaign selected');
-      return;
-    }
-    try {
-      await api.campaign.update(campaign.id, {});
-      toast.success('Campaign updated successfully');
-    } catch (error) {
-      toast.error('Failed to update campaign');
-    }
-  };
-  const deleteOne = async (id: string) => {
-    if (!id) return;
-    try {
-      await api.campaign.deleteOne(id);
-      setCampaigns((prevCampaigns) => prevCampaigns?.filter((c) => c.id !== id));
-      toast.success('Campaign deleted successfully');
-    } catch (error) {
-      toast.error('Failed to delete campaign');
-    }
-  }
+  // const update = async () => {
+  //   if (!campaign || !campaign.id) {
+  //     toast.error('No campaign selected');
+  //     return;
+  //   }
+  //   try {
+  //     await api.campaign.update(campaign.id, {});
+  //     toast.success('Campaign updated successfully');
+  //   } catch (error) {
+  //     toast.error('Failed to update campaign');
+  //   }
+  // };
+  // const deleteOne = async (id: string) => {
+  //   if (!id) return;
+  //   try {
+  //     await api.campaign.deleteOne(id);
+  //     // setCampaigns((prevCampaigns) => prevCampaigns?.filter((c) => c.id !== id));
+  //     toast.success('Campaign deleted successfully');
+  //   } catch (error) {
+  //     toast.error('Failed to delete campaign');
+  //   }
+  // }
   const create = async (dto: CreateCampaignDto) => {
     if (!dto) return;
     try {
       const response = await api.campaign.create(dto);
-      setCampaigns((prevCampaigns) => [...(prevCampaigns || []), response]);
+      // setCampaigns((prevCampaigns) => [...(prevCampaigns || []), response]);
       toast.success('Campaign created successfully');
     } catch (error) {
       toast.error('Failed to create campaign');
@@ -113,49 +116,26 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
     }
   }
 
-  // const fetchData = async (
-  //   pageIndex: number,
-  //   pageSize: number,
-  //   sorting: any,
-  //   columnFilters: any,
-  // ) => {
-  //   if (!defaultWorkspace) {
-  //     return null;
-  //   }
-  //   const res = await api.campaign.findAll({
-  //     workspaceId: defaultWorkspace?.id || '',
-  //     page: parseInt(params.get('page') || '1'),
-  //     pageSize: parseInt(params.get('limit') || '10'),
-  //     sortBy: 'createdAt',
-  //     sortOrder: 'desc',
-  //   });
-  //   // setTotalServerRowCount(res.meta.total); // Update total count if you need to display it
-  //   return {
-  //     data: res.items,
-  //     pageCount: res.meta.total,
-  //     totalRowCount: res.meta.total, // Pass totalRowCount if your pagination component uses it
-  //   };
-  // };
-
   useEffect(() => {
     if (!user || !defaultWorkspace) {
       return;
     }
-    findAll(defaultWorkspace.id);
+    // findAll(0, 10)
     findAllFormsByWorkspaceId(defaultWorkspace.id);
   }, [user, defaultWorkspace]);
 
   useEffect(() => {
-    if (!user || !defaultWorkspace || !campaigns || !forms) {
+    if (!user || !defaultWorkspace || !forms) {
       return;
     }
     setSubmitForm({
       workspaceId: defaultWorkspace.id || '',
       formId: forms?.[0]?.id || '',
-      name: `${user.name || 'User'}'s Campaign ${campaigns.length || 0}`,
+      formShortId: forms?.[0]?.shortId || '',
+      name: 'New Campaign',
       fromName: `${user.name || ''}`,
       fromEmail: 'reply@mail.reviewsup.io',
-      toEmails: ['wsyanligang@gmail.com', '123@gmail.com'],
+      toEmails: [],
       subject: 'We would love to hear your feedback. {{name}}',
       content: `Hi {{name}},
 
@@ -168,21 +148,19 @@ Cheers,
 ${user.name}  
       `,
       isTest: false,
-      buttonText: 'Leave a testimonial',
+      buttonText: 'Leave a review',
     });
 
-  }, [user, defaultWorkspace, campaigns, forms]);
+  }, [user, defaultWorkspace, forms]);
 
   return (
     <CampaignContext.Provider
       value={{
         forms,
-        campaigns,
-        campaign,
         findAll,
         findOne,
-        update,
-        deleteOne,
+        // update,
+        // deleteOne,
         create,
         submitForm,
         setSubmitForm,

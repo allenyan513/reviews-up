@@ -4,12 +4,13 @@ import React, {useEffect, useRef, useState} from 'react';
 import ReviewImportDialog from '@/modules/review/review-import-dialog';
 import {useUserContext} from '@/context/UserProvider';
 import {api} from '@/lib/api-client';
-import {DataTable} from '@/modules/review/table/data-table';
+import {DataTable} from '@/components/data-table';
 import {Button} from '@/components/ui/button';
 import {IconCode, IconTable} from '@tabler/icons-react';
 import {useRouter} from 'next/navigation';
 import {BiHide, BiInfoCircle, BiShow} from "react-icons/bi";
 import {cn} from "@/lib/utils";
+import {columns} from "@/modules/review/table/columens";
 
 
 const statusOptions = [
@@ -38,7 +39,6 @@ const statusOptions = [
 export default function ReviewsPage() {
   const router = useRouter();
   const {defaultWorkspace} = useUserContext();
-  const [totalServerRowCount, setTotalServerRowCount] = useState(0); // Optional: to display total count
   const [filterValue, setFilterValue] = useState<string>('');
 
   const fetchReviews = async (
@@ -70,7 +70,6 @@ export default function ReviewsPage() {
       sortBy: 'createdAt',
       sortOrder: 'desc',
     });
-    setTotalServerRowCount(res.meta.total); // Update total count if you need to display it
     return {
       data: res.items,
       pageCount: res.meta.total,
@@ -139,6 +138,7 @@ export default function ReviewsPage() {
         </div>
         <DataTable
           fetchData={fetchReviews}
+          columns={columns}
         />
       </div>
     </div>

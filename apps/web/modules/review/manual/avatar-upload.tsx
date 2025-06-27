@@ -39,6 +39,7 @@ export default function AvatarUpload(props: {
       </div>
       <Button
         type="button"
+        variant={'outline'}
         onClick={handlePickImage}
         disabled={status === 'uploading'}
       >

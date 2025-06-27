@@ -35,7 +35,7 @@ import {
 import {toLocalDateString} from "@/lib/utils";
 
 
-export function getColumns(setData: any): ColumnDef<any>[] {
+export function columns(setData: any): ColumnDef<any>[] {
   const deleteReview = async (reviewId: string) => {
     try {
       await api.review.deleteReview(reviewId);
@@ -80,7 +80,7 @@ export function getColumns(setData: any): ColumnDef<any>[] {
         id: 'reviewer',
         header: 'Reviewer',
         enableResizing: true,
-        size:100,
+        size: 100,
         accessorFn: (row) => ({
           name: row.reviewerName,
           email: row.reviewerEmail,
@@ -166,9 +166,6 @@ export function getColumns(setData: any): ColumnDef<any>[] {
         cell: ({row, table}) => {
           const reviewId = row.original.id;
           const status = row.getValue('status') as string;
-          const handleStatusChange = async () => {
-            //todo
-          };
           return (
             <Button
               onClick={() => {

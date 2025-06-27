@@ -1,6 +1,6 @@
 'use client';
 import {use, useEffect} from 'react';
-import {PageFormReview} from '@/modules/form/page-form-review';
+import {FormDefaultPreviewView} from '@/modules/form/default/form-default-preview-view';
 import {useFormContext} from '@/modules/form/context/FormProvider';
 import {useSession} from "@/context/UserProvider";
 
@@ -22,7 +22,7 @@ export default function PublicFormRoute(props: {
     return null;
   }
   return (
-    <PageFormReview
+    <FormDefaultPreviewView
       className={'flex flex-col w-full min-h-screen justify-center items-center bg-gray-100'}
       id={form.id}
       lang={lang}

@@ -6,7 +6,7 @@ import {FormConfig} from '@repo/api/forms/entities/form-config.entity';
 import {Button, buttonVariants} from '@/components/ui/button';
 import Link from 'next/link';
 
-export function PageFormThanksReview(props: {
+export function FormThanksPreviewView(props: {
   mode: 'edit' | 'public';
   formConfig: FormConfig | undefined;
 }) {

@@ -1,13 +1,15 @@
-import {CreateFormDto} from '@repo/api/forms/dto/create-form.dto';
-import {Form} from '@repo/database/generated/client/client';
-import {FormEntity} from '@repo/api/forms/entities/form.entity';
-import {UpdateFormDto} from '@repo/api/forms/dto/update-form.dto';
 import {authFetch} from './auth-fetch';
-import {CampaignEntity, CreateCampaignDto, UpdateCampaignDto} from "@repo/api/campaign/index";
+import {CampaignEntity, CreateCampaignDto, FindAllCampaignsRequest, UpdateCampaignDto} from "@repo/api/campaign/index";
+import {PaginateResponse} from "@repo/api/common/paginate";
 
 export const campaign = {
-  findAll: (workspaceId: string): Promise<CampaignEntity[]> =>
-    authFetch(`/campaigns/workspaceId/${workspaceId}`, 'GET', {}),
+  findAll: (request: FindAllCampaignsRequest): Promise<PaginateResponse<CampaignEntity>> =>
+    authFetch(`/campaigns/workspaceId/${request.workspaceId}`, 'GET', {
+      page: request.page,
+      pageSize: request.pageSize,
+      sortBy: request.sortBy,
+      sortOrder: request.sortOrder,
+    }),
 
   findOne: (id: string): Promise<CampaignEntity> =>
     authFetch(`/campaigns/${id}`, 'GET', {}),

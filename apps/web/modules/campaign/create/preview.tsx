@@ -4,13 +4,26 @@ import {useCampaignContext} from "@/modules/campaign/context/campaign-provider";
 import PoweredBy from "@/components/powered-by";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import {Logo} from "@/components/logo";
 import Link from "next/link";
+import {CampaignEntity} from "@repo/api/campaign/index";
 
-export function CampaignCreatePreviewPage() {
+export function CampaignCreatePreviewPage(props: {
+  data?: CampaignEntity
+  mode?: 'view' | 'create';
+}) {
+  const {data, mode} = props;
   const {submitForm} = useCampaignContext()
 
   if (!submitForm) return null;
+
+  const isViewMode = mode === 'view';
+
+  const from = isViewMode ? `${data?.fromName} <${data?.fromEmail}>` : `${submitForm.fromName} <${submitForm.fromEmail}>`;
+  const to = isViewMode ? data?.toEmails || [] : submitForm.toEmails || [];
+  const subject = isViewMode ? data?.subject : submitForm.subject;
+  const content = isViewMode ? data?.content : submitForm.content;
+  const formShortId = isViewMode ? data?.formShortId : submitForm.formShortId;
+  const buttonText = isViewMode ? data?.buttonText : submitForm.buttonText;
 
   return (
     <>
@@ -20,14 +33,14 @@ export function CampaignCreatePreviewPage() {
             <div className="flex flex-row items-start gap-2">
               <span className='w-16'>From:</span>{' '}
               <span className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-mono text-gray-800">
-                {submitForm.fromName} &lt;{submitForm.fromEmail}&gt;
+                {from}
               </span>
             </div>
             <Divider/>
             <div className='flex flex-row items-start gap-2'>
               <span className='w-16'>To:</span>
               <div className='flex flex-col gap-2 mt-1'>
-                {submitForm.toEmails && submitForm.toEmails.length > 0 && submitForm.toEmails.map((email, index) => (
+                {to.map((email, index) => (
                   <span
                     key={index}
                     className="inline-block rounded-full bg-gray-100 px-2 py-0.5 text-xs font-mono text-gray-800">
@@ -39,7 +52,7 @@ export function CampaignCreatePreviewPage() {
             <Divider/>
             <div className='flex flex-row items-start gap-2'>
               <span className='w-16'>Subject:</span>{' '}
-              <span>{submitForm.subject}</span>
+              <span>{subject}</span>
             </div>
             <Divider/>
           </div>
@@ -49,17 +62,17 @@ export function CampaignCreatePreviewPage() {
         <div className="flex flex-col w-full gap-4 p-8 items-center text-center bg-white rounded-b-md">
           <div className="rich-text text-start">
             <Markdown
-              children={submitForm.content || ''}
+              children={content}
               remarkPlugins={[remarkGfm]}/>
           </div>
           <Link
             target="_blank"
-            href={`/forms/${submitForm.formId}`}
+            href={`/forms/${formShortId}`}
             className={buttonVariants({
               variant: 'default',
               size: 'lg',
             })}>
-            {submitForm.buttonText}
+            {buttonText}
           </Link>
           <PoweredBy className='py-2'/>
         </div>

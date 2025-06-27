@@ -1,14 +1,14 @@
 import {useEffect, useState} from 'react';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Button} from '@/components/ui/button';
-import ReviewImportXDialog from '../review/twitter';
+import ReviewImportXDialog from '../../review/twitter';
 import PoweredBy from '@/components/powered-by';
 import {useFormContext} from '@/modules/form/context/FormProvider';
 import {Divider} from '@/components/divider';
 import {BsTwitterX} from 'react-icons/bs';
 import {$Enums} from '@repo/database/generated/client';
 import ReviewSource = $Enums.ReviewSource;
-import {SubmitForm} from '@/modules/form/submit-form';
+import {FormDefaultSubmitView} from '@/modules/form/default/form-default-submit-view';
 import {parseTweet} from '@/lib/utils';
 import {useSession, useUserContext} from "@/context/UserProvider";
 
@@ -17,7 +17,7 @@ import {useSession, useUserContext} from "@/context/UserProvider";
  * @param props
  * @constructor
  */
-export function PageFormReview(props: {
+export function FormDefaultPreviewView(props: {
   id: string;
   workspaceId: string;
   lang: string;
@@ -104,98 +104,37 @@ export function PageFormReview(props: {
           <p className="text-gray-600">{welcome.message}</p>
         </div>
 
-        {!reviewSource && (
-          <div className="flex flex-col gap-2 w-full">
-            <ReviewImportXDialog
-              beforeOnOpenChange={() => {
-                if (!user) {
-                  signIn()
-                  return false;
-                }
-                return true;
-              }}
-              onImport={(tweetId, data) => {
-                if (!user) {
-                  signIn()
-                  return;
-                }
-                const parseData = parseTweet(data);
-                setInitValue({
-                  rating: 5,
-                  message: parseData?.message || '',
-                  fullName: parseData?.fullName || '',
-                  email: parseData?.email || '',
-                  userUrl: parseData?.userUrl || '',
-                  avatarUrl: parseData?.avatarUrl || '',
-                  imageUrls: parseData?.imageUrls || [],
-                  videoUrl: parseData?.videoUrl || '',
-                  twitterId: parseData?.tweetId || '',
-                  source: ReviewSource.twitter,
-                  reviewerId: user.id,
-                });
-                setReviewSource(ReviewSource.twitter);
-              }}
-            >
-              <Button
-                className="w-full"
-                variant="default"
-                size={'lg'}>
-                Import from
-                <span>
-                  <BsTwitterX/>
-                </span>
-              </Button>
-            </ReviewImportXDialog>
 
-            <Button
-              onClick={() => {
-                if (!user) {
-                  signIn()
-                  return;
-                }
-                setReviewSource(ReviewSource.manual);
-              }}
-              className="w-full"
-              variant="outline"
-              size={'lg'}>
-              Manual
-            </Button>
-          </div>
-        )}
 
-        {reviewSource && (
-          <SubmitForm
-            id={id}
-            workspaceId={workspaceId}
-            lang={lang}
-            shortId={shortId}
-            mode={mode}
-            reviewSource={reviewSource}
-            initValue={initValue}
-          />
-        )}
+        <FormDefaultSubmitView
+          id={id}
+          workspaceId={workspaceId}
+          lang={lang}
+          shortId={shortId}
+          mode={mode}
+          reviewSource={reviewSource}
+          initValue={initValue}
+        />
 
-        {reviewSource && (
-          <Button
-            onClick={() => {
-              setReviewSource(null);
-              setInitValue({
-                rating: 0,
-                message: '',
-                fullName: '',
-                email: '',
-                avatarUrl: '',
-                userUrl: '',
-                imageUrls: [],
-                videoUrl: '',
-                twitterId: '',
-                reviewerId: user?.id || '',
-              });
-            }}
-            variant={'ghost'}>
-            Back
-          </Button>
-        )}
+        {/*<Button*/}
+        {/*  onClick={() => {*/}
+        {/*    setReviewSource(null);*/}
+        {/*    setInitValue({*/}
+        {/*      rating: 0,*/}
+        {/*      message: '',*/}
+        {/*      fullName: '',*/}
+        {/*      email: '',*/}
+        {/*      avatarUrl: '',*/}
+        {/*      userUrl: '',*/}
+        {/*      imageUrls: [],*/}
+        {/*      videoUrl: '',*/}
+        {/*      twitterId: '',*/}
+        {/*      reviewerId: user?.id || '',*/}
+        {/*    });*/}
+        {/*  }}*/}
+        {/*  variant={'ghost'}>*/}
+        {/*  Back*/}
+        {/*</Button>*/}
       </div>
       <PoweredBy/>
     </div>

@@ -1,10 +1,11 @@
 'use client';
 
-import React, {use, useEffect, useState} from 'react';
+import React, {use} from 'react';
 import {useCampaignContext} from "@/modules/campaign/context/campaign-provider";
 import Link from "next/link";
 import {buttonVariants} from "@/components/ui/button";
-import {CampaignListItem} from './campagin-list-item';
+import {DataTable} from '@/components/data-table';
+import {columns} from "@/modules/campaign/columens";
 
 export default function CampaignListPage(props: {
   params: Promise<{
@@ -13,8 +14,7 @@ export default function CampaignListPage(props: {
   }>;
 }) {
   const {lang, workspaceId} = use(props.params);
-  const {campaigns} = useCampaignContext();
-
+  const {findAll} = useCampaignContext();
 
   return (
     <div className="min-h-screen p-6 md:p-8">
@@ -25,7 +25,6 @@ export default function CampaignListPage(props: {
             Create and send email marketing campaigns to invite your users to leave feedback and reviews.
           </p>
         </div>
-        {/*<CreateFormDialog/>*/}
         <Link
           href={`/${lang}/${workspaceId}/campaigns/create`}
           className={buttonVariants({
@@ -33,21 +32,11 @@ export default function CampaignListPage(props: {
           })}>
           Create Campaign
         </Link>
-
       </div>
-      {/*<DataTable*/}
-      {/*  fetchData={fetchData}*/}
-      {/*/>*/}
-      <div className="space-y-4">
-        {campaigns && campaigns.length > 0 && campaigns.map((item) => (
-          <CampaignListItem
-            key={item.id}
-            lang={lang}
-            workspaceId={workspaceId}
-            item={item}
-          />
-        ))}
-      </div>
+      <DataTable
+        fetchData={findAll}
+        columns={columns}
+      />
     </div>
   );
 }

@@ -6,13 +6,19 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards,
+  UseGuards, Query
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/common/types/jwt-payload';
 import { CampaignsService } from '@src/modules/campaigns/campaigns.service';
-import { CreateCampaignDto, UpdateCampaignDto } from '@repo/api/campaign/index';
+import {
+  CreateCampaignDto,
+  FindAllCampaignsRequest,
+  findAllCampaignsRequestSchema,
+  UpdateCampaignDto
+} from '@repo/api/campaign/index';
+import { FindAllReviewRequest, findAllReviewRequestSchema } from '@repo/api/reviews/dto/find-all-review.dto';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -25,19 +31,20 @@ export class CampaignsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('')
-  findAll(@Jwt() jwt: JwtPayload) {
-    return this.campaignsService.findAll(jwt.userId, null);
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Get('/workspaceId/:workspaceId')
   findAllWithWorkspaceId(
     @Jwt() jwt: JwtPayload,
     @Param('workspaceId') workspaceId: string,
+    @Query() query: any,
   ) {
-    return this.campaignsService.findAll(jwt.userId, workspaceId);
+    const req = findAllCampaignsRequestSchema.parse({
+      userId: jwt.userId,
+      workspaceId,
+      ...query,
+    }) as FindAllCampaignsRequest;
+    return this.campaignsService.findAll(req);
   }
+
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')

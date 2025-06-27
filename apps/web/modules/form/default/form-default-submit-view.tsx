@@ -1,22 +1,26 @@
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import {useRouter} from 'next/navigation';
+import React, {useState} from 'react';
 import toast from 'react-hot-toast';
-import { api } from '@/lib/api-client';
+import {api} from '@/lib/api-client';
 import StarRating from '@/modules/review/manual/star-rating';
-import { UploadContainer } from '@/components/upload-container';
-import { BiImage, BiLogoTwitter, BiVideo } from 'react-icons/bi';
-import { Button } from '@/components/ui/button';
-import { ReviewSource } from '@repo/database/generated/client/client';
-import { Required } from '@/components/required';
+import {UploadContainer} from '@/components/upload-container';
+import {BiImage, BiLogoTwitter, BiVideo} from 'react-icons/bi';
+import {Button} from '@/components/ui/button';
+import {ReviewSource} from '@repo/database/generated/client';
+import {Required} from '@/components/required';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
-import { Textarea } from '@/components/ui/textarea';
+import {Textarea} from '@/components/ui/textarea';
+import ReviewImportXDialog from '../../review/twitter';
+import {BsGoogle, BsInstagram, BsTiktok, BsTwitterX} from "react-icons/bs";
+import {useSession, useUserContext} from "@/context/UserProvider";
+import {parseTweet} from '@/lib/utils';
 
 /**
  * 从 /forms/[shortId] 提交的表单
  * @param props
  * @constructor
  */
-export function SubmitForm(props: {
+export function FormDefaultSubmitView(props: {
   id: string;
   workspaceId: string;
   lang: string;
@@ -37,7 +41,11 @@ export function SubmitForm(props: {
   };
 }) {
   const router = useRouter();
-  const { id, workspaceId, lang, shortId, mode, initValue } = props;
+  const {signIn} = useUserContext();
+  const {user} = useSession({
+    required: false
+  })
+  const {id, workspaceId, lang, shortId, mode, initValue} = props;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [submitForm, setSubmitForm] = useState<{
@@ -103,20 +111,79 @@ export function SubmitForm(props: {
       <StarRating
         size={'lg'}
         value={submitForm.rating}
-        onChange={(value) => setSubmitForm({ ...submitForm, rating: value })}
+        onChange={(value) => setSubmitForm({...submitForm, rating: value})}
       />
+
+      {/*import review from social media*/}
+      <div className='flex flex-col items-center gap-4 w-full'>
+        <label className='font-semibold'>Import Review from Social Media:</label>
+        <div className='flex flex-row items-center justify-center gap-2 w-full'>
+          <ReviewImportXDialog
+            beforeOnOpenChange={() => {
+              if (!user) {
+                signIn()
+                return false;
+              }
+              return true;
+            }}
+            onImport={(tweetId, data) => {
+              if (!user) {
+                signIn()
+                return;
+              }
+              const parseData = parseTweet(data);
+              setSubmitForm({
+                rating: 5,
+                message: parseData?.message || '',
+                fullName: parseData?.fullName || '',
+                email: parseData?.email || '',
+                userUrl: parseData?.userUrl || '',
+                avatarUrl: parseData?.avatarUrl || '',
+                imageUrls: parseData?.imageUrls || [],
+                videoUrl: parseData?.videoUrl || '',
+                twitterId: parseData?.tweetId || '',
+                reviewerId: user?.id,
+              });
+              // setReviewSource(ReviewSource.twitter);
+            }}
+          >
+            <Button variant="outline">
+              <BsTwitterX/>
+            </Button>
+          </ReviewImportXDialog>
+          <Button variant="outline">
+            <BsTiktok/>
+          </Button>
+          <Button variant="outline">
+            <BsGoogle/>
+          </Button>
+          <Button variant="outline">
+            <BsInstagram/>
+          </Button>
+        </div>
+      </div>
+
+      {/* 横线 中间一个文本 'or'  */}
+      <div className="flex items-center w-full">
+        <hr className="flex-grow border-gray-300"/>
+        <span className="mx-2 text-gray-500">or</span>
+        <hr className="flex-grow border-gray-300"/>
+      </div>
+
+      {/* 用户信息表单 */}
+      <label className='text-center w-full font-semibold'>Manually Add a Review:</label>
       <div className="grid grid-cols-2 gap-4 w-full">
         <div>
           <label className="text-sm">
-            Full Name <Required />
+            Full Name <Required/>
           </label>
           <input
             type="text"
-            placeholder="e.g. John Smith"
+            placeholder="John Smith"
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.fullName}
             onChange={(e) =>
-              setSubmitForm({ ...submitForm, fullName: e.target.value })
+              setSubmitForm({...submitForm, fullName: e.target.value})
             }
           />
         </div>
@@ -124,11 +191,35 @@ export function SubmitForm(props: {
           <label className="text-sm mt-2">Email</label>
           <input
             type="email"
-            placeholder="e.g. john.smith@gmail.com"
+            placeholder="john.smith@gmail.com"
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.email}
             onChange={(e) =>
-              setSubmitForm({ ...submitForm, email: e.target.value })
+              setSubmitForm({...submitForm, email: e.target.value})
+            }
+          />
+        </div>
+        <div>
+          <label className="text-sm mt-2">Tagline</label>
+          <input
+            type="text"
+            placeholder="Software Engineer at ABC Corp"
+            className="w-full p-4 border rounded-lg shadow-sm"
+            value={submitForm.email}
+            onChange={(e) =>
+              setSubmitForm({...submitForm, email: e.target.value})
+            }
+          />
+        </div>
+        <div>
+          <label className="text-sm mt-2">Link</label>
+          <input
+            type="url"
+            placeholder="https://john.smith.com"
+            className="w-full p-4 border rounded-lg shadow-sm"
+            value={submitForm.userUrl}
+            onChange={(e) =>
+              setSubmitForm({...submitForm, userUrl: e.target.value})
             }
           />
         </div>
@@ -144,25 +235,14 @@ export function SubmitForm(props: {
             }}
           />
         </div>
-        <div>
-          <label className="text-sm mt-2">Link</label>
-          <input
-            type="email"
-            placeholder="e.g. https://twitter.com/johnsmith"
-            className="w-full p-4 border rounded-lg shadow-sm"
-            value={submitForm.userUrl}
-            onChange={(e) =>
-              setSubmitForm({ ...submitForm, userUrl: e.target.value })
-            }
-          />
-        </div>
+
       </div>
       <div className="flex flex-col items-center gap-4 w-full pb-8">
-        <Textarea
+        <textarea
           className="w-full p-4 border rounded-lg shadow-sm"
           value={submitForm.message}
           onChange={(e) =>
-            setSubmitForm({ ...submitForm, message: e.target.value })
+            setSubmitForm({...submitForm, message: e.target.value})
           }
           rows={5}
           placeholder="Write your feedback here..."
@@ -195,7 +275,7 @@ export function SubmitForm(props: {
               }));
             }}
           >
-            <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+            <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors"/>
           </UploadContainer>
           <UploadContainer
             accept={'video/*'}
@@ -206,7 +286,7 @@ export function SubmitForm(props: {
               }));
             }}
           >
-            <BiVideo className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+            <BiVideo className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors"/>
           </UploadContainer>
         </div>
       </div>
