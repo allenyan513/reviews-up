@@ -1,20 +1,16 @@
 import {Button} from '@/components/ui/button';
-import {useShowcaseContext} from './context/ShowcaseProvider';
+import {useShowcaseContext} from './context/showcase-context';
 import {Input} from '@/components/ui/input';
-import {ShowcaseEntity} from '@repo/api/showcases/entities/showcase.entity';
 import {useState} from 'react';
 import {
   Select,
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import {
-  BsArrowDown,
-  BsArrowUp,
   BsCaretDown,
   BsCaretUp,
   BsGear,
@@ -22,51 +18,9 @@ import {
 } from 'react-icons/bs';
 import {cn} from '@/lib/utils';
 import {SortBy} from '@/types/sortby';
+import {layoutOptions} from "@/modules/showcase/layout-options";
+import {sortOptions} from './sort-options';
 
-const layoutOptions = [
-  {
-    value: 'flow',
-    label: 'FlowLayout',
-    img: '/img/grid-card.webp',
-    settings: {
-      column: 3,
-    },
-  },
-  {
-    value: 'multi-carousel',
-    label: 'MultiCarouselLayout',
-    img: '/img/grid-card.webp',
-  },
-  // {
-  //   value: 'carousel',
-  //   label: 'CarouselLayout',
-  //   img: '/img/grid-card.webp',
-  // },
-  // {
-  //   value: 'list',
-  //   label: 'ListLayout',
-  //   img: '/img/list-card.webp',
-  // },
-];
-
-const sortOptions = [
-  {
-    value: SortBy.newest,
-    label: 'Dates from Newest to Oldest',
-  },
-  {
-    value: SortBy.oldest,
-    label: 'Dates from Oldest to Newest',
-  },
-  {
-    value: SortBy.random,
-    label: 'Random',
-  },
-  {
-    value: SortBy.rating,
-    label: 'Rating from Highest to Lowest',
-  },
-];
 
 type ToggleOptionProps = {
   label: string;
@@ -165,9 +119,9 @@ export function ShowcasePageConfig(props: {
             {layoutOptions.map((opt) => (
               <div
                 key={opt.value}
-                className={`flex flex-col items-center gap-2 p-2 border rounded cursor-pointer ${
+                className={`flex flex-row items-center gap-2 p-3 border rounded cursor-pointer ${
                   showcaseConfig.type === opt.value
-                    ? 'border-blue-500'
+                    ? 'border-red-400 bg-red-50 shadow'
                     : 'border-gray-300'
                 }`}
                 onClick={() => {
@@ -177,12 +131,8 @@ export function ShowcasePageConfig(props: {
                   });
                 }}
               >
-                <img
-                  src={opt.img}
-                  alt={opt.label}
-                  className="w-full aspect-video"
-                />
-                <span className="text-sm">{opt.label}</span>
+                {opt.icon}
+                <span className="text-sm text-start">{opt.label}</span>
               </div>
             ))}
           </div>
@@ -196,32 +146,78 @@ export function ShowcasePageConfig(props: {
           <div
             className={cn('flex flex-col gap-4', isSettingOpen ? '' : 'hidden')}
           >
-            {/*flow layout specific settings*/}
-            {showcaseConfig.type === 'flow' && (
-              <div>
-                <label className="text-sm">FlowLayout Columns:</label>
-                <Input
-                  type="number"
-                  placeholder="Enter number of columns"
-                  min="1"
-                  max="5"
-                  className="w-full mt-2"
-                  value={showcaseConfig.flow?.columns || 3}
-                  onChange={(e) => {
-                    const value = parseInt(e.target.value, 10);
-                    if (!isNaN(value)) {
-                      setShowcaseConfig({
-                        ...showcaseConfig,
-                        flow: {
-                          ...showcaseConfig.flow,
-                          columns: value,
-                        },
-                      });
-                    }
-                  }}
-                />
-              </div>
-            )}
+            {(showcaseConfig.type === 'flow' ||
+                showcaseConfig.type === 'grid' ||
+                showcaseConfig.type === 'fix-row'
+              )
+              && (
+                <div>
+                  <label className="text-sm">Columns Count:</label>
+                  <div className='text-sm grid grid-cols-3 gap-2 mt-2'>
+                    <label>sm:</label>
+                    <label>md:</label>
+                    <label>lg:</label>
+                    <Input
+                      type="number"
+                      min="1"
+                      max="5"
+                      className="w-full"
+                      value={showcaseConfig.breakpoints?.sm || 1}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        if (!isNaN(value)) {
+                          setShowcaseConfig({
+                            ...showcaseConfig,
+                            breakpoints: {
+                              ...showcaseConfig.breakpoints,
+                              sm: value,
+                            }
+                          });
+                        }
+                      }}
+                    />
+                    <Input
+                      type="number"
+                      min="1"
+                      max="5"
+                      className="w-full"
+                      value={showcaseConfig.breakpoints?.md || 2}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        if (!isNaN(value)) {
+                          setShowcaseConfig({
+                            ...showcaseConfig,
+                            breakpoints: {
+                              ...showcaseConfig.breakpoints,
+                              md: value,
+                            }
+                          });
+                        }
+                      }}
+                    />
+                    <Input
+                      type="number"
+                      min="1"
+                      max="5"
+                      className="w-full"
+                      value={showcaseConfig.breakpoints?.lg || 3}
+                      onChange={(e) => {
+                        const value = parseInt(e.target.value, 10);
+                        if (!isNaN(value)) {
+                          setShowcaseConfig({
+                            ...showcaseConfig,
+                            breakpoints: {
+                              ...showcaseConfig.breakpoints,
+                              lg: value,
+                            }
+                          });
+                        }
+                      }}
+                    />
+                  </div>
+
+                </div>
+              )}
 
             <div>
               <label className="text-sm">Reviews Max Count:</label>
@@ -270,6 +266,16 @@ export function ShowcasePageConfig(props: {
               </Select>
             </div>
 
+            <ToggleOption
+              label="Show Summary Rating"
+              checked={showcaseConfig.isRatingSummaryEnabled || false}
+              onChange={(checked) =>
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  isRatingSummaryEnabled: checked,
+                })
+              }
+            />
             <ToggleOption
               label="Show Rating"
               checked={showcaseConfig.isRatingEnabled || false}

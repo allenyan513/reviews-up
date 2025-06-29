@@ -4,7 +4,7 @@ import { Menu, X } from 'lucide-react';
 import { useSelectedLayoutSegment } from 'next/navigation';
 import * as React from 'react';
 import Link from 'next/link';
-import { Button, buttonVariants } from '../ui/button';
+import { Button, buttonVariants } from '@repo/ui/button';
 import { Logo } from './logo';
 import { cn } from '@/lib/utils';
 import { useState } from 'react';

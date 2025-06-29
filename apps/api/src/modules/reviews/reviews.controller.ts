@@ -14,7 +14,7 @@ import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 import {
   findAllReviewRequestSchema,
   FindAllReviewRequest,

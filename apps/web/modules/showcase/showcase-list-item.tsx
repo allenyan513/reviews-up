@@ -1,5 +1,5 @@
 import {ShowcaseEntity} from "@repo/api/showcases/entities/showcase.entity";
-import {useShowcaseContext} from "@/modules/showcase/context/ShowcaseProvider";
+import {useShowcaseContext} from "@/modules/showcase/context/showcase-context";
 import Link from "next/link";
 import {BiFile, BiTrash} from "react-icons/bi";
 import {toLocalDateString} from "@/lib/utils";

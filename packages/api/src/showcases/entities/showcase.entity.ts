@@ -14,6 +14,7 @@ export interface ShowcaseEntity extends Showcase {
 
 export interface ShowcaseConfig {
   type?: string | 'flow' | 'grid' | 'list' | 'carousel' | 'multi-carousel';
+  isRatingSummaryEnabled?: boolean;
   isRatingEnabled?: boolean;
   isSourceEnabled?: boolean;
   isDateEnabled?: boolean;
@@ -23,5 +24,10 @@ export interface ShowcaseConfig {
   sortBy?: 'newest' | 'oldest' | 'random' | 'rating' | string;
   flow?: {
     columns?: number;
+  };
+  breakpoints?: {
+    sm?: number;
+    md?: number;
+    lg?: number;
   };
 }

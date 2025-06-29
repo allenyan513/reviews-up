@@ -5,16 +5,14 @@ import {ReviewEntity} from '@repo/api/reviews/entities/review.entity';
 import React from 'react';
 import {
   BsCameraVideo,
-  BsEye,
   BsImage,
-  BsTrash,
 } from 'react-icons/bs';
 import {Button} from '@/components/ui/button';
 import {ArrowUpDown} from 'lucide-react';
 import {ReviewMedia} from '@repo/api/reviews/entities/review-media.entity';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import StarRating from '@/modules/review/manual/star-rating';
-import {ReviewItemSource} from '@/modules/showcase/review-item-source';
+import StarRating from '@repo/ui/star-rating';
+import {ReviewItemSource} from '@reviewsup/embed-react';
 import {api} from '@/lib/api-client';
 import {$Enums} from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
@@ -109,6 +107,7 @@ export function columns(setData: any): ColumnDef<any>[] {
                 </div>
               </div>
               <StarRating
+                size={'sm'}
                 className="ml-1"
                 value={rating || 5}
                 onChange={() => {

@@ -1,6 +1,6 @@
 'use client';
 
-import { ReviewItem } from '../review-item';
+import { ReviewItem } from '../item/review-item';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
 

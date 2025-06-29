@@ -13,7 +13,7 @@ import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dt
 import { UpdateWorkspaceDto } from '@repo/api/workspaces/dto/update-workspace.dto';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 
 @Controller('workspaces')
 export class WorkspacesController {

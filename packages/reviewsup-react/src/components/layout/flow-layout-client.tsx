@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import { ReviewItem } from '../review-item';
+import { ReviewItem } from '../item/review-item';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
+import { RatingSummary } from '../RatingSummary';
+import { useBreakpoints } from '../../hooks/use-breakpoints';
 
 interface FlowLayoutClientProps {
   items: ReviewEntity[];
@@ -13,22 +15,8 @@ interface FlowLayoutClientProps {
   defaultColumns?: number;
 }
 
-function getColumnsFromWidth(
-  width: number,
-  breakpoints: Record<string, number>,
-) {
-  if (width < 640) return breakpoints.sm ?? 1;
-  if (width < 768) return breakpoints.md ?? 2;
-  return breakpoints.lg ?? 3;
-}
-
-export function FlowLayoutClient({
-  items,
-  config,
-  breakpoints = { sm: 1, md: 2, lg: 3 },
-  defaultColumns = 3,
-}: FlowLayoutClientProps) {
-  const [columns, setColumns] = useState(defaultColumns);
+export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
+  const columns = useBreakpoints(config.breakpoints);
 
   const renderItem = (
     review: ReviewEntity,
@@ -48,17 +36,6 @@ export function FlowLayoutClient({
     );
   };
 
-  useEffect(() => {
-    const updateColumns = () => {
-      const width = window.innerWidth;
-      setColumns(getColumnsFromWidth(width, breakpoints));
-    };
-
-    updateColumns(); // run once at mount
-    window.addEventListener('resize', updateColumns);
-    return () => window.removeEventListener('resize', updateColumns);
-  }, [breakpoints]);
-
   const renderedColumns: ReactNode[][] = Array(columns)
     .fill(null)
     .map(() => []);
@@ -68,16 +45,21 @@ export function FlowLayoutClient({
   });
 
   return (
-    <div style={{ display: 'flex', gap: '16px' }}>
-      {renderedColumns.map((colItems, colIdx) => (
-        <div key={colIdx} style={{ flex: 1 }}>
-          {colItems.map((child, i) => (
-            <div key={i} style={{ marginBottom: '16px' }}>
-              {child}
-            </div>
-          ))}
-        </div>
-      ))}
+    <div className="w-full flex flex-col justify-center items-center gap-4">
+      <div style={{ display: 'flex', gap: '16px' }}>
+        {renderedColumns.map((colItems, colIdx) => (
+          <div key={colIdx} style={{ flex: 1 }}>
+            {colItems.map((child, i) => (
+              <div key={i} style={{ marginBottom: '16px' }}>
+                {child}
+              </div>
+            ))}
+          </div>
+        ))}
+      </div>
+      {config.isRatingSummaryEnabled && (
+        <RatingSummary ratings={items.map((item) => item.rating || 0)} />
+      )}
     </div>
   );
 }

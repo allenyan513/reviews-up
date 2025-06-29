@@ -87,28 +87,6 @@ export default function ReviewsPage() {
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <Button
-            className='hidden md:flex'
-            onClick={() => {
-              router.push(`/${defaultWorkspace?.id}/showcases`);
-            }}
-            size={'lg'}
-            variant={'outline'}
-          >
-            <IconCode/>
-            <span>Create Showcase</span>
-          </Button>
-          <Button
-            className='hidden md:flex'
-            onClick={() => {
-              router.push(`/${defaultWorkspace?.id}/forms`);
-            }}
-            size={'lg'}
-            variant={'outline'}
-          >
-            <IconTable/>
-            <span>Create Collect Form</span>
-          </Button>
           <ReviewImportDialog/>
         </div>
       </div>

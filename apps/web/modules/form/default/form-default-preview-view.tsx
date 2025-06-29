@@ -1,15 +1,12 @@
 import {useEffect, useState} from 'react';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
 import {Button} from '@/components/ui/button';
-import ReviewImportXDialog from '../../review/twitter';
 import PoweredBy from '@/components/powered-by';
 import {useFormContext} from '@/modules/form/context/FormProvider';
 import {Divider} from '@/components/divider';
-import {BsTwitterX} from 'react-icons/bs';
 import {$Enums} from '@repo/database/generated/client';
 import ReviewSource = $Enums.ReviewSource;
 import {FormDefaultSubmitView} from '@/modules/form/default/form-default-submit-view';
-import {parseTweet} from '@/lib/utils';
 import {useSession, useUserContext} from "@/context/UserProvider";
 
 /**

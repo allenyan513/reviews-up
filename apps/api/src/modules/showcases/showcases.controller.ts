@@ -12,7 +12,7 @@ import { ShowcasesService } from './showcases.service';
 import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
 import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 
 @Controller('showcases')

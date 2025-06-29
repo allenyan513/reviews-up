@@ -129,6 +129,7 @@ model Review {
   reviewerImage String?
   reviewerEmail String?
   reviewerUrl   String?
+  reviewerTitle String?
   rating        Int?
   text          String?
   tweetId       String?

@@ -1,5 +1,7 @@
 'use client';
-import { Button } from '@/components/ui/button';
+import {Button} from '@/components/ui/button';
+import {Input} from '@repo/ui/input';
+import {Label} from '@repo/ui/label';
 import toast from 'react-hot-toast';
 import {
   Dialog,
@@ -11,125 +13,101 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useState, useRef } from 'react';
-import { BiDownload, BiUser, BiX } from 'react-icons/bi';
-import { api } from '@/lib/api-client';
-import { useUserContext } from '@/context/UserProvider';
+import StarRating from '@repo/ui/star-rating';
 
+import React, {useState, useRef} from 'react';
+import {BiDownload, BiPlus, BiUser, BiX} from 'react-icons/bi';
+import {api} from '@/lib/api-client';
+import {useUserContext} from '@/context/UserProvider';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
-import StarRating from '@/modules/review/manual/star-rating';
-import DataPicker from '@/modules/review/manual/data-picker';
+import {CreateReviewDto} from "@repo/api/reviews/dto/create-review.dto";
 
 export default function ReviewImportManualDialog(props: {
-  onOpenCallback?: (open: boolean) => void;
+
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultWorkspace } = useUserContext();
-  const [formData, setFormData] = useState({
+  const {defaultWorkspace} = useUserContext();
+  const [formData, setFormData] = useState<CreateReviewDto>({
     workspaceId: defaultWorkspace?.id || '',
+    rating: 0,
+    message: '',
     fullName: '',
     email: '',
-    tagline: '',
-    link: '',
-    rating: 0,
-    profilePicture: '',
-    message: '',
+    userUrl: '',
+    avatarUrl: '',
+    imageUrls: [],
+    videoUrl: '',
+    title: '',
     source: 'manual',
-    date: new Date(),
   });
 
-  const [addStatus, setAddStatus] = useState<
-    'idle' | 'loading' | 'success' | 'error'
-  >('idle');
-  const [addError, setAddError] = useState<string | null>(null);
-
   const createReview = async () => {
-    console.log(formData);
     try {
-      setAddStatus('loading');
-      const res = await api.review.createReview(
-        {
-          workspaceId: formData.workspaceId,
-          fullName: formData.fullName,
-          email: formData.email,
-          rating: formData.rating,
-          message: formData.message,
-          imageUrls: [],
-          videoUrl: '',
-          tweetId: '',
-        },
-      );
+      await api.review.createReview(formData);
       toast.success('Review created successfully!');
-      setAddStatus('success');
       setIsOpen(false);
     } catch (error) {
-      setAddError('Failed to create review. Please try again.');
-      setAddStatus('error');
+      toast.error('Failed to create review. Please check your input and try again.');
       return;
     }
   };
 
   return (
-    <Dialog
-      open={isOpen}
-      onOpenChange={(open) => {
-        setIsOpen(open);
-        props.onOpenCallback?.(open);
-      }}
-    >
+    <Dialog open={isOpen} onOpenChange={(open) =>{
+      setIsOpen(open);
+      if (!open) {
+        setFormData({
+          workspaceId: defaultWorkspace?.id || '',
+          rating: 0,
+          message: '',
+          fullName: '',
+          email: '',
+          userUrl: '',
+          avatarUrl: '',
+          imageUrls: [],
+          videoUrl: '',
+          title: '',
+          source: 'manual',
+        });
+      }
+    }}>
       <DialogTrigger asChild>
         <Button
           size={'lg'}
-          className="w-full items-center justify-center text-lg"
-          variant="outline"
-        >
-          <BiDownload  className='text-lg'/>
-          Manual Import
+          className="w-full items-center justify-center text-sm"
+          variant="default">
+          <BiPlus/> Manual Import
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-4xl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Let's import some reviews ✌🏻</DialogTitle>
-          <DialogDescription>
-            {/*Anyone who has this link will be able to view this.*/}
-          </DialogDescription>
+          <DialogTitle>Add Review</DialogTitle>
         </DialogHeader>
-        <div className="max-w-4xl font-sans">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+        <div className="w-full flex flex-col gap-4 justify-center items-center">
+          <StarRating
+            className=''
+            size={'lg'}
+            value={formData.rating || 0}
+            onChange={(value) => {
+              setFormData({...formData, rating: value});
+            }}
+          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
             <div>
-              <label
+              <Label
                 htmlFor="fullName"
                 className="block text-gray-700 text-sm font-medium mb-1"
               >
                 Full name <span className="text-red-500">*</span>
-              </label>
-              <input
-                type="text"
+              </Label>
+              <Input
                 id="fullName"
+                type="text"
                 placeholder="John Smith"
                 value={formData.fullName}
                 onChange={(e) =>
-                  setFormData({ ...formData, fullName: e.target.value })
+                  setFormData({...formData, fullName: e.target.value})
                 }
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-            <div>
-              <label
-                htmlFor="tagline"
-                className="block text-gray-700 text-sm font-medium mb-1"
-              >
-                Tagline
-              </label>
-              <input
-                type="text"
-                id="tagline"
-                value={formData.tagline}
-                onChange={(e) =>
-                  setFormData({ ...formData, tagline: e.target.value })
-                }
-                placeholder="e.g. Co-founder & CTO"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
             <div>
@@ -139,15 +117,31 @@ export default function ReviewImportManualDialog(props: {
               >
                 Email
               </label>
-              <input
+              <Input
                 type="email"
                 id="email"
                 value={formData.email}
                 onChange={(e) =>
-                  setFormData({ ...formData, email: e.target.value })
+                  setFormData({...formData, email: e.target.value})
                 }
                 placeholder="e.g. john@reviewsup.io"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="title"
+                className="block text-gray-700 text-sm font-medium mb-1"
+              >
+                Title
+              </label>
+              <Input
+                type="text"
+                id="title"
+                value={formData.title}
+                onChange={(e) =>
+                  setFormData({...formData, title: e.target.value})
+                }
+                placeholder="e.g. Co-founder & CTO"
               />
             </div>
             <div>
@@ -157,31 +151,17 @@ export default function ReviewImportManualDialog(props: {
               >
                 Link
               </label>
-              <input
+              <Input
                 type="url"
                 id="link"
-                value={formData.link}
+                value={formData.userUrl}
                 onChange={(e) =>
-                  setFormData({ ...formData, link: e.target.value })
+                  setFormData({...formData, userUrl: e.target.value})
                 }
                 placeholder="https://reviews.com/review/123"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
-            <div>
-              <label
-                htmlFor="rating"
-                className="block text-gray-700 text-sm font-medium mb-1"
-              >
-                Rating
-              </label>
-              <StarRating
-                value={formData.rating}
-                onChange={(value) => {
-                  setFormData({ ...formData, rating: value });
-                }}
-              />
-            </div>
+
             <div>
               <label
                 htmlFor="profilePicture"
@@ -190,14 +170,14 @@ export default function ReviewImportManualDialog(props: {
                 Profile picture
               </label>
               <AvatarUpload
-                value={formData.profilePicture}
+                value={formData.avatarUrl || ''}
                 onChange={(value) => {
-                  setFormData({ ...formData, profilePicture: value });
+                  setFormData({...formData, avatarUrl: value});
                 }}
               />
             </div>
           </div>
-          <div className="mb-6">
+          <div className="w-full">
             <label
               htmlFor="message"
               className="block text-gray-700 text-sm font-medium mb-1"
@@ -208,26 +188,12 @@ export default function ReviewImportManualDialog(props: {
               id="message"
               value={formData.message}
               onChange={(e) =>
-                setFormData({ ...formData, message: e.target.value })
+                setFormData({...formData, message: e.target.value})
               }
               rows={5}
               placeholder="Love this service! If you have customers that need a level of confidence before they buy, this will help a ton!"
               className="w-full px-4 py-2 border border-gray-300 rounded-md resize-y focus:outline-none focus:ring-2 focus:ring-blue-500"
             ></textarea>
-          </div>
-          <div className="mb-8">
-            <label
-              htmlFor="date"
-              className="block text-gray-700 text-sm font-medium mb-1"
-            >
-              Date
-            </label>
-            <DataPicker
-              value={formData.date}
-              onChange={(date) => {
-                setFormData({ ...formData, date: date || new Date() });
-              }}
-            />
           </div>
         </div>
         <DialogFooter className="">

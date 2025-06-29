@@ -1,4 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@repo/ui/button";
 import Link from "next/link";
 import { BsGithub, BsLinkedin, BsTwitterX } from 'react-icons/bs';
 

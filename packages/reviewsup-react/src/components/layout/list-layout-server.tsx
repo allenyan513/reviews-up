@@ -7,7 +7,7 @@ interface ListLayoutServerProps {
   config?: ShowcaseConfig;
 }
 
-export default function ListLayoutServer({
+export function ListLayoutServer({
   items,
   config,
 }: ListLayoutServerProps) {

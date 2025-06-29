@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 import { CampaignsService } from '@src/modules/campaigns/campaigns.service';
 import {
   CreateCampaignDto,

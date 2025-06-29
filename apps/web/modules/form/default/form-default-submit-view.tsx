@@ -2,14 +2,13 @@ import {useRouter} from 'next/navigation';
 import React, {useState} from 'react';
 import toast from 'react-hot-toast';
 import {api} from '@/lib/api-client';
-import StarRating from '@/modules/review/manual/star-rating';
+import StarRating from '@repo/ui/star-rating';
 import {UploadContainer} from '@/components/upload-container';
 import {BiImage, BiLogoTwitter, BiVideo} from 'react-icons/bi';
 import {Button} from '@/components/ui/button';
 import {ReviewSource} from '@repo/database/generated/client';
 import {Required} from '@/components/required';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
-import {Textarea} from '@/components/ui/textarea';
 import ReviewImportXDialog from '../../review/twitter';
 import {BsGoogle, BsInstagram, BsTiktok, BsTwitterX} from "react-icons/bs";
 import {useSession, useUserContext} from "@/context/UserProvider";
@@ -119,13 +118,6 @@ export function FormDefaultSubmitView(props: {
         <label className='font-semibold'>Import Review from Social Media:</label>
         <div className='flex flex-row items-center justify-center gap-2 w-full'>
           <ReviewImportXDialog
-            beforeOnOpenChange={() => {
-              if (!user) {
-                signIn()
-                return false;
-              }
-              return true;
-            }}
             onImport={(tweetId, data) => {
               if (!user) {
                 signIn()

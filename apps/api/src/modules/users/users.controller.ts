@@ -1,7 +1,7 @@
 import { Controller, Get, Logger, Req, UseGuards, Param } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 
 @Controller('users')
