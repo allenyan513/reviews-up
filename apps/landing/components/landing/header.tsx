@@ -1,16 +1,18 @@
 'use client';
 
-import { Menu, X } from 'lucide-react';
-import { useSelectedLayoutSegment } from 'next/navigation';
+import {Menu, X} from 'lucide-react';
+import {useSelectedLayoutSegment} from 'next/navigation';
 import * as React from 'react';
 import Link from 'next/link';
-import { Button, buttonVariants } from '@repo/ui/button';
-import { Logo } from './logo';
-import { cn } from '@repo/ui/lib/utils';
-import { useState } from 'react';
-import { BsGithub } from 'react-icons/bs';
+import {Button, buttonVariants} from '@repo/ui/button';
+import {Logo} from './logo';
+import {cn} from '@repo/ui/lib/utils';
+import {useState} from 'react';
+import {BsGithub} from 'react-icons/bs';
+import {LanguageSwitcher} from '@/components/language-switcher';
 
 interface NavProps {
+  lang?: string;
   websiteLogo?: string;
   websiteName?: string;
   githubLink?: string;
@@ -25,7 +27,8 @@ interface NavProps {
 
 function MobileItems(props: NavProps) {
   return (
-    <div className="fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 animate-in slide-in-from-bottom-80 md:hidden">
+    <div
+      className="fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 animate-in slide-in-from-bottom-80 md:hidden">
       <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
         <nav className="grid grid-flow-row auto-rows-max text-sm">
           {props.items?.map((item, index) => (
@@ -86,7 +89,7 @@ export function Header(props: NavProps) {
             className=""
             isBeta={true}
           />
-          {props.items?.length ? <DesktopItems items={props.items} /> : null}
+          {props.items?.length ? <DesktopItems items={props.items}/> : null}
           <Button
             className="space-x-2 md:hidden"
             variant="ghost"
@@ -94,27 +97,30 @@ export function Header(props: NavProps) {
             onClick={() => setShowMobileMenu(!showMobileMenu)}
           >
             {showMobileMenu ? (
-              <X className="h-6 w-6" />
+              <X className="h-6 w-6"/>
             ) : (
-              <Menu className="h-6 w-6" />
+              <Menu className="h-6 w-6"/>
             )}
           </Button>
           {/*<Logo className="md:hidden" />*/}
 
-          {showMobileMenu && props.items && <MobileItems items={props.items} />}
+          {showMobileMenu && props.items && <MobileItems items={props.items}/>}
         </div>
         <div className="flex gap-4 items-center">
+          <LanguageSwitcher
+            lang={props.lang || 'en'}
+          />
           <Link href={props.githubLink || ''} target="_blank">
-            <BsGithub className="h-6 w-6" />
+            <BsGithub className="h-6 w-6"/>
           </Link>
           <Link
             href={props.appLink || ''}
             target="_blank"
-            className={cn(buttonVariants({ size: 'lg' }),
+            className={cn(buttonVariants({size: 'lg'}),
               'rounded-full hidden md:inline-flex'
-              )}
+            )}
           >
-           Get Started
+            Get Started
           </Link>
         </div>
       </div>

@@ -9,13 +9,16 @@ import FAQ from '@/components/landing/faq';
 import {hero2} from '@/data/hero'
 import {ShowcaseWrapper} from "@/components/landing/showcase";
 import {Badge} from "@/components/badge";
+import {useTranslate} from "@/locales/dictionaries";
 
 export async function generateMetadata(props: {
   params: Promise<{
     lang: string;
   }>;
 }): Promise<Metadata> {
+
   const {lang} = await props.params;
+  const t = useTranslate(lang);
   return {
     title:
       'ReviewsUp.io - Collect and Show Reviews, Feedback, and Testimonials',
@@ -41,15 +44,16 @@ export default async function LandingPage(props: {
   }>;
 }) {
   const {lang} = await props.params;
+  const t = await useTranslate(lang);
 
   return (
     <div className='flex flex-col w-full items-center gap-8 md:gap-16'>
       <Hero
-        capsuleText={hero2.capsuleText}
+        capsuleText={t(hero2.capsuleText)}
         capsuleLink={hero2.capsuleLink}
-        title={hero2.title}
-        subtitle={hero2.subtitle}
-        primaryCtaText={hero2.primaryCtaText}
+        title={t(hero2.title)}
+        subtitle={t(hero2.subtitle)}
+        primaryCtaText={t(hero2.primaryCtaText)}
         primaryCtaLink={hero2.primaryCtaLink}
         secondaryCtaText={hero2.secondaryCtaText}
         secondaryCtaLink={hero2.secondaryCtaLink}
@@ -62,8 +66,8 @@ export default async function LandingPage(props: {
 
       <div id="showcase-1"/>
       <ShowcaseWrapper
-        title="Build-in Reviews Styles"
-        subtitle="Reviews from our users, displayed in a beautiful and customizable widget."
+        title={t('Build-in Reviews Styles')}
+        subtitle={t("Reviews from our users, displayed in a beautiful and customizable widget.")}
         formId={process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'cbfd5a031de'}
         items={
           [
