@@ -6,7 +6,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { Button, buttonVariants } from '@repo/ui/button';
 import { Logo } from './logo';
-import { cn } from '@/lib/utils';
+import { cn } from '@repo/ui/lib/utils';
 import { useState } from 'react';
 import { BsGithub } from 'react-icons/bs';
 

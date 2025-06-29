@@ -1,5 +1,5 @@
 import {buttonVariants} from "@repo/ui/button";
-import {cn} from "@/lib/utils";
+import {cn} from "@repo/ui/lib/utils";
 import Link from "next/link";
 
 export function Hero(props: {
@@ -23,8 +23,12 @@ export function Hero(props: {
         >
           {props.capsuleText}
         </Link>
-        <h1 className="font-heading text-4xl md:text-7xl w-full md:max-w-5xl font-bold">
-          {props.title}
+        <h1 className="text-4xl md:text-7xl w-full md:max-w-5xl font-bold">
+          {props.title.split('\n').map((line, i) => (
+            <span key={i} className="block">
+              {line}
+            </span>
+          ))}
         </h1>
         <p className="leading-normal text-muted-foreground text-lg  md:text-xl md:leading-8 whitespace-normal w-full md:max-w-2xl">
           {props.subtitle}

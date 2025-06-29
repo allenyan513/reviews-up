@@ -6,10 +6,9 @@ import {useUserContext} from '@/context/UserProvider';
 import {api} from '@/lib/api-client';
 import {DataTable} from '@/components/data-table';
 import {Button} from '@/components/ui/button';
-import {IconCode, IconTable} from '@tabler/icons-react';
 import {useRouter} from 'next/navigation';
 import {BiHide, BiInfoCircle, BiShow} from "react-icons/bi";
-import {cn} from "@/lib/utils";
+import {cn} from "@repo/ui/lib/utils";
 import {columns} from "@/modules/review/table/columens";
 
 

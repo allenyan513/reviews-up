@@ -1,5 +1,5 @@
 import {SortBy} from "@/types/sortby";
-import {cn} from "@/lib/utils";
+import {cn} from "@repo/ui/lib/utils";
 import {BsLayers} from "react-icons/bs";
 
 

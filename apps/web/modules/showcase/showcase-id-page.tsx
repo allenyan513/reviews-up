@@ -5,7 +5,7 @@ import {BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow} from 'react-icons/bi';
 import {Button} from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import {ShowcasePageReview, ShowcasePageReviewClient} from '@reviewsup/embed-react';
+import {ShowcasePageReviewClient} from '@reviewsup/embed-react';
 import {BsBoxArrowUpRight, BsShare} from 'react-icons/bs';
 import {ShowcasePageConfig} from '@/modules/showcase/showcase-page-config';
 import {useShowcaseContext} from '@/modules/showcase/context/showcase-context';

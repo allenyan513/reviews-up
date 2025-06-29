@@ -21,7 +21,6 @@ export function GridLayout(props: {
           display: 'grid',
           gridTemplateColumns: `repeat(${columns}, 1fr)`,
           gap: '16px',
-          padding: '16px',
         }}
       >
         {items.map((item, idx) => (

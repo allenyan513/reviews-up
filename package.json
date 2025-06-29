@@ -159,7 +159,7 @@
     "typescript": "5.5.4",
     "autoprefixer": "^10.4.21"
   },
-  "engines": {
+"engines": {
     "node": ">=18"
   },
   "workspaces": [

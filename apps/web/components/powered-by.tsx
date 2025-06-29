@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import Link from 'next/link';
-import {cn} from "@/lib/utils";
+import {cn} from "@repo/ui/lib/utils";
 
 export default function PoweredBy(props: {
   className?: string;
