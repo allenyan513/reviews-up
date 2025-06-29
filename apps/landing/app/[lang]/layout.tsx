@@ -25,6 +25,7 @@ export default async function RootLayout(props: {
       )}
     >
     <Header
+      lang={lang}
       websiteLogo={'/img/logo-32.png'}
       websiteName={'Reviewsup.io'}
       githubLink="https://github.com/allenyan513/reviewsup.io"
@@ -45,6 +46,7 @@ export default async function RootLayout(props: {
       twitterLink="https://x.com/alinlinlink"
       linkedinLink="https://www.linkedin.com/in/ligangyan/"
     />
+
     </body>
     <GoogleAnalytics gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}/>
     </html>
