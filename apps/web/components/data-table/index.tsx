@@ -22,7 +22,6 @@ import {
 } from '@/components/ui/table';
 import React, {useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
 import {DataTablePagination} from './pagination';
-import {getColumns} from "@/modules/review/table/columens";
 
 
 interface DataTableProps<TData, TValue> {
@@ -36,12 +35,14 @@ interface DataTableProps<TData, TValue> {
     pageCount: number;
     totalRowCount: number;
   } | null>;
+  columns: (setData: React.Dispatch<React.SetStateAction<TData[]>>) => ColumnDef<TData, TValue>[];
 }
 
 
 export function DataTable<TData, TValue>(
   {
     fetchData,
+    columns,
   }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -52,13 +53,13 @@ export function DataTable<TData, TValue>(
   const [data, setData] = useState<TData[]>([]);
   const [pageCount, setPageCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  const columns = useMemo(() => {
-    return getColumns(setData);
+  const _columns = useMemo(() => {
+    return columns(setData);
   }, []);
 
   const table = useReactTable({
     data: data,
-    columns: columns,
+    columns: _columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
     pageCount: pageCount,

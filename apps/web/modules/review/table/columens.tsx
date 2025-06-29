@@ -5,16 +5,14 @@ import {ReviewEntity} from '@repo/api/reviews/entities/review.entity';
 import React from 'react';
 import {
   BsCameraVideo,
-  BsEye,
   BsImage,
-  BsTrash,
 } from 'react-icons/bs';
 import {Button} from '@/components/ui/button';
 import {ArrowUpDown} from 'lucide-react';
 import {ReviewMedia} from '@repo/api/reviews/entities/review-media.entity';
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import StarRating from '@/modules/review/manual/star-rating';
-import {ReviewItemSource} from '@/modules/showcase/review-item-source';
+import StarRating from '@repo/ui/star-rating';
+import {ReviewItemSource} from '@reviewsup/embed-react';
 import {api} from '@/lib/api-client';
 import {$Enums} from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
@@ -35,7 +33,7 @@ import {
 import {toLocalDateString} from "@/lib/utils";
 
 
-export function getColumns(setData: any): ColumnDef<any>[] {
+export function columns(setData: any): ColumnDef<any>[] {
   const deleteReview = async (reviewId: string) => {
     try {
       await api.review.deleteReview(reviewId);
@@ -80,7 +78,7 @@ export function getColumns(setData: any): ColumnDef<any>[] {
         id: 'reviewer',
         header: 'Reviewer',
         enableResizing: true,
-        size:100,
+        size: 100,
         accessorFn: (row) => ({
           name: row.reviewerName,
           email: row.reviewerEmail,
@@ -109,6 +107,7 @@ export function getColumns(setData: any): ColumnDef<any>[] {
                 </div>
               </div>
               <StarRating
+                size={'sm'}
                 className="ml-1"
                 value={rating || 5}
                 onChange={() => {
@@ -166,9 +165,6 @@ export function getColumns(setData: any): ColumnDef<any>[] {
         cell: ({row, table}) => {
           const reviewId = row.original.id;
           const status = row.getValue('status') as string;
-          const handleStatusChange = async () => {
-            //todo
-          };
           return (
             <Button
               onClick={() => {

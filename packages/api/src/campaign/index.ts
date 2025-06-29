@@ -3,6 +3,7 @@ import { z } from 'zod';
 export const createCampaignSchema = z.object({
   workspaceId: z.string().min(1, 'Workspace is required'),
   formId: z.string().min(1, 'Form ID is required'),
+  formShortId: z.string().min(1, 'Form short ID is required'),
   name: z.string().min(1, 'Campaign name is required'),
   fromName: z.string().min(1, 'From name is required'),
   fromEmail: z
@@ -27,6 +28,7 @@ export const campaignEntitySchema = z.object({
   userId: z.string().min(1, 'Campaign ID is required'),
   workspaceId: z.string(),
   formId: z.string(),
+  formShortId: z.string(),
   name: z.string(),
   fromName: z.string(),
   fromEmail: z.string().email('Invalid email format'),
@@ -40,3 +42,14 @@ export const campaignEntitySchema = z.object({
 });
 
 export type CampaignEntity = z.infer<typeof campaignEntitySchema>;
+
+export const findAllCampaignsRequestSchema = z.object({
+  userId: z.string().min(1, 'User ID is required'),
+  workspaceId: z.string().min(1, 'Workspace is required'),
+  page: z.coerce.number().int().min(1).default(1),
+  pageSize: z.coerce.number().int().min(1).max(100).default(10),
+  sortBy: z.string().default('createdAt'),
+  sortOrder: z.enum(['asc', 'desc']).default('desc'),
+});
+
+export type FindAllCampaignsRequest = z.infer<typeof findAllCampaignsRequestSchema>;

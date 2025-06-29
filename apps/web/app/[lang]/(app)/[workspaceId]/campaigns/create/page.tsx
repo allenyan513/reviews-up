@@ -7,6 +7,12 @@ export default function Page(props: {
     lang: string;
     workspaceId: string;
   }>;
+  searchParams: Promise<{
+    formId?: string;
+  }>
 }) {
-  return <CampaignCreatePage params={props.params}/>;
+  return <CampaignCreatePage
+    params={props.params}
+    searchParams={props.searchParams}
+  />;
 }

@@ -59,12 +59,29 @@ export default async function LandingPage(props: {
         }
       />
 
-      <div id="showcase"/>
+
+      <div id="showcase-1"/>
       <ShowcaseWrapper
-        title="Reviews Showcase"
+        title="Build-in Reviews Styles"
         subtitle="Reviews from our users, displayed in a beautiful and customizable widget."
-        showcaseId={process.env.NODE_ENV === 'development' ? '25db6a933d3' : 'f5f3cdf3bb2'}
         formId={process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'cbfd5a031de'}
+        items={
+          [
+            {
+              title: 'Grid Layout',
+              showcaseId: process.env.NODE_ENV === 'development' ? '29fa5c4d361' : 'f5f3cdf3bb2',
+            },
+            {
+              title: 'Avatar List Layout',
+              showcaseId: process.env.NODE_ENV === 'development' ? '148ac173529' : '25db6a933d3',
+            },
+            {
+              title: 'Flow Layout',
+              showcaseId: process.env.NODE_ENV === 'development' ? '25db6a933d3' : 'f5f3cdf3bb2',
+            },
+          ]
+        }
+
       />
 
       <div id="how-it-works"/>

@@ -13,7 +13,7 @@ import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
 import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 
 @Controller('forms')
 export class FormsController {

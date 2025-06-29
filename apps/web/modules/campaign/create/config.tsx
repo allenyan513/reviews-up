@@ -8,10 +8,11 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger
 } from "@/components/ui/alert-dialog";
-import {BiTrash} from "react-icons/bi";
 import React from "react";
 import {useUserContext} from "@/context/UserProvider";
 import {EmailsInput} from "@/components/emails-input";
+import {CampaignEntity} from "@repo/api/campaign/index";
+import {cn} from "@repo/ui/lib/utils";
 
 export function CampaignFormItem(props: {
   label: string;
@@ -29,63 +30,73 @@ export function CampaignFormItem(props: {
   )
 }
 
-export function CampaignCreateConfigPage() {
+export function CampaignCreateConfigPage(props: {
+  data?: CampaignEntity,
+  mode?: 'view' | 'create';
+}) {
+  const {data, mode} = props;
   const {user} = useUserContext()
-  const {submitForm, setSubmitForm, campaigns, forms, sendCampaign} = useCampaignContext()
+  const {submitForm, setSubmitForm, forms, sendCampaign} = useCampaignContext()
 
   if (!submitForm || !forms || !user) return null;
 
   return (
     <div className='space-y-4'>
-
       <CampaignFormItem label="Campaign Name">
         <input
           type="text"
           id="name"
-          value={submitForm.name}
+          value={data?.name || submitForm.name}
           onChange={(e) =>
             setSubmitForm({
               ...submitForm,
               name: e.target.value,
             })
           }
+          disabled={mode === "view"}
           placeholder="Enter Campaign Name"
-          className="w-full p-2 border border-gray-300 rounded"
+          className={cn("w-full p-2 border border-gray-300 rounded",
+            mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+          )}
         />
       </CampaignFormItem>
 
-      <CampaignFormItem label="From Name">
-        <input
-          type="text"
-          id="fromName"
-          value={submitForm.fromName}
-          onChange={(e) =>
-            setSubmitForm({
-              ...submitForm,
-              fromName: e.target.value,
-            })
-          }
-          placeholder="Enter From Name"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
+      <CampaignFormItem label="From">
+        <div className='flex flex-row gap-2'>
+          <input
+            type="text"
+            id="fromName"
+            value={data?.fromName || submitForm.fromName}
+            onChange={(e) =>
+              setSubmitForm({
+                ...submitForm,
+                fromName: e.target.value,
+              })
+            }
+            disabled={mode === "view"}
+            placeholder="Enter From Name"
+            className={cn("p-2 border border-gray-300 rounded",
+              mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+            )}
+          />
+          <input
+            type="text"
+            id="fromName"
+            value={`<${submitForm.fromEmail}>`}
+            disabled={true}
+            className="w-full p-2 border border-gray-300 bg-gray-100 rounded disabled:opacity-75 disabled:cursor-not-allowed"
+          />
+        </div>
       </CampaignFormItem>
 
-      <CampaignFormItem label="From Email">
-        <input
-          type="text"
-          id="fromName"
-          value={submitForm.fromEmail}
-          disabled={true}
-          className="w-full p-2 border border-gray-300 rounded disabled:bg-gray-100 disabled:cursor-not-allowed"
-        />
-      </CampaignFormItem>
-
-      <CampaignFormItem label="To Emails">
+      <CampaignFormItem label="To">
         <EmailsInput
           emails={submitForm.toEmails || []}
           onChange={(emails: string[]) =>
             setSubmitForm({...submitForm, toEmails: emails})
-          }/>
+          }
+          disabled={mode === "view"}
+        />
       </CampaignFormItem>
 
 
@@ -93,14 +104,17 @@ export function CampaignCreateConfigPage() {
         <input
           type="text"
           id="subject"
-          value={submitForm.subject}
+          value={data?.subject || submitForm.subject}
           onChange={(e) =>
             setSubmitForm({
               ...submitForm,
               subject: e.target.value,
             })
           }
-          className="w-full p-2 border border-gray-300 rounded"
+          disabled={mode === "view"}
+          className={cn("w-full p-2 border border-gray-300 rounded",
+            mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+          )}
         />
       </CampaignFormItem>
 
@@ -108,36 +122,41 @@ export function CampaignCreateConfigPage() {
        <textarea
          id="message"
          rows={10}
-         value={submitForm.content}
+         value={data?.content || submitForm.content}
          onChange={(e) =>
            setSubmitForm({
              ...submitForm,
              content: e.target.value,
            })
          }
-         className="w-full p-2 border border-gray-300 rounded"
+         disabled={mode === "view"}
+         className={cn("w-full p-2 border border-gray-300 rounded",
+           mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+         )}
        />
       </CampaignFormItem>
 
 
-
-
       <CampaignFormItem label="Collecting Form">
         <Select
-          value={submitForm.formId}
+          value={data?.formShortId || submitForm.formShortId}
           onValueChange={(value) =>
             setSubmitForm({
               ...submitForm,
-              formId: value,
+              formShortId: value,
             })
           }
+          disabled={mode === "view"}
         >
-          <SelectTrigger className="w-full">
+          <SelectTrigger
+            className={cn("w-full",
+              mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+            )}>
             <SelectValue placeholder="Select Form ID"/>
           </SelectTrigger>
           <SelectContent>
             {forms.map((form) => (
-              <SelectItem key={form.id} value={form.id}>
+              <SelectItem key={form.shortId} value={form.shortId}>
                 {form.name}
               </SelectItem>
             ))}
@@ -149,23 +168,26 @@ export function CampaignCreateConfigPage() {
         <input
           type="text"
           id="buttonText"
-          value={submitForm.buttonText}
+          value={data?.buttonText || submitForm.buttonText}
           onChange={(e) =>
             setSubmitForm({
               ...submitForm,
               buttonText: e.target.value,
             })
           }
-          className="w-full p-2 border border-gray-300 rounded"
+          disabled={mode === "view"}
+          className={cn("w-full p-2 border border-gray-300 rounded",
+            mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+          )}
         />
       </CampaignFormItem>
 
 
-
-      <div className='grid grid-cols-2 gap-4'>
+      <div className={cn('grid grid-cols-2 gap-4',
+        mode === "view" && "hidden"
+      )}>
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            {/*<BiTrash className={'text-2xl text-red-400 cursor-pointer'}/>*/}
             <Button
               variant='outline'
               size={'lg'}>

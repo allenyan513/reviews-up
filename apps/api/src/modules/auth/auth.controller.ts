@@ -16,7 +16,7 @@ import { GithubOauthGuard } from '@src/modules/auth/guards/github-oauth.guard';
 import { EmailMagicGuard } from '@src/modules/auth/guards/email-magic.guard';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
-import { JwtPayload } from '@src/common/types/jwt-payload';
+import { JwtPayload } from '@src/app.types';
 import { TwitterOauthGuard } from '@src/modules/auth/guards/twitter-oauth.guard';
 
 @Controller('auth')

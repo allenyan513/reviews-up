@@ -17,7 +17,6 @@ import {Tweet, useTweet} from 'react-tweet';
 import {Tweet as TweetEntity} from 'react-tweet/api';
 
 export default function ReviewImportXDialog(props: {
-  beforeOnOpenChange: () => boolean;
   onImport: (tweetId: string, data: TweetEntity | null | undefined) => void;
   children: React.ReactNode;
 }) {
@@ -39,10 +38,7 @@ export default function ReviewImportXDialog(props: {
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (props.beforeOnOpenChange()) {
-          console.log('beforeOnOpenChange', props.beforeOnOpenChange());
-          setIsOpen(open);
-        }
+        setIsOpen(open);
       }}
     >
       <DialogTrigger asChild>{props.children}</DialogTrigger>

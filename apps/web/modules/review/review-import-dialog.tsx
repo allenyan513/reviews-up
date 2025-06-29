@@ -10,10 +10,10 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, {useEffect, useState} from 'react';
-import {BiDownload, BiX} from 'react-icons/bi';
+import {BiDownload, BiPlus, BiX} from 'react-icons/bi';
 import ReviewImportManualDialog from './manual';
 import ReviewImportXDialog from './twitter';
-import {BsTwitterX} from 'react-icons/bs';
+import {BsFacebook, BsGoogle, BsLinkedin, BsTwitterX} from 'react-icons/bs';
 import {api} from '@/lib/api-client';
 import toast from 'react-hot-toast';
 import {useUserContext} from '@/context/UserProvider';
@@ -97,59 +97,65 @@ export default function ReviewImportDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
-          <BiDownload className="text-2xl"/>
+          <BiPlus className="text-2xl"/>
           Import Reviews
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="max-w-4xl">
         <DialogHeader>
-          <DialogTitle>Let's import some reviews ✌🏻</DialogTitle>
-          <DialogDescription>
-            {/*Anyone who has this link will be able to view this.*/}
-          </DialogDescription>
+          <DialogTitle>Import Reviews</DialogTitle>
         </DialogHeader>
         <div className="grid grid-cols-1 gap-4">
-          {/*Import from x*/}
-          <ReviewImportXDialog
-            beforeOnOpenChange={() => {
-              if (!user) {
-                signIn()
-                return false;
-              }
-              return true;
-            }}
-            onImport={(tweetId, data) => {
-              importFromX(tweetId, data);
-            }}
-          >
-            <div>
-              <Button
-                size={'lg'}
-                className="w-full items-center justify-center text-lg"
-              >
-                <BsTwitterX className="text-xl"/>
-                Import from X
-              </Button>
-            </div>
-          </ReviewImportXDialog>
-          {/*<ReviewImportTiktokDialog*/}
-          {/*  onImport={(response: YtDlpResponse | undefined) => {*/}
-          {/*    importFromTiktok(response);*/}
-          {/*  }}*/}
-          {/*>*/}
-          {/*  <div>*/}
-          {/*    <Button*/}
-          {/*      size={'lg'}*/}
-          {/*      className="w-full items-center justify-center text-lg"*/}
-          {/*    >*/}
-          {/*      <BsTwitterX className="text-xl"/>*/}
-          {/*      Import from Tiktok*/}
-          {/*    </Button>*/}
-          {/*  </div>*/}
-          {/*</ReviewImportTiktokDialog>*/}
+          <label>Import Reviews from Third Platform</label>
+          <div className='grid grid-cols-4 gap-2'>
+            <ReviewImportXDialog
+              onImport={(tweetId, data) => {
+                importFromX(tweetId, data);
+              }}>
+              <div>
+                <Button
+                  size={'lg'}
+                  className="w-full items-center justify-center text-sm"
+                  variant={'outline'}
+                >
+                  <BsTwitterX/>
+                  Twitter/X
+                </Button>
+              </div>
+            </ReviewImportXDialog>
+            <Button
+              size={'lg'}
+              className="w-full items-center justify-center text-sm"
+              variant={'outline'}
+            >
+              <BsGoogle/>
+              Google
+            </Button>
+            <Button
+              size={'lg'}
+              className="w-full items-center justify-center text-sm"
+              variant={'outline'}
+            >
+              <BsLinkedin/>
+              LinkedIn
+            </Button>
+            <Button
+              size={'lg'}
+              className="w-full items-center justify-center text-sm"
+              variant={'outline'}
+            >
+              <BsFacebook/>
+              Facebook
+            </Button>
+          </div>
 
-
-          {/*Import from manual*/}
+          {/* or */}
+          <div className="flex items-center justify-center">
+            <hr className="w-full border-t border-gray-300"/>
+            <span className="text-gray-500">or</span>
+            <hr className="w-full border-t border-gray-300"/>
+          </div>
+          <label>Add Review Manually</label>
           <ReviewImportManualDialog/>
         </div>
       </DialogContent>

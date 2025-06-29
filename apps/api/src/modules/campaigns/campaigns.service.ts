@@ -3,12 +3,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateCampaignDto,
   createCampaignSchema,
+  FindAllCampaignsRequest,
   UpdateCampaignDto,
 } from '@repo/api/campaign/index';
 import { ResendEmailService } from '@src/modules/email/resend-email.service';
 import { render } from '@react-email/render';
 import * as React from 'react';
 import CampaignEmail from '@src/emails/campaign-email';
+import { PaginateResponse } from '@repo/api/common/paginate';
 
 @Injectable()
 export class CampaignsService {
@@ -78,20 +80,39 @@ export class CampaignsService {
         content: validatedDto.content,
         isTest: validatedDto.isTest,
         buttonText: validatedDto.buttonText,
+        status: 'sent',
       },
     });
   }
 
-  async findAll(uid: string, workspaceId: string) {
-    return this.prismaService.campaign.findMany({
+  async findAll(request: FindAllCampaignsRequest) {
+    this.logger.debug('Fetching campaigns with pagination', request);
+    if (!request.workspaceId) {
+      throw new Error('Workspace ID is required to fetch reviews');
+    }
+    const total = await this.prismaService.campaign.count({
       where: {
-        userId: uid,
-        workspaceId: workspaceId,
-      },
-      orderBy: {
-        createdAt: 'desc', // Order by creation date
+        workspaceId: request.workspaceId,
       },
     });
+    const items = await this.prismaService.campaign.findMany({
+      where: {
+        workspaceId: request.workspaceId,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+      skip: (request.page - 1) * request.pageSize,
+      take: request.pageSize,
+    });
+    return {
+      items: items,
+      meta: {
+        page: request.page,
+        pageSize: request.pageSize,
+        total: total,
+      },
+    } as PaginateResponse<any>;
   }
 
   async findOne(uid: string, id: string) {
@@ -120,7 +141,7 @@ export class CampaignsService {
   }
 
   async remove(uid: string, id: string) {
-    return this.prismaService.form.delete({
+    return this.prismaService.campaign.delete({
       where: {
         id: id,
         userId: uid,

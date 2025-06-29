@@ -57,6 +57,7 @@
     "@react-email/components": "^0.0.42",
     "@repo/api": "*",
     "@repo/database": "*",
+    "@repo/ui": "*",
     "@reviewsup/embed-react": "*",
     "@superfaceai/passport-twitter-oauth2": "^1.2.4",
     "@tabler/icons-react": "^3.34.0",
@@ -117,6 +118,7 @@
     "@repo/eslint-config": "*",
     "@repo/jest-config": "*",
     "@repo/typescript-config": "*",
+    "@repo/tailwind-config": "*",
     "@tailwindcss/cli": "^4.1.10",
     "@tailwindcss/postcss": "^4.1.10",
     "@types/ejs": "^3.1.5",
@@ -154,9 +156,10 @@
     "tsup": "^8.0.2",
     "tsx": "^4.20.3",
     "turbo": "^2.5.4",
-    "typescript": "5.5.4"
+    "typescript": "5.5.4",
+    "autoprefixer": "^10.4.21"
   },
-  "engines": {
+"engines": {
     "node": ">=18"
   },
   "workspaces": [

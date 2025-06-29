@@ -1,5 +1,5 @@
-import {ShowcaseEntity} from "@repo/api/showcases/entities/showcase.entity";
-import {useShowcaseContext} from "@/modules/showcase/context/ShowcaseProvider";
+import {ShowcaseConfig, ShowcaseEntity} from "@repo/api/showcases/entities/showcase.entity";
+import {useShowcaseContext} from "@/modules/showcase/context/showcase-context";
 import Link from "next/link";
 import {BiFile, BiTrash} from "react-icons/bi";
 import {toLocalDateString} from "@/lib/utils";
@@ -21,6 +21,8 @@ export function ShowcaseListItem(props: {
   const {deleteShowcase} = useShowcaseContext();
   const {item, lang, workspaceId} = props;
 
+  const config = item.config as ShowcaseConfig;
+
   return (
     <div
       className='flex flex-row justify-between items-center mb-4 w-full bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:shadow-md transition-shadow duration-200'
@@ -39,7 +41,7 @@ export function ShowcaseListItem(props: {
               {item.name}
             </h2>
             <p className="text-sm text-gray-500 mt-0.5">
-              {/*<span className="font-semibold uppercase">{item.type} Type</span>{' '}*/}
+              <span className="font-semibold">{config.type?.toUpperCase()} Layout</span>{' '}
               created on {toLocalDateString(item.createdAt.toLocaleString())}
             </p>
           </div>

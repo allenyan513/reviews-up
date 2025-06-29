@@ -1,12 +1,18 @@
 import {useState} from 'react';
 import {X} from 'lucide-react';
+import {cn} from '@/lib/utils';
 
 interface EmailsInputProps {
   emails: string[];
   onChange: (emails: string[]) => void;
+  disabled?: boolean;
 }
 
-export function EmailsInput({emails, onChange}: EmailsInputProps) {
+export function EmailsInput({
+                              emails,
+                              onChange,
+                              disabled
+                            }: EmailsInputProps) {
   const [inputValue, setInputValue] = useState('');
 
   const isValidEmail = (email: string) =>
@@ -29,7 +35,9 @@ export function EmailsInput({emails, onChange}: EmailsInputProps) {
 
   return (
     <div
-      className="w-full p-2 border border-gray-300 rounded flex flex-wrap gap-2 focus-within:ring-2 focus-within:ring-blue-500">
+      className={cn("w-full p-2 border border-gray-300 rounded flex flex-wrap gap-2 focus-within:ring-2 focus-within:ring-blue-500",
+        disabled ? "bg-gray-100 cursor-not-allowed opacity-75" : "bg-white"
+      )}>
       {emails.map((email) => (
         <div
           key={email}
@@ -51,7 +59,10 @@ export function EmailsInput({emails, onChange}: EmailsInputProps) {
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder="Enter email and press Enter"
-        className="flex-grow outline-none min-w-[150px]"
+        disabled={disabled}
+        className={cn("flex-grow outline-none min-w-[150px]",
+          disabled ? "bg-gray-100 cursor-not-allowed opacity-75" : "bg-white"
+        )}
       />
     </div>
   );

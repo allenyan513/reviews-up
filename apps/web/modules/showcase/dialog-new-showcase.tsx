@@ -15,7 +15,7 @@ import {BiPlus, BiSortAlt2} from 'react-icons/bi';
 import {useUserContext} from '@/context/UserProvider';
 import {useState} from 'react';
 import toast from 'react-hot-toast';
-import {useShowcaseContext} from "@/modules/showcase/context/ShowcaseProvider";
+import {useShowcaseContext} from "@/modules/showcase/context/showcase-context";
 
 export default function DialogNewShowcase(props: {}) {
 

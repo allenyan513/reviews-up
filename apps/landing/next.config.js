@@ -1,4 +1,5 @@
 const nextConfig = {
+  transpilePackages: ["@repo/ui"],
   images: {
     domains: ['localhost'],
     remotePatterns: [

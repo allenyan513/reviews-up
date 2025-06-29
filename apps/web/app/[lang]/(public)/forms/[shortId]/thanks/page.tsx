@@ -1,6 +1,6 @@
 'use client';
 import {useEffect, useState, use} from 'react';
-import {PageFormThanksReview} from '@/modules/form/page-form-thanks-review';
+import {FormThanksPreviewView} from '@/modules/form/thanks/form-thanks-preview-view';
 import {useFormContext} from '@/modules/form/context/FormProvider';
 import {useSession} from '@/context/UserProvider';
 
@@ -24,5 +24,5 @@ export default function PublicFormThanksRoute(props: {
   if (!formConfig) {
     return null;
   }
-  return <PageFormThanksReview mode={'public'} formConfig={formConfig}/>;
+  return <FormThanksPreviewView mode={'public'} formConfig={formConfig}/>;
 }

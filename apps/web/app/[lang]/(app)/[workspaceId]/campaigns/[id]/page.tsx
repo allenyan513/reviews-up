@@ -1,7 +1,7 @@
 'use client';
 
-import { use } from 'react';
-import { redirect } from 'next/navigation';
+import {use} from 'react';
+import {CampaignIdPage} from '@/modules/campaign/id';
 
 export default function Page(props: {
   params: Promise<{
@@ -10,9 +10,9 @@ export default function Page(props: {
     id: string;
   }>;
 }) {
-  const { id, lang, workspaceId } = use(props.params);
+  const {id, lang, workspaceId} = use(props.params);
   if (!id || !lang || !workspaceId) {
     return null;
   }
-  redirect(`/${lang}/${workspaceId}/forms/${id}/default`);
+  return <CampaignIdPage params={props.params}/>;
 }

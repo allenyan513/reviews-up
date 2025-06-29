@@ -14,6 +14,7 @@ export const createReviewSchema = z.object({
   avatarUrl: z.string().url().optional(),
   imageUrls: z.array(z.string().url()).optional(),
   videoUrl: z.string().url().optional(),
+  title: z.string().optional(),
   tweetId: z.string().optional(),
   source: z.nativeEnum(ReviewSource).default(ReviewSource.manual).optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending).optional(),

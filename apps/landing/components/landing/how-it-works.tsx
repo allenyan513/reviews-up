@@ -1,8 +1,7 @@
 // how-it-works.tsx
 import React from 'react';
 import {howItWorksSteps} from '@/data/how-it-works';
-import {CodeBlock} from '../code-block';
-import { CodeHighlighter } from '../ui/code-highlighter';
+import { CodeHighlighter } from '../code-highlighter';
 
 export const HowItWorks: React.FC = () => {
   return (
