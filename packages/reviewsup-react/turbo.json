@@ -5,10 +5,10 @@
       "dependsOn": ["build:styles", "build:components"]
     },
     "build:styles": {
-      "outputs": ["dist/**"]
+      "cache": false
     },
     "build:components": {
-      "outputs": ["dist/**"]
+      "cache": false
     },
     "dev": {
       "with": ["dev:styles", "dev:components"]
