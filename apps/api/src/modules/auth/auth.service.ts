@@ -6,6 +6,7 @@ import { CreateAccountDto } from '@repo/api/users/index';
 import { EMAIL_FROM } from '@src/modules/email/email.constants';
 import { UsersService } from '../users/users.service';
 import { ResendEmailService } from '@src/modules/email/resend-email.service';
+import { NotificationsService } from '../notifications/notifications.service';
 
 @Injectable()
 export class AuthService {
@@ -16,6 +17,7 @@ export class AuthService {
     private jwtService: JwtService,
     private emailService: ResendEmailService,
     private userService: UsersService,
+    private notificationsService: NotificationsService,
   ) {}
 
   generateJwt(payload: JwtPayload): string {
@@ -136,6 +138,7 @@ export class AuthService {
       },
     });
     await this.userService.addDefaultUserData(newUser);
+    await this.notificationsService.onUserCreated(newUser);
     return newUser;
   }
 

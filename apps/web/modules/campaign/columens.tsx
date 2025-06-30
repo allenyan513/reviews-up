@@ -1,15 +1,12 @@
 'use client';
 
 import {ColumnDef, useReactTable} from '@tanstack/react-table';
-import {ReviewEntity} from '@repo/api/reviews/entities/review.entity';
 import React from 'react';
 import {Button} from '@/components/ui/button';
 import {ArrowUpDown} from 'lucide-react';
 import {api} from '@/lib/api-client';
-import {$Enums} from '@repo/database/generated/client';
-import ReviewStatus = $Enums.ReviewStatus;
 import toast from 'react-hot-toast';
-import {BiHide, BiInfoCircle, BiShow, BiTrash} from 'react-icons/bi';
+import {BiShow, BiTrash} from 'react-icons/bi';
 import {
   AlertDialog,
   AlertDialogAction,

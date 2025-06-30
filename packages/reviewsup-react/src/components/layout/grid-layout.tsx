@@ -2,7 +2,7 @@
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
 import { ReviewItem2 } from '../item/review-item-2';
-import { RatingSummary } from '../RatingSummary';
+import { RatingSummary } from '../rating-summary';
 import React from 'react';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 

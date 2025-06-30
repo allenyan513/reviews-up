@@ -2,6 +2,7 @@ export * from './components/showcase';
 export * from './components/showcase-loading';
 export * from './components/item/review-item';
 export * from './components/item/review-item-source';
+export * from './components/item/review-item-source-2';
 export * from './components/layout/list-layout-client';
 export * from './components/layout/list-layout-server';
 export * from './components/layout/flow-layout-client';

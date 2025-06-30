@@ -88,10 +88,10 @@ export class UsersService {
           formId: defaultForm.id,
           reviewerName: review.reviewerName,
           reviewerImage: review.reviewerImage,
-          reviewerEmail: review.reviewerEmail,
+          reviewerTitle: review.reviewerTitle,
           rating: review.rating,
           text: review.text,
-          status: 'pending',
+          status: review.status,
         },
       });
     }

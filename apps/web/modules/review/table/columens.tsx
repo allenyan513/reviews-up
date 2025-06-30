@@ -17,7 +17,7 @@ import {api} from '@/lib/api-client';
 import {$Enums} from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 import toast from 'react-hot-toast';
-import {BiHide, BiInfoCircle, BiShow, BiTrash} from 'react-icons/bi';
+import {BiHide, BiInfoCircle, BiListCheck, BiShow, BiTrash} from 'react-icons/bi';
 import ReviewLookupDialog from '@/modules/review/review-lookup-dialog';
 import {
   AlertDialog,
@@ -31,6 +31,9 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog"
 import {toLocalDateString} from "@/lib/utils";
+import {cn} from '@repo/ui/lib/utils';
+import {ReviewItemSource2} from "@reviewsup/embed-react";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from '@/components/ui/dropdown-menu';
 
 
 export function columns(setData: any): ColumnDef<any>[] {
@@ -156,12 +159,36 @@ export function columns(setData: any): ColumnDef<any>[] {
         header: 'Source',
         cell: ({row}) => {
           const source = row.getValue('source') as string;
-          return <ReviewItemSource source={source}/>;
+          return <ReviewItemSource2 source={source}/>;
         },
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: function StatusHeader({column}) {
+          return (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="text-sm font-semibold">
+                  Status ⏷
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem onClick={() => column.setFilterValue(undefined)}>
+                  <BiListCheck/>All
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => column.setFilterValue('pending')}>
+                  <BiInfoCircle/>Pending
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => column.setFilterValue('public')}>
+                  <BiShow/>Public
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => column.setFilterValue('hidden')}>
+                  <BiHide/>Hidden
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          );
+        },
         cell: ({row, table}) => {
           const reviewId = row.original.id;
           const status = row.getValue('status') as string;
@@ -171,7 +198,11 @@ export function columns(setData: any): ColumnDef<any>[] {
                 updateReviewStatus(reviewId, status as ReviewStatus)
               }}
               variant={'outline'}
-              className={`text-sm font-medium rounded-full`}
+              className={cn(`text-sm font-medium rounded-full`,
+                status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
+                  status === 'public' ? 'bg-green-100 text-green-800' :
+                    status === 'hidden' ? 'bg-gray-100 text-gray-800' : ''
+              )}
             >
               {status === 'pending' && <BiInfoCircle className=""/>}
               {status === 'public' && <BiShow className=""/>}
@@ -190,7 +221,7 @@ export function columns(setData: any): ColumnDef<any>[] {
               onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
             >
               Date
-              <ArrowUpDown className="ml-2 h-4 w-4"/>
+              <ArrowUpDown className="h-4 w-4"/>
             </Button>
           );
         },

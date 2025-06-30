@@ -3,7 +3,7 @@ import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
 import { useState } from 'react';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
-import { RatingSummary } from '../RatingSummary';
+import { RatingSummary } from '../rating-summary';
 
 /**
  * @param props

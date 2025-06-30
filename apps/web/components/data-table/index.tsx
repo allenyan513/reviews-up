@@ -98,7 +98,6 @@ export function DataTable<TData, TValue>(
         setIsLoading(false);
       }
     };
-
     fetchDataFromServer();
   }, [
     pagination.pageIndex,
