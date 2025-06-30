@@ -10,6 +10,8 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
+    "@repo/ui": "*",
+    "@repo/api": "*",
     "@reviewsup/embed-react": "*"
   }
 }

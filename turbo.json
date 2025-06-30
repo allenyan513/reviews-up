@@ -4,10 +4,6 @@
     ".env"
   ],
   "tasks": {
-    "email:dev": {
-      "cache": false,
-      "persistent": true
-    },
     "dev": {
       "dependsOn": [
         "^db:generate"
@@ -60,31 +56,11 @@
         "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID"
       ]
     },
-    "deploy": {
-      "dependsOn": [
-        "^build"
-      ],
-      "cache": false,
-      "persistent": true
-    },
     "db:generate": {
       "cache": false
     },
     "db:migrate": {
       "cache": false
-    },
-    "db:deploy": {
-      "cache": false
-    },
-    "db:studio": {
-      "cache": false
-    },
-    "lint": {},
-    "test": {},
-    "test:e2e": {},
-    "start": {
-      "cache": false,
-      "persistent": true
     }
   }
 }

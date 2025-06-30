@@ -4,10 +4,8 @@
   "private": true,
   "license": "MIT",
   "scripts": {
-    "dev": "tsc -b -v --watch",
-    "build": "tsc -b -v",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
-    "prebuild": "tsc -b -v"
+    "dev": "tsc --watch",
+    "build": "tsc"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,5 +31,8 @@
       "import": "./dist/*.js",
       "require": "./dist/*.js"
     }
+  },
+  "dependencies": {
+    "@repo/database": "*"
   }
 }

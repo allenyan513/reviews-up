@@ -11,10 +11,20 @@
       ]
     },
     "build:styles": {
-      "cache": false
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "build:components": {
-      "cache": false
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/**"
+      ]
     },
     "dev": {
       "with": [

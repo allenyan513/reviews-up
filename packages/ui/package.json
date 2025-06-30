@@ -17,10 +17,8 @@
   "scripts": {
     "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
     "build:components": "tsc",
-    "check-types": "tsc --noEmit",
     "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
-    "dev:components": "tsc --watch",
-    "lint": "eslint src --max-warnings 0"
+    "dev:components": "tsc --watch"
   },
   "peerDependencies": {
     "react": "^19"
