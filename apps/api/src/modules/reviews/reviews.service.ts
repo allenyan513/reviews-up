@@ -100,6 +100,7 @@ export class ReviewsService {
         page: request.page,
         pageSize: request.pageSize,
         total: total,
+        pageCount: Math.ceil(total / request.pageSize),
       },
     } as PaginateResponse<any>;
   }

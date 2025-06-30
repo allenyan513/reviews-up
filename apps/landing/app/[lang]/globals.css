@@ -1,4 +1,5 @@
 /** 优先加载 @repo/ui/styles.css 再加载 @repo/tailwind-config */
+@import "@reviewsup/embed-react/styles.css";
 @import "@repo/ui/styles.css";
 @import "@repo/tailwind-config";
 

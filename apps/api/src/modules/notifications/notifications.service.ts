@@ -4,7 +4,9 @@ import { EMAIL_FROM } from '@src/modules/email/email.constants';
 import { ResendEmailService } from '../email/resend-email.service';
 import { render } from '@react-email/render';
 import * as React from 'react';
-import { StripeWelcomeEmail } from '@src/emails/welcome';
+import { WelcomeEmail } from '@src/emails/welcome-email';
+import { ReviewSubmitEmail } from '@src/emails/review-submitted-email';
+import { User } from '@repo/database/generated/client';
 
 @Injectable()
 export class NotificationsService {
@@ -14,6 +16,30 @@ export class NotificationsService {
     private prismaService: PrismaService,
     private emailService: ResendEmailService,
   ) {}
+
+  /**
+   * Send a welcome email to the user when they are created.
+   * @param user
+   */
+  async onUserCreated(user: User): Promise<void> {
+    if (!user.email) {
+      this.logger.warn(
+        `User with ID ${user.id} has no email, skipping welcome email.`,
+      );
+      return;
+    }
+    const html = await render(
+      React.createElement(WelcomeEmail, {
+        userName: user.name || 'User',
+      }),
+    );
+    await this.emailService.send({
+      from: EMAIL_FROM,
+      to: user.email,
+      subject: `Welcome to Reviewsup.io`,
+      html: html,
+    });
+  }
 
   /**
    * 当用户提交评论时触发通知，通知创建者
@@ -43,15 +69,10 @@ export class NotificationsService {
       throw new Error(`Owner with ID ${ownerId} not found`);
     }
     const html = await render(
-      React.createElement(StripeWelcomeEmail, {
-        brand: 'Reviewsup.io',
+      React.createElement(ReviewSubmitEmail, {
+        url: `${process.env.NEXT_PUBLIC_APP_URL}`,
       }),
     );
-    // const html = await render(
-    //   React.createElement(MyEmail, {
-    //     url: 'https://www.google.com'
-    //   }),
-    // )
     await this.emailService.send({
       from: EMAIL_FROM,
       to: owner.email,

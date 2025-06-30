@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import { ReviewItem } from '../item/review-item';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
-import { RatingSummary } from '../RatingSummary';
+import { RatingSummary } from '../rating-summary';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 
 interface FlowLayoutClientProps {

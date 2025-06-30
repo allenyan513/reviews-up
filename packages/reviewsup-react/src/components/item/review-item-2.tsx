@@ -38,28 +38,19 @@ export function ReviewItem2(props: {
       <Link
         target="_blank"
         href={`${process.env.NEXT_PUBLIC_APP_URL}/profile/${review.reviewerId}`}
-        className="flex flex-col gap-2" >
-        {/*divider*/}
+        className="flex flex-col gap-2"
+      >
         <div className="border-t border-gray-200" />
         <div className="flex flex-row gap-3 p-2 overflow-x-auto">
           <img
             src={review.reviewerImage}
             alt={review.reviewerName}
-            className="rounded-full object-cover shadow"
-            style={{
-              width: '44px',
-              height: '44px',
-            }}
+            className="rounded-full object-cover shadow w-12 h-12 border border-gray-300 bg-white"
           />
           <div className="flex flex-col justify-center">
             <p className="text-md line-clamp-1">{review.reviewerName}</p>
-            <p
-              className="text-sm"
-              style={{
-                color: '#6b7280',
-              }}
-            >
-              {review.reviewerEmail || ''}
+            <p className="text-sm line-clamp-1 text-gray-500">
+              {review.reviewerTitle || ''}
             </p>
           </div>
         </div>
