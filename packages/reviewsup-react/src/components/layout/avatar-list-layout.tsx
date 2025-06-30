@@ -36,11 +36,7 @@ export function AvatarListLayout(props: {
             key={item.id}
             src={item.reviewerImage}
             alt={item.reviewerName}
-            className="rounded-full object-cover border"
-            style={{
-              width: '44px',
-              height: '44px',
-            }}
+            className="rounded-full object-cover border w-12 h-12 shadow"
             onMouseEnter={() => setCurrentItem(item)}
           />
         ))}
@@ -51,11 +47,7 @@ export function AvatarListLayout(props: {
             key={item.id}
             src={item.reviewerImage}
             alt={item.reviewerName}
-            className={`rounded-full object-cover border `}
-            style={{
-              width: '44px',
-              height: '44px',
-            }}
+            className="rounded-full object-cover border w-12 h-12 shadow"
             onMouseEnter={() => setCurrentItem(item)}
           />
         ))}
@@ -68,23 +60,19 @@ export function AvatarListLayout(props: {
             </span>
             {currentItem.text}
           </p>
-          <p className="text-sm mt-4">{currentItem.reviewerTitle}</p>
+          <p className="text-sm mt-4 text-gray-500">
+            {currentItem.reviewerTitle}
+          </p>
           <img
             src={currentItem.reviewerImage}
             alt={currentItem.reviewerName}
-            className="rounded-full object-cover border"
-            style={{
-              width: '44px',
-              height: '44px',
-            }}
+            className="rounded-full object-cover border w-12 h-12 shadow"
           />
         </div>
       )}
       {config.isRatingSummaryEnabled && (
-        <div className='mt-8 w-full flex justify-center'>
-          <RatingSummary
-            ratings={items.map(item => item.rating || 0)}
-          />
+        <div className="mt-8 w-full flex justify-center">
+          <RatingSummary ratings={items.map((item) => item.rating || 0)} />
         </div>
       )}
     </div>

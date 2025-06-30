@@ -5,10 +5,10 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev": "tsc -b -v --watch",
-    "build": "tsc && npm run reviewsup-react:copy",
-    "reviewsup-react:copy": "mkdir -p dist/styles && cp -r src/styles/* dist/styles",
-    "clean": "rm -rf dist && rm -rf .turbo"
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+    "dev:components": "tsc --watch",
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build:components": "tsc"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -16,9 +16,8 @@
     "dist/**/*.{js,d.ts,css}"
   ],
   "exports": {
-    ".": {
-      "default": "./dist/index.js"
-    }
+    "./styles.css": "./dist/index.css",
+    ".": "./dist/index.js"
   },
   "publishConfig": {
     "access": "public",

@@ -108,15 +108,7 @@ export function ReviewItem(props: {
   return (
     <div
       key={review.id}
-      style={{
-        backgroundColor: 'white',
-        padding: '1rem',
-        border: '1px solid #d1d5db', // gray-300
-        borderRadius: '0.375rem', // rounded-md
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-      }}
+      className={`bg-white p-4 border border-gray-300 rounded-md shadow-sm flex flex-col gap-4 ${className}`}
     >
       <Link
         target="_blank"
@@ -124,11 +116,7 @@ export function ReviewItem(props: {
         className="flex flex-row justify-between"
       >
         <div className="flex flex-row gap-2 overflow-x-auto">
-          <div
-            style={{
-              position: 'relative',
-            }}
-          >
+          <div className="relative">
             <div className="w-10 h-10 rounded-full overflow-hidden">
               <img
                 src={review.reviewerImage}
@@ -138,7 +126,8 @@ export function ReviewItem(props: {
             </div>
             <ReviewItemSource
               className="absolute bottom-0 right-0"
-              source={review.source as string} />
+              source={review.source as string}
+            />
           </div>
           <div className="flex flex-col justify-center">
             <p className="text-md font-semibold line-clamp-1">

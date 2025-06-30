@@ -16,12 +16,10 @@ export function GridLayout(props: {
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4">
       <div
-        className="w-full"
         style={{
-          display: 'grid',
           gridTemplateColumns: `repeat(${columns}, 1fr)`,
-          gap: '16px',
         }}
+        className="w-full grid gap-4"
       >
         {items.map((item, idx) => (
           <ReviewItem2

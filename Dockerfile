@@ -20,8 +20,12 @@ COPY --from=builder /app/apps/landing/public /app/apps/landing/public
 COPY --from=builder /app/apps/landing/package.json /app/apps/landing/package.json
 
 COPY --from=builder /app/packages /app/packages
+COPY --from=builder /app/package.json /app/package.json
+COPY --from=builder /app/package-lock.json /app/package-lock.json
+COPY --from=builder /app/tsconfig.json /app/tsconfig.json
+COPY --from=builder /app/turbo.json /app/turbo.json
 
-RUN npm install --production
+RUN npm ci --production
 
 EXPOSE 5510
 EXPOSE 5520

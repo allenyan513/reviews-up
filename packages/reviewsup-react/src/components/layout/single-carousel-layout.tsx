@@ -45,7 +45,11 @@ export function SingleCarouselLayout(props: {
 
   return (
     <div ref={containerRef} className="overflow-hidden w-full relative">
-      <div ref={ref} className="flex flex-row gap-4 p-4" style={{ willChange: 'transform' }}>
+      <div
+        ref={ref}
+        style={{ willChange: 'transform' }}
+        className="flex flex-row gap-4 p-4"
+      >
         {duplicatedItems.map((item, idx) => (
           <div key={`${item ? (item as any).id || idx : idx}-${idx}`}>
             <ReviewItem1
@@ -60,30 +64,8 @@ export function SingleCarouselLayout(props: {
           </div>
         ))}
       </div>
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100px', // Width of the fade
-          height: '100%',
-          background:
-            'linear-gradient(to right, #f3f4f6, rgba(243, 244, 246, 0))', // Adjust color to match background
-          pointerEvents: 'none', // Allow clicks/text selection underneath
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: '100px', // Width of the fade
-          height: '100%',
-          background:
-            'linear-gradient(to left, #f3f4f6, rgba(243, 244, 246, 0))', // Adjust color to match background
-          pointerEvents: 'none', // Allow clicks/text selection underneath
-        }}
-      />
+      <div className="absolute top-0 left-0 w-[100px] h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[100px] h-full bg-gradient-to-l from-white to-transparent pointer-events-none" />
     </div>
   );
 }

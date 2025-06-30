@@ -1,5 +1,5 @@
-const nextConfig= {
-  transpilePackages: ["@repo/ui"],
+const nextConfig = {
+  transpilePackages: ["@repo/ui", "@reviewsup/embed-react"],
   images: {
     domains: ['localhost'],
     remotePatterns: [

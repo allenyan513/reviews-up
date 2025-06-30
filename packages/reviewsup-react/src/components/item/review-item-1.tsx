@@ -47,21 +47,12 @@ export function ReviewItem1(props: {
           <img
             src={review.reviewerImage}
             alt={review.reviewerName}
-            className="rounded-full object-cover shadow"
-            style={{
-              width: '44px',
-              height: '44px',
-            }}
+            className="rounded-full object-cover shadow w-12 h-12 border border-gray-300 bg-white"
           />
           <div className="flex flex-col justify-center">
             <p className="text-md line-clamp-1">{review.reviewerName}</p>
-            <p
-              className="text-sm"
-              style={{
-                color: '#6b7280',
-              }}
-            >
-              {review.reviewerEmail || ''}
+            <p className="text-sm text-gray-500 line-clamp-1">
+              {review.reviewerTitle || ''}
             </p>
           </div>
         </div>

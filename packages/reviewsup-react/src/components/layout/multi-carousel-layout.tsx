@@ -76,31 +76,8 @@ function CarouselRow({
           </div>
         ))}
       </div>
-      {/* Fade overlays for each row */}
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100px',
-          height: '100%',
-          background:
-            'linear-gradient(to right, #f3f4f6, rgba(243, 244, 246, 0))',
-          pointerEvents: 'none',
-        }}
-      />
-      <div
-        style={{
-          position: 'absolute',
-          top: 0,
-          right: 0,
-          width: '100px',
-          height: '100%',
-          background:
-            'linear-gradient(to left, #f3f4f6, rgba(243, 244, 246, 0))',
-          pointerEvents: 'none',
-        }}
-      />
+      <div className="absolute top-0 left-0 w-[100px] h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[100px] h-full bg-gradient-to-l from-white to-transparent pointer-events-none" />
     </div>
   );
 }

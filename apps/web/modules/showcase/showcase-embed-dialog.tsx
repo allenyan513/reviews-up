@@ -73,10 +73,20 @@ export function ShowcaseEmbedDialog(props: {
                 `npm install @reviewsup/embed-react`,
               ]}
             />
+            <p className='text-sm text-muted-foreground'>
+              {/*2.在您的global.css中添加以下样式*/}
+              2. Add the following styles to your global.css
+            </p>
+            <CodeBlock
+              lang="css"
+              codes={[
+                `@import "@reviewsup/embed-react/styles.css";`,
+              ]}
+            />
 
             <p className='text-sm text-muted-foreground'>
               {/*2.在您的React组件中使用Showcase组件*/}
-              2. Use the Showcase component in your React component
+              3. Use the Showcase component in your React component
             </p>
 
             <CodeBlock
