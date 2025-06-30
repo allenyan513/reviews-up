@@ -11,14 +11,10 @@
       ]
     },
     "build:styles": {
-      "outputs": [
-        "dist/**"
-      ]
+      "cache": false
     },
     "build:components": {
-      "outputs": [
-        "dist/**"
-      ]
+      "cache": false
     },
     "dev": {
       "with": [
