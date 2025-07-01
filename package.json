@@ -8,7 +8,7 @@
   "packageManager": "npm@11.4.1",
   "scripts": {
     "dev": "npm run cp-env && turbo run dev",
-    "build": "turbo run build",
+    "build": "npm run cp-env && turbo run build",
     "pm2:start": "pm2 startOrReload ecosystem.config.js",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
