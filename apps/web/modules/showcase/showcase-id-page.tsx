@@ -1,15 +1,15 @@
 'use client';
 
-import {useEffect, useState, use} from 'react';
-import {BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow} from 'react-icons/bi';
-import {Button} from '@/components/ui/button';
+import { useEffect, useState, use } from 'react';
+import { BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow } from 'react-icons/bi';
+import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import {ShowcasePageReviewClient} from '@reviewsup/embed-react';
-import {BsBoxArrowUpRight, BsShare} from 'react-icons/bs';
-import {ShowcasePageConfig} from '@/modules/showcase/showcase-page-config';
-import {useShowcaseContext} from '@/modules/showcase/context/showcase-context';
-import {ShowcaseEmbedDialog} from '@/modules/showcase/showcase-embed-dialog';
+import { ShowcasePageReviewClient } from '@reviewsup/embed-react';
+import { BsBoxArrowUpRight, BsShare } from 'react-icons/bs';
+import { ShowcasePageConfig } from '@/modules/showcase/showcase-page-config';
+import { useShowcaseContext } from '@/modules/showcase/context/showcase-context';
+import { ShowcaseEmbedDialog } from '@/modules/showcase/showcase-embed-dialog';
 
 export default function ShowcaseIdPage(props: {
   params: Promise<{
@@ -19,7 +19,7 @@ export default function ShowcaseIdPage(props: {
   }>;
 }) {
   const params = use(props.params);
-  const {getShowcase, showcase, showcaseConfig} = useShowcaseContext();
+  const { getShowcase, showcase, showcaseConfig } = useShowcaseContext();
   useEffect(() => {
     if (!params.id) return;
     getShowcase(params.id);
@@ -35,7 +35,7 @@ export default function ShowcaseIdPage(props: {
             href={`/${params.lang}/${params.workspaceId}/showcases`}
             className="flex flex-row items-center gap-2 "
           >
-            <BiArrowBack className="text-2xl"/>
+            <BiArrowBack className="text-2xl" />
             <h1 className="text-2xl md:text-3xl font-semibold text-gray-900">
               Edit {showcase.name}
             </h1>
@@ -47,8 +47,8 @@ export default function ShowcaseIdPage(props: {
         <div className={'flex flex-row gap-1'}>
           <ShowcaseEmbedDialog showcaseId={showcase.shortId}>
             <Button variant="outline" size={'lg'}>
-              <BiCodeAlt className="text-2xl"/>
-              <span className='hidden md:flex'>Add to your website</span>
+              <BiCodeAlt className="text-2xl" />
+              <span className="hidden md:flex">Add to your website</span>
             </Button>
           </ShowcaseEmbedDialog>
 
@@ -62,8 +62,8 @@ export default function ShowcaseIdPage(props: {
             variant="outline"
             size={'lg'}
           >
-            <BsShare className="text-2xl"/>
-            <span className='hidden md:flex'>Share</span>
+            <BsShare className="text-2xl" />
+            <span className="hidden md:flex">Share</span>
           </Button>
           <Button
             onClick={() => {
@@ -72,18 +72,17 @@ export default function ShowcaseIdPage(props: {
             variant="default"
             size={'lg'}
           >
-            <BsBoxArrowUpRight className="text-2xl"/>
-            <span className='hidden md:flex'>Open</span>
+            <BsBoxArrowUpRight className="text-2xl" />
+            <span className="hidden md:flex">Open</span>
           </Button>
         </div>
       </div>
 
       <div className="flex flex-col md:grid md:grid-cols-4 gap-4">
         <div className={'flex flex-col md:col-span-1 w-full gap-2'}>
-          <ShowcasePageConfig/>
+          <ShowcasePageConfig />
         </div>
-        <div
-          className="md:col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
+        <div className="md:col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
           <ShowcasePageReviewClient
             showcase={showcase}
             showcaseConfig={showcaseConfig}

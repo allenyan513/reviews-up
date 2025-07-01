@@ -1,13 +1,9 @@
 import Link from 'next/link';
 import clsx from 'clsx';
 
-export function PoweredBy(props: {
-  className?: string;
-}) {
+export function PoweredBy(props: { className?: string }) {
   return (
-    <Link
-      href='https://reviewsup.io'
-      target="_blank">
+    <Link href="https://reviewsup.io" target="_blank">
       <div
         // className={clsx("flex items-center justify-center text-xs gap-1 text-gray-400 py-8", props.className)}
         style={{
@@ -24,7 +20,8 @@ export function PoweredBy(props: {
         <span>Powered by </span>
         <img
           className="w-4 h-4 ml-2"
-          src="https://reviewsup.io/img/logo-32.png"/>
+          src="https://reviewsup.io/img/logo-32.png"
+        />
         <span>Reviewsup.io</span>
       </div>
     </Link>

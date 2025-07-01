@@ -1,9 +1,16 @@
-import {authFetch} from './auth-fetch';
-import {CampaignEntity, CreateCampaignDto, FindAllCampaignsRequest, UpdateCampaignDto} from "@repo/api/campaign/index";
-import {PaginateResponse} from "@repo/api/common/paginate";
+import { authFetch } from './auth-fetch';
+import {
+  CampaignEntity,
+  CreateCampaignDto,
+  FindAllCampaignsRequest,
+  UpdateCampaignDto,
+} from '@repo/api/campaign/index';
+import { PaginateResponse } from '@repo/api/common/paginate';
 
 export const campaign = {
-  findAll: (request: FindAllCampaignsRequest): Promise<PaginateResponse<CampaignEntity>> =>
+  findAll: (
+    request: FindAllCampaignsRequest,
+  ): Promise<PaginateResponse<CampaignEntity>> =>
     authFetch(`/campaigns/workspaceId/${request.workspaceId}`, 'GET', {
       page: request.page,
       pageSize: request.pageSize,

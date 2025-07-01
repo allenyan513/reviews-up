@@ -81,7 +81,7 @@ export function FormProvider(props: { children: React.ReactNode }) {
     } catch (error) {
       toast.error('Failed to delete form');
     }
-  }
+  };
   const createForm = async (workspaceId: string, formName: string) => {
     if (!workspaceId || !formName) {
       toast.error('Please select a workspace first.');
@@ -97,7 +97,7 @@ export function FormProvider(props: { children: React.ReactNode }) {
     } catch (error) {
       toast.error('Failed to create form. Please try again.');
     }
-  }
+  };
 
   return (
     <FormContext.Provider

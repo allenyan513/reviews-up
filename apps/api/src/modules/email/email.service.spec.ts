@@ -1,4 +1,4 @@
-import { Test, TestingModule} from '@nestjs/testing';
+import { Test, TestingModule } from '@nestjs/testing';
 import { EmailService } from './email.service';
 import { beforeEach, describe, expect, it } from '@jest/globals';
 
@@ -19,6 +19,5 @@ describe('EmailService', () => {
     service = module.get<EmailService>(EmailService);
   });
 
-  it('should be defined', async () => {
-  }, 10000);
+  it('should be defined', async () => {}, 10000);
 });

@@ -1,13 +1,13 @@
-import {api} from '@/lib/api-client';
-import {createContext, useContext, useState} from 'react';
+import { api } from '@/lib/api-client';
+import { createContext, useContext, useState } from 'react';
 import {
   ShowcaseConfig,
   ShowcaseEntity,
 } from '@repo/api/showcases/entities/showcase.entity';
-import {PaginateResponse} from '@repo/api/common/paginate';
+import { PaginateResponse } from '@repo/api/common/paginate';
 import toast from 'react-hot-toast';
-import {Showcase} from '@repo/database/generated/client/client';
-import {SortBy} from '@/types/sortby';
+import { Showcase } from '@repo/database/generated/client/client';
+import { SortBy } from '@/types/sortby';
 
 const ShowcaseContext = createContext<{
   showcase: ShowcaseEntity | undefined;
@@ -27,7 +27,6 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
   const [showcases, setShowcases] = useState<PaginateResponse<Showcase>>();
   const [showcase, setShowcase] = useState<ShowcaseEntity>();
   const [showcaseConfig, setShowcaseConfig] = useState<ShowcaseConfig>();
-
 
   const getShowcase = (showcaseId: string) => {
     api.showcase
@@ -55,8 +54,7 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
     } catch (error) {
       toast.error('Failed to delete showcase');
     }
-  }
-
+  };
 
   const createShowcase = async (workspaceId: string, workspaceName: string) => {
     if (!workspaceId || !workspaceName) {
@@ -67,8 +65,8 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
       await api.showcase.createShowcase({
         workspaceId: workspaceId,
         name: workspaceName,
-      })
-      await getShowcases(workspaceId)
+      });
+      await getShowcases(workspaceId);
       toast.success('Showcase created successfully');
     } catch (error) {
       toast.error('Failed to create showcase');

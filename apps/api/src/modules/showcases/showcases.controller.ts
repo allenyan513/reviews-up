@@ -58,8 +58,6 @@ export class ShowcasesController {
     });
   }
 
-
-
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
   async update(

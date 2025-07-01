@@ -7,7 +7,8 @@ import {
   IconStar,
   IconCode,
   IconTable,
-  IconUser, IconMail,
+  IconUser,
+  IconMail,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -47,7 +48,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             >
               <Link
                 target={'_blank'}
-                href={`${process.env.NEXT_PUBLIC_WWW_URL}`}>
+                href={`${process.env.NEXT_PUBLIC_WWW_URL}`}
+              >
                 <Logo />
                 <h1 className="text-base font-semibold">{data.title}</h1>
               </Link>

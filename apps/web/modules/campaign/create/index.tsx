@@ -1,10 +1,10 @@
 'use client';
 
-import {use, useEffect, useState} from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
-import {BiArrowBack} from 'react-icons/bi';
-import {CampaignCreateConfigPage} from './config';
-import {CampaignCreatePreviewPage} from './preview';
+import { BiArrowBack } from 'react-icons/bi';
+import { CampaignCreateConfigPage } from './config';
+import { CampaignCreatePreviewPage } from './preview';
 
 export function CampaignCreatePage(props: {
   params: Promise<{
@@ -13,10 +13,10 @@ export function CampaignCreatePage(props: {
   }>;
   searchParams: Promise<{
     formId?: string;
-  }>
+  }>;
 }) {
-  const {lang, workspaceId} = use(props.params);
-  const {formId} = use(props.searchParams);
+  const { lang, workspaceId } = use(props.params);
+  const { formId } = use(props.searchParams);
 
   return (
     <div className="min-h-screen p-6 md:p-8">
@@ -26,7 +26,7 @@ export function CampaignCreatePage(props: {
             href={`/${lang}/${workspaceId}/campaigns`}
             className="flex flex-row items-center gap-2 "
           >
-            <BiArrowBack className="text-2xl"/>
+            <BiArrowBack className="text-2xl" />
             <h1 className="text-3xl font-semibold text-gray-900">
               Create Campaign
             </h1>
@@ -35,15 +35,14 @@ export function CampaignCreatePage(props: {
             Create a new campaign to send emails to your users.
           </p>
         </div>
-        <div className={'space-x-2'}>
-        </div>
+        <div className={'space-x-2'}></div>
       </div>
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-5 flex flex-col">
-          <CampaignCreateConfigPage/>
+          <CampaignCreateConfigPage />
         </div>
         <div className="col-span-7">
-          <CampaignCreatePreviewPage/>
+          <CampaignCreatePreviewPage />
         </div>
       </div>
     </div>

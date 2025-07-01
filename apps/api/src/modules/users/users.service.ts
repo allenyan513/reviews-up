@@ -48,7 +48,7 @@ export class UsersService {
       where: { id: slug },
       include: {
         Workspace: true,
-        Review:true
+        Review: true,
       },
     });
   }

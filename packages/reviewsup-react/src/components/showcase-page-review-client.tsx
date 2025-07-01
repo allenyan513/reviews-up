@@ -27,9 +27,7 @@ export function ShowcasePageReviewClient(props: {
       {type === 'flow' && (
         <FlowLayoutServer items={reviews} config={defaultConfig} />
       )}
-      {type === 'grid' && (
-        <GridLayout items={reviews} config={defaultConfig} />
-      )}
+      {type === 'grid' && <GridLayout items={reviews} config={defaultConfig} />}
       {type === 'list' && (
         <ListLayoutServer items={reviews} config={defaultConfig} />
       )}
@@ -38,7 +36,7 @@ export function ShowcasePageReviewClient(props: {
       )}
       {type === 'multi-carousel' && (
         <MultiCarouselLayout items={reviews} config={defaultConfig} />
-        )}
+      )}
       {type === 'avatar-list' && (
         <AvatarListLayout items={reviews} config={defaultConfig} />
       )}

@@ -52,4 +52,6 @@ export const findAllCampaignsRequestSchema = z.object({
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
 });
 
-export type FindAllCampaignsRequest = z.infer<typeof findAllCampaignsRequestSchema>;
+export type FindAllCampaignsRequest = z.infer<
+  typeof findAllCampaignsRequestSchema
+>;

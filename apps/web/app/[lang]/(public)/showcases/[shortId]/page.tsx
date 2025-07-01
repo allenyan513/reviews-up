@@ -7,5 +7,5 @@ export default function Page(props: {
     shortId: string;
   }>;
 }) {
-  return <ShowcaseShortIdPage params={props.params}/>;
+  return <ShowcaseShortIdPage params={props.params} />;
 }

@@ -1,7 +1,7 @@
-import {Button} from '@/components/ui/button';
-import {useShowcaseContext} from './context/showcase-context';
-import {Input} from '@/components/ui/input';
-import {useState} from 'react';
+import { Button } from '@/components/ui/button';
+import { useShowcaseContext } from './context/showcase-context';
+import { Input } from '@/components/ui/input';
+import { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -10,17 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import {
-  BsCaretDown,
-  BsCaretUp,
-  BsGear,
-  BsLayers,
-} from 'react-icons/bs';
-import {cn} from '@/lib/utils';
-import {SortBy} from '@/types/sortby';
-import {layoutOptions} from "@/modules/showcase/layout-options";
-import {sortOptions} from './sort-options';
-
+import { BsCaretDown, BsCaretUp, BsGear, BsLayers } from 'react-icons/bs';
+import { cn } from '@/lib/utils';
+import { SortBy } from '@/types/sortby';
+import { layoutOptions } from '@/modules/showcase/layout-options';
+import { sortOptions } from './sort-options';
 
 type ToggleOptionProps = {
   label: string;
@@ -34,7 +28,7 @@ function LayoutToggleButton(props: {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
 }) {
-  const {isOpen, setIsOpen, title, icon} = props;
+  const { isOpen, setIsOpen, title, icon } = props;
   return (
     <div
       onClick={() => props.setIsOpen(!isOpen)}
@@ -61,18 +55,18 @@ function LayoutToggleButton(props: {
       </div>
       {isOpen ? (
         <div>
-          <BsCaretDown/>
+          <BsCaretDown />
         </div>
       ) : (
         <div>
-          <BsCaretUp/>
+          <BsCaretUp />
         </div>
       )}
     </div>
   );
 }
 
-const ToggleOption = ({label, checked, onChange}: ToggleOptionProps) => (
+const ToggleOption = ({ label, checked, onChange }: ToggleOptionProps) => (
   <div className="flex flex-row justify-between items-center w-full">
     <label className="text-sm">{label}</label>
     <Input
@@ -84,9 +78,7 @@ const ToggleOption = ({label, checked, onChange}: ToggleOptionProps) => (
   </div>
 );
 
-export function ShowcasePageConfig(props: {
-  className?: string;
-}) {
+export function ShowcasePageConfig(props: { className?: string }) {
   const {
     showcase,
     showcaseConfig,
@@ -101,12 +93,12 @@ export function ShowcasePageConfig(props: {
     return null;
   }
   return (
-    <div className={cn("", props.className)}>
+    <div className={cn('', props.className)}>
       <div className="w-full h-[700px] overflow-y-auto py-2">
         <div className="space-y-4 w-full pr-4 ">
           <LayoutToggleButton
             title="Layout"
-            icon={<BsLayers className="h-4 w-4"/>}
+            icon={<BsLayers className="h-4 w-4" />}
             isOpen={isLayoutOpen}
             setIsOpen={setIsLayoutOpen}
           />
@@ -139,7 +131,7 @@ export function ShowcasePageConfig(props: {
 
           <LayoutToggleButton
             title="Settings"
-            icon={<BsGear className="h-4 w-4"/>}
+            icon={<BsGear className="h-4 w-4" />}
             isOpen={isSettingOpen}
             setIsOpen={setIsSettingOpen}
           />
@@ -147,77 +139,74 @@ export function ShowcasePageConfig(props: {
             className={cn('flex flex-col gap-4', isSettingOpen ? '' : 'hidden')}
           >
             {(showcaseConfig.type === 'flow' ||
-                showcaseConfig.type === 'grid' ||
-                showcaseConfig.type === 'fix-row'
-              )
-              && (
-                <div>
-                  <label className="text-sm">Columns Count:</label>
-                  <div className='text-sm grid grid-cols-3 gap-2 mt-2'>
-                    <label>sm:</label>
-                    <label>md:</label>
-                    <label>lg:</label>
-                    <Input
-                      type="number"
-                      min="1"
-                      max="5"
-                      className="w-full"
-                      value={showcaseConfig.breakpoints?.sm || 1}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value, 10);
-                        if (!isNaN(value)) {
-                          setShowcaseConfig({
-                            ...showcaseConfig,
-                            breakpoints: {
-                              ...showcaseConfig.breakpoints,
-                              sm: value,
-                            }
-                          });
-                        }
-                      }}
-                    />
-                    <Input
-                      type="number"
-                      min="1"
-                      max="5"
-                      className="w-full"
-                      value={showcaseConfig.breakpoints?.md || 2}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value, 10);
-                        if (!isNaN(value)) {
-                          setShowcaseConfig({
-                            ...showcaseConfig,
-                            breakpoints: {
-                              ...showcaseConfig.breakpoints,
-                              md: value,
-                            }
-                          });
-                        }
-                      }}
-                    />
-                    <Input
-                      type="number"
-                      min="1"
-                      max="5"
-                      className="w-full"
-                      value={showcaseConfig.breakpoints?.lg || 3}
-                      onChange={(e) => {
-                        const value = parseInt(e.target.value, 10);
-                        if (!isNaN(value)) {
-                          setShowcaseConfig({
-                            ...showcaseConfig,
-                            breakpoints: {
-                              ...showcaseConfig.breakpoints,
-                              lg: value,
-                            }
-                          });
-                        }
-                      }}
-                    />
-                  </div>
-
+              showcaseConfig.type === 'grid' ||
+              showcaseConfig.type === 'fix-row') && (
+              <div>
+                <label className="text-sm">Columns Count:</label>
+                <div className="text-sm grid grid-cols-3 gap-2 mt-2">
+                  <label>sm:</label>
+                  <label>md:</label>
+                  <label>lg:</label>
+                  <Input
+                    type="number"
+                    min="1"
+                    max="5"
+                    className="w-full"
+                    value={showcaseConfig.breakpoints?.sm || 1}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      if (!isNaN(value)) {
+                        setShowcaseConfig({
+                          ...showcaseConfig,
+                          breakpoints: {
+                            ...showcaseConfig.breakpoints,
+                            sm: value,
+                          },
+                        });
+                      }
+                    }}
+                  />
+                  <Input
+                    type="number"
+                    min="1"
+                    max="5"
+                    className="w-full"
+                    value={showcaseConfig.breakpoints?.md || 2}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      if (!isNaN(value)) {
+                        setShowcaseConfig({
+                          ...showcaseConfig,
+                          breakpoints: {
+                            ...showcaseConfig.breakpoints,
+                            md: value,
+                          },
+                        });
+                      }
+                    }}
+                  />
+                  <Input
+                    type="number"
+                    min="1"
+                    max="5"
+                    className="w-full"
+                    value={showcaseConfig.breakpoints?.lg || 3}
+                    onChange={(e) => {
+                      const value = parseInt(e.target.value, 10);
+                      if (!isNaN(value)) {
+                        setShowcaseConfig({
+                          ...showcaseConfig,
+                          breakpoints: {
+                            ...showcaseConfig.breakpoints,
+                            lg: value,
+                          },
+                        });
+                      }
+                    }}
+                  />
                 </div>
-              )}
+              </div>
+            )}
 
             <div>
               <label className="text-sm">Reviews Max Count:</label>
@@ -252,7 +241,7 @@ export function ShowcasePageConfig(props: {
                 }}
               >
                 <SelectTrigger className="w-full mt-2">
-                  <SelectValue placeholder="Select sort option"/>
+                  <SelectValue placeholder="Select sort option" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
@@ -290,7 +279,7 @@ export function ShowcasePageConfig(props: {
               label="Show Date"
               checked={showcaseConfig.isDateEnabled || false}
               onChange={(checked) =>
-                setShowcaseConfig({...showcaseConfig, isDateEnabled: checked})
+                setShowcaseConfig({ ...showcaseConfig, isDateEnabled: checked })
               }
             />
             <ToggleOption

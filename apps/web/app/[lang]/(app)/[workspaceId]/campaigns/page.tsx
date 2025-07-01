@@ -1,6 +1,6 @@
 'use client';
 
-import CampaignListPage from "@/modules/campaign/campaign-list-page";
+import CampaignListPage from '@/modules/campaign/campaign-list-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -8,5 +8,5 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
-  return <CampaignListPage params={props.params}/>
+  return <CampaignListPage params={props.params} />;
 }

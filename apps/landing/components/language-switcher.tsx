@@ -1,10 +1,10 @@
 'use client';
 
-import {i18nLanguages} from '@/config/i18n-config';
-import {usePathname, useRouter} from 'next/navigation';
-import {useState} from 'react';
-import {BiGlobe} from "react-icons/bi";
-import Link from "next/link";
+import { i18nLanguages } from '@/config/i18n-config';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { BiGlobe } from 'react-icons/bi';
+import Link from 'next/link';
 
 export function LanguageSwitcher(props: {
   lang: string;
@@ -13,12 +13,12 @@ export function LanguageSwitcher(props: {
 }) {
   const [isOpen, setIsOpen] = useState(false);
 
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   function getLocalizedPath(newLang: string) {
-    const segments = pathname.split('/')
-    segments[1] = newLang
-    return segments.join('/') || '/'
+    const segments = pathname.split('/');
+    segments[1] = newLang;
+    return segments.join('/') || '/';
   }
 
   return (
@@ -30,7 +30,7 @@ export function LanguageSwitcher(props: {
         className="inline-flex items-center justify-center rounded-md py-2 text-base font-medium text-gray-900 hover:text-purple-600"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <BiGlobe/>
+        <BiGlobe />
         <span className="ml-2 uppercase">{props.lang}</span>
         <svg
           aria-hidden="true"
@@ -57,7 +57,9 @@ export function LanguageSwitcher(props: {
                 key={lang.code}
                 href={getLocalizedPath(lang.code)}
                 className={`block px-4 py-2 text-sm text-gray-900 hover:text-purple-600 ${
-                  props.lang === lang.code ? 'font-semibold text-purple-600' : ''
+                  props.lang === lang.code
+                    ? 'font-semibold text-purple-600'
+                    : ''
                 }`}
               >
                 {lang.name}

@@ -1,4 +1,4 @@
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,18 +9,18 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {BiPlus, BiSortAlt2} from 'react-icons/bi';
-import {useUserContext} from '@/context/UserProvider';
-import {useState} from 'react';
-import {api} from '@/lib/api-client';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { BiPlus, BiSortAlt2 } from 'react-icons/bi';
+import { useUserContext } from '@/context/UserProvider';
+import { useState } from 'react';
+import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
-import {useFormContext} from './context/FormProvider';
+import { useFormContext } from './context/FormProvider';
 
 export default function CreateFormDialog(props: {}) {
-  const {defaultWorkspace} = useUserContext();
-  const {createForm} = useFormContext();
+  const { defaultWorkspace } = useUserContext();
+  const { createForm } = useFormContext();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formName, setFormName] = useState<string>('');
 
@@ -28,7 +28,7 @@ export default function CreateFormDialog(props: {}) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
-          <BiPlus className="text-2xl"/>
+          <BiPlus className="text-2xl" />
           New Form
         </Button>
       </DialogTrigger>
@@ -55,15 +55,19 @@ export default function CreateFormDialog(props: {}) {
               Close
             </Button>
           </DialogClose>
-          <Button type="submit" onClick={async () => {
-            if (!defaultWorkspace || !defaultWorkspace.id) {
-              toast.error('Please select a workspace first.');
-              return;
-            }
-            await createForm(defaultWorkspace.id, formName);
-            setFormName('');
-            setIsOpen(false);
-          }} className="ml-2">
+          <Button
+            type="submit"
+            onClick={async () => {
+              if (!defaultWorkspace || !defaultWorkspace.id) {
+                toast.error('Please select a workspace first.');
+                return;
+              }
+              await createForm(defaultWorkspace.id, formName);
+              setFormName('');
+              setIsOpen(false);
+            }}
+            className="ml-2"
+          >
             Create Form
           </Button>
         </DialogFooter>

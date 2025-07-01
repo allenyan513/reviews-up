@@ -20,11 +20,9 @@ Collect and show your customer's reviews and testimonials
 
 # ✨ What is reviewsup.io?
 
-
 <img width="1527" alt="reviewsup-sneak" src="https://s3.us-east-2.amazonaws.com/strapi.ff2050.com/Wechat_IMG_3003_69810fdf71.jpg">
 
 **reviewsup.io** is an open-source review and testimonial management system that helps you **collect**, **manage**, and **showcase** customer feedback with ease. Whether you're a developer looking for a secure, self-hosted solution or a non-technical user needing a quick cloud-based setup, reviewsup.io is built for you.
-
 
 **Try it out in the cloud [app.reviewsup.io](https://app.reviewsup.io/api/auth/signin)**
 
@@ -35,7 +33,6 @@ Collect and show your customer's reviews and testimonials
 Boost productivity with fast, secure, and flexible review management—**code or no code**.
 
 reviewsup.io is designed for teams that care about **data privacy**, **developer efficiency**, and **ease of integration**. With self-hosted and cloud options, you maintain full control of your data while enjoying powerful features and a free usage tier.
-
 
 ## Table of Contents
 
@@ -49,11 +46,9 @@ reviewsup.io is designed for teams that care about **data privacy**, **developer
 - [Security](#security)
 - [License](#license)
 
-
 <a id="features"></a>
 
 ## Features
-
 
 - ✅ Collect and display customer reviews and testimonials
 - 🧩 Easily embed on any website (React, Next.js, etc.)
@@ -63,7 +58,6 @@ reviewsup.io is designed for teams that care about **data privacy**, **developer
 - 🧑‍💻 Developer-friendly API and SDK
 - 🌐 Cloud version with free plan available
 - 🧱 Modular design for easy extension and integration
-
 
 ## 🏁 Getting Started
 
@@ -84,7 +78,6 @@ git clone git@github.com:allenyan513/reviewsup.io.git
 cd reviewsup.io
 ```
 
-
 2. Install dependencies:
 
 ```
@@ -100,7 +93,6 @@ pnpm build
 pnpm start
 ```
 
-
 ## ☁️ Cloud Version
 
 - ✅ Ideal for non-technical users
@@ -108,15 +100,15 @@ pnpm start
 - 🚀 Instant deployment, no setup required
 - 🔄 Easy upgrade to premium plans
 
-
 ## 🖥️ Self-hosted Version
+
 - 🛠️ Full control over your data and infrastructure
 - 🧩 Easily integrate with your backend or CMS
 - 🔒 Suitable for organizations with strict data policies
 - 🧪 Supports Docker for easier deployment
 
-
 ## 🧑‍💻 Development
+
 To run locally in development mode:
 
 ```
@@ -129,23 +121,23 @@ You’ll need:
 - PostgreSQL or another supported database
 - Supabase (optional for cloud-like functionality)
 
-
 ## 🤝 Contribution
+
 We welcome contributions from the community!
+
 1. Fork this repo
 2. Create a new branch (git checkout -b feature/your-feature)
 3. Commit your changes (git commit -am 'Add new feature')
 4. Push to the branch (git push origin feature/your-feature)
 5. Create a new Pull Request
 
-
 ## 🛡️ Security
+
 If you discover a vulnerability, please report it responsibly.
 
 Email: security@reviewsup.io
 
 We take security and data privacy seriously.
-
 
 ## 📬 Contact Us
 
@@ -160,9 +152,6 @@ We take security and data privacy seriously.
 reviewsup.io is open-source software licensed under the MIT License.
 
 Made with ❤️ by the reviewsup.io team.
-
-
-
 
 :5500 api
 :5510 web

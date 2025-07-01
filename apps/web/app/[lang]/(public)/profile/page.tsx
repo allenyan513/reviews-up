@@ -1,11 +1,11 @@
 'use client';
-import {useSession} from '@/context/UserProvider';
-import {api} from '@/lib/api-client';
-import {redirect} from 'next/navigation';
-import {use, useEffect} from 'react';
+import { useSession } from '@/context/UserProvider';
+import { api } from '@/lib/api-client';
+import { redirect } from 'next/navigation';
+import { use, useEffect } from 'react';
 
 export default function Page(props: { params: Promise<{ lang: string }> }) {
-  const {user} = useSession({
+  const { user } = useSession({
     required: false,
   });
 
@@ -14,7 +14,7 @@ export default function Page(props: { params: Promise<{ lang: string }> }) {
       redirect('/');
       return;
     }
-    const slug = user.id
+    const slug = user.id;
     redirect(`/profile/${slug}`);
   }, [user]);
 

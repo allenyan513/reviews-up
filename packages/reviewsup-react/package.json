@@ -35,8 +35,8 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@repo/ui": "*",
-    "@repo/api": "*",
-    "@repo/database": "*"
+    "@repo/ui": "workspace:*",
+    "@repo/api": "workspace:*",
+    "@repo/database": "workspace:*"
   }
 }

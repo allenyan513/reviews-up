@@ -31,15 +31,16 @@ Developer of [ReviewsUp.io](https://reviewsup.io)
 };
 
 export const CampaignEmail = (props: {
-  content: string
-  formUrl: string
-  buttonText: string
+  content: string;
+  formUrl: string;
+  buttonText: string;
 }) => (
   <Html>
-    <Head/>
+    <Head />
     <Body style={main}>
       <Preview>
-        We would love to hear your feedback. Click the button below to leave a testimonial.
+        We would love to hear your feedback. Click the button below to leave a
+        testimonial.
       </Preview>
       <Container style={container}>
         <Section style={box}>
@@ -52,18 +53,27 @@ export const CampaignEmail = (props: {
           />
           <Markdown
             markdownCustomStyles={{
-              h1: { fontSize: '24px', fontWeight: 'bold', marginBottom: '16px' },
+              h1: {
+                fontSize: '24px',
+                fontWeight: 'bold',
+                marginBottom: '16px',
+              },
               p: paragraph,
             }}
             markdownContainerStyles={{}}
-          >{props.content || data.content}</Markdown>
+          >
+            {props.content || data.content}
+          </Markdown>
 
           <Button style={button} href={props.formUrl}>
             {props.buttonText || data.buttonText}
           </Button>
           {/*<PoweredBy/>*/}
           <Text style={footer}>
-            Powered by <Link href="https://reviewsup.io" style={anchor}>Reviewsup.io</Link>
+            Powered by{' '}
+            <Link href="https://reviewsup.io" style={anchor}>
+              Reviewsup.io
+            </Link>
           </Text>
         </Section>
       </Container>
@@ -88,7 +98,7 @@ const container = {
 const logo = {
   display: 'block',
   margin: '0 auto',
-}
+};
 
 const box = {
   padding: '0 0',

@@ -5,9 +5,7 @@ export default function FAQ(props: {
   }[];
 }) {
   return (
-    <section
-      id="faq"
-      className="w-full p-4">
+    <section id="faq" className="w-full p-4">
       <div className="">
         <h2 className="mb-10 text-center text-3xl font-bold text-gray-900">
           Frequently Asked Questions
@@ -21,7 +19,9 @@ export default function FAQ(props: {
               <summary className="cursor-pointer text-lg font-semibold">
                 {item.question}
               </summary>
-              <p className="mt-2 text-gray-700 whitespace-normal">{item.answer}</p>
+              <p className="mt-2 text-gray-700 whitespace-normal">
+                {item.answer}
+              </p>
             </details>
           ))}
         </div>

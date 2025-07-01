@@ -1,20 +1,20 @@
-import {BundledLanguage, codeToHtml, ThemeRegistrationAny} from 'shiki';
-import {useEffect, useState} from 'react';
-import {Button} from "@/components/ui/button";
-import toast from "react-hot-toast";
-import {BsCopy} from "react-icons/bs";
+import { BundledLanguage, codeToHtml, ThemeRegistrationAny } from 'shiki';
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import toast from 'react-hot-toast';
+import { BsCopy } from 'react-icons/bs';
 
 export function CodeBlock(props: {
   codes: string[];
   lang: BundledLanguage;
   theme?: ThemeRegistrationAny;
 }) {
-  const {codes, lang, theme = 'one-light'} = props;
+  const { codes, lang, theme = 'one-light' } = props;
   const [out, setOut] = useState<string>('');
   useEffect(() => {
     codeToHtml(codes.join('\n'), {
       lang: lang,
-      theme: theme
+      theme: theme,
     })
       .then((result) => {
         setOut(result);
@@ -33,10 +33,12 @@ export function CodeBlock(props: {
         variant="outline"
         className="absolute top-2 right-2"
       >
-        <BsCopy/>
+        <BsCopy />
       </Button>
       <div
-        className={'text-sm p-4 bg-white'} dangerouslySetInnerHTML={{ __html: out }} />
+        className={'text-sm p-4 bg-white'}
+        dangerouslySetInnerHTML={{ __html: out }}
+      />
     </div>
   );
 }

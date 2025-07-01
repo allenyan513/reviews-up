@@ -9,5 +9,5 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
-  return <ShowcaseListPage params={props.params}/>;
+  return <ShowcaseListPage params={props.params} />;
 }

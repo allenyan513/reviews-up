@@ -1,13 +1,13 @@
-import {useEffect, useState} from 'react';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {Button} from '@/components/ui/button';
+import { useEffect, useState } from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import PoweredBy from '@/components/powered-by';
-import {useFormContext} from '@/modules/form/context/FormProvider';
-import {Divider} from '@/components/divider';
-import {$Enums} from '@repo/database/generated/client';
+import { useFormContext } from '@/modules/form/context/FormProvider';
+import { Divider } from '@/components/divider';
+import { $Enums } from '@repo/database/generated/client';
 import ReviewSource = $Enums.ReviewSource;
-import {FormDefaultSubmitView} from '@/modules/form/default/form-default-submit-view';
-import {useSession, useUserContext} from "@/context/UserProvider";
+import { FormDefaultSubmitView } from '@/modules/form/default/form-default-submit-view';
+import { useSession, useUserContext } from '@/context/UserProvider';
 
 /**
  *
@@ -22,12 +22,12 @@ export function FormDefaultPreviewView(props: {
   mode: 'edit' | 'public';
   className?: string;
 }) {
-  const {id, workspaceId, lang, shortId, mode, className} = props;
-  const {signIn} = useUserContext();
-  const {user} = useSession({
-    required: false
-  })
-  const {formConfig} = useFormContext();
+  const { id, workspaceId, lang, shortId, mode, className } = props;
+  const { signIn } = useUserContext();
+  const { user } = useSession({
+    required: false,
+  });
+  const { formConfig } = useFormContext();
   const [reviewSource, setReviewSource] = useState<ReviewSource | null>(null);
   const [initValue, setInitValue] = useState<{
     rating: number;
@@ -55,28 +55,26 @@ export function FormDefaultPreviewView(props: {
   });
 
   useEffect(() => {
-    if (!user) return
+    if (!user) return;
     setInitValue((prev) => ({
       ...prev,
       reviewerId: user?.id || '',
     }));
-  }, [user])
-
+  }, [user]);
 
   if (!formConfig || !formConfig.brand || !formConfig.welcome) {
     return null;
   }
 
-  const {brand, welcome} = formConfig;
+  const { brand, welcome } = formConfig;
 
   return (
     <div className={className}>
-      <div
-        className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
+      <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
         <div className="flex flex-row gap-4 w-full justify-between items-center">
           <div className="flex flex-row items-center gap-4">
             <Avatar className="size-16 shadow-md border rounded-full">
-              <AvatarImage src={brand.logo} alt={brand.name}/>
+              <AvatarImage src={brand.logo} alt={brand.name} />
               <AvatarFallback className="AvatarFallback" delayMs={600}>
                 {brand.name?.charAt(0).toUpperCase() || 'U'}
               </AvatarFallback>
@@ -95,13 +93,11 @@ export function FormDefaultPreviewView(props: {
             Visit
           </Button>
         </div>
-        <Divider/>
+        <Divider />
         <div className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-center">{welcome.title}</h2>
           <p className="text-gray-600">{welcome.message}</p>
         </div>
-
-
 
         <FormDefaultSubmitView
           id={id}
@@ -133,7 +129,7 @@ export function FormDefaultPreviewView(props: {
         {/*  Back*/}
         {/*</Button>*/}
       </div>
-      <PoweredBy/>
+      <PoweredBy />
     </div>
   );
 }

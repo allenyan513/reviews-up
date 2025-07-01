@@ -1,4 +1,4 @@
-import {$Enums} from '@repo/database/generated/client';
+import { $Enums } from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 
 export const defaultUserData = {
@@ -52,11 +52,13 @@ export const defaultUserData = {
     },
     {
       reviewerName: 'Jenna S.',
-      reviewerImage:'https://ph-avatars.imgix.net/3420727/b006900d-3131-4b27-af77-c7ec4617cd6d.jpeg?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=32&h=32&fit=crop&frame=1&dpr=2',
+      reviewerImage:
+        'https://ph-avatars.imgix.net/3420727/b006900d-3131-4b27-af77-c7ec4617cd6d.jpeg?auto=compress&codec=mozjpeg&cs=strip&auto=format&w=32&h=32&fit=crop&frame=1&dpr=2',
       reviewerTitle: 'Creative Director at Moonpixel Studio',
       rating: 4,
-      text:'"One of the best open-source tools we’ve adopted"\n' +
-        'I was surprised by how polished this tool is out of the box. We’ve used it to gather client testimonials for our agency portfolio, and clients love how professional it looks.' ,
+      text:
+        '"One of the best open-source tools we’ve adopted"\n' +
+        'I was surprised by how polished this tool is out of the box. We’ve used it to gather client testimonials for our agency portfolio, and clients love how professional it looks.',
       status: ReviewStatus.hidden,
     },
   ],

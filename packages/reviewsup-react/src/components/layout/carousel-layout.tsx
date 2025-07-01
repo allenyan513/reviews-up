@@ -44,13 +44,15 @@ export function CarouselLayout<T>({
 
   // Effect to handle the "jump" for infinite loop
   useEffect(() => {
-    if (currentIndex === augmentedItems.length - bufferSlides) { // If we're on the first duplicated real slide
+    if (currentIndex === augmentedItems.length - bufferSlides) {
+      // If we're on the first duplicated real slide
       const timer = setTimeout(() => {
         setIsTransitioning(false); // Disable transition
         setCurrentIndex(bufferSlides); // Jump to the real first slide
       }, 500); // Wait for the transition to finish (should match CSS transition duration)
       return () => clearTimeout(timer);
-    } else if (currentIndex === bufferSlides - 1) { // If we're on the last duplicated real slide
+    } else if (currentIndex === bufferSlides - 1) {
+      // If we're on the last duplicated real slide
       const timer = setTimeout(() => {
         setIsTransitioning(false); // Disable transition
         setCurrentIndex(augmentedItems.length - bufferSlides * 2); // Jump to the real last slide
@@ -58,11 +60,14 @@ export function CarouselLayout<T>({
       return () => clearTimeout(timer);
     }
     // Re-enable transition if we move away from the jump points
-    if (!isTransitioning && currentIndex >= bufferSlides && currentIndex < augmentedItems.length - bufferSlides) {
+    if (
+      !isTransitioning &&
+      currentIndex >= bufferSlides &&
+      currentIndex < augmentedItems.length - bufferSlides
+    ) {
       setIsTransitioning(true);
     }
   }, [currentIndex, augmentedItems.length, bufferSlides, isTransitioning]);
-
 
   // Auto-slide effect (similar to your original, but using augmentedItems and handling transition)
   useEffect(() => {
@@ -76,10 +81,8 @@ export function CarouselLayout<T>({
     return () => clearInterval(slideTimer);
   }, [autoSlide, slideInterval, currentIndex, items.length]);
 
-
   // Calculate the transform value
   const transformValue = `translateX(-${currentIndex * 100}%)`;
-
 
   return (
     <div className="relative w-full overflow-hidden">

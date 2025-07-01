@@ -11,7 +11,7 @@ export function CodeBlockClient(props: {
   useEffect(() => {
     codeToHtml(props.children, {
       lang: props.lang,
-      theme: 'one-light'
+      theme: 'one-light',
     })
       .then((result) => {
         setOut(result);

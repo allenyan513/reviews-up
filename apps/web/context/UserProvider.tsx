@@ -1,9 +1,9 @@
-import {api} from '@/lib/api-client';
-import {createContext, useContext, useEffect, useState} from 'react';
-import {Workspace} from '@repo/api/workspaces/entities/workspace.entity';
-import {User} from '@repo/api/users/index';
+import { api } from '@/lib/api-client';
+import { createContext, useContext, useEffect, useState } from 'react';
+import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import { User } from '@repo/api/users/index';
 import useLocalStorageState from 'use-local-storage-state';
-import {redirect, useRouter} from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 interface UserContextProps {
   user: User | null;
@@ -41,26 +41,34 @@ export function UserProvider(props: { children: React.ReactNode }) {
 
   const signIn = (redirectUrl?: string) => {
     if (!user) {
-      const defaultCallbackUrl = typeof window !== 'undefined' ? window.location.href : redirectUrl || '/';
-      router.push('/auth/signin?redirect=' + encodeURIComponent(defaultCallbackUrl));
+      const defaultCallbackUrl =
+        typeof window !== 'undefined'
+          ? window.location.href
+          : redirectUrl || '/';
+      router.push(
+        '/auth/signin?redirect=' + encodeURIComponent(defaultCallbackUrl),
+      );
     }
-  }
+  };
 
   const googleSignIn = (redirectUrl?: string) => {
-    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/google?redirect=${encodeURIComponent(redirectUrl || '')}`);
+    redirect(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/google?redirect=${encodeURIComponent(redirectUrl || '')}`,
+    );
   };
 
   const githubSignIn = (redirectUrl?: string) => {
-    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/github?redirect=${encodeURIComponent(redirectUrl || '')}`);
+    redirect(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/github?redirect=${encodeURIComponent(redirectUrl || '')}`,
+    );
   };
   const twitterSignIn = (redirectUrl?: string) => {
-    redirect(`${process.env.NEXT_PUBLIC_API_URL}/auth/twitter?redirect=${encodeURIComponent(redirectUrl || '')}`);
-  }
+    redirect(
+      `${process.env.NEXT_PUBLIC_API_URL}/auth/twitter?redirect=${encodeURIComponent(redirectUrl || '')}`,
+    );
+  };
 
-  const sendMagicLink = async (
-    email: string,
-    redirectUrl?: string
-  ) => {
+  const sendMagicLink = async (email: string, redirectUrl?: string) => {
     try {
       await api.auth.sendMagicLink(email, redirectUrl);
     } catch (error) {
@@ -135,21 +143,22 @@ interface UseSessionOptions {
 }
 
 export function useSession(options: UseSessionOptions) {
-  const {user} = useUserContext();
+  const { user } = useUserContext();
 
   useEffect(() => {
     if (!user && options.required) {
       if (options.onUnauthenticated) {
         options.onUnauthenticated();
       } else {
-        console.warn('No onUnauthenticated handler provided, redirecting to signin');
+        console.warn(
+          'No onUnauthenticated handler provided, redirecting to signin',
+        );
       }
     }
   }, [user, options]);
 
-  return {user};
+  return { user };
 }
-
 
 interface UseServerSessionOptions {
   required?: boolean;
@@ -160,7 +169,4 @@ interface UseServerSessionOptions {
  *  server-side session hook
  * @param options
  */
-export function useServerSession(options: UseServerSessionOptions) {
-
-
-}
+export function useServerSession(options: UseServerSessionOptions) {}

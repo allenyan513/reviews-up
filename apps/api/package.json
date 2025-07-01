@@ -17,7 +17,7 @@
     "email:dev": "email dev --port 3002 --dir ./src/emails"
   },
   "dependencies": {
-    "@repo/api": "*",
-    "@repo/database": "*"
+    "@repo/api": "workspace:*",
+    "@repo/database": "workspace:*"
   }
 }

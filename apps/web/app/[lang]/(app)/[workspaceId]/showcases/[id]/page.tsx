@@ -9,5 +9,5 @@ export default function Page(props: {
     id: string;
   }>;
 }) {
-  return <ShowcaseIdPage params={props.params}/>;
+  return <ShowcaseIdPage params={props.params} />;
 }

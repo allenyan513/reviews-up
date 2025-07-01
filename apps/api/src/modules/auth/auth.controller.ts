@@ -9,7 +9,7 @@ import {
   Body,
   Session,
 } from '@nestjs/common';
-import { Request,Response } from 'express';
+import { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { GoogleOauthGuard } from './guards/google-oauth.guard';
 import { GithubOauthGuard } from '@src/modules/auth/guards/github-oauth.guard';
@@ -89,7 +89,7 @@ export class AuthController {
         `<h1>Authentication succeeded</h1> User data: <pre>${userData}</pre>
         State:
         <pre>${state}</pre>
-        `
+        `,
       );
     });
   }

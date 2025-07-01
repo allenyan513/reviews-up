@@ -1,6 +1,6 @@
-import {useState} from 'react';
-import {X} from 'lucide-react';
-import {cn} from '@/lib/utils';
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface EmailsInputProps {
   emails: string[];
@@ -8,11 +8,7 @@ interface EmailsInputProps {
   disabled?: boolean;
 }
 
-export function EmailsInput({
-                              emails,
-                              onChange,
-                              disabled
-                            }: EmailsInputProps) {
+export function EmailsInput({ emails, onChange, disabled }: EmailsInputProps) {
   const [inputValue, setInputValue] = useState('');
 
   const isValidEmail = (email: string) =>
@@ -35,9 +31,11 @@ export function EmailsInput({
 
   return (
     <div
-      className={cn("w-full p-2 border border-gray-300 rounded flex flex-wrap gap-2 focus-within:ring-2 focus-within:ring-blue-500",
-        disabled ? "bg-gray-100 cursor-not-allowed opacity-75" : "bg-white"
-      )}>
+      className={cn(
+        'w-full p-2 border border-gray-300 rounded flex flex-wrap gap-2 focus-within:ring-2 focus-within:ring-blue-500',
+        disabled ? 'bg-gray-100 cursor-not-allowed opacity-75' : 'bg-white',
+      )}
+    >
       {emails.map((email) => (
         <div
           key={email}
@@ -49,7 +47,7 @@ export function EmailsInput({
             className="ml-1 text-gray-600 hover:text-gray-900"
             onClick={() => removeEmail(email)}
           >
-            <X className="w-4 h-4"/>
+            <X className="w-4 h-4" />
           </button>
         </div>
       ))}
@@ -60,8 +58,9 @@ export function EmailsInput({
         onKeyDown={handleKeyDown}
         placeholder="Enter email and press Enter"
         disabled={disabled}
-        className={cn("flex-grow outline-none min-w-[150px]",
-          disabled ? "bg-gray-100 cursor-not-allowed opacity-75" : "bg-white"
+        className={cn(
+          'flex-grow outline-none min-w-[150px]',
+          disabled ? 'bg-gray-100 cursor-not-allowed opacity-75' : 'bg-white',
         )}
       />
     </div>

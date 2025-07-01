@@ -1,8 +1,8 @@
 'use client';
-import {use, useEffect} from 'react';
-import {FormDefaultPreviewView} from '@/modules/form/default/form-default-preview-view';
-import {useFormContext} from '@/modules/form/context/FormProvider';
-import {useSession} from "@/context/UserProvider";
+import { use, useEffect } from 'react';
+import { FormDefaultPreviewView } from '@/modules/form/default/form-default-preview-view';
+import { useFormContext } from '@/modules/form/context/FormProvider';
+import { useSession } from '@/context/UserProvider';
 
 export default function PublicFormRoute(props: {
   params: Promise<{
@@ -10,9 +10,9 @@ export default function PublicFormRoute(props: {
     lang: string;
   }>;
 }) {
-  const {user} = useSession({required: false,})
-  const {lang, shortId} = use(props.params);
-  const {form, fetchFormByShortId} = useFormContext();
+  const { user } = useSession({ required: false });
+  const { lang, shortId } = use(props.params);
+  const { form, fetchFormByShortId } = useFormContext();
   useEffect(() => {
     if (!shortId) return;
     fetchFormByShortId(shortId);
@@ -23,7 +23,9 @@ export default function PublicFormRoute(props: {
   }
   return (
     <FormDefaultPreviewView
-      className={'flex flex-col w-full min-h-screen justify-center items-center bg-gray-100'}
+      className={
+        'flex flex-col w-full min-h-screen justify-center items-center bg-gray-100'
+      }
       id={form.id}
       lang={lang}
       workspaceId={form.workspaceId}

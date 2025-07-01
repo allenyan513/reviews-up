@@ -26,14 +26,9 @@ export function FeatureGrid(props: {
   }[];
 }) {
   return (
-    <section
-      id="features"
-      className="container space-y-6 p-4"
-    >
+    <section id="features" className="container space-y-6 p-4">
       <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold">
-          {props.title}
-        </h2>
+        <h2 className="text-3xl md:text-4xl font-semibold">{props.title}</h2>
         <p className="max-w-[85%] text-muted-foreground sm:text-lg">
           {props.subtitle}
         </p>

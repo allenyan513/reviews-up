@@ -1,12 +1,12 @@
 'use client';
 
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import ReviewImportDialog from '@/modules/review/review-import-dialog';
-import {useUserContext} from '@/context/UserProvider';
-import {api} from '@/lib/api-client';
-import {DataTable} from '@/components/data-table';
-import {columns} from "@/modules/review/table/columens";
-import {ColumnFiltersState, SortingState} from "@tanstack/react-table";
+import { useUserContext } from '@/context/UserProvider';
+import { api } from '@/lib/api-client';
+import { DataTable } from '@/components/data-table';
+import { columns } from '@/modules/review/table/columens';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 export default function ReviewsPage(props: {
   params: Promise<{
@@ -14,7 +14,7 @@ export default function ReviewsPage(props: {
     workspaceId: string;
   }>;
 }) {
-  const {defaultWorkspace} = useUserContext();
+  const { defaultWorkspace } = useUserContext();
 
   const fetchReviews = async (
     pageIndex: number,
@@ -49,13 +49,10 @@ export default function ReviewsPage(props: {
           </p>
         </div>
         <div className="flex items-center space-x-4">
-          <ReviewImportDialog/>
+          <ReviewImportDialog />
         </div>
       </div>
-      <DataTable
-        fetchData={fetchReviews}
-        columns={columns}
-      />
+      <DataTable fetchData={fetchReviews} columns={columns} />
     </div>
   );
 }

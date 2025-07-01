@@ -1,10 +1,15 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 
-
-const ErrorBoundary = ({ error, reset }: { error: Error; reset: () => void }) => {
-  if (process.env.NODE_ENV === "development") {
+const ErrorBoundary = ({
+  error,
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) => {
+  if (process.env.NODE_ENV === 'development') {
     console.error(error.message);
   }
 
@@ -14,7 +19,7 @@ const ErrorBoundary = ({ error, reset }: { error: Error; reset: () => void }) =>
         <Button variant="secondary" onClick={() => reset()} className="mr-2">
           Try again
         </Button>
-        <Button onClick={() => (window.location.href = "/")}>
+        <Button onClick={() => (window.location.href = '/')}>
           Go to Dashboard
         </Button>
       </div>

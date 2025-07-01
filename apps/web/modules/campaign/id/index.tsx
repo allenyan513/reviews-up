@@ -1,12 +1,12 @@
 'use client';
 
-import {use, useEffect, useState} from 'react';
+import { use, useEffect, useState } from 'react';
 import Link from 'next/link';
-import {BiArrowBack} from 'react-icons/bi';
-import {CampaignCreateConfigPage} from '../create/config';
-import {CampaignCreatePreviewPage} from '../create/preview';
-import {useCampaignContext} from "@/modules/campaign/context/campaign-provider";
-import {CampaignEntity} from "@repo/api/campaign/index";
+import { BiArrowBack } from 'react-icons/bi';
+import { CampaignCreateConfigPage } from '../create/config';
+import { CampaignCreatePreviewPage } from '../create/preview';
+import { useCampaignContext } from '@/modules/campaign/context/campaign-provider';
+import { CampaignEntity } from '@repo/api/campaign/index';
 
 export function CampaignIdPage(props: {
   params: Promise<{
@@ -15,8 +15,8 @@ export function CampaignIdPage(props: {
     id: string;
   }>;
 }) {
-  const {lang, workspaceId, id} = use(props.params);
-  const {findOne} = useCampaignContext()
+  const { lang, workspaceId, id } = use(props.params);
+  const { findOne } = useCampaignContext();
   const [campaign, setCampaign] = useState<CampaignEntity | null>(null);
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export function CampaignIdPage(props: {
   }, [id]);
 
   if (!campaign) {
-    return null
+    return null;
   }
 
   return (
@@ -42,30 +42,22 @@ export function CampaignIdPage(props: {
             href={`/${lang}/${workspaceId}/campaigns`}
             className="flex flex-row items-center gap-2 "
           >
-            <BiArrowBack className="text-2xl"/>
+            <BiArrowBack className="text-2xl" />
             <h1 className="text-3xl font-semibold text-gray-900">
               {campaign.name}
             </h1>
           </Link>
-          <p className="mt-1 text-gray-600">
-          </p>
+          <p className="mt-1 text-gray-600"></p>
         </div>
-        <div className={'space-x-2'}>
-        </div>
+        <div className={'space-x-2'}></div>
       </div>
 
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-5 flex flex-col">
-          <CampaignCreateConfigPage
-            data={campaign}
-            mode="view"
-          />
+          <CampaignCreateConfigPage data={campaign} mode="view" />
         </div>
         <div className="col-span-7">
-          <CampaignCreatePreviewPage
-            data={campaign}
-            mode="view"
-          />
+          <CampaignCreatePreviewPage data={campaign} mode="view" />
         </div>
       </div>
     </div>

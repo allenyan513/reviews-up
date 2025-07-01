@@ -1,4 +1,4 @@
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,22 +9,22 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, {useEffect, useState} from 'react';
-import {BiDownload, BiPlus, BiX} from 'react-icons/bi';
+import React, { useEffect, useState } from 'react';
+import { BiDownload, BiPlus, BiX } from 'react-icons/bi';
 import ReviewImportManualDialog from './manual';
 import ReviewImportXDialog from './twitter';
-import {BsFacebook, BsGoogle, BsLinkedin, BsTwitterX} from 'react-icons/bs';
-import {api} from '@/lib/api-client';
+import { BsFacebook, BsGoogle, BsLinkedin, BsTwitterX } from 'react-icons/bs';
+import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
-import {useUserContext} from '@/context/UserProvider';
-import {Tweet} from 'react-tweet/api';
-import {parseTweet} from '@/lib/utils';
+import { useUserContext } from '@/context/UserProvider';
+import { Tweet } from 'react-tweet/api';
+import { parseTweet } from '@/lib/utils';
 import ReviewImportTiktokDialog from './tiktok';
-import {YtDlpResponse} from '@repo/api/yt-dlp/yt-dlp-response.dto';
+import { YtDlpResponse } from '@repo/api/yt-dlp/yt-dlp-response.dto';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const {defaultWorkspace, user, signIn} = useUserContext();
+  const { defaultWorkspace, user, signIn } = useUserContext();
 
   /**
    * 将tweet数据转换成 review数据，然后发送给服务端， 服务端不需要做任何转换
@@ -40,7 +40,7 @@ export default function ReviewImportDialog() {
         toast.error('Tweet ID is missing');
         return;
       }
-      const parseData = parseTweet(data)
+      const parseData = parseTweet(data);
       await api.review.createReview({
         workspaceId: defaultWorkspace.id,
         rating: 5,
@@ -53,7 +53,7 @@ export default function ReviewImportDialog() {
         imageUrls: parseData?.imageUrls,
         videoUrl: parseData?.videoUrl,
         tweetId: parseData?.tweetId,
-        reviewerId: user?.id || ''
+        reviewerId: user?.id || '',
       });
       toast.success('Review created successfully!');
       setIsOpen(false);
@@ -63,9 +63,7 @@ export default function ReviewImportDialog() {
     }
   };
 
-  const importFromTiktok = async (
-    data: YtDlpResponse | undefined | null,
-  ) => {
+  const importFromTiktok = async (data: YtDlpResponse | undefined | null) => {
     try {
       if (!data || !defaultWorkspace) {
         toast.error('Tweet ID is missing');
@@ -83,7 +81,7 @@ export default function ReviewImportDialog() {
         imageUrls: [data.thumbnail],
         videoUrl: data.video_url,
         tweetId: '',
-        reviewerId: user?.id || ''
+        reviewerId: user?.id || '',
       });
       toast.success('Review created successfully!');
       setIsOpen(false);
@@ -97,7 +95,7 @@ export default function ReviewImportDialog() {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
-          <BiPlus className="text-2xl"/>
+          <BiPlus className="text-2xl" />
           Import Reviews
         </Button>
       </DialogTrigger>
@@ -107,18 +105,19 @@ export default function ReviewImportDialog() {
         </DialogHeader>
         <div className="grid grid-cols-1 gap-4">
           <label>Import Reviews from Third Platform</label>
-          <div className='grid grid-cols-4 gap-2'>
+          <div className="grid grid-cols-4 gap-2">
             <ReviewImportXDialog
               onImport={(tweetId, data) => {
                 importFromX(tweetId, data);
-              }}>
+              }}
+            >
               <div>
                 <Button
                   size={'lg'}
                   className="w-full items-center justify-center text-sm"
                   variant={'outline'}
                 >
-                  <BsTwitterX/>
+                  <BsTwitterX />
                   Twitter/X
                 </Button>
               </div>
@@ -128,7 +127,7 @@ export default function ReviewImportDialog() {
               className="w-full items-center justify-center text-sm"
               variant={'outline'}
             >
-              <BsGoogle/>
+              <BsGoogle />
               Google
             </Button>
             <Button
@@ -136,7 +135,7 @@ export default function ReviewImportDialog() {
               className="w-full items-center justify-center text-sm"
               variant={'outline'}
             >
-              <BsLinkedin/>
+              <BsLinkedin />
               LinkedIn
             </Button>
             <Button
@@ -144,19 +143,19 @@ export default function ReviewImportDialog() {
               className="w-full items-center justify-center text-sm"
               variant={'outline'}
             >
-              <BsFacebook/>
+              <BsFacebook />
               Facebook
             </Button>
           </div>
 
           {/* or */}
           <div className="flex items-center justify-center">
-            <hr className="w-full border-t border-gray-300"/>
+            <hr className="w-full border-t border-gray-300" />
             <span className="text-gray-500">or</span>
-            <hr className="w-full border-t border-gray-300"/>
+            <hr className="w-full border-t border-gray-300" />
           </div>
           <label>Add Review Manually</label>
-          <ReviewImportManualDialog/>
+          <ReviewImportManualDialog />
         </div>
       </DialogContent>
     </Dialog>

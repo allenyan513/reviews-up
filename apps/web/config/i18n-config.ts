@@ -5,10 +5,9 @@ export const i18n = {
 
 export const i18nMetadata = i18n.locales.map((lang) => {
   return {
-    lang: lang
-  }
-})
-
+    lang: lang,
+  };
+});
 
 export const i18nLanguages = [
   {
@@ -59,7 +58,7 @@ export const i18nLanguages = [
     name: 'Tiếng Việt',
     url: '/vi',
     code: 'vi',
-  }
-]
+  },
+];
 
-export type Locale = typeof i18n['locales'][number];
+export type Locale = (typeof i18n)['locales'][number];

@@ -1,7 +1,7 @@
-import {NextRequest, NextResponse} from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const domain = `${process.env.NEXT_PUBLIC_APP_URL}`.trim()
+  const domain = `${process.env.NEXT_PUBLIC_APP_URL}`.trim();
 
   const scriptContent = `
     (function () {
@@ -22,11 +22,10 @@ export async function GET(req: NextRequest) {
     })();
   `;
   return new NextResponse(scriptContent, {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/javascript',
-        // 'Cache-Control': 'public, max-age=3600, immutable', // 缓存设置，根据需要调整
-      },
-    }
-  );
+    status: 200,
+    headers: {
+      'Content-Type': 'application/javascript',
+      // 'Cache-Control': 'public, max-age=3600, immutable', // 缓存设置，根据需要调整
+    },
+  });
 }

@@ -1,6 +1,6 @@
 'use client';
 
-import FormThanksPage from "@/modules/form/thanks/form-thanks-page";
+import FormThanksPage from '@/modules/form/thanks/form-thanks-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -9,5 +9,5 @@ export default function Page(props: {
     id: string;
   }>;
 }) {
-  return <FormThanksPage params={props.params}/>;
+  return <FormThanksPage params={props.params} />;
 }

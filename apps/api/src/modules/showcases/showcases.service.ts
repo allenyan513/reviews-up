@@ -6,7 +6,7 @@ import { PaginateRequest, PaginateResponse } from '@repo/api/common/paginate';
 import { Showcase } from '@repo/database/generated/client';
 import {
   ShowcaseConfig,
-  ShowcaseEntity
+  ShowcaseEntity,
 } from '@repo/api/showcases/entities/showcase.entity';
 import { generateShortId } from '../../libs/shortId';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
@@ -26,17 +26,16 @@ export class ShowcasesService {
     sortBy: 'newest',
     count: 20,
     flow: {
-      columns: 4
+      columns: 4,
     },
     breakpoints: {
       sm: 1,
       md: 2,
-      lg: 3
-    }
+      lg: 3,
+    },
   };
 
-  constructor(private prismaService: PrismaService) {
-  }
+  constructor(private prismaService: PrismaService) {}
 
   async create(uid: string, createShowcaseDto: CreateShowcaseDto) {
     return this.prismaService.showcase.create({
@@ -46,24 +45,24 @@ export class ShowcasesService {
         workspaceId: createShowcaseDto.workspaceId,
         name: createShowcaseDto.name,
         config: {
-          ...this.defaultConfig // Merge with any provided config
+          ...this.defaultConfig, // Merge with any provided config
         },
         createdAt: new Date(),
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     });
   }
 
   async findAll(
     uid: string,
     workspaceId: string,
-    paginateRequest: PaginateRequest
+    paginateRequest: PaginateRequest,
   ) {
     this.logger.debug(
       'Fetching showcases for user',
       uid,
       workspaceId,
-      paginateRequest
+      paginateRequest,
     );
     if (!uid || !workspaceId || !paginateRequest) {
       throw new Error('Workspace ID is required to fetch reviews');
@@ -71,27 +70,27 @@ export class ShowcasesService {
     const total = await this.prismaService.showcase.count({
       where: {
         userId: uid,
-        workspaceId: workspaceId
-      }
+        workspaceId: workspaceId,
+      },
     });
     const items = await this.prismaService.showcase.findMany({
       where: {
         userId: uid,
-        workspaceId: workspaceId
+        workspaceId: workspaceId,
       },
       orderBy: {
-        createdAt: 'desc' // Order by creation date
+        createdAt: 'desc', // Order by creation date
       },
       skip: (paginateRequest.page - 1) * paginateRequest.pageSize,
-      take: paginateRequest.pageSize
+      take: paginateRequest.pageSize,
     });
     return {
       items: items,
       meta: {
         page: paginateRequest.page,
         pageSize: paginateRequest.pageSize,
-        total: total
-      }
+        total: total,
+      },
     } as PaginateResponse<Showcase>;
   }
 
@@ -106,13 +105,13 @@ export class ShowcasesService {
     return this.prismaService.showcase.update({
       where: {
         id: id,
-        userId: uid
+        userId: uid,
       },
       data: {
         name: dto.name,
         config: dto.config,
-        updatedAt: new Date()
-      }
+        updatedAt: new Date(),
+      },
     });
   }
 
@@ -120,8 +119,8 @@ export class ShowcasesService {
     return this.prismaService.showcase.delete({
       where: {
         id: id,
-        userId: uid
-      }
+        userId: uid,
+      },
     });
   }
 
@@ -129,8 +128,8 @@ export class ShowcasesService {
     this.logger.debug(`Finding showcase by shortId: ${shortId}`);
     const showcase = await this.prismaService.showcase.findUnique({
       where: {
-        shortId: shortId
-      }
+        shortId: shortId,
+      },
     });
     if (!showcase) {
       throw new Error('Showcase not found');
@@ -147,8 +146,8 @@ export class ShowcasesService {
   async findOne(uid: string, id: string): Promise<ShowcaseEntity> {
     const showcase = await this.prismaService.showcase.findUnique({
       where: {
-        id: id
-      }
+        id: id,
+      },
     });
     if (!showcase || showcase.userId !== uid) {
       throw new Error('Showcase not found or access denied');
@@ -165,14 +164,14 @@ export class ShowcasesService {
     const reviews = await this.prismaService.review.findMany({
       where: {
         workspaceId: workspaceId,
-        status: 'public'
+        status: 'public',
       },
       orderBy: {
-        createdAt: 'desc'
+        createdAt: 'desc',
       },
       include: {
-        medias: true
-      }
+        medias: true,
+      },
     });
     const config = showcase.config as ShowcaseConfig;
     const { count, sortBy } = config || {};
@@ -180,7 +179,7 @@ export class ShowcasesService {
     let sortedReviews = this.sortReviewsBy(
       reviews as ReviewEntity[],
       sortBy as SortBy,
-      count
+      count,
     );
     if (count && count > 0) {
       sortedReviews = sortedReviews.slice(0, count);
@@ -191,9 +190,9 @@ export class ShowcasesService {
         (review) =>
           ({
             ...review,
-            medias: review.medias || []
-          }) as ReviewEntity
-      )
+            medias: review.medias || [],
+          }) as ReviewEntity,
+      ),
     } as ShowcaseEntity;
   }
 
@@ -202,18 +201,18 @@ export class ShowcasesService {
     if (sortBy === SortBy.newest) {
       sortedReviews = [...reviews].sort(
         (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
     } else if (sortBy === SortBy.oldest) {
       sortedReviews = [...reviews].sort(
         (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
       );
     } else if (sortBy === SortBy.random) {
       sortedReviews = [...reviews].sort(() => Math.random() - 0.5);
     } else if (sortBy === SortBy.rating) {
       sortedReviews = [...reviews].sort(
-        (a, b) => (b.rating || 0) - (a.rating || 0)
+        (a, b) => (b.rating || 0) - (a.rating || 0),
       );
     } else {
       sortedReviews = reviews;

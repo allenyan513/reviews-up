@@ -1,5 +1,5 @@
 'use client';
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -10,11 +10,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 
-import {Input} from '@/components/ui/input';
-import {Tweet, useTweet} from 'react-tweet';
-import {Tweet as TweetEntity} from 'react-tweet/api';
+import { Input } from '@/components/ui/input';
+import { Tweet, useTweet } from 'react-tweet';
+import { Tweet as TweetEntity } from 'react-tweet/api';
 
 export default function ReviewImportXDialog(props: {
   onImport: (tweetId: string, data: TweetEntity | null | undefined) => void;
@@ -22,7 +22,7 @@ export default function ReviewImportXDialog(props: {
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tweetId, setTweetId] = useState<string | null>(null);
-  const {data} = useTweet(tweetId || '');
+  const { data } = useTweet(tweetId || '');
 
   const handleTweetIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
@@ -65,7 +65,7 @@ export default function ReviewImportXDialog(props: {
           </div>
           {/*preview*/}
           <div className="items-center justify-between">
-            {tweetId && <Tweet id={tweetId}/>}
+            {tweetId && <Tweet id={tweetId} />}
           </div>
         </div>
         <DialogFooter className="">

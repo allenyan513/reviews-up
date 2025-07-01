@@ -1,5 +1,5 @@
-import {authFetch} from './auth-fetch';
-import {User} from '@repo/api/users/index';
+import { authFetch } from './auth-fetch';
+import { User } from '@repo/api/users/index';
 
 export const auth = {
   getSession: async (): Promise<User | null> => {

@@ -16,7 +16,8 @@ describe('YtDlpService', () => {
 
   it('should be defined', async () => {
     // const url = 'https://www.youtube.com/watch?v=EQrtrjdFK4k&t=437s';
-    const url ='https://www.tiktok.com/@cherdleys5/video/7486296599136652586?is_from_webapp=1&sender_device=pc'
+    const url =
+      'https://www.tiktok.com/@cherdleys5/video/7486296599136652586?is_from_webapp=1&sender_device=pc';
     const result = await service.parse({ url });
     console.log(result);
   }, 10000);

@@ -1,18 +1,18 @@
-import {useRouter} from 'next/navigation';
-import React, {useState} from 'react';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import {api} from '@/lib/api-client';
+import { api } from '@/lib/api-client';
 import StarRating from '@repo/ui/star-rating';
-import {UploadContainer} from '@/components/upload-container';
-import {BiImage, BiLogoTwitter, BiVideo} from 'react-icons/bi';
-import {Button} from '@/components/ui/button';
-import {ReviewSource} from '@repo/database/generated/client';
-import {Required} from '@/components/required';
+import { UploadContainer } from '@/components/upload-container';
+import { BiImage, BiLogoTwitter, BiVideo } from 'react-icons/bi';
+import { Button } from '@/components/ui/button';
+import { ReviewSource } from '@repo/database/generated/client';
+import { Required } from '@/components/required';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
 import ReviewImportXDialog from '../../review/twitter';
-import {BsGoogle, BsInstagram, BsTiktok, BsTwitterX} from "react-icons/bs";
-import {useSession, useUserContext} from "@/context/UserProvider";
-import {parseTweet} from '@/lib/utils';
+import { BsGoogle, BsInstagram, BsTiktok, BsTwitterX } from 'react-icons/bs';
+import { useSession, useUserContext } from '@/context/UserProvider';
+import { parseTweet } from '@/lib/utils';
 
 /**
  * 从 /forms/[shortId] 提交的表单
@@ -40,11 +40,11 @@ export function FormDefaultSubmitView(props: {
   };
 }) {
   const router = useRouter();
-  const {signIn} = useUserContext();
-  const {user} = useSession({
-    required: false
-  })
-  const {id, workspaceId, lang, shortId, mode, initValue} = props;
+  const { signIn } = useUserContext();
+  const { user } = useSession({
+    required: false,
+  });
+  const { id, workspaceId, lang, shortId, mode, initValue } = props;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
   const [submitForm, setSubmitForm] = useState<{
@@ -110,17 +110,19 @@ export function FormDefaultSubmitView(props: {
       <StarRating
         size={'lg'}
         value={submitForm.rating}
-        onChange={(value) => setSubmitForm({...submitForm, rating: value})}
+        onChange={(value) => setSubmitForm({ ...submitForm, rating: value })}
       />
 
       {/*import review from social media*/}
-      <div className='flex flex-col items-center gap-4 w-full'>
-        <label className='font-semibold'>Import Review from Social Media:</label>
-        <div className='flex flex-row items-center justify-center gap-2 w-full'>
+      <div className="flex flex-col items-center gap-4 w-full">
+        <label className="font-semibold">
+          Import Review from Social Media:
+        </label>
+        <div className="flex flex-row items-center justify-center gap-2 w-full">
           <ReviewImportXDialog
             onImport={(tweetId, data) => {
               if (!user) {
-                signIn()
+                signIn();
                 return;
               }
               const parseData = parseTweet(data);
@@ -140,34 +142,36 @@ export function FormDefaultSubmitView(props: {
             }}
           >
             <Button variant="outline">
-              <BsTwitterX/>
+              <BsTwitterX />
             </Button>
           </ReviewImportXDialog>
           <Button variant="outline">
-            <BsTiktok/>
+            <BsTiktok />
           </Button>
           <Button variant="outline">
-            <BsGoogle/>
+            <BsGoogle />
           </Button>
           <Button variant="outline">
-            <BsInstagram/>
+            <BsInstagram />
           </Button>
         </div>
       </div>
 
       {/* 横线 中间一个文本 'or'  */}
       <div className="flex items-center w-full">
-        <hr className="flex-grow border-gray-300"/>
+        <hr className="flex-grow border-gray-300" />
         <span className="mx-2 text-gray-500">or</span>
-        <hr className="flex-grow border-gray-300"/>
+        <hr className="flex-grow border-gray-300" />
       </div>
 
       {/* 用户信息表单 */}
-      <label className='text-center w-full font-semibold'>Manually Add a Review:</label>
+      <label className="text-center w-full font-semibold">
+        Manually Add a Review:
+      </label>
       <div className="grid grid-cols-2 gap-4 w-full">
         <div>
           <label className="text-sm">
-            Full Name <Required/>
+            Full Name <Required />
           </label>
           <input
             type="text"
@@ -175,7 +179,7 @@ export function FormDefaultSubmitView(props: {
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.fullName}
             onChange={(e) =>
-              setSubmitForm({...submitForm, fullName: e.target.value})
+              setSubmitForm({ ...submitForm, fullName: e.target.value })
             }
           />
         </div>
@@ -187,7 +191,7 @@ export function FormDefaultSubmitView(props: {
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.email}
             onChange={(e) =>
-              setSubmitForm({...submitForm, email: e.target.value})
+              setSubmitForm({ ...submitForm, email: e.target.value })
             }
           />
         </div>
@@ -199,7 +203,7 @@ export function FormDefaultSubmitView(props: {
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.email}
             onChange={(e) =>
-              setSubmitForm({...submitForm, email: e.target.value})
+              setSubmitForm({ ...submitForm, email: e.target.value })
             }
           />
         </div>
@@ -211,7 +215,7 @@ export function FormDefaultSubmitView(props: {
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.userUrl}
             onChange={(e) =>
-              setSubmitForm({...submitForm, userUrl: e.target.value})
+              setSubmitForm({ ...submitForm, userUrl: e.target.value })
             }
           />
         </div>
@@ -227,14 +231,13 @@ export function FormDefaultSubmitView(props: {
             }}
           />
         </div>
-
       </div>
       <div className="flex flex-col items-center gap-4 w-full pb-8">
         <textarea
           className="w-full p-4 border rounded-lg shadow-sm"
           value={submitForm.message}
           onChange={(e) =>
-            setSubmitForm({...submitForm, message: e.target.value})
+            setSubmitForm({ ...submitForm, message: e.target.value })
           }
           rows={5}
           placeholder="Write your feedback here..."
@@ -267,7 +270,7 @@ export function FormDefaultSubmitView(props: {
               }));
             }}
           >
-            <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors"/>
+            <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
           </UploadContainer>
           <UploadContainer
             accept={'video/*'}
@@ -278,7 +281,7 @@ export function FormDefaultSubmitView(props: {
               }));
             }}
           >
-            <BiVideo className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors"/>
+            <BiVideo className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
           </UploadContainer>
         </div>
       </div>

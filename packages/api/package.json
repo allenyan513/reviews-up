@@ -33,6 +33,6 @@
     }
   },
   "dependencies": {
-    "@repo/database": "*"
+    "@repo/database": "workspace:*"
   }
 }

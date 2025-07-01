@@ -1,6 +1,6 @@
 'use client';
 
-import FormIdLayout from "@/modules/form/form-id-layout";
+import FormIdLayout from '@/modules/form/form-id-layout';
 
 export default function Layout(props: {
   params: Promise<{
@@ -10,7 +10,5 @@ export default function Layout(props: {
   }>;
   children: React.ReactNode;
 }) {
-  return <FormIdLayout params={props.params}>
-    {props.children}
-  </FormIdLayout>
+  return <FormIdLayout params={props.params}>{props.children}</FormIdLayout>;
 }

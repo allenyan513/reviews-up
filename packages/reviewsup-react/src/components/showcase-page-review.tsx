@@ -20,15 +20,9 @@ export async function ShowcasePageReview(props: { showcase: ShowcaseEntity }) {
 
   return (
     <>
-      {type === 'flow' && (
-        <FlowLayoutServer items={reviews} config={config} />
-      )}
-      {type === 'grid' && (
-        <GridLayout items={reviews} config={config} />
-      )}
-      {type === 'list' && (
-        <ListLayoutServer items={reviews} config={config} />
-      )}
+      {type === 'flow' && <FlowLayoutServer items={reviews} config={config} />}
+      {type === 'grid' && <GridLayout items={reviews} config={config} />}
+      {type === 'list' && <ListLayoutServer items={reviews} config={config} />}
       {type === 'single-carousel' && (
         <SingleCarouselLayout items={reviews} config={config} />
       )}

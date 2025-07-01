@@ -1,4 +1,4 @@
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -9,18 +9,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import {Input} from '@/components/ui/input';
-import {Label} from '@/components/ui/label';
-import {BiPlus, BiSortAlt2} from 'react-icons/bi';
-import {useUserContext} from '@/context/UserProvider';
-import {useState} from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { BiPlus, BiSortAlt2 } from 'react-icons/bi';
+import { useUserContext } from '@/context/UserProvider';
+import { useState } from 'react';
 import toast from 'react-hot-toast';
-import {useShowcaseContext} from "@/modules/showcase/context/showcase-context";
+import { useShowcaseContext } from '@/modules/showcase/context/showcase-context';
 
 export default function DialogNewShowcase(props: {}) {
-
-  const {defaultWorkspace} = useUserContext();
-  const {createShowcase} = useShowcaseContext()
+  const { defaultWorkspace } = useUserContext();
+  const { createShowcase } = useShowcaseContext();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [submitForm, setSubmitForm] = useState<{
     name: string;
@@ -32,7 +31,7 @@ export default function DialogNewShowcase(props: {}) {
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button size={'lg'}>
-          <BiPlus className="text-2xl"/>
+          <BiPlus className="text-2xl" />
           New Showcase
         </Button>
       </DialogTrigger>
@@ -51,7 +50,7 @@ export default function DialogNewShowcase(props: {}) {
             className="w-full"
             value={submitForm.name}
             onChange={(e) =>
-              setSubmitForm({...submitForm, name: e.target.value})
+              setSubmitForm({ ...submitForm, name: e.target.value })
             }
           />
         </div>
@@ -61,17 +60,21 @@ export default function DialogNewShowcase(props: {}) {
               Close
             </Button>
           </DialogClose>
-          <Button type="submit" onClick={async () => {
-            if (!defaultWorkspace || !defaultWorkspace.id) {
-              toast.error('Please select a workspace first.');
-              return;
-            }
-            await createShowcase(defaultWorkspace.id, submitForm.name);
-            setSubmitForm({
-              name: '',
-            })
-            setIsOpen(false);
-          }} className="ml-2">
+          <Button
+            type="submit"
+            onClick={async () => {
+              if (!defaultWorkspace || !defaultWorkspace.id) {
+                toast.error('Please select a workspace first.');
+                return;
+              }
+              await createShowcase(defaultWorkspace.id, submitForm.name);
+              setSubmitForm({
+                name: '',
+              });
+              setIsOpen(false);
+            }}
+            className="ml-2"
+          >
             Create Showcase
           </Button>
         </DialogFooter>

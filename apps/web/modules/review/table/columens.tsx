@@ -1,23 +1,26 @@
 'use client';
 
-import {ColumnDef, useReactTable} from '@tanstack/react-table';
-import {ReviewEntity} from '@repo/api/reviews/entities/review.entity';
+import { ColumnDef, useReactTable } from '@tanstack/react-table';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import React from 'react';
-import {
-  BsCameraVideo,
-  BsImage,
-} from 'react-icons/bs';
-import {Button} from '@/components/ui/button';
-import {ArrowUpDown} from 'lucide-react';
-import {ReviewMedia} from '@repo/api/reviews/entities/review-media.entity';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
+import { BsCameraVideo, BsImage } from 'react-icons/bs';
+import { Button } from '@/components/ui/button';
+import { ArrowUpDown } from 'lucide-react';
+import { ReviewMedia } from '@repo/api/reviews/entities/review-media.entity';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import StarRating from '@repo/ui/star-rating';
-import {ReviewItemSource} from '@reviewsup/embed-react';
-import {api} from '@/lib/api-client';
-import {$Enums} from '@repo/database/generated/client';
+import { ReviewItemSource } from '@reviewsup/embed-react';
+import { api } from '@/lib/api-client';
+import { $Enums } from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 import toast from 'react-hot-toast';
-import {BiHide, BiInfoCircle, BiListCheck, BiShow, BiTrash} from 'react-icons/bi';
+import {
+  BiHide,
+  BiInfoCircle,
+  BiListCheck,
+  BiShow,
+  BiTrash,
+} from 'react-icons/bi';
 import ReviewLookupDialog from '@/modules/review/review-lookup-dialog';
 import {
   AlertDialog,
@@ -29,12 +32,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import {toLocalDateString} from "@/lib/utils";
-import {cn} from '@repo/ui/lib/utils';
-import {ReviewItemSource2} from "@reviewsup/embed-react";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from '@/components/ui/dropdown-menu';
-
+} from '@/components/ui/alert-dialog';
+import { toLocalDateString } from '@/lib/utils';
+import { cn } from '@repo/ui/lib/utils';
+import { ReviewItemSource2 } from '@reviewsup/embed-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 export function columns(setData: any): ColumnDef<any>[] {
   const deleteReview = async (reviewId: string) => {
@@ -47,7 +54,7 @@ export function columns(setData: any): ColumnDef<any>[] {
     } catch (error) {
       toast.error('Failed to delete review');
     }
-  }
+  };
   const updateReviewStatus = async (
     reviewId: string,
     currentStatus: ReviewStatus,
@@ -63,10 +70,10 @@ export function columns(setData: any): ColumnDef<any>[] {
       } else {
         throw new Error('Invalid review status');
       }
-      await api.review.updateReview(reviewId, {status: newStatus});
+      await api.review.updateReview(reviewId, { status: newStatus });
       setData((prevData: ReviewEntity[]) =>
         prevData.map((review) =>
-          review.id === reviewId ? {...review, status: newStatus} : review,
+          review.id === reviewId ? { ...review, status: newStatus } : review,
         ),
       );
       toast.success(`Review status updated to ${newStatus}`);
@@ -75,197 +82,209 @@ export function columns(setData: any): ColumnDef<any>[] {
     }
   };
 
-  return (
-    [
-      {
-        id: 'reviewer',
-        header: 'Reviewer',
-        enableResizing: true,
-        size: 100,
-        accessorFn: (row) => ({
-          name: row.reviewerName,
-          email: row.reviewerEmail,
-          image: row.reviewerImage,
-          rating: row.rating,
-        }),
-        cell: ({row, getValue}) => {
-          const {name, email, image, rating} = getValue<{
-            name: string;
-            email: string | null;
-            image: string | null;
-            rating: number | null;
-          }>();
-          return (
-            <div className="flex flex-col gap-2 p-2">
-              <div className="flex flex-row items-center gap-2">
-                <Avatar className="size-10 shadow-md border">
-                  <AvatarImage src={image || ''} alt={name || 'Reviewer'}/>
-                  <AvatarFallback className="AvatarFallback" delayMs={600}>
-                    {name.charAt(0).toUpperCase() || 'U'}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <div className="text-sm font-medium text-gray-900">{name}</div>
-                  <div className="text-sm text-gray-500">{email}</div>
-                </div>
-              </div>
-              <StarRating
-                size={'sm'}
-                className="ml-1"
-                value={rating || 5}
-                onChange={() => {
-                }}
-              />
-            </div>
-          );
-        },
-      },
-      {
-        id: 'message',
-        header: 'Message',
-        accessorFn: (row) => ({
-          text: row.text,
-          medias: row.medias,
-          tweetId: row.tweetId,
-        }),
-        cell: ({row, getValue}) => {
-          const {text, medias, tweetId} = getValue<{
-            text: string;
-            medias: ReviewMedia[] | null;
-            tweetId: string;
-          }>();
-          return (
-            <div className="text-sm text-gray-700  max-w-md whitespace-normal flex flex-col">
-              <p>{text}</p>
-              <div className="flex flex-row gap-1 mt-2">
-                {medias &&
-                  medias.length > 0 &&
-                  medias.map((media) => {
-                    if (media.type === 'video') {
-                      return <BsCameraVideo key={media.id} className="text-xl"/>;
-                    } else if (media.type === 'image') {
-                      return <BsImage key={media.id} className="text-xl"/>;
-                    } else {
-                      return null;
-                    }
-                  })}
+  return [
+    {
+      id: 'reviewer',
+      header: 'Reviewer',
+      enableResizing: true,
+      size: 100,
+      accessorFn: (row) => ({
+        name: row.reviewerName,
+        email: row.reviewerEmail,
+        image: row.reviewerImage,
+        rating: row.rating,
+      }),
+      cell: ({ row, getValue }) => {
+        const { name, email, image, rating } = getValue<{
+          name: string;
+          email: string | null;
+          image: string | null;
+          rating: number | null;
+        }>();
+        return (
+          <div className="flex flex-col gap-2 p-2">
+            <div className="flex flex-row items-center gap-2">
+              <Avatar className="size-10 shadow-md border">
+                <AvatarImage src={image || ''} alt={name || 'Reviewer'} />
+                <AvatarFallback className="AvatarFallback" delayMs={600}>
+                  {name.charAt(0).toUpperCase() || 'U'}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <div className="text-sm font-medium text-gray-900">{name}</div>
+                <div className="text-sm text-gray-500">{email}</div>
               </div>
             </div>
-          );
-        },
+            <StarRating
+              size={'sm'}
+              className="ml-1"
+              value={rating || 5}
+              onChange={() => {}}
+            />
+          </div>
+        );
       },
-      {
-        accessorKey: 'source',
-        header: 'Source',
-        cell: ({row}) => {
-          const source = row.getValue('source') as string;
-          return <ReviewItemSource2 source={source}/>;
-        },
-      },
-      {
-        accessorKey: 'status',
-        header: function StatusHeader({column}) {
-          return (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="text-sm font-semibold">
-                  Status ⏷
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start">
-                <DropdownMenuItem onClick={() => column.setFilterValue(undefined)}>
-                  <BiListCheck/>All
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => column.setFilterValue('pending')}>
-                  <BiInfoCircle/>Pending
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => column.setFilterValue('public')}>
-                  <BiShow/>Public
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => column.setFilterValue('hidden')}>
-                  <BiHide/>Hidden
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          );
-        },
-        cell: ({row, table}) => {
-          const reviewId = row.original.id;
-          const status = row.getValue('status') as string;
-          return (
-            <Button
-              onClick={() => {
-                updateReviewStatus(reviewId, status as ReviewStatus)
-              }}
-              variant={'outline'}
-              className={cn(`text-sm font-medium rounded-full`,
-                status === 'pending' ? 'bg-yellow-100 text-yellow-800' :
-                  status === 'public' ? 'bg-green-100 text-green-800' :
-                    status === 'hidden' ? 'bg-gray-100 text-gray-800' : ''
-              )}
-            >
-              {status === 'pending' && <BiInfoCircle className=""/>}
-              {status === 'public' && <BiShow className=""/>}
-              {status === 'hidden' && <BiHide className=""/>}
-              {status.charAt(0).toUpperCase() + status.slice(1)}
-            </Button>
-          );
-        },
-      },
-      {
-        accessorKey: 'createdAt',
-        header: ({column}) => {
-          return (
-            <Button
-              variant={'ghost'}
-              onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-            >
-              Date
-              <ArrowUpDown className="h-4 w-4"/>
-            </Button>
-          );
-        },
-        cell: ({row}) => {
-          const date = new Date(row.getValue('createdAt'));
-          return <span>{toLocalDateString(date)}</span>;
-        },
-      },
-      {
-        id: 'actions',
-        header: 'Actions',
-        cell: ({row}) => {
-          const review = row.original;
-          return (
-            <div className="flex items-center space-x-2">
-              <ReviewLookupDialog review={review}>
-                <BiShow className={'text-2xl cursor-pointer'}/>
-              </ReviewLookupDialog>
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <BiTrash className={'text-2xl text-red-400 cursor-pointer'}/>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      This action cannot be undone. This will permanently delete the
-                      review.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction
-                      onClick={() => {
-                        deleteReview(review.id)
-                      }}
-                    >Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
+    },
+    {
+      id: 'message',
+      header: 'Message',
+      accessorFn: (row) => ({
+        text: row.text,
+        medias: row.medias,
+        tweetId: row.tweetId,
+      }),
+      cell: ({ row, getValue }) => {
+        const { text, medias, tweetId } = getValue<{
+          text: string;
+          medias: ReviewMedia[] | null;
+          tweetId: string;
+        }>();
+        return (
+          <div className="text-sm text-gray-700  max-w-md whitespace-normal flex flex-col">
+            <p>{text}</p>
+            <div className="flex flex-row gap-1 mt-2">
+              {medias &&
+                medias.length > 0 &&
+                medias.map((media) => {
+                  if (media.type === 'video') {
+                    return <BsCameraVideo key={media.id} className="text-xl" />;
+                  } else if (media.type === 'image') {
+                    return <BsImage key={media.id} className="text-xl" />;
+                  } else {
+                    return null;
+                  }
+                })}
             </div>
-          );
-        },
+          </div>
+        );
       },
-    ]
-  )
+    },
+    {
+      accessorKey: 'source',
+      header: 'Source',
+      cell: ({ row }) => {
+        const source = row.getValue('source') as string;
+        return <ReviewItemSource2 source={source} />;
+      },
+    },
+    {
+      accessorKey: 'status',
+      header: function StatusHeader({ column }) {
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="text-sm font-semibold">
+                Status ⏷
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem
+                onClick={() => column.setFilterValue(undefined)}
+              >
+                <BiListCheck />
+                All
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => column.setFilterValue('pending')}
+              >
+                <BiInfoCircle />
+                Pending
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => column.setFilterValue('public')}>
+                <BiShow />
+                Public
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => column.setFilterValue('hidden')}>
+                <BiHide />
+                Hidden
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+      cell: ({ row, table }) => {
+        const reviewId = row.original.id;
+        const status = row.getValue('status') as string;
+        return (
+          <Button
+            onClick={() => {
+              updateReviewStatus(reviewId, status as ReviewStatus);
+            }}
+            variant={'outline'}
+            className={cn(
+              `text-sm font-medium rounded-full`,
+              status === 'pending'
+                ? 'bg-yellow-100 text-yellow-800'
+                : status === 'public'
+                  ? 'bg-green-100 text-green-800'
+                  : status === 'hidden'
+                    ? 'bg-gray-100 text-gray-800'
+                    : '',
+            )}
+          >
+            {status === 'pending' && <BiInfoCircle className="" />}
+            {status === 'public' && <BiShow className="" />}
+            {status === 'hidden' && <BiHide className="" />}
+            {status.charAt(0).toUpperCase() + status.slice(1)}
+          </Button>
+        );
+      },
+    },
+    {
+      accessorKey: 'createdAt',
+      header: ({ column }) => {
+        return (
+          <Button
+            variant={'ghost'}
+            onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+          >
+            Date
+            <ArrowUpDown className="h-4 w-4" />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const date = new Date(row.getValue('createdAt'));
+        return <span>{toLocalDateString(date)}</span>;
+      },
+    },
+    {
+      id: 'actions',
+      header: 'Actions',
+      cell: ({ row }) => {
+        const review = row.original;
+        return (
+          <div className="flex items-center space-x-2">
+            <ReviewLookupDialog review={review}>
+              <BiShow className={'text-2xl cursor-pointer'} />
+            </ReviewLookupDialog>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <BiTrash className={'text-2xl text-red-400 cursor-pointer'} />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    the review.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() => {
+                      deleteReview(review.id);
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          </div>
+        );
+      },
+    },
+  ];
 }

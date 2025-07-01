@@ -6,15 +6,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, {useState} from 'react';
-import {ReviewEntity} from '@repo/api/reviews/entities/review.entity';
-import {ReviewItem} from '@reviewsup/embed-react';
+import React, { useState } from 'react';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ReviewItem } from '@reviewsup/embed-react';
 
 export default function ReviewLookupDialog(props: {
   review: ReviewEntity | null;
   children: React.ReactNode;
 }) {
-  const {review, children} = props;
+  const { review, children } = props;
   if (!review) {
     return null;
   }
@@ -28,7 +28,7 @@ export default function ReviewLookupDialog(props: {
             View the details of the selected review.
           </DialogDescription>
         </DialogHeader>
-        <ReviewItem review={review}/>
+        <ReviewItem review={review} />
       </DialogContent>
     </Dialog>
   );

@@ -20,9 +20,14 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import React, {useEffect, useImperativeHandle, useMemo, useRef, useState} from 'react';
-import {DataTablePagination} from './pagination';
-
+import React, {
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+import { DataTablePagination } from './pagination';
 
 interface DataTableProps<TData, TValue> {
   fetchData: (
@@ -35,15 +40,15 @@ interface DataTableProps<TData, TValue> {
     pageCount: number;
     totalRowCount: number;
   } | null>;
-  columns: (setData: React.Dispatch<React.SetStateAction<TData[]>>) => ColumnDef<TData, TValue>[];
+  columns: (
+    setData: React.Dispatch<React.SetStateAction<TData[]>>,
+  ) => ColumnDef<TData, TValue>[];
 }
 
-
-export function DataTable<TData, TValue>(
-  {
-    fetchData,
-    columns,
-  }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({
+  fetchData,
+  columns,
+}: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = useState<PaginationState>({
@@ -74,7 +79,6 @@ export function DataTable<TData, TValue>(
       pagination,
     },
   });
-
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -109,7 +113,7 @@ export function DataTable<TData, TValue>(
 
   return (
     <div>
-      <DataTablePagination table={table}/>
+      <DataTablePagination table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader className="bg-gray-100">
@@ -121,9 +125,9 @@ export function DataTable<TData, TValue>(
                       {header.isPlaceholder
                         ? null
                         : flexRender(
-                          header.column.columnDef.header,
-                          header.getContext(),
-                        )}
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
                     </TableHead>
                   );
                 })}
@@ -160,7 +164,7 @@ export function DataTable<TData, TValue>(
           </TableBody>
         </Table>
       </div>
-      <DataTablePagination table={table}/>
+      <DataTablePagination table={table} />
     </div>
   );
 }

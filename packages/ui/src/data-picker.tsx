@@ -4,11 +4,7 @@ import React, { useState, useRef } from 'react';
 
 import { ChevronDownIcon } from 'lucide-react';
 import { Calendar } from './calendar';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from './popover';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
 
 export default function DataPicker(props: {
   value: Date | undefined;

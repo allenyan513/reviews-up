@@ -7,9 +7,6 @@ interface ListLayoutServerProps {
   config?: ShowcaseConfig;
 }
 
-export function ListLayoutServer({
-  items,
-  config,
-}: ListLayoutServerProps) {
+export function ListLayoutServer({ items, config }: ListLayoutServerProps) {
   return <ListLayoutClient items={items} config={config} />;
 }

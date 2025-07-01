@@ -9,5 +9,5 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
-  return <ReviewListPage params={props.params}/>
+  return <ReviewListPage params={props.params} />;
 }

@@ -61,7 +61,11 @@ function CarouselRow({
 
   return (
     <div className="overflow-hidden w-full relative">
-      <div ref={ref} className="flex flex-row gap-4 p-4" style={{ willChange: 'transform' }}>
+      <div
+        ref={ref}
+        className="flex flex-row gap-4 p-4"
+        style={{ willChange: 'transform' }}
+      >
         {duplicatedItems.map((item, idx) => (
           <div key={`${item ? (item as any).id || idx : idx}-${idx}`}>
             <ReviewItem1

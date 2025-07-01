@@ -5,7 +5,6 @@ import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
 import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
 import { authFetch } from './auth-fetch';
 
-
 // Define your API methods, each accepting the session object
 export const showcase = {
   getShowcases: (workspaceId: string): Promise<PaginateResponse<Showcase>> =>
