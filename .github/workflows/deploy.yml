@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-      - feature/*
+      - feature/pnpm
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -23,10 +23,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22.9.0'
-          cache: 'npm'
+          cache: 'pnpm'
 
-      - name: Install dependencies
-        run: npm ci --include dev
+      - name: Enable corepack and install pnpm
+        run: |
+            corepack enable
+            corepack prepare pnpm@latest --activate
+
+      - name: Install dependencies (pnpm)
+        run: pnpm install --frozen-lockfile
 
       - name: Decrypt .env.production.gpg file
         run: |
@@ -43,7 +48,7 @@ jobs:
           set +a
 
       - name: Build
-        run: npm run build
+        run: pnpm run build
 
       - name: Prepare zip artifact
         run: |
@@ -69,5 +74,9 @@ jobs:
           script: |
             cd ${{ env.REMOTE_PATH }}
             unzip -o ${{ env.ZIP_NAME }} && rm -f ${{ env.ZIP_NAME }}
-            npm install --omit=dev
-            npm run pm2:start
+            
+            corepack enable
+            corepack prepare pnpm@latest --activate
+
+            pnpm install --omit=dev
+            pnpm run pm2:start
