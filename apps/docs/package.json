@@ -1,0 +1,11 @@
+{
+  "name": "docs",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 5530 --turbopack",
+    "build": "next build",
+    "postbuild": "pagefind --site .next/server/app --output-path public/_pagefind",
+    "start": "next start"
+  }
+}

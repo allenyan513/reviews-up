@@ -16,7 +16,6 @@ export async function generateMetadata(props: {
     lang: string;
   }>;
 }): Promise<Metadata> {
-
   const {lang} = await props.params;
   const t = useTranslate(lang);
   return {

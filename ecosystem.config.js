@@ -17,6 +17,12 @@ module.exports = {
       script: 'next',
       args: 'start -p 5520',
       cwd: './apps/landing',
+    },
+    {
+      name: 'reviewsup-docs',
+      script: 'next',
+      args: 'start -p 5530',
+      cwd: './apps/docs',
     }
   ],
 };
