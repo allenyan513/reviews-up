@@ -4,4 +4,3 @@ export type JwtPayload = {
   provider?: string;
   providerAccountId?: string;
 };
-

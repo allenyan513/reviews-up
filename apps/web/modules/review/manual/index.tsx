@@ -1,7 +1,7 @@
 'use client';
-import {Button} from '@/components/ui/button';
-import {Input} from '@repo/ui/input';
-import {Label} from '@repo/ui/label';
+import { Button } from '@/components/ui/button';
+import { Input } from '@repo/ui/input';
+import { Label } from '@repo/ui/label';
 import toast from 'react-hot-toast';
 import {
   Dialog,
@@ -15,18 +15,16 @@ import {
 } from '@/components/ui/dialog';
 import StarRating from '@repo/ui/star-rating';
 
-import React, {useState, useRef} from 'react';
-import {BiDownload, BiPlus, BiUser, BiX} from 'react-icons/bi';
-import {api} from '@/lib/api-client';
-import {useUserContext} from '@/context/UserProvider';
+import React, { useState, useRef } from 'react';
+import { BiDownload, BiPlus, BiUser, BiX } from 'react-icons/bi';
+import { api } from '@/lib/api-client';
+import { useUserContext } from '@/context/UserProvider';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
-import {CreateReviewDto} from "@repo/api/reviews/dto/create-review.dto";
+import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
 
-export default function ReviewImportManualDialog(props: {
-
-}) {
+export default function ReviewImportManualDialog(props: {}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const {defaultWorkspace} = useUserContext();
+  const { defaultWorkspace } = useUserContext();
   const [formData, setFormData] = useState<CreateReviewDto>({
     workspaceId: defaultWorkspace?.id || '',
     rating: 0,
@@ -47,36 +45,42 @@ export default function ReviewImportManualDialog(props: {
       toast.success('Review created successfully!');
       setIsOpen(false);
     } catch (error) {
-      toast.error('Failed to create review. Please check your input and try again.');
+      toast.error(
+        'Failed to create review. Please check your input and try again.',
+      );
       return;
     }
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) =>{
-      setIsOpen(open);
-      if (!open) {
-        setFormData({
-          workspaceId: defaultWorkspace?.id || '',
-          rating: 0,
-          message: '',
-          fullName: '',
-          email: '',
-          userUrl: '',
-          avatarUrl: '',
-          imageUrls: [],
-          videoUrl: '',
-          title: '',
-          source: 'manual',
-        });
-      }
-    }}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        setIsOpen(open);
+        if (!open) {
+          setFormData({
+            workspaceId: defaultWorkspace?.id || '',
+            rating: 0,
+            message: '',
+            fullName: '',
+            email: '',
+            userUrl: '',
+            avatarUrl: '',
+            imageUrls: [],
+            videoUrl: '',
+            title: '',
+            source: 'manual',
+          });
+        }
+      }}
+    >
       <DialogTrigger asChild>
         <Button
           size={'lg'}
           className="w-full items-center justify-center text-sm"
-          variant="default">
-          <BiPlus/> Manual Import
+          variant="default"
+        >
+          <BiPlus /> Manual Import
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-2xl">
@@ -85,11 +89,11 @@ export default function ReviewImportManualDialog(props: {
         </DialogHeader>
         <div className="w-full flex flex-col gap-4 justify-center items-center">
           <StarRating
-            className=''
+            className=""
             size={'lg'}
             value={formData.rating || 0}
             onChange={(value) => {
-              setFormData({...formData, rating: value});
+              setFormData({ ...formData, rating: value });
             }}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
@@ -106,7 +110,7 @@ export default function ReviewImportManualDialog(props: {
                 placeholder="John Smith"
                 value={formData.fullName}
                 onChange={(e) =>
-                  setFormData({...formData, fullName: e.target.value})
+                  setFormData({ ...formData, fullName: e.target.value })
                 }
               />
             </div>
@@ -122,7 +126,7 @@ export default function ReviewImportManualDialog(props: {
                 id="email"
                 value={formData.email}
                 onChange={(e) =>
-                  setFormData({...formData, email: e.target.value})
+                  setFormData({ ...formData, email: e.target.value })
                 }
                 placeholder="e.g. john@reviewsup.io"
               />
@@ -139,7 +143,7 @@ export default function ReviewImportManualDialog(props: {
                 id="title"
                 value={formData.title}
                 onChange={(e) =>
-                  setFormData({...formData, title: e.target.value})
+                  setFormData({ ...formData, title: e.target.value })
                 }
                 placeholder="e.g. Co-founder & CTO"
               />
@@ -156,7 +160,7 @@ export default function ReviewImportManualDialog(props: {
                 id="link"
                 value={formData.userUrl}
                 onChange={(e) =>
-                  setFormData({...formData, userUrl: e.target.value})
+                  setFormData({ ...formData, userUrl: e.target.value })
                 }
                 placeholder="https://reviews.com/review/123"
               />
@@ -172,7 +176,7 @@ export default function ReviewImportManualDialog(props: {
               <AvatarUpload
                 value={formData.avatarUrl || ''}
                 onChange={(value) => {
-                  setFormData({...formData, avatarUrl: value});
+                  setFormData({ ...formData, avatarUrl: value });
                 }}
               />
             </div>
@@ -188,7 +192,7 @@ export default function ReviewImportManualDialog(props: {
               id="message"
               value={formData.message}
               onChange={(e) =>
-                setFormData({...formData, message: e.target.value})
+                setFormData({ ...formData, message: e.target.value })
               }
               rows={5}
               placeholder="Love this service! If you have customers that need a level of confidence before they buy, this will help a ton!"

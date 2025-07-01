@@ -1,32 +1,39 @@
-import {ShowcaseConfig, ShowcaseEntity} from "@repo/api/showcases/entities/showcase.entity";
-import {useShowcaseContext} from "@/modules/showcase/context/showcase-context";
-import Link from "next/link";
-import {BiFile, BiTrash} from "react-icons/bi";
-import {toLocalDateString} from "@/lib/utils";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
-  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  ShowcaseConfig,
+  ShowcaseEntity,
+} from '@repo/api/showcases/entities/showcase.entity';
+import { useShowcaseContext } from '@/modules/showcase/context/showcase-context';
+import Link from 'next/link';
+import { BiFile, BiTrash } from 'react-icons/bi';
+import { toLocalDateString } from '@/lib/utils';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from "@/components/ui/alert-dialog";
-import React from "react";
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import React from 'react';
 
 export function ShowcaseListItem(props: {
-  item: ShowcaseEntity,
-  lang: string,
-  workspaceId: string,
+  item: ShowcaseEntity;
+  lang: string;
+  workspaceId: string;
 }) {
-
-  const {deleteShowcase} = useShowcaseContext();
-  const {item, lang, workspaceId} = props;
+  const { deleteShowcase } = useShowcaseContext();
+  const { item, lang, workspaceId } = props;
 
   const config = item.config as ShowcaseConfig;
 
   return (
     <div
-      className='flex flex-row justify-between items-center mb-4 w-full bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:shadow-md transition-shadow duration-200'
-      key={item.id}>
+      className="flex flex-row justify-between items-center mb-4 w-full bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:shadow-md transition-shadow duration-200"
+      key={item.id}
+    >
       <Link
         key={item.id}
         href={`/${lang}/${workspaceId}/showcases/${item.id}`}
@@ -34,14 +41,16 @@ export function ShowcaseListItem(props: {
       >
         <div className="flex items-center">
           <div className="p-3 bg-gray-100 rounded-md mr-4">
-            <BiFile className="text-2xl"/>
+            <BiFile className="text-2xl" />
           </div>
           <div>
             <h2 className="text-lg font-medium text-gray-900 w-full">
               {item.name}
             </h2>
             <p className="text-sm text-gray-500 mt-0.5">
-              <span className="font-semibold">{config.type?.toUpperCase()} Layout</span>{' '}
+              <span className="font-semibold">
+                {config.type?.toUpperCase()} Layout
+              </span>{' '}
               created on {toLocalDateString(item.createdAt.toLocaleString())}
             </p>
           </div>
@@ -53,7 +62,7 @@ export function ShowcaseListItem(props: {
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <div className="p-2 rounded-full hover:bg-gray-100 transition-colors duration-200 cursor-pointer">
-              <BiTrash className="text-2xl text-red-500 "/>
+              <BiTrash className="text-2xl text-red-500 " />
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
@@ -70,11 +79,13 @@ export function ShowcaseListItem(props: {
                 onClick={() => {
                   deleteShowcase(item.id);
                 }}
-              >Continue</AlertDialogAction>
+              >
+                Continue
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
     </div>
-  )
+  );
 }

@@ -9,7 +9,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
 
   constructor(private authService: AuthService) {
     super({
-      clientType:'confidential',
+      clientType: 'confidential',
       clientID: process.env.TWITTER_CLIENT_ID,
       clientSecret: process.env.TWITTER_CLIENT_SECRET,
       callbackURL: process.env.TWITTER_CALLBACK_URL,
@@ -26,7 +26,7 @@ export class TwitterStrategy extends PassportStrategy(Strategy, 'twitter') {
       accessToken,
       refreshToken,
       profile,
-    })
+    });
     const {
       provider,
       id,

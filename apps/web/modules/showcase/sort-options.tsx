@@ -1,5 +1,4 @@
-import {SortBy} from "@/types/sortby";
-
+import { SortBy } from '@/types/sortby';
 
 export const sortOptions = [
   {

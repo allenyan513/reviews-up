@@ -9,7 +9,7 @@ export default function RootLayout({ children }: Readonly<PropsWithChildren>) {
     <>
       <UserProvider>
         {children}
-        <ToastContext/>
+        <ToastContext />
       </UserProvider>
     </>
   );

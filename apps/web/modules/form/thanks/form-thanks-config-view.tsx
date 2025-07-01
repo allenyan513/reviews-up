@@ -1,7 +1,7 @@
-import {useFormContext} from "@/modules/form/context/FormProvider";
-import {Button} from "@/components/ui/button";
+import { useFormContext } from '@/modules/form/context/FormProvider';
+import { Button } from '@/components/ui/button';
 
-export function FormThanksConfigView(){
+export function FormThanksConfigView() {
   const { form, formConfig, setFormConfig, updateFormConfig } =
     useFormContext();
   if (!form || !formConfig) return null;
@@ -61,5 +61,5 @@ export function FormThanksConfigView(){
       </div>
       <Button onClick={updateFormConfig}>Save</Button>
     </>
-  )
+  );
 }

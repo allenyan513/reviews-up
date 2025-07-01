@@ -16,7 +16,7 @@ export class EmailMagicStrategy extends PassportStrategy(
   }
 
   async validate(req: any) {
-    const token = req.query.token
+    const token = req.query.token;
     return this.authService.validateMagicToken(token);
   }
 }

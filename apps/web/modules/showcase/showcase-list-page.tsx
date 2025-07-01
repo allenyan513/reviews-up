@@ -1,10 +1,9 @@
 'use client';
 
-import React, {useEffect, useState, use} from 'react';
+import React, { useEffect, useState, use } from 'react';
 import DialogNewShowcase from '@/modules/showcase/dialog-new-showcase';
-import {useShowcaseContext} from '@/modules/showcase/context/showcase-context';
-import {ShowcaseListItem} from '@/modules/showcase/showcase-list-item';
-
+import { useShowcaseContext } from '@/modules/showcase/context/showcase-context';
+import { ShowcaseListItem } from '@/modules/showcase/showcase-list-item';
 
 export default function ShowcaseListPage(props: {
   params: Promise<{
@@ -13,7 +12,7 @@ export default function ShowcaseListPage(props: {
   }>;
 }) {
   const params = use(props.params);
-  const {getShowcases, showcases, deleteShowcase} = useShowcaseContext();
+  const { getShowcases, showcases, deleteShowcase } = useShowcaseContext();
   useEffect(() => {
     getShowcases(params.workspaceId);
   }, []);
@@ -30,19 +29,20 @@ export default function ShowcaseListPage(props: {
             Easily collect testimonials from your customers using a simple link
           </p>
         </div>
-        <DialogNewShowcase/>
+        <DialogNewShowcase />
       </div>
 
       {/* Showcase List */}
       <div className="space-y-4 w-full">
-        {showcases?.items && showcases?.items.map((item) => (
-          <ShowcaseListItem
-            key={item.id}
-            item={item}
-            lang={params.lang}
-            workspaceId={params.workspaceId}
-          />
-        ))}
+        {showcases?.items &&
+          showcases?.items.map((item) => (
+            <ShowcaseListItem
+              key={item.id}
+              item={item}
+              lang={params.lang}
+              workspaceId={params.workspaceId}
+            />
+          ))}
       </div>
     </div>
   );

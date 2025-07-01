@@ -1,9 +1,13 @@
-import {api} from '@/lib/api-client';
-import {createContext, useContext, useEffect, useState} from 'react';
+import { api } from '@/lib/api-client';
+import { createContext, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import {CampaignEntity, CreateCampaignDto, createCampaignSchema} from "@repo/api/campaign/index";
-import {useUserContext} from "@/context/UserProvider";
-import {FormEntity} from "@repo/api/forms/entities/form.entity";
+import {
+  CampaignEntity,
+  CreateCampaignDto,
+  createCampaignSchema,
+} from '@repo/api/campaign/index';
+import { useUserContext } from '@/context/UserProvider';
+import { FormEntity } from '@repo/api/forms/entities/form.entity';
 
 const CampaignContext = createContext<{
   forms: FormEntity[] | undefined;
@@ -14,16 +18,18 @@ const CampaignContext = createContext<{
   create: (dto: CreateCampaignDto) => Promise<void>;
 
   submitForm: CreateCampaignDto | undefined;
-  setSubmitForm: React.Dispatch<React.SetStateAction<CreateCampaignDto | undefined>>;
+  setSubmitForm: React.Dispatch<
+    React.SetStateAction<CreateCampaignDto | undefined>
+  >;
 
   sendCampaign: (isTest: boolean) => Promise<void>;
 } | null>(null);
 
 export function CampaignProvider(props: { children: React.ReactNode }) {
-  const {defaultWorkspace, user} = useUserContext()
+  const { defaultWorkspace, user } = useUserContext();
   const [forms, setForms] = useState<FormEntity[]>();
 
-  const [submitForm, setSubmitForm] = useState<CreateCampaignDto>()
+  const [submitForm, setSubmitForm] = useState<CreateCampaignDto>();
 
   const findAllFormsByWorkspaceId = (workspaceId: string) => {
     api.form
@@ -34,14 +40,11 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
-  const findAll = async (
-    pageIndex: number,
-    pageSize: number
-  ) => {
+  const findAll = async (pageIndex: number, pageSize: number) => {
     if (!defaultWorkspace) {
-      return null
+      return null;
     }
     const res = await api.campaign.findAll({
       workspaceId: defaultWorkspace?.id || '',
@@ -54,15 +57,15 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
       data: res.items,
       pageCount: res.meta.total,
       totalRowCount: res.meta.total,
-    }
+    };
   };
 
   const findOne = async (id: string) => {
     try {
-      return await api.campaign.findOne(id)
+      return await api.campaign.findOne(id);
     } catch (error) {
       console.error('Failed to find campaign:', error);
-      return null
+      return null;
     }
   };
 
@@ -97,24 +100,26 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
     } catch (error) {
       toast.error('Failed to create campaign');
     }
-  }
+  };
 
   const sendCampaign = async (isTest: boolean) => {
     if (!submitForm || !user) {
-      toast.error(`Please fill out the form before sending a ${isTest ? 'test' : ''} campaign`);
+      toast.error(
+        `Please fill out the form before sending a ${isTest ? 'test' : ''} campaign`,
+      );
       return;
     }
     try {
       const validatedDto = createCampaignSchema.parse({
         ...submitForm,
         isTest: isTest,
-      })
+      });
       await api.campaign.create(validatedDto);
       toast.success(`Campaign ${isTest ? 'test ' : ''}sent successfully`);
     } catch (error: any) {
       toast.error(error.message || 'Failed to send campaign');
     }
-  }
+  };
 
   useEffect(() => {
     if (!user || !defaultWorkspace) {
@@ -150,7 +155,6 @@ ${user.name}
       isTest: false,
       buttonText: 'Leave a review',
     });
-
   }, [user, defaultWorkspace, forms]);
 
   return (
@@ -165,7 +169,6 @@ ${user.name}
         submitForm,
         setSubmitForm,
         sendCampaign,
-
       }}
     >
       {props.children}

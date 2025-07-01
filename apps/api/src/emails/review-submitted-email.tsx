@@ -33,9 +33,7 @@ export const ReviewSubmitEmail = (props: { url: string }) => {
               height="49"
               alt="reviewsup.io logo"
             />
-            <Text style={paragraph}>
-              Dear User,
-            </Text>
+            <Text style={paragraph}>Dear User,</Text>
             <Text style={paragraph}>
               There is a new review submitted on your form. Click the button
               below to view it.

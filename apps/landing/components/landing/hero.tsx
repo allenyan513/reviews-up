@@ -1,6 +1,6 @@
-import {buttonVariants} from "@repo/ui/button";
-import {cn} from "@repo/ui/lib/utils";
-import Link from "next/link";
+import { buttonVariants } from '@repo/ui/button';
+import { cn } from '@repo/ui/lib/utils';
+import Link from 'next/link';
 
 export function Hero(props: {
   capsuleText: string;
@@ -36,8 +36,10 @@ export function Hero(props: {
         <div className="flex gap-4 flex-wrap justify-center mt-8">
           <Link
             href={props.primaryCtaLink}
-            className={cn(buttonVariants({ size: "lg", }),
-              "bg-red-400 hover:bg-red-500 rounded-full h-14")}
+            className={cn(
+              buttonVariants({ size: 'lg' }),
+              'bg-red-400 hover:bg-red-500 rounded-full h-14',
+            )}
           >
             {props.primaryCtaText}
           </Link>
@@ -47,7 +49,7 @@ export function Hero(props: {
               href={props.secondaryCtaLink}
               target="_blank"
               rel="noreferrer"
-              className={cn(buttonVariants({variant: "outline", size: "lg"}))}
+              className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
             >
               {props.secondaryCtaText}
             </Link>

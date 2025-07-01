@@ -1,6 +1,6 @@
 'use client';
 
-import FormDefaultPage from "@/modules/form/default/form-default-page";
+import FormDefaultPage from '@/modules/form/default/form-default-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -9,5 +9,5 @@ export default function Page(props: {
     workspaceId: string;
   }>;
 }) {
-  return <FormDefaultPage params={props.params}/>
+  return <FormDefaultPage params={props.params} />;
 }

@@ -1,6 +1,6 @@
-import React from "react";
-import { Check } from "lucide-react";
-import { Button, buttonVariants } from "@repo/ui/button";
+import React from 'react';
+import { Check } from 'lucide-react';
+import { Button, buttonVariants } from '@repo/ui/button';
 import {
   Card,
   CardContent,
@@ -8,8 +8,8 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@repo/ui/card";
-import Link from "next/link";
+} from '@repo/ui/card';
+import Link from 'next/link';
 
 type PricingCardProps = {
   title: string;
@@ -25,7 +25,7 @@ export function PricingCard(props: PricingCardProps) {
   return (
     <Card
       className={`w-full ${
-        props.isPopular ? "border-primary border-2 shadow-lg" : ""
+        props.isPopular ? 'border-primary border-2 shadow-lg' : ''
       }`}
     >
       <CardHeader>
@@ -50,7 +50,7 @@ export function PricingCard(props: PricingCardProps) {
         <Link
           href={props.buttonHref}
           className={buttonVariants({
-            variant: props.isPopular ? "default" : "outline",
+            variant: props.isPopular ? 'default' : 'outline',
           })}
         >
           {props.buttonText}
@@ -66,10 +66,7 @@ export function PricingGrid(props: {
   items: PricingCardProps[];
 }) {
   return (
-    <section
-      id="features"
-      className="container space-y-6 p-4"
-    >
+    <section id="features" className="container space-y-6 p-4">
       <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
         <h2 className="text-3xl md:text-4xl font-semibold">{props.title}</h2>
         <p className="max-w-[85%] text-muted-foreground sm:text-lg">

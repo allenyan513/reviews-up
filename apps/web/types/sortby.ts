@@ -4,4 +4,3 @@ export enum SortBy {
   random = 'random',
   rating = 'rating',
 }
-

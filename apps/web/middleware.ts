@@ -1,9 +1,9 @@
-import type {NextRequest} from 'next/server';
-import {NextResponse} from 'next/server';
+import type { NextRequest } from 'next/server';
+import { NextResponse } from 'next/server';
 
-import {i18n} from '@/config/i18n-config';
+import { i18n } from '@/config/i18n-config';
 
-import {match as matchLocale} from '@formatjs/intl-localematcher';
+import { match as matchLocale } from '@formatjs/intl-localematcher';
 import Negotiator from 'negotiator';
 
 function getLocale(request: NextRequest): string | undefined {
@@ -12,7 +12,7 @@ function getLocale(request: NextRequest): string | undefined {
   request.headers.forEach((value, key) => (negotiatorHeaders[key] = value));
 
   // Use negotiator and intl-localematcher to get best locale
-  let languages = new Negotiator({headers: negotiatorHeaders}).languages();
+  let languages = new Negotiator({ headers: negotiatorHeaders }).languages();
   // @ts-ignore locales are readonly
   const locales: string[] = i18n.locales;
   try {

@@ -1,47 +1,58 @@
-import {Button} from "@/components/ui/button";
-import {useCampaignContext} from "@/modules/campaign/context/campaign-provider";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import { Button } from '@/components/ui/button';
+import { useCampaignContext } from '@/modules/campaign/context/campaign-provider';
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel,
-  AlertDialogContent, AlertDialogDescription, AlertDialogFooter,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from "@/components/ui/alert-dialog";
-import React from "react";
-import {useUserContext} from "@/context/UserProvider";
-import {EmailsInput} from "@/components/emails-input";
-import {CampaignEntity} from "@repo/api/campaign/index";
-import {cn} from "@repo/ui/lib/utils";
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+import React from 'react';
+import { useUserContext } from '@/context/UserProvider';
+import { EmailsInput } from '@/components/emails-input';
+import { CampaignEntity } from '@repo/api/campaign/index';
+import { cn } from '@repo/ui/lib/utils';
 
 export function CampaignFormItem(props: {
   label: string;
   children: React.ReactNode;
 }) {
-  const {label, children} = props;
+  const { label, children } = props;
   return (
-    <div className='flex flex-col gap-2'>
+    <div className="flex flex-col gap-2">
       <label className="text-sm font-medium">
         <span className="text-red-500 mr-1">*</span>
         {label}
       </label>
       {children}
     </div>
-  )
+  );
 }
 
 export function CampaignCreateConfigPage(props: {
-  data?: CampaignEntity,
+  data?: CampaignEntity;
   mode?: 'view' | 'create';
 }) {
-  const {data, mode} = props;
-  const {user} = useUserContext()
-  const {submitForm, setSubmitForm, forms, sendCampaign} = useCampaignContext()
+  const { data, mode } = props;
+  const { user } = useUserContext();
+  const { submitForm, setSubmitForm, forms, sendCampaign } =
+    useCampaignContext();
 
   if (!submitForm || !forms || !user) return null;
 
   return (
-    <div className='space-y-4'>
+    <div className="space-y-4">
       <CampaignFormItem label="Campaign Name">
         <input
           type="text"
@@ -53,16 +64,18 @@ export function CampaignCreateConfigPage(props: {
               name: e.target.value,
             })
           }
-          disabled={mode === "view"}
+          disabled={mode === 'view'}
           placeholder="Enter Campaign Name"
-          className={cn("w-full p-2 border border-gray-300 rounded",
-            mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+          className={cn(
+            'w-full p-2 border border-gray-300 rounded',
+            mode === 'view' &&
+              'bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75',
           )}
         />
       </CampaignFormItem>
 
       <CampaignFormItem label="From">
-        <div className='flex flex-row gap-2'>
+        <div className="flex flex-row gap-2">
           <input
             type="text"
             id="fromName"
@@ -73,10 +86,12 @@ export function CampaignCreateConfigPage(props: {
                 fromName: e.target.value,
               })
             }
-            disabled={mode === "view"}
+            disabled={mode === 'view'}
             placeholder="Enter From Name"
-            className={cn("p-2 border border-gray-300 rounded",
-              mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+            className={cn(
+              'p-2 border border-gray-300 rounded',
+              mode === 'view' &&
+                'bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75',
             )}
           />
           <input
@@ -93,12 +108,11 @@ export function CampaignCreateConfigPage(props: {
         <EmailsInput
           emails={submitForm.toEmails || []}
           onChange={(emails: string[]) =>
-            setSubmitForm({...submitForm, toEmails: emails})
+            setSubmitForm({ ...submitForm, toEmails: emails })
           }
-          disabled={mode === "view"}
+          disabled={mode === 'view'}
         />
       </CampaignFormItem>
-
 
       <CampaignFormItem label="Subject">
         <input
@@ -111,31 +125,34 @@ export function CampaignCreateConfigPage(props: {
               subject: e.target.value,
             })
           }
-          disabled={mode === "view"}
-          className={cn("w-full p-2 border border-gray-300 rounded",
-            mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+          disabled={mode === 'view'}
+          className={cn(
+            'w-full p-2 border border-gray-300 rounded',
+            mode === 'view' &&
+              'bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75',
           )}
         />
       </CampaignFormItem>
 
       <CampaignFormItem label="Content">
-       <textarea
-         id="message"
-         rows={10}
-         value={data?.content || submitForm.content}
-         onChange={(e) =>
-           setSubmitForm({
-             ...submitForm,
-             content: e.target.value,
-           })
-         }
-         disabled={mode === "view"}
-         className={cn("w-full p-2 border border-gray-300 rounded",
-           mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
-         )}
-       />
+        <textarea
+          id="message"
+          rows={10}
+          value={data?.content || submitForm.content}
+          onChange={(e) =>
+            setSubmitForm({
+              ...submitForm,
+              content: e.target.value,
+            })
+          }
+          disabled={mode === 'view'}
+          className={cn(
+            'w-full p-2 border border-gray-300 rounded',
+            mode === 'view' &&
+              'bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75',
+          )}
+        />
       </CampaignFormItem>
-
 
       <CampaignFormItem label="Collecting Form">
         <Select
@@ -146,13 +163,16 @@ export function CampaignCreateConfigPage(props: {
               formShortId: value,
             })
           }
-          disabled={mode === "view"}
+          disabled={mode === 'view'}
         >
           <SelectTrigger
-            className={cn("w-full",
-              mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
-            )}>
-            <SelectValue placeholder="Select Form ID"/>
+            className={cn(
+              'w-full',
+              mode === 'view' &&
+                'bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75',
+            )}
+          >
+            <SelectValue placeholder="Select Form ID" />
           </SelectTrigger>
           <SelectContent>
             {forms.map((form) => (
@@ -175,22 +195,21 @@ export function CampaignCreateConfigPage(props: {
               buttonText: e.target.value,
             })
           }
-          disabled={mode === "view"}
-          className={cn("w-full p-2 border border-gray-300 rounded",
-            mode === "view" && "bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75"
+          disabled={mode === 'view'}
+          className={cn(
+            'w-full p-2 border border-gray-300 rounded',
+            mode === 'view' &&
+              'bg-gray-100 disabled:cursor-not-allowed disabled:opacity-75',
           )}
         />
       </CampaignFormItem>
 
-
-      <div className={cn('grid grid-cols-2 gap-4',
-        mode === "view" && "hidden"
-      )}>
+      <div
+        className={cn('grid grid-cols-2 gap-4', mode === 'view' && 'hidden')}
+      >
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button
-              variant='outline'
-              size={'lg'}>
+            <Button variant="outline" size={'lg'}>
               Send Test Email
             </Button>
           </AlertDialogTrigger>
@@ -201,26 +220,27 @@ export function CampaignCreateConfigPage(props: {
                 Are you sure you want to send a test email?
               </AlertDialogTitle>
               <AlertDialogDescription>
-                The test email will be sent to <strong className='text-red-500 mx-1'>{user.email}</strong>, please
-                ensure the content is correct.
+                The test email will be sent to{' '}
+                <strong className="text-red-500 mx-1">{user.email}</strong>,
+                please ensure the content is correct.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => {
-                  sendCampaign(true)
+                  sendCampaign(true);
                 }}
-              >Continue</AlertDialogAction>
+              >
+                Continue
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
 
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <Button
-              variant='default'
-              size={'lg'}>
+            <Button variant="default" size={'lg'}>
               Send Campaign
             </Button>
           </AlertDialogTrigger>
@@ -231,22 +251,23 @@ export function CampaignCreateConfigPage(props: {
               </AlertDialogTitle>
               <AlertDialogDescription>
                 {/*The test email will be sent to <strong className='text-red-500 mx-1'>{user.email}</strong>, please ensure the content is correct.*/}
-                This will send the campaign to all recipients. Please ensure the content is correct and you have
-                selected the right form.
+                This will send the campaign to all recipients. Please ensure the
+                content is correct and you have selected the right form.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => {
-                  sendCampaign(false)
+                  sendCampaign(false);
                 }}
-              >Continue</AlertDialogAction>
+              >
+                Continue
+              </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>
         </AlertDialog>
       </div>
-
     </div>
-  )
+  );
 }

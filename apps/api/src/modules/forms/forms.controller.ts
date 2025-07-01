@@ -42,9 +42,7 @@ export class FormsController {
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(
-    @Jwt() jwt: JwtPayload,
-    @Param('id') id: string) {
+  findOne(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
     return this.formsService.findOne(jwt.userId, id);
   }
 
@@ -65,9 +63,7 @@ export class FormsController {
 
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(
-    @Jwt() jwt: JwtPayload,
-    @Param('id') id: string) {
+  remove(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
     return this.formsService.remove(jwt.userId, id);
   }
 }

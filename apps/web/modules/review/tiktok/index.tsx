@@ -1,5 +1,5 @@
 'use client';
-import {Button} from '@/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -10,12 +10,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, {useState, useRef} from 'react';
-import {api} from '@/lib/api-client';
+import React, { useState, useRef } from 'react';
+import { api } from '@/lib/api-client';
 
-import {Input} from '@/components/ui/input';
-import {YtDlpResponse} from '@repo/api/yt-dlp/yt-dlp-response.dto';
-import toast from "react-hot-toast";
+import { Input } from '@/components/ui/input';
+import { YtDlpResponse } from '@repo/api/yt-dlp/yt-dlp-response.dto';
+import toast from 'react-hot-toast';
 
 export default function ReviewImportTiktokDialog(props: {
   onImport: (response: YtDlpResponse | undefined) => void;
@@ -23,20 +23,25 @@ export default function ReviewImportTiktokDialog(props: {
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tiktokUrl, setTiktokUrl] = useState<string>('');
-  const [ytDlpResponse, setYtDlpResponse] = useState<YtDlpResponse | undefined>();
+  const [ytDlpResponse, setYtDlpResponse] = useState<
+    YtDlpResponse | undefined
+  >();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setTiktokUrl(inputValue);
-    api.review.parse({
-      url: inputValue,
-    }).then((response) => {
-      if (response) {
-        setYtDlpResponse(response);
-      }
-    }).catch((error) => {
-      toast.error('Error parsing TikTok URL:', error);
-    })
+    api.review
+      .parse({
+        url: inputValue,
+      })
+      .then((response) => {
+        if (response) {
+          setYtDlpResponse(response);
+        }
+      })
+      .catch((error) => {
+        toast.error('Error parsing TikTok URL:', error);
+      });
   };
 
   return (

@@ -1,8 +1,8 @@
 'use client';
 
-import {use, useEffect} from 'react';
-import {useRouter, useSearchParams} from 'next/navigation';
-import {redirect} from 'next/navigation';
+import { use, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { redirect } from 'next/navigation';
 
 export default function CallbackPage(props: {
   params: Promise<{
@@ -19,11 +19,13 @@ export default function CallbackPage(props: {
   useEffect(() => {
     const access_token = searchParams.get('access_token');
     const encodedRedirectUrl = searchParams.get('redirect');
-    const redirectUrl = encodedRedirectUrl ? decodeURIComponent(encodedRedirectUrl) : '/';
+    const redirectUrl = encodedRedirectUrl
+      ? decodeURIComponent(encodedRedirectUrl)
+      : '/';
     if (!access_token) return;
     localStorage.setItem('access_token', access_token);
     redirect(redirectUrl || '/');
   }, [searchParams, router]);
 
-  return null
+  return null;
 }

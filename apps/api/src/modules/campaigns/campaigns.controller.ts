@@ -6,7 +6,8 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards, Query
+  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
@@ -16,9 +17,12 @@ import {
   CreateCampaignDto,
   FindAllCampaignsRequest,
   findAllCampaignsRequestSchema,
-  UpdateCampaignDto
+  UpdateCampaignDto,
 } from '@repo/api/campaign/index';
-import { FindAllReviewRequest, findAllReviewRequestSchema } from '@repo/api/reviews/dto/find-all-review.dto';
+import {
+  FindAllReviewRequest,
+  findAllReviewRequestSchema,
+} from '@repo/api/reviews/dto/find-all-review.dto';
 
 @Controller('campaigns')
 export class CampaignsController {
@@ -44,7 +48,6 @@ export class CampaignsController {
     }) as FindAllCampaignsRequest;
     return this.campaignsService.findAll(req);
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Get(':id')

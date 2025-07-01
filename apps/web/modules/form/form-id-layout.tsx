@@ -1,15 +1,22 @@
 'use client';
 
-import {useEffect, useState, use} from 'react';
-import {BiArrowBack, BiCodeAlt, BiPlus, BiSave} from 'react-icons/bi';
-import {BsHeart, BsMailbox, BsMailbox2, BsMailboxFlag, BsSend, BsStar} from 'react-icons/bs';
-import {Button} from '@/components/ui/button';
+import { useEffect, useState, use } from 'react';
+import { BiArrowBack, BiCodeAlt, BiPlus, BiSave } from 'react-icons/bi';
+import {
+  BsHeart,
+  BsMailbox,
+  BsMailbox2,
+  BsMailboxFlag,
+  BsSend,
+  BsStar,
+} from 'react-icons/bs';
+import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import {BsBoxArrowUpRight, BsCodeSlash, BsShare} from 'react-icons/bs';
-import {cn} from '@/lib/utils';
-import {usePathname, useRouter} from 'next/navigation';
-import {useFormContext} from '@/modules/form/context/FormProvider';
+import { BsBoxArrowUpRight, BsCodeSlash, BsShare } from 'react-icons/bs';
+import { cn } from '@/lib/utils';
+import { usePathname, useRouter } from 'next/navigation';
+import { useFormContext } from '@/modules/form/context/FormProvider';
 
 const pageItems = [
   {
@@ -32,9 +39,9 @@ export default function FormIdLayout(props: {
   }>;
   children: React.ReactNode;
 }) {
-  const {lang, workspaceId, id} = use(props.params);
+  const { lang, workspaceId, id } = use(props.params);
   const path = usePathname();
-  const {fetchForm, form} = useFormContext();
+  const { fetchForm, form } = useFormContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -53,7 +60,7 @@ export default function FormIdLayout(props: {
             href={`/${lang}/${workspaceId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
-            <BiArrowBack className="text-2xl"/>
+            <BiArrowBack className="text-2xl" />
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
               Edit {form.name}
             </h1>
@@ -65,12 +72,14 @@ export default function FormIdLayout(props: {
         <div className={'flex flex-row gap-1 md:gap-2'}>
           <Button
             onClick={() => {
-              router.push(`/${lang}/${workspaceId}/campaigns/create?formId=${form.id}`);
+              router.push(
+                `/${lang}/${workspaceId}/campaigns/create?formId=${form.id}`,
+              );
             }}
             variant="outline"
             size={'lg'}
           >
-            <BsSend className="text-2xl"/>
+            <BsSend className="text-2xl" />
             <span className="hidden md:inline">Invite Reviews</span>
           </Button>
           <Button
@@ -83,7 +92,7 @@ export default function FormIdLayout(props: {
             variant="outline"
             size={'lg'}
           >
-            <BsShare className="text-2xl"/>
+            <BsShare className="text-2xl" />
             <span className="hidden md:inline">Share</span>
           </Button>
           <Button
@@ -93,10 +102,9 @@ export default function FormIdLayout(props: {
             variant="default"
             size={'lg'}
           >
-            <BsBoxArrowUpRight className="text-2xl"/>
+            <BsBoxArrowUpRight className="text-2xl" />
             <span className="hidden md:inline">Preview</span>
           </Button>
-
         </div>
       </div>
 
@@ -114,7 +122,7 @@ export default function FormIdLayout(props: {
                   : 'text-muted-foreground hover:bg-muted hover:text-foreground',
               )}
             >
-              {item.icon && <item.icon/>}
+              {item.icon && <item.icon />}
               <span className={'text-[14px]'}>{item.title}</span>
             </Link>
           ))}

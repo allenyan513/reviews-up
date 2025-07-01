@@ -6,7 +6,6 @@ import { FormThanksPreviewView } from '@/modules/form/thanks/form-thanks-preview
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { FormThanksConfigView } from '@/modules/form/thanks/form-thanks-config-view';
 
-
 export default function FormThanksPage(props: {
   params: Promise<{
     lang: string;

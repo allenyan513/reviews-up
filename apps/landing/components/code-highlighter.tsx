@@ -7,8 +7,7 @@ export const CodeHighlighter = (props: {
 }) => {
   return (
     <div className={props.className}>
-      <SyntaxHighlighter
-        language={props.language}>
+      <SyntaxHighlighter language={props.language}>
         {props.code}
       </SyntaxHighlighter>
     </div>
