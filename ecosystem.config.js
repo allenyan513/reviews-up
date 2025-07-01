@@ -21,7 +21,7 @@ module.exports = {
     {
       name: 'reviewsup-docs',
       script: 'next',
-      args: 'start -p 5530',
+      args: 'start -p 5540',
       cwd: './apps/docs',
     }
   ],
