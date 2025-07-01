@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - dev
+      - feature/*
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -12,40 +13,6 @@ jobs:
     env:
       ZIP_NAME: app.zip
       REMOTE_PATH: /home/ec2-user/reviewsup.io
-      NODE_ENV: ${{ secrets.NODE_ENV }}
-      DATABASE_URL: ${{ secrets.DATABASE_URL }}
-      API_PORT: ${{ secrets.API_PORT }}
-      API_URL: ${{ secrets.API_URL }}
-      APP_URL: ${{ secrets.APP_URL }}
-      EMAIL_HOST: ${{ secrets.EMAIL_HOST }}
-      EMAIL_PORT: ${{ secrets.EMAIL_PORT }}
-      EMAIL_USER: ${{ secrets.EMAIL_USER }}
-      EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
-      AWS_S3_BUCKET_NAME: ${{ secrets.AWS_S3_BUCKET_NAME }}
-      JWT_SECRET: ${{ secrets.JWT_SECRET }}
-      JWT_EXPIRES: ${{ secrets.JWT_EXPIRES }}
-      GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
-      GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-      GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
-      GITHUBS_CLIENT_ID: ${{ secrets.GITHUBS_CLIENT_ID }}
-      GITHUBS_CLIENT_SECRET: ${{ secrets.GITHUBS_CLIENT_SECRET }}
-      GITHUBS_CALLBACK_URL: ${{ secrets.GITHUBS_CALLBACK_URL }}
-      RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
-      TWITTER_CLIENT_ID: ${{ secrets.TWITTER_CLIENT_ID }}
-      TWITTER_CLIENT_SECRET: ${{ secrets.TWITTER_CLIENT_SECRET }}
-      TWITTER_CALLBACK_URL: ${{ secrets.TWITTER_CALLBACK_URL }}
-      YT_DLP_SERVER_URL: ${{ secrets.YT_DLP_SERVER_URL }}
-
-      NEXT_PUBLIC_APP_URL: ${{ secrets.NEXT_PUBLIC_APP_URL }}
-      NEXT_PUBLIC_API_URL: ${{ secrets.NEXT_PUBLIC_API_URL }}
-      NEXT_PUBLIC_WWW_URL: ${{ secrets.NEXT_PUBLIC_WWW_URL }}
-      NEXT_PUBLIC_AWS_REGION: ${{ secrets.NEXT_PUBLIC_AWS_REGION }}
-      NEXT_PUBLIC_AWS_S3_BUCKET_NAME: ${{ secrets.NEXT_PUBLIC_AWS_S3_BUCKET_NAME }}
-      NEXT_PUBLIC_GOOGLE_ANALYTICS_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}
-
 
     steps:
       - name: Checkout code
@@ -61,47 +28,19 @@ jobs:
       - name: Install dependencies
         run: npm ci --include dev
 
-      - name: Write all environment variables to .env file
+      - name: Decrypt .env.production.gpg file
         run: |
-          echo "NODE_ENV=${{ env.NODE_ENV }}" >> .env
-          echo "DATABASE_URL=${{ env.DATABASE_URL }}" >> .env
-          echo "API_PORT=${{ env.API_PORT }}" >> .env
-          echo "API_URL=${{ env.API_URL }}" >> .env
-          echo "APP_URL=${{ env.APP_URL }}" >> .env
-          echo "EMAIL_HOST=${{ env.EMAIL_HOST }}" >> .env
-          echo "EMAIL_PORT=${{ env.EMAIL_PORT }}" >> .env
-          echo "EMAIL_USER=${{ env.EMAIL_USER }}" >> .env
-          echo "EMAIL_PASS=${{ env.EMAIL_PASS }}" >> .env
-          echo "AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}" >> .env
-          echo "AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}" >> .env
-          echo "AWS_DEFAULT_REGION=${{ env.AWS_DEFAULT_REGION }}" >> .env
-          echo "AWS_S3_BUCKET_NAME=${{ env.AWS_S3_BUCKET_NAME }}" >> .env
-          echo "JWT_SECRET=${{ env.JWT_SECRET }}" >> .env
-          echo "JWT_EXPIRES=${{ env.JWT_EXPIRES }}" >> .env
-          echo "GOOGLE_CLIENT_ID=${{ env.GOOGLE_CLIENT_ID }}" >> .env
-          echo "GOOGLE_CLIENT_SECRET=${{ env.GOOGLE_CLIENT_SECRET }}" >> .env
-          echo "GOOGLE_CALLBACK_URL=${{ env.GOOGLE_CALLBACK_URL }}" >> .env
-          echo "GITHUBS_CLIENT_ID=${{ env.GITHUBS_CLIENT_ID }}" >> .env
-          echo "GITHUBS_CLIENT_SECRET=${{ env.GITHUBS_CLIENT_SECRET }}" >> .env
-          echo "GITHUBS_CALLBACK_URL=${{ env.GITHUBS_CALLBACK_URL }}" >> .env
-          echo "RESEND_API_KEY=${{ env.RESEND_API_KEY }}" >> .env
-          echo "TWITTER_CLIENT_ID=${{ env.TWITTER_CLIENT_ID }}" >> .env
-          echo "TWITTER_CLIENT_SECRET=${{ env.TWITTER_CLIENT_SECRET }}" >> .env
-          echo "TWITTER_CALLBACK_URL=${{ env.TWITTER_CALLBACK_URL }}" >> .env
-          echo "YT_DLP_SERVER_URL=${{ env.YT_DLP_SERVER_URL }}" >> .env
-          echo "NEXT_PUBLIC_APP_URL=${{ env.NEXT_PUBLIC_APP_URL }}" >> .env
-          echo "NEXT_PUBLIC_API_URL=${{ env.NEXT_PUBLIC_API_URL }}" >> .env
-          echo "NEXT_PUBLIC_WWW_URL=${{ env.NEXT_PUBLIC_WWW_URL }}" >> .env
-          echo "NEXT_PUBLIC_AWS_REGION=${{ env.NEXT_PUBLIC_AWS_REGION }}" >> .env
-          echo "NEXT_PUBLIC_AWS_S3_BUCKET_NAME=${{ env.NEXT_PUBLIC_AWS_S3_BUCKET_NAME }}" >> .env
-          echo "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID=${{ env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID }}" >> .env
+          gpg --quiet --batch --yes --decrypt --passphrase="${{ secrets.GPG_PASSPHRASE }}" \
+          --output .env.production .env.production.gpg
 
-      - name: cp .env to apps/api apps/web apps/landing packages/database
+      - name: Copy .env.production to .env
+        run: cp .env.production .env
+
+      - name: Load .env file
         run: |
-          cp .env apps/api/.env
-          cp .env apps/web/.env
-          cp .env apps/landing/.env
-          cp .env packages/database/.env
+          set -a
+          source .env
+          set +a
 
       - name: Build
         run: npm run build
