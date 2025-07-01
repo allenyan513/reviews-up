@@ -1,8 +1,5 @@
 {
   "$schema": "https://turborepo.com/schema.json",
-  "globalDependencies": [
-    ".env"
-  ],
   "tasks": {
     "dev": {
       "dependsOn": [
@@ -16,44 +13,10 @@
         "^build",
         "^db:generate"
       ],
-      "inputs": [
-        "$TURBO_DEFAULT$",
-        ".env*"
-      ],
       "outputs": [
         "dist/**",
         ".next/**",
         "!.next/cache/**"
-      ],
-      "env": [
-        "ENV",
-        "API_PORT",
-        "APP_URL",
-        "API_URL",
-        "EMAIL_HOST",
-        "EMAIL_PORT",
-        "EMAIL_USER",
-        "EMAIL_PASS",
-        "AWS_ACCESS_KEY_ID",
-        "AWS_SECRET_ACCESS_KEY",
-        "AWS_DEFAULT_REGION",
-        "AWS_S3_BUCKET_NAME",
-        "JWT_SECRET",
-        "JWT_EXPIRES",
-        "GOOGLE_CLIENT_ID",
-        "GOOGLE_CLIENT_SECRET",
-        "GOOGLE_CALLBACK_URL",
-        "GITHUBS_CLIENT_ID",
-        "GITHUBS_CLIENT_SECRET",
-        "GITHUBS_CALLBACK_URL",
-        "RESEND_API_KEY",
-        "DATABASE_URL",
-        "NEXT_PUBLIC_APP_URL",
-        "NEXT_PUBLIC_API_URL",
-        "NEXT_PUBLIC_WWW_URL",
-        "NEXT_PUBLIC_AWS_REGION",
-        "NEXT_PUBLIC_AWS_S3_BUCKET_NAME",
-        "NEXT_PUBLIC_GOOGLE_ANALYTICS_ID"
       ]
     },
     "db:generate": {

@@ -48,7 +48,7 @@ export class CampaignsService {
     let html = await render(
       React.createElement(CampaignEmail, {
         content: validatedDto.content,
-        formUrl: `${process.env.APP_URL}/forms/${form.shortId}`,
+        formUrl: `${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.shortId}`,
         buttonText: validatedDto.buttonText,
       }),
     );

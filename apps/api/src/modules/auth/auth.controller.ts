@@ -32,7 +32,7 @@ export class AuthController {
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       secure: process.env.NODE_ENV === 'production',
     });
-    return res.redirect(`${process.env.APP_URL}`);
+    return res.redirect(`${process.env.NEXT_PUBLIC_APP_URL}`);
   }
 
   @UseGuards(GoogleOauthGuard)
@@ -44,7 +44,7 @@ export class AuthController {
   async googleAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
     const redirectParam = req.query.state as string;
-    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    let redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/auth/callback?access_token=${token}`;
     if (redirectParam) {
       redirectUrl = `${redirectUrl}&redirect=${encodeURIComponent(redirectParam)}`;
     }
@@ -60,7 +60,7 @@ export class AuthController {
   async githubAuthCallback(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
     const redirectParam = req.query.state as string;
-    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    let redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/auth/callback?access_token=${token}`;
     if (redirectParam) {
       redirectUrl = `${redirectUrl}&redirect=${encodeURIComponent(redirectParam)}`;
     }
@@ -107,7 +107,7 @@ export class AuthController {
   async loginWithMagic(@Req() req, @Res() res: Response) {
     const token = this.authService.generateJwt(req.user);
     const encodedRedirect = req.query.redirect as string;
-    let redirectUrl = `${process.env.APP_URL}/en/auth/callback?access_token=${token}`;
+    let redirectUrl = `${process.env.NEXT_PUBLIC_APP_URL}/en/auth/callback?access_token=${token}`;
     if (encodedRedirect) {
       redirectUrl = `${redirectUrl}&redirect=${encodedRedirect}`;
     }
