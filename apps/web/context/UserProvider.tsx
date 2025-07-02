@@ -17,6 +17,7 @@ interface UserContextProps {
   sendMagicLink: (email: string, redirect?: string) => Promise<void>;
   signIn: (callbackUrl?: string) => void;
   signOut: () => void;
+  deleteAccount: () => void;
 }
 
 const UserContext = createContext<UserContextProps | null>(null);
@@ -81,6 +82,22 @@ export function UserProvider(props: { children: React.ReactNode }) {
     redirect('/auth/signin');
   };
 
+  const deleteAccount = async () => {
+    if (!user) {
+      console.error('No user to delete');
+      return;
+    }
+    try {
+      await api.user.deleteAccount();
+      localStorage.removeItem('access_token');
+      setUser(null);
+      setDefaultWorkspace(null);
+      redirect('/auth/signin');
+    } catch (error) {
+      console.error('Failed to delete account:', error);
+    }
+  };
+
   const getSession = async (): Promise<void> => {
     try {
       const user = await api.auth.getSession();
@@ -122,6 +139,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
         signIn,
         signOut,
         getSession,
+        deleteAccount,
       }}
     >
       {props.children}
@@ -159,14 +177,3 @@ export function useSession(options: UseSessionOptions) {
 
   return { user };
 }
-
-interface UseServerSessionOptions {
-  required?: boolean;
-  onUnauthenticated?: () => void;
-}
-
-/**
- *  server-side session hook
- * @param options
- */
-export function useServerSession(options: UseServerSessionOptions) {}

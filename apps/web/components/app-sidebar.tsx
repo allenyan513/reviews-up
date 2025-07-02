@@ -35,7 +35,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = props.lang;
-  const { user, defaultWorkspace, signOut } = useUserContext();
+  const { user, defaultWorkspace, signOut , deleteAccount} = useUserContext();
   const path = usePathname();
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -103,6 +103,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             avatar: user?.avatarUrl || '',
           }}
           signOut={signOut}
+          deleteAccount={deleteAccount}
         />
       </SidebarFooter>
     </Sidebar>

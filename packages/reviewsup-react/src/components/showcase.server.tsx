@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { api } from '../api';
-import { ShowcasePageReview } from './showcase-page-review';
+import { ShowcasePageReviewClient } from './showcase-page-review-client';
 
 export type ShowcaseContentProps = Omit<ShowcaseProps, 'fallback'>;
 export type ShowcaseProps = {
@@ -25,10 +25,14 @@ export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
     );
   }
 
-  return <ShowcasePageReview showcase={showcase} />;
+  return <ShowcasePageReviewClient showcase={showcase} />;
 }
 
-export async function Showcase({ fallback, ...props }: ShowcaseProps) {
+export async function ShowcaseServer(props: {
+  fallback?: React.ReactNode;
+  showcaseId: string;
+}) {
+  const { fallback, showcaseId } = props;
   return (
     <Suspense fallback={fallback}>
       <ShowcaseContent {...props} />

@@ -7,9 +7,9 @@ datasource db {
 }
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "rhel-openssl-3.0.x"]
-  output   = "../generated/client"
+  output        = "../generated/client"
 }
 
 enum ReviewStatus {
@@ -85,24 +85,23 @@ model Account {
   sessionState      String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
-  user              User     @relation(fields: [userId], references: [id])
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
 }
 
 model Workspace {
-  id        String   @id @default(uuid())
-  shortId   String   @unique
+  id        String     @id @default(uuid())
+  shortId   String     @unique
   name      String
   userId    String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user      User     @relation(fields: [userId], references: [id])
-
-  Form     Form[]
-  Review   Review[]
-  Showcase Showcase[]
-  Campaign Campaign[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Form      Form[]
+  Review    Review[]
+  Showcase  Showcase[]
+  Campaign  Campaign[]
 }
 
 model Form {
@@ -114,8 +113,8 @@ model Form {
   config      Json?      @default("{}")
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
-  user        User       @relation(fields: [userId], references: [id])
-  workspace   Workspace  @relation(fields: [workspaceId], references: [id])
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   Review      Review[]
   Campaign    Campaign[]
 }
@@ -138,9 +137,9 @@ model Review {
   status        ReviewStatus  @default(pending)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
-  form          Form?         @relation(fields: [formId], references: [id])
-  workspace     Workspace     @relation(fields: [workspaceId], references: [id])
-  reviewer      User?         @relation(fields: [reviewerId], references: [id])
+  form          Form?         @relation(fields: [formId], references: [id], onDelete: Cascade)
+  workspace     Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  reviewer      User?         @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
   medias        ReviewMedia[]
 }
 
@@ -152,7 +151,7 @@ model ReviewMedia {
   type      MediaType @default(image)
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
-  Review    Review?   @relation(fields: [reviewId], references: [id])
+  Review    Review?   @relation(fields: [reviewId], references: [id], onDelete: Cascade)
 }
 
 model Showcase {
@@ -164,8 +163,8 @@ model Showcase {
   config      Json?     @default("{}")
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  user        User      @relation(fields: [userId], references: [id])
-  Workspace   Workspace @relation(fields: [workspaceId], references: [id])
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }
 
 //邮件营销活动表
@@ -185,7 +184,7 @@ model Campaign {
   buttonText  String         @default("Leave a review")
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  user        User           @relation(fields: [userId], references: [id])
-  form        Form           @relation(fields: [formId], references: [id])
-  workspace   Workspace      @relation(fields: [workspaceId], references: [id])
+  user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+  form        Form           @relation(fields: [formId], references: [id], onDelete: Cascade)
+  workspace   Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
 }

@@ -36,6 +36,11 @@ export default async function RootLayout(props: {
             { title: 'Features', href: '/#features' },
             { title: 'Pricing', href: '/#pricing' },
             { title: 'FAQ', href: '/#faq' },
+            {
+              title: 'Documents',
+              href: process.env.NEXT_PUBLIC_DOCS_URL as string,
+              external: true,
+            },
           ]}
         />
         <main className="flex-1">{props.children}</main>

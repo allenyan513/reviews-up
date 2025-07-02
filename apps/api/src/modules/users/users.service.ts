@@ -103,4 +103,14 @@ export class UsersService {
       throw new Error('Unable to create default showcase');
     }
   }
+
+  async deleteUser(userId: string) {
+    this.logger.debug(`Deleting user with ID: ${userId}`);
+    if (!userId) {
+      throw new Error('User ID is required to delete user');
+    }
+    return this.prismaService.user.delete({
+      where: { id: userId },
+    });
+  }
 }

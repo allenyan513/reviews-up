@@ -14,7 +14,7 @@ export function Hero(props: {
   secondaryCtaLink: string;
 }) {
   return (
-    <section className="px-4 pb-4 pt-32 md:pt-48 ">
+    <section className="px-4 pt-32 md:pt-32 ">
       <div className="flex flex-col items-center gap-4 text-center mx-auto">
         <Link
           href={props.capsuleLink}
@@ -23,7 +23,7 @@ export function Hero(props: {
         >
           {props.capsuleText}
         </Link>
-        <h1 className="text-4xl md:text-7xl w-full md:max-w-5xl font-bold">
+        <h1 className="text-4xl md:text-6xl w-full md:max-w-5xl font-bold">
           {props.title.split('\n').map((line, i) => (
             <span key={i} className="block">
               {line}

@@ -7,11 +7,13 @@ export function CodeBlockClient(props: {
   lang: BundledLanguage;
   theme?: ThemeRegistrationAny;
 }) {
+  const { lang, theme, children } = props;
+
   const [out, setOut] = useState<string>('');
   useEffect(() => {
-    codeToHtml(props.children, {
-      lang: props.lang,
-      theme: 'one-light',
+    codeToHtml(children, {
+      lang: lang,
+      theme: 'github-light',
     })
       .then((result) => {
         setOut(result);
@@ -19,8 +21,8 @@ export function CodeBlockClient(props: {
       .catch((error) => {
         console.error('Error generating HTML code:', error);
       });
-  }, []);
+  }, [children]);
   return (
-    <div className={'text-sm p-4'} dangerouslySetInnerHTML={{ __html: out }} />
+    <div className={'text-sm'} dangerouslySetInnerHTML={{ __html: out }} />
   );
 }

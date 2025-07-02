@@ -1,4 +1,3 @@
-'use client';
 import { FlowLayoutServer } from './layout/flow-layout-server';
 import { ListLayoutServer } from './layout/list-layout-server';
 import { MultiCarouselLayout } from './layout/multi-carousel-layout';
@@ -14,8 +13,9 @@ import { GridLayout } from './layout/grid-layout';
 export function ShowcasePageReviewClient(props: {
   showcase: ShowcaseEntity;
   showcaseConfig?: ShowcaseConfig;
+  className?: string;
 }) {
-  const { showcase, showcaseConfig } = props;
+  const { showcase, showcaseConfig, className } = props;
   const { reviews, config } = showcase;
   const defaultConfig = showcaseConfig || (config as ShowcaseConfig);
   const { type } = defaultConfig;
@@ -23,7 +23,7 @@ export function ShowcasePageReviewClient(props: {
     return null;
   }
   return (
-    <div>
+    <div className={className}>
       {type === 'flow' && (
         <FlowLayoutServer items={reviews} config={defaultConfig} />
       )}

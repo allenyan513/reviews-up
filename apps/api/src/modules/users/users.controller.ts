@@ -1,4 +1,12 @@
-import { Controller, Get, Logger, Req, UseGuards, Param } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Logger,
+  Req,
+  UseGuards,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 import { JwtPayload } from '@src/app.types';
@@ -19,5 +27,12 @@ export class UsersController {
   @Get('slug/:slug')
   async findOneBySlug(@Param('slug') slug: string) {
     return await this.usersService.findOneBySlug(slug);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('delete')
+  async deleteUser(@Jwt() jwt: JwtPayload) {
+    this.logger.log(`Deleting user with ID: ${jwt.userId}`);
+    return this.usersService.deleteUser(jwt.userId);
   }
 }

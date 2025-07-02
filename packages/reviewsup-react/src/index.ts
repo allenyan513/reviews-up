@@ -1,5 +1,5 @@
-export * from './components/showcase';
-export * from './components/showcase-loading';
+export * from './components/showcase.server';
+export * from './components/showcase.client';
 export * from './components/item/review-item';
 export * from './components/item/review-item-source';
 export * from './components/item/review-item-source-2';
@@ -12,5 +12,6 @@ export * from './components/layout/carousel-layout';
 export * from './components/layout/multi-carousel-layout';
 export * from './components/layout/avatar-list-layout';
 export * from './components/powered-by';
-export * from './components/showcase-page-review';
 export * from './components/showcase-page-review-client';
+
+export * from './hooks/use-showcase';

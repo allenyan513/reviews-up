@@ -1,5 +1,11 @@
-import { Showcase, ShowcaseLoading } from '@reviewsup/embed-react';
-import Link from 'next/link';
+'use client';
+import { ShowcaseClient } from '@reviewsup/embed-react';
+import { useState } from 'react';
+import { cn } from '@repo/ui/lib/utils';
+import { Button } from '@repo/ui/button';
+import { CodeViewer } from '@/components/code-viewer';
+import { BsPhone, BsTablet, BsWindowDesktop } from 'react-icons/bs';
+import { GoDeviceDesktop } from 'react-icons/go';
 
 export function ShowcaseWrapper(props: {
   title: string;
@@ -11,35 +17,114 @@ export function ShowcaseWrapper(props: {
   }[];
 }) {
   const { items, title, subtitle, formId } = props;
+  const defaultShowcaseId = items?.[0]?.showcaseId || '';
+  const [currentShowcaseId, setCurrentShowcaseId] =
+    useState<string>(defaultShowcaseId);
+  const [view, setView] = useState<'preview' | 'code'>('preview');
+  const [mode, setMode] = useState<'mobile' | 'pad' | 'desktop'>('desktop');
 
   return (
-    <section id="showcase" className="max-w-5xl">
-      <h2 className="w-full text-center text-4xl pb-4 font-semibold">
+    <section
+      id="showcase"
+      className="px-4 w-full md:max-w-5xl flex flex-col gap-4"
+    >
+      <h2 className="w-full text-center text-4xl font-semibold">
         {title}
       </h2>
-      <h3 className="text-muted-foreground sm:text-lg text-center pb-8">
+      <h3 className="text-muted-foreground sm:text-lg text-center mb-4">
         {subtitle}
-        <Link
-          href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${formId}`}
-          target={'_blank'}
-          className="underline text-blue-500 ml-2"
-        >
-          Submit your review
-        </Link>
       </h3>
-      <div className="flex flex-col gap-24">
+      <div className="flex flex-row gap-2 w-full items-start">
         {items.map((item) => (
-          <div key={item.showcaseId}>
-            <h3 className="text-muted-foreground sm:text-lg text-center pb-8">
-              {item.title}
-            </h3>
-            <Showcase
-              fallback={<ShowcaseLoading />}
-              showcaseId={item.showcaseId}
-            />
+          <div
+            onClick={() => {
+              setCurrentShowcaseId(item.showcaseId);
+            }}
+            className={cn(
+              'flex flex-row',
+              'cursor-pointer',
+              'px-4 py-2 rounded-md',
+              'border border-gray-200',
+              currentShowcaseId === item.showcaseId
+                ? 'bg-red-100 border-red-300'
+                : 'bg-white',
+            )}
+            key={item.title}
+          >
+            {item.title}
           </div>
         ))}
       </div>
+      <div className="justify-between w-full hidden md:flex md:flex-row">
+        <div className="flex flex-row items-center border border-gray-200 rounded-md p-1 bg-gray-100">
+          <Button
+            className={cn(
+              'rounded text-xs',
+              view === 'preview' ? 'bg-white text-black' : 'text-gray-700',
+            )}
+            variant="ghost"
+            size={'sm'}
+            onClick={() => setView('preview')}
+          >
+            Preview
+          </Button>
+          <Button
+            className={cn(
+              'rounded text-xs',
+              view === 'code' ? 'bg-white text-black' : 'text-gray-700',
+            )}
+            variant="ghost"
+            size={'sm'}
+            onClick={() => setView('code')}
+          >
+            Code
+          </Button>
+        </div>
+        <div className="flex flex-row border border-gray-200 rounded-md p-1 bg-gray-100">
+          <Button
+            className={cn(
+              mode === 'desktop' ? 'bg-white text-black' : 'text-gray-700',
+            )}
+            variant="ghost"
+            onClick={() => setMode('desktop')}
+          >
+            <GoDeviceDesktop />
+          </Button>
+          <Button
+            className={cn(
+              mode === 'pad' ? 'bg-white text-black' : 'text-gray-700',
+            )}
+            variant="ghost"
+            onClick={() => setMode('pad')}
+          >
+            <BsTablet />
+          </Button>
+          <Button
+            className={cn(
+              mode === 'mobile' ? 'bg-white text-black' : 'text-gray-700',
+            )}
+            variant="ghost"
+            onClick={() => setMode('mobile')}
+          >
+            <BsPhone />
+          </Button>
+        </div>
+      </div>
+      {view === 'preview' && (
+        <div
+          className={cn(
+            'flex flex-col gap-4',
+            mode === 'mobile' && 'w-[375px]',
+            mode === 'pad' && 'w-[768px]',
+            mode === 'desktop' && 'w-full',
+          )}
+        >
+          <ShowcaseClient
+            showcaseId={currentShowcaseId} />
+
+        </div>
+      )}
+      {view === 'code' && <CodeViewer />}
     </section>
   );
 }

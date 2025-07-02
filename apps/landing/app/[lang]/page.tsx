@@ -6,7 +6,7 @@ import { i18nMetadata } from '@/config/i18n-config';
 import { Metadata } from 'next';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import FAQ from '@/components/landing/faq';
-import { hero2 } from '@/data/hero';
+import { hero3 } from '@/data/hero';
 import { ShowcaseWrapper } from '@/components/landing/showcase';
 import { Badge } from '@/components/badge';
 import { useTranslate } from '@/locales/dictionaries';
@@ -46,22 +46,22 @@ export default async function LandingPage(props: {
   const t = await useTranslate(lang);
 
   return (
-    <div className="flex flex-col w-full items-center gap-8 md:gap-16">
+    <div className="flex flex-col w-full items-center gap-8 md:gap-12">
       <Hero
-        capsuleText={t(hero2.capsuleText)}
-        capsuleLink={hero2.capsuleLink}
-        title={t(hero2.title)}
-        subtitle={t(hero2.subtitle)}
-        primaryCtaText={t(hero2.primaryCtaText)}
-        primaryCtaLink={hero2.primaryCtaLink}
-        secondaryCtaText={hero2.secondaryCtaText}
-        secondaryCtaLink={hero2.secondaryCtaLink}
+        capsuleText={t(hero3.capsuleText)}
+        capsuleLink={hero3.capsuleLink}
+        title={t(hero3.title)}
+        subtitle={t(hero3.subtitle)}
+        primaryCtaText={t(hero3.primaryCtaText)}
+        primaryCtaLink={hero3.primaryCtaLink}
+        secondaryCtaText={hero3.secondaryCtaText}
+        secondaryCtaLink={hero3.secondaryCtaLink}
         credits={<></>}
       />
 
-      <div id="showcase-1" />
+      <div id="showcase" />
       <ShowcaseWrapper
-        title={t('Build-in Reviews Styles')}
+        title={t('Build-in Review Widgets')}
         subtitle={t(
           'Reviews from our users, displayed in a beautiful and customizable widget.',
         )}
