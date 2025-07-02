@@ -66,7 +66,7 @@ export default async function LandingPage(props: {
           'Reviews from our users, displayed in a beautiful and customizable widget.',
         )}
         formId={
-          process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'cbfd5a031de'
+          process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'f09dbd1ff08'
         }
         items={[
           {
@@ -74,21 +74,21 @@ export default async function LandingPage(props: {
             showcaseId:
               process.env.NODE_ENV === 'development'
                 ? '29fa5c4d361'
-                : 'f5f3cdf3bb2',
-          },
-          {
-            title: 'Avatar List Layout',
-            showcaseId:
-              process.env.NODE_ENV === 'development'
-                ? '148ac173529'
-                : '25db6a933d3',
+                : '92620b6dda4',
           },
           {
             title: 'Flow Layout',
             showcaseId:
               process.env.NODE_ENV === 'development'
                 ? '25db6a933d3'
-                : 'f5f3cdf3bb2',
+                : '2c337712ccd',
+          },
+          {
+            title: 'Avatar List Layout',
+            showcaseId:
+              process.env.NODE_ENV === 'development'
+                ? '148ac173529'
+                : 'b68f3f0a0a2',
           },
         ]}
       />
