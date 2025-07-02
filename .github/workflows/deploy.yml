@@ -78,5 +78,5 @@ jobs:
             corepack enable
             corepack prepare pnpm@latest --activate
 
-            pnpm install --omit=dev
+            pnpm install --only production --frozen-lockfile
             pnpm run pm2:start
