@@ -8,21 +8,24 @@ module.exports = {
     },
     {
       name: 'reviewsup-app',
-      script: 'next',
-      args: 'start -p 5510',
       cwd: './apps/web',
+      script: 'pnpm',
+      args: 'exec next start -p 5510',
+      interpreter: 'bash',
     },
     {
       name: 'reviewsup-www',
-      script: 'next',
-      args: 'start -p 5520',
       cwd: './apps/landing',
+      script: 'pnpm',
+      args: 'exec next start -p 5520',
+      interpreter: 'bash',
     },
     {
       name: 'reviewsup-docs',
-      script: 'next',
-      args: 'start -p 5540',
       cwd: './apps/docs',
+      script: 'pnpm',
+      args: 'exec next start -p 5540',
+      interpreter: 'bash',
     }
   ],
 };
