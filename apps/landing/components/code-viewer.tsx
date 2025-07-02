@@ -4,7 +4,13 @@ import { BsCopy, BsFile, BsFolder } from 'react-icons/bs';
 import { cn } from '@repo/ui/lib/utils';
 import { Button } from '@repo/ui/button';
 
-const FileTreeItem = ({ item, activeFile, setActiveFile, depth = 0 }) => {
+const FileTreeItem = (props: {
+  item: FileTreeItem;
+  activeFile: FileTreeItem;
+  setActiveFile: React.Dispatch<React.SetStateAction<FileTreeItem>>;
+  depth?: number;
+}) => {
+  const { item, activeFile, setActiveFile, depth = 0 } = props;
   const [isOpen, setIsOpen] = useState(true); // Folders are open by default
   const paddingLeft = `${depth * 1.5}rem`; // Indent based on depth
   const handleItemClick = () => {
@@ -17,7 +23,7 @@ const FileTreeItem = ({ item, activeFile, setActiveFile, depth = 0 }) => {
     }
   };
 
-  const isFileActive = item.type === 'file' && activeFile === item.path;
+  const isFileActive = item.type === 'file' && activeFile.path === item.path;
 
   return (
     <div>
@@ -44,15 +50,16 @@ const FileTreeItem = ({ item, activeFile, setActiveFile, depth = 0 }) => {
       </div>
       {item.type === 'folder' && isOpen && (
         <div className="pl-0">
-          {item.children.map((child: any) => (
-            <FileTreeItem
-              key={child.path}
-              item={child}
-              activeFile={activeFile}
-              setActiveFile={setActiveFile}
-              depth={depth + 1}
-            />
-          ))}
+          {item.children &&
+            item.children.map((child: any) => (
+              <FileTreeItem
+                key={child.path}
+                item={child}
+                activeFile={activeFile}
+                setActiveFile={setActiveFile}
+                depth={depth + 1}
+              />
+            ))}
         </div>
       )}
     </div>
@@ -73,11 +80,19 @@ const flattenTree = (tree: any, parentPath = '') => {
   return flatTree;
 };
 
+type FileTreeItem = {
+  path: string;
+  name: string;
+  type: 'file' | 'folder';
+  children?: FileTreeItem[];
+};
+
 export function CodeViewer() {
-  const rawFileTree = [
+  const rawFileTree: FileTreeItem[] = [
     {
       name: 'app',
       type: 'folder',
+      path: 'app',
       children: [
         { path: 'app/page.tsx', name: 'page.tsx', type: 'file' },
         { path: 'app/index.css', name: 'index.css', type: 'file' },
@@ -85,14 +100,11 @@ export function CodeViewer() {
     },
     {
       name: 'package.json',
+      path: 'package.json',
       type: 'file',
     },
   ];
-  const [activeFile, setActiveFile] = useState<{
-    name: string;
-    path: string;
-    type: 'file' | 'folder';
-  }>({
+  const [activeFile, setActiveFile] = useState<FileTreeItem>({
     name: 'page.tsx',
     path: 'app/page.tsx',
     type: 'file',
