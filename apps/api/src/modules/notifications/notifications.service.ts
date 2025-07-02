@@ -1,11 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { EMAIL_FROM } from '@src/modules/email/email.constants';
-import { ResendEmailService } from '../email/resend-email.service';
 import { render } from '@react-email/render';
 import * as React from 'react';
+import { ResendEmailService } from '../email/resend-email.service';
+import { EMAIL_ADMIN, EMAIL_FROM } from '../email/email.constants';
 import { WelcomeEmail } from '@src/emails/welcome-email';
 import { ReviewSubmitEmail } from '@src/emails/review-submitted-email';
+import DailyAnalyticsEmail from '../..//emails/daily-analytics-email';
 import { User } from '@repo/database/generated/client';
 
 @Injectable()
@@ -77,6 +78,37 @@ export class NotificationsService {
       from: EMAIL_FROM,
       to: owner.email,
       subject: 'New Review Submitted',
+      html: html,
+    });
+  }
+
+  async onDailyAnalytics(result: {
+    totalUsers: number;
+    totalAccount: number;
+    totalForms: number;
+    totalShowcase: number;
+    totalWorkspace: number;
+    totalReview: number;
+    totalReviewMedia: number;
+    totalCampaign: number;
+  }) {
+    const html = await render(
+      React.createElement(DailyAnalyticsEmail, {
+        userName: 'Admin',
+        totalUsers: result.totalUsers,
+        totalAccount: result.totalAccount,
+        totalForms: result.totalForms,
+        totalShowcase: result.totalShowcase,
+        totalWorkspace: result.totalWorkspace,
+        totalReview: result.totalReview,
+        totalReviewMedia: result.totalReviewMedia,
+        totalCampaign: result.totalCampaign,
+      }),
+    );
+    await this.emailService.send({
+      from: EMAIL_FROM,
+      to: EMAIL_ADMIN,
+      subject: `Daily Analytics Summary`,
       html: html,
     });
   }

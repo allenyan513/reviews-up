@@ -16,6 +16,8 @@ import { PassportModule } from '@nestjs/passport';
 import { NotificationsModule } from '@src/modules/notifications/notifications.module';
 import { YtDlpModule } from '@src/modules/yt-dlp/yt-dlp.module';
 import { CampaignsModule } from './modules/campaigns/campaigns.module';
+import { AnalyticsModule } from './modules/analytics/analytics.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -30,6 +32,7 @@ import { CampaignsModule } from './modules/campaigns/campaigns.module';
         expiresIn: process.env.JWT_EXPIRES || '1h',
       },
     }),
+    ScheduleModule.forRoot(),
     PassportModule,
     EmailModule,
     PrismaModule,
@@ -43,6 +46,7 @@ import { CampaignsModule } from './modules/campaigns/campaigns.module';
     NotificationsModule,
     YtDlpModule,
     CampaignsModule,
+    AnalyticsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
