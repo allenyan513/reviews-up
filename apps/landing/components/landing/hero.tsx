@@ -35,10 +35,11 @@ export function Hero(props: {
         </p>
         <div className="flex gap-4 flex-wrap justify-center mt-8">
           <Link
+            target="_blank"
             href={props.primaryCtaLink}
             className={cn(
               buttonVariants({ size: 'lg' }),
-              'bg-red-400 hover:bg-red-500 rounded-full h-14',
+              'bg-red-400 hover:bg-red-500 rounded-full h-14 text-white font-semibold',
             )}
           >
             {props.primaryCtaText}

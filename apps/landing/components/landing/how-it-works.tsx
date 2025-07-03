@@ -1,7 +1,8 @@
-// how-it-works.tsx
 import React from 'react';
 import { howItWorksSteps } from '@/data/how-it-works';
-import { CodeHighlighter } from '../code-highlighter';
+import Link from 'next/link';
+import { cn } from '@repo/ui/lib/utils';
+import { buttonVariants } from '@repo/ui/button';
 
 export const HowItWorks: React.FC = () => {
   return (
@@ -31,18 +32,28 @@ export const HowItWorks: React.FC = () => {
                 alt={`Step ${step.stepNumber} illustration`}
               />
             )}
-            {step.codeBlocks &&
-              step.codeBlocks.map((codeBlock, codeIndex) => (
-                <CodeHighlighter
-                  key={codeIndex}
-                  code={codeBlock.content}
-                  language={codeBlock.lang}
-                  className="w-full hidden md:block"
-                />
-              ))}
+            {/*{step.codeBlocks &&*/}
+            {/*  step.codeBlocks.map((codeBlock, codeIndex) => (*/}
+            {/*    <CodeHighlighter*/}
+            {/*      key={codeIndex}*/}
+            {/*      code={codeBlock.content}*/}
+            {/*      language={codeBlock.lang}*/}
+            {/*      className="w-full hidden md:block"*/}
+            {/*    />*/}
+            {/*  ))}*/}
           </div>
         ))}
       </div>
+      <Link
+        href={`${process.env.NEXT_PUBLIC_DOCS_URL}`}
+        target={'_blank'}
+        className={cn(
+          buttonVariants({ size: 'lg' }),
+          'bg-red-400 hover:bg-red-500 rounded-full h-14 text-white font-semibold mt-8',
+        )}
+      >
+        Read more in the docs
+      </Link>
     </section>
   );
 };

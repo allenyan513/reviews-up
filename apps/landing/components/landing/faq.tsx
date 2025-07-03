@@ -8,7 +8,7 @@ export default function FAQ(props: {
     <section id="faq" className="w-full p-4">
       <div className="">
         <h2 className="mb-10 text-center text-3xl font-bold text-gray-900">
-          Frequently Asked Questions
+          FAQ
         </h2>
         <div className="w-full space-y-4">
           {props.data?.map((item, index) => (

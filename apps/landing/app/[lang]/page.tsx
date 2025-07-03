@@ -13,6 +13,8 @@ import { showcaseData } from '@/data/showcases';
 import { featureData } from '@/data/features';
 import { pricingData } from '@/data/pricings';
 import { faqData } from '@/data/faqs';
+import { CollectingForm } from '@/components/landing/collecting-form';
+import { collectingFormData } from '@/data/collecting-form';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -62,16 +64,27 @@ export default async function LandingPage(props: {
         credits={<></>}
       />
 
-      <div id="showcase" />
+      <div id="widget" />
       <ShowcaseWrapper
         title={t(showcaseData.title)}
-        subtitle={t(showcaseData.subtitle)}
+        subtitle={showcaseData.subtitle}
         formId={showcaseData.formId}
         items={showcaseData.items}
       />
 
+      <div id="form" />
+      <CollectingForm
+        title={t(collectingFormData.title)}
+        subtitle={collectingFormData.subtitle}
+        formId={collectingFormData.formId}
+        buttonText={collectingFormData.buttonText}
+      />
+
+
       <div id="how-it-works" />
       <HowItWorks />
+
+
 
       <div id="features" />
       <FeatureGrid
@@ -89,6 +102,7 @@ export default async function LandingPage(props: {
 
       <div id={'faqs'} />
       <FAQ data={faqData} />
+
       <div id="badges" className="py-8">
         <Badge />
       </div>
