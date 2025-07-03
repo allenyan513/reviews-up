@@ -3,7 +3,7 @@ import clsx from 'clsx';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ListLayoutClient } from '@reviewsup/embed-react';
-import PoweredBy from '@/components/powered-by';
+import { PoweredBy } from '@reviewsup/embed-react';
 
 export function UserProfilePage(props: { user: User; className?: string }) {
   const { user, className } = props;

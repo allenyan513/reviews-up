@@ -1,7 +1,7 @@
 'use client';
 import Lottie from 'lottie-react';
 import thanks from '@/public/animation/thanks.json';
-import PoweredBy from '@/components/powered-by';
+import { PoweredBy } from '@reviewsup/embed-react';
 import { FormConfig } from '@repo/api/forms/entities/form-config.entity';
 import { Button, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';

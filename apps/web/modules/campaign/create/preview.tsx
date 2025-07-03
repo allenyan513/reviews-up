@@ -1,11 +1,11 @@
 import { Divider } from '@/components/divider';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { useCampaignContext } from '@/modules/campaign/context/campaign-provider';
-import PoweredBy from '@/components/powered-by';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
 import { CampaignEntity } from '@repo/api/campaign/index';
+import { PoweredBy } from '@reviewsup/embed-react';
 
 export function CampaignCreatePreviewPage(props: {
   data?: CampaignEntity;
