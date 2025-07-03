@@ -9,7 +9,7 @@ export * from './components/layout/flow-layout-client';
 export * from './components/layout/flow-layout-server';
 export * from './components/layout/grid-layout';
 export * from './components/layout/carousel-layout';
-export * from './components/layout/multi-carousel-layout';
+export * from './components/layout/carousel-layout';
 export * from './components/layout/avatar-list-layout';
 export * from './components/powered-by';
 export * from './components/showcase-page-review-client';

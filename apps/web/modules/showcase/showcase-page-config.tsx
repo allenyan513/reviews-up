@@ -15,6 +15,7 @@ import { cn } from '@/lib/utils';
 import { SortBy } from '@/types/sortby';
 import { layoutOptions } from '@/modules/showcase/layout-options';
 import { sortOptions } from './sort-options';
+import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
 
 type ToggleOptionProps = {
   label: string;
@@ -89,6 +90,133 @@ export function ShowcasePageConfig(props: { className?: string }) {
   const [isLayoutOpen, setIsLayoutOpen] = useState(true);
   const [isSettingOpen, setIsSettingOpen] = useState(true);
 
+  /**
+   * Render columns count and breakpoints input fields when the layout type is grid or flow.
+   * @param showcaseConfig
+   */
+  const renderColumnsCount = (showcaseConfig: ShowcaseConfig) => {
+    if (showcaseConfig.type !== 'grid' && showcaseConfig.type !== 'flow') {
+      return null;
+    }
+    return (
+      <div>
+        <label className="text-sm">Columns Count:</label>
+        <div className="text-sm grid grid-cols-3 gap-2 mt-2">
+          <label>sm:</label>
+          <label>md:</label>
+          <label>lg:</label>
+          <Input
+            type="number"
+            min="1"
+            max="5"
+            className="w-full"
+            value={showcaseConfig.breakpoints?.sm || 1}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (!isNaN(value)) {
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  breakpoints: {
+                    ...showcaseConfig.breakpoints,
+                    sm: value,
+                  },
+                });
+              }
+            }}
+          />
+          <Input
+            type="number"
+            min="1"
+            max="5"
+            className="w-full"
+            value={showcaseConfig.breakpoints?.md || 2}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (!isNaN(value)) {
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  breakpoints: {
+                    ...showcaseConfig.breakpoints,
+                    md: value,
+                  },
+                });
+              }
+            }}
+          />
+          <Input
+            type="number"
+            min="1"
+            max="5"
+            className="w-full"
+            value={showcaseConfig.breakpoints?.lg || 3}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (!isNaN(value)) {
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  breakpoints: {
+                    ...showcaseConfig.breakpoints,
+                    lg: value,
+                  },
+                });
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const renderRowsAndSpeed = (showcaseConfig: ShowcaseConfig) => {
+    if (showcaseConfig.type !== 'carousel') {
+      return null;
+    }
+    return (
+      <>
+        <div>
+          <label className="text-sm">Rows Count:</label>
+          <Input
+            type="number"
+            placeholder="Enter rows count"
+            min="1"
+            max="10"
+            className="w-full mt-2"
+            value={showcaseConfig.rows || 1}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (!isNaN(value)) {
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  rows: value,
+                });
+              }
+            }}
+          />
+        </div>
+        <div>
+          <label className="text-sm">Speed:</label>
+          <Input
+            type="number"
+            placeholder="Enter speed"
+            min="1"
+            max="120"
+            className="w-full mt-2"
+            value={showcaseConfig.speed || 40}
+            onChange={(e) => {
+              const value = parseInt(e.target.value, 10);
+              if (!isNaN(value)) {
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  speed: value,
+                });
+              }
+            }}
+          />
+        </div>
+      </>
+    );
+  };
+
   if (!showcaseConfig) {
     return null;
   }
@@ -138,75 +266,8 @@ export function ShowcasePageConfig(props: { className?: string }) {
           <div
             className={cn('flex flex-col gap-4', isSettingOpen ? '' : 'hidden')}
           >
-            {(showcaseConfig.type === 'flow' ||
-              showcaseConfig.type === 'grid' ||
-              showcaseConfig.type === 'fix-row') && (
-              <div>
-                <label className="text-sm">Columns Count:</label>
-                <div className="text-sm grid grid-cols-3 gap-2 mt-2">
-                  <label>sm:</label>
-                  <label>md:</label>
-                  <label>lg:</label>
-                  <Input
-                    type="number"
-                    min="1"
-                    max="5"
-                    className="w-full"
-                    value={showcaseConfig.breakpoints?.sm || 1}
-                    onChange={(e) => {
-                      const value = parseInt(e.target.value, 10);
-                      if (!isNaN(value)) {
-                        setShowcaseConfig({
-                          ...showcaseConfig,
-                          breakpoints: {
-                            ...showcaseConfig.breakpoints,
-                            sm: value,
-                          },
-                        });
-                      }
-                    }}
-                  />
-                  <Input
-                    type="number"
-                    min="1"
-                    max="5"
-                    className="w-full"
-                    value={showcaseConfig.breakpoints?.md || 2}
-                    onChange={(e) => {
-                      const value = parseInt(e.target.value, 10);
-                      if (!isNaN(value)) {
-                        setShowcaseConfig({
-                          ...showcaseConfig,
-                          breakpoints: {
-                            ...showcaseConfig.breakpoints,
-                            md: value,
-                          },
-                        });
-                      }
-                    }}
-                  />
-                  <Input
-                    type="number"
-                    min="1"
-                    max="5"
-                    className="w-full"
-                    value={showcaseConfig.breakpoints?.lg || 3}
-                    onChange={(e) => {
-                      const value = parseInt(e.target.value, 10);
-                      if (!isNaN(value)) {
-                        setShowcaseConfig({
-                          ...showcaseConfig,
-                          breakpoints: {
-                            ...showcaseConfig.breakpoints,
-                            lg: value,
-                          },
-                        });
-                      }
-                    }}
-                  />
-                </div>
-              </div>
-            )}
+            {renderColumnsCount(showcaseConfig)}
+            {renderRowsAndSpeed(showcaseConfig)}
 
             <div>
               <label className="text-sm">Reviews Max Count:</label>
@@ -310,6 +371,16 @@ export function ShowcasePageConfig(props: { className?: string }) {
                 setShowcaseConfig({
                   ...showcaseConfig,
                   isSourceEnabled: checked,
+                })
+              }
+            />
+            <ToggleOption
+              label="Show Reviews Powered By"
+              checked={showcaseConfig.isPoweredByEnabled || false}
+              onChange={(checked) =>
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  isPoweredByEnabled: checked,
                 })
               }
             />

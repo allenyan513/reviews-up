@@ -50,7 +50,7 @@ export function LoginForm(props: { redirect?: string; className?: string }) {
             onChange={(e) =>
               setSubmitForm({ ...submitForm, email: e.target.value })
             }
-            placeholder="john.smith@gmail.com"
+            placeholder="Enter your email address"
             required
           />
         </div>
@@ -67,39 +67,35 @@ export function LoginForm(props: { redirect?: string; className?: string }) {
         {/*  <Input id="password" type="password" required />*/}
         {/*</div>*/}
         <Button onClick={handleSubmit} type="submit" className="w-full">
-          Send Magic Link
+          Continue with Email
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
           <span className="bg-background text-muted-foreground relative z-10 px-2">
             Or continue with
           </span>
         </div>
-        <Button
-          onClick={() => {
-            googleSignIn(redirect);
-          }}
-          variant="outline"
-          className="w-full"
-        >
-          <BsGoogle />
-          Continue with Google
-        </Button>
-        {/*<Button onClick={() => {*/}
-        {/*  twitterSignIn(redirect);*/}
-        {/*}} variant="outline" className="w-full">*/}
-        {/*  <BsTwitterX/>*/}
-        {/*  Continue with Twitter/X*/}
-        {/*</Button>*/}
-        <Button
-          onClick={() => {
-            githubSignIn(redirect);
-          }}
-          variant="outline"
-          className="w-full"
-        >
-          <BsGithub />
-          Continue with GitHub
-        </Button>
+        <div className='space-y-2'>
+          <Button
+            onClick={() => {
+              googleSignIn(redirect);
+            }}
+            variant="outline"
+            className="w-full"
+          >
+            <BsGoogle />
+            Continue with Google
+          </Button>
+          <Button
+            onClick={() => {
+              githubSignIn(redirect);
+            }}
+            variant="outline"
+            className="w-full"
+          >
+            <BsGithub />
+            Continue with GitHub
+          </Button>
+        </div>
       </div>
       {/*<div className="text-center text-sm">*/}
       {/*  Don&apos;t have an account?{' '}*/}

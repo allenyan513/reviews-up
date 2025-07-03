@@ -13,13 +13,14 @@ export interface ShowcaseEntity extends Showcase {
 }
 
 export interface ShowcaseConfig {
-  type?: string | 'flow' | 'grid' | 'list' | 'carousel' | 'multi-carousel';
+  type?: string | 'flow' | 'grid' | 'list' | 'carousel' | 'avatar-list';
   isRatingSummaryEnabled?: boolean;
   isRatingEnabled?: boolean;
   isSourceEnabled?: boolean;
   isDateEnabled?: boolean;
   isImageEnabled?: boolean;
   isVideoEnabled?: boolean;
+  isPoweredByEnabled?: boolean;
   count?: number;
   sortBy?: 'newest' | 'oldest' | 'random' | 'rating' | string;
   flow?: {
@@ -30,4 +31,6 @@ export interface ShowcaseConfig {
     md?: number;
     lg?: number;
   };
+  rows?: number;
+  speed?: number;
 }
