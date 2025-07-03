@@ -33,13 +33,6 @@ export const HowItWorks: React.FC = () => {
             )}
             {step.codeBlocks &&
               step.codeBlocks.map((codeBlock, codeIndex) => (
-                // <CodeBlock
-                //   className={'w-full'}
-                //   key={codeIndex}
-                //   lang={codeBlock.lang}>
-                //   {codeBlock.content}
-                // </CodeBlock>
-
                 <CodeHighlighter
                   key={codeIndex}
                   code={codeBlock.content}

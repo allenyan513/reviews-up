@@ -1,6 +1,6 @@
 {
   "name": "@reviewsup/embed-react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "private": false,
   "license": "MIT",
   "type": "module",
@@ -8,7 +8,8 @@
     "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
     "dev:components": "tsc --watch",
     "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
-    "build:components": "tsc"
+    "build:components": "tsc",
+    "publish:pkg": "pnpm build:components && pnpm build:styles && npm publish --access public"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
