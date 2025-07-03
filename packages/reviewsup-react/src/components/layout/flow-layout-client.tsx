@@ -7,6 +7,7 @@ import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
 import { RatingSummary } from '../rating-summary';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
+import { PoweredBy } from '../powered-by';
 
 interface FlowLayoutClientProps {
   items: ReviewEntity[];
@@ -60,6 +61,7 @@ export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
       {config.isRatingSummaryEnabled && (
         <RatingSummary ratings={items.map((item) => item.rating || 0)} />
       )}
+      {config.isPoweredByEnabled && <PoweredBy />}
     </div>
   );
 }

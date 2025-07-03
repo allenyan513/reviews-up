@@ -1,9 +1,10 @@
 'use client';
 import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
 import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 import { RatingSummary } from '../rating-summary';
+import { PoweredBy } from '../powered-by';
 
 /**
  * @param props
@@ -75,6 +76,7 @@ export function AvatarListLayout(props: {
           <RatingSummary ratings={items.map((item) => item.rating || 0)} />
         </div>
       )}
+      {config.isPoweredByEnabled && <PoweredBy />}
     </div>
   );
 }

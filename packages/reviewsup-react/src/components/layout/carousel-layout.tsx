@@ -1,114 +1,134 @@
 'use client';
+import { useRef, useEffect } from 'react';
+import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
+import { ReviewItem1 } from '../item/review-item-1';
+import { RatingSummary } from '../rating-summary';
+import { PoweredBy } from '../powered-by';
 
-import React, { useState, useEffect, ReactNode } from 'react';
-
-export interface CarouselLayoutProps {
-  items: any[];
-  renderItem: (item: any, index: number) => ReactNode;
-  autoSlide?: boolean;
-  slideInterval?: number;
-  className?: string;
-}
-
-export function CarouselLayout<T>({
+// Internal component for a single carousel row
+function CarouselRow({
   items,
-  renderItem,
-  autoSlide = false,
-  slideInterval = 3000,
-  className = '',
-}: CarouselLayoutProps) {
-  // Number of "buffer" slides to add at the beginning and end for smooth infinite loop
-  // You might need to adjust this based on your specific visual needs.
-  const bufferSlides = 1;
+  config,
+  reverse,
+  speed,
+}: {
+  items: ReviewEntity[];
+  config: ShowcaseConfig;
+  reverse: boolean;
+  speed: number;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
 
-  // Create an augmented list of items for the infinite scroll effect
-  const augmentedItems = [
-    ...items.slice(-bufferSlides), // Prepend last few items
-    ...items, // Original items
-    ...items.slice(0, bufferSlides), // Append first few items
-  ];
-
-  // Initialize currentIndex to start at the first *real* item
-  const [currentIndex, setCurrentIndex] = useState(bufferSlides);
-  const [isTransitioning, setIsTransitioning] = useState(true); // Control CSS transition
-
-  const prevSlide = () => {
-    setIsTransitioning(true); // Enable transition for regular movement
-    setCurrentIndex((prevIndex) => prevIndex - 1);
-  };
-
-  const nextSlide = () => {
-    setIsTransitioning(true); // Enable transition for regular movement
-    setCurrentIndex((prevIndex) => prevIndex + 1);
-  };
-
-  // Effect to handle the "jump" for infinite loop
   useEffect(() => {
-    if (currentIndex === augmentedItems.length - bufferSlides) {
-      // If we're on the first duplicated real slide
-      const timer = setTimeout(() => {
-        setIsTransitioning(false); // Disable transition
-        setCurrentIndex(bufferSlides); // Jump to the real first slide
-      }, 500); // Wait for the transition to finish (should match CSS transition duration)
-      return () => clearTimeout(timer);
-    } else if (currentIndex === bufferSlides - 1) {
-      // If we're on the last duplicated real slide
-      const timer = setTimeout(() => {
-        setIsTransitioning(false); // Disable transition
-        setCurrentIndex(augmentedItems.length - bufferSlides * 2); // Jump to the real last slide
-      }, 500); // Wait for the transition to finish
-      return () => clearTimeout(timer);
+    const el = ref.current;
+    if (!el || items.length === 0) return;
+
+    let animationFrameId: number;
+    let currentPosition = 0;
+    // We duplicate items, so the actual content width is half of the scrollWidth
+    const contentWidth = el.scrollWidth / 2;
+
+    // Initialize currentPosition based on direction to avoid initial gap
+    if (reverse) {
+      currentPosition = -contentWidth; // Start with the second set of items visible
+    } else {
+      currentPosition = 0; // Start with the first set of items visible
     }
-    // Re-enable transition if we move away from the jump points
-    if (
-      !isTransitioning &&
-      currentIndex >= bufferSlides &&
-      currentIndex < augmentedItems.length - bufferSlides
-    ) {
-      setIsTransitioning(true);
-    }
-  }, [currentIndex, augmentedItems.length, bufferSlides, isTransitioning]);
 
-  // Auto-slide effect (similar to your original, but using augmentedItems and handling transition)
-  useEffect(() => {
-    if (!autoSlide || items.length === 0) return;
+    const animate = () => {
+      const movementPerFrame = speed / 60; // 60 frames per second
 
-    const slideTimer = setInterval(() => {
-      setIsTransitioning(true); // Ensure transition is enabled for auto-slide
-      setCurrentIndex((prevIndex) => prevIndex + 1);
-    }, slideInterval);
+      if (reverse) {
+        currentPosition += movementPerFrame;
+        if (currentPosition >= 0) {
+          currentPosition -= contentWidth;
+        }
+      } else {
+        currentPosition -= movementPerFrame;
+        if (currentPosition <= -contentWidth) {
+          currentPosition += contentWidth;
+        }
+      }
+      el.style.transform = `translateX(${currentPosition}px)`;
+      animationFrameId = requestAnimationFrame(animate);
+    };
 
-    return () => clearInterval(slideTimer);
-  }, [autoSlide, slideInterval, currentIndex, items.length]);
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [items, reverse, speed]);
 
-  // Calculate the transform value
-  const transformValue = `translateX(-${currentIndex * 100}%)`;
+  // Duplicate items for seamless looping. Ensure items are not empty.
+  const duplicatedItems = items.length > 0 ? [...items, ...items] : [];
 
   return (
-    <div className="relative w-full overflow-hidden">
+    <div className="overflow-hidden w-full relative">
       <div
-        className={`flex ${isTransitioning ? 'transition-transform duration-500 ease-in-out' : ''}`}
-        style={{ transform: transformValue }}
+        ref={ref}
+        className="flex flex-row gap-4 p-4"
+        style={{ willChange: 'transform' }}
       >
-        {augmentedItems.map((item, index) => (
-          <div key={index} className="w-full flex-shrink-0">
-            {renderItem(item, index)}
+        {duplicatedItems.map((item, idx) => (
+          <div key={`${item ? (item as any).id || idx : idx}-${idx}`}>
+            <ReviewItem1
+              key={item.id}
+              isSourceEnabled={config.isSourceEnabled}
+              isVideoEnabled={config.isVideoEnabled}
+              isImageEnabled={config.isImageEnabled}
+              isDateEnabled={config.isDateEnabled}
+              isRatingEnabled={config.isRatingEnabled}
+              review={item}
+            />
           </div>
         ))}
       </div>
-      {/* Indicators */}
-      <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 space-x-2">
-        {items.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => setCurrentIndex(index)}
-            className={`h-3 w-3 rounded-full ${
-              index === currentIndex ? 'bg-white' : 'bg-gray-400'
-            } hover:bg-white focus:outline-none`}
-            aria-label={`Go to slide ${index + 1}`}
-          />
-        ))}
+      <div className="absolute top-0 left-0 w-[100px] h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
+      <div className="absolute top-0 right-0 w-[100px] h-full bg-gradient-to-l from-white to-transparent pointer-events-none" />
+    </div>
+  );
+}
+
+export function CarouselLayout(props: {
+  items: ReviewEntity[];
+  config: ShowcaseConfig;
+}) {
+  const { items, config } = props;
+  const { rows = 1, speed = 40 } = config;
+  // Split items into specified number of rows
+  const distributeItemsIntoRows = (
+    allData: ReviewEntity[],
+    numRows: number,
+  ) => {
+    if (numRows <= 0) return [allData]; // Handle invalid rows
+    const result: ReviewEntity[][] = Array.from({ length: numRows }, () => []);
+    allData.forEach((item, index) => {
+      result[index % numRows].push(item);
+    });
+    return result;
+  };
+
+  const rowsOfItems = distributeItemsIntoRows(items, rows);
+
+  return (
+    <div className="flex flex-col gap-4">
+      <div className="w-full flex flex-col">
+        {rowsOfItems.map((rowItems, rowIndex) => {
+          const rowReverse = rowIndex % 2 !== 0;
+          return (
+            <CarouselRow
+              key={rowIndex}
+              items={rowItems}
+              config={config}
+              reverse={rowReverse}
+              speed={speed}
+            />
+          );
+        })}
       </div>
+      {config.isRatingSummaryEnabled && (
+        <RatingSummary ratings={items.map((item) => item.rating || 0)} />
+      )}
+      {config.isPoweredByEnabled && <PoweredBy />}
     </div>
   );
 }

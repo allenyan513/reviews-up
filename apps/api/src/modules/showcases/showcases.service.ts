@@ -23,6 +23,7 @@ export class ShowcasesService {
     isDateEnabled: true,
     isImageEnabled: true,
     isVideoEnabled: true,
+    isPoweredByEnabled: true,
     sortBy: 'newest',
     count: 20,
     flow: {
@@ -33,6 +34,8 @@ export class ShowcasesService {
       md: 2,
       lg: 3,
     },
+    rows: 1,
+    speed: 40,
   };
 
   constructor(private prismaService: PrismaService) {}

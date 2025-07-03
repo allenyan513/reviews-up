@@ -2,6 +2,7 @@
 
 import { LoginForm } from '@/components/login-form';
 import { use } from 'react';
+import { ShowcaseClient } from '@reviewsup/embed-react';
 
 export default function LoginPage(props: {
   params: Promise<{
@@ -28,12 +29,13 @@ export default function LoginPage(props: {
           </div>
         </div>
       </div>
-      <div className="bg-muted relative hidden lg:block">
-        {/*<img*/}
-        {/*  src="/img/logo-32.png"*/}
-        {/*  alt="Image"*/}
-        {/*  className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"*/}
-        {/*/>*/}
+      <div className="bg-muted relative hidden lg:block max-h-screen overflow-y-scroll p-4">
+        {/*<h2 className="text-2xl font-semibold mb-4 text-center">*/}
+        {/*  ReviewsUp.io Showcase*/}
+        {/*</h2>*/}
+        <ShowcaseClient
+          showcaseId={process.env.NODE_ENV === 'development' ? '25db6a933d3' : '2c337712ccd'}
+        />
       </div>
     </div>
   );

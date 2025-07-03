@@ -75,25 +75,34 @@ export const showcaseData: {
     process.env.NODE_ENV === 'development' ? '9aecce7e3db' : 'f09dbd1ff08',
   items: [
     {
-      title: 'Grid Layout',
+      title: 'Grid',
       showcaseId:
         process.env.NODE_ENV === 'development' ? '29fa5c4d361' : '92620b6dda4',
       rawFileTree: rawFileTree,
       codeMap: codeMap,
     },
     {
-      title: 'Flow Layout',
+      title: 'Flow',
       showcaseId:
         process.env.NODE_ENV === 'development' ? '25db6a933d3' : '2c337712ccd',
       rawFileTree: rawFileTree,
       codeMap: codeMap,
     },
     {
-      title: 'Avatar List Layout',
+      title: 'Carousel',
+      showcaseId:
+        process.env.NODE_ENV === 'development' ? 'd389d637944' : 'dbca7f09470',
+      rawFileTree: rawFileTree,
+      codeMap: codeMap,
+    },
+    {
+      title: 'Avatar List',
       showcaseId:
         process.env.NODE_ENV === 'development' ? '148ac173529' : 'b68f3f0a0a2',
       rawFileTree: rawFileTree,
       codeMap: codeMap,
     },
+
+
   ],
 };
