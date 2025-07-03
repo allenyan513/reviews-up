@@ -9,8 +9,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { WorkspacesService } from './workspaces.service';
-import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
-import { UpdateWorkspaceDto } from '@repo/api/workspaces/dto/update-workspace.dto';
+import {
+  CreateWorkspaceDto,
+  UpdateWorkspaceDto,
+} from '@repo/api/workspace';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';

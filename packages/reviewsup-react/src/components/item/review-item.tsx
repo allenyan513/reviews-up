@@ -1,4 +1,4 @@
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ReviewEntity } from '@repo/api/reviews';
 import Link from 'next/link';
 import { ReviewItemSource } from './review-item-source';
 import StarRating from '@repo/ui/star-rating';

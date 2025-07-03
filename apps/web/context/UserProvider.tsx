@@ -1,15 +1,15 @@
 import { api } from '@/lib/api-client';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
-import { User } from '@repo/api/users/index';
+import { WorkspaceEntity } from '@repo/api/workspace';
+import { UserEntity } from '@repo/api/users';
 import useLocalStorageState from 'use-local-storage-state';
 import { redirect, useRouter } from 'next/navigation';
 
 interface UserContextProps {
-  user: User | null;
-  defaultWorkspace: Workspace | null | undefined;
-  setDefaultWorkspace: (workspace: Workspace | null) => void;
-  switchDefaultWorkspace: (workspace: Workspace | null) => void;
+  user: UserEntity | null;
+  defaultWorkspace: WorkspaceEntity | null | undefined;
+  setDefaultWorkspace: (workspace: WorkspaceEntity | null) => void;
+  switchDefaultWorkspace: (workspace: WorkspaceEntity | null) => void;
   getSession: () => void;
   googleSignIn: (redirect?: string) => void;
   githubSignIn: (redirect?: string) => void;
@@ -23,15 +23,15 @@ interface UserContextProps {
 const UserContext = createContext<UserContextProps | null>(null);
 
 export function UserProvider(props: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserEntity | null>(null);
   const [defaultWorkspace, setDefaultWorkspace] = useLocalStorageState<
-    Workspace | null | undefined
+    WorkspaceEntity | null | undefined
   >(`${user?.id}_workspace`, {
     defaultValue: null,
   });
   const router = useRouter();
 
-  const switchDefaultWorkspace = (workspace: Workspace | null) => {
+  const switchDefaultWorkspace = (workspace: WorkspaceEntity | null) => {
     if (!workspace) {
       console.error('Cannot switch to null workspace');
       return;

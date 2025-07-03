@@ -1,6 +1,6 @@
 'use client';
 import { use, useEffect, useState } from 'react';
-import { User } from '@repo/api/users/index';
+import { UserEntity } from '@repo/api/users';
 import { api } from '@/lib/api-client';
 import { UserProfilePage } from '@/modules/profile/user-profile-page';
 import toast from 'react-hot-toast';
@@ -12,7 +12,7 @@ export default function Page(props: {
   }>;
 }) {
   const { slug } = use(props.params);
-  const [userProfile, setUserProfile] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserEntity | null>(null);
 
   useEffect(() => {
     if (!slug) return;

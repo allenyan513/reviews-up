@@ -10,17 +10,17 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ReviewsService } from './reviews.service';
-import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
-import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';
 import {
   findAllReviewRequestSchema,
   FindAllReviewRequest,
-} from '@repo/api/reviews/dto/find-all-review.dto';
+  CreateReviewDto,
+  UpdateReviewDto,
+} from '@repo/api/reviews';
 import { YtDlpService } from '../yt-dlp/yt-dlp.service';
-import { YtDlpRequest } from '@repo/api/yt-dlp/yt-dlp-request.dto';
+import { YtDlpRequest } from '@repo/api/yt-dlp';
 
 @Controller('reviews')
 export class ReviewsController {

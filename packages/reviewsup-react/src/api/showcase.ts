@@ -1,5 +1,5 @@
 import { REVIEWSUP_API_URL } from './index';
-import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
+import { ShowcaseEntity } from '@repo/api/showcases';
 
 export const showcase = {
   getShowcaseByShortId: async (shortId: string): Promise<ShowcaseEntity> => {

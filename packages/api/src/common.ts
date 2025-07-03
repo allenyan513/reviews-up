@@ -16,3 +16,11 @@ export type PaginateRequest = {
   sortBy: string;
   sortOrder: 'asc' | 'desc';
 };
+
+export enum SortBy {
+  newest = 'newest',
+  oldest = 'oldest',
+  random = 'random',
+  rating = 'rating',
+}
+

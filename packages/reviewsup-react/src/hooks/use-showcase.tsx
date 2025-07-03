@@ -1,7 +1,7 @@
 'use client';
 import { api } from '../api';
 import { useEffect, useState } from 'react';
-import { ShowcaseEntity } from '@repo/api/showcases/entities/showcase.entity';
+import { ShowcaseEntity } from '@repo/api/showcases';
 
 export function useShowcase(showcaseId: string) {
   const [showcase, setShowcase] = useState<ShowcaseEntity>();

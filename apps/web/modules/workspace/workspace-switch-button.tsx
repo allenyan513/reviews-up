@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import { WorkspaceEntity } from '@repo/api/workspace';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { useUserContext } from '@/context/UserProvider';
 import { WorkspaceAddButton } from '@/modules/workspace/workspace-add-button';
@@ -38,7 +38,7 @@ export function WorkspaceSwitchButton(props: {}) {
           {/*<p>Choose a workspace</p>*/}
           {user && user.Workspace && user.Workspace.length > 0 && (
             <div className="flex flex-col gap-2">
-              {user.Workspace.map((workspace: Workspace) => (
+              {user.Workspace.map((workspace: WorkspaceEntity) => (
                 <div
                   key={workspace.id}
                   className="flex flex-row w-full justify-between items-center p-6 border border-gray-300 rounded-lg hover:border-gray-500 cursor-pointer"

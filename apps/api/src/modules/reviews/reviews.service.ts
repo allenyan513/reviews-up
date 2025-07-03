@@ -1,10 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
-import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
+import {
+  CreateReviewDto,
+  UpdateReviewDto,
+  FindAllReviewRequest,
+} from '@repo/api/reviews';
 import { PrismaService } from '../prisma/prisma.service';
-import { PaginateResponse, PaginateRequest } from '@repo/api/common/paginate';
-import { FindAllReviewRequest } from '@repo/api/reviews/dto/find-all-review.dto';
+import { PaginateResponse } from '@repo/api/common';
 import { NotificationsService } from '../notifications/notifications.service';
+import { ReviewSource, ReviewStatus } from '@repo/database/generated/client';
 
 @Injectable()
 export class ReviewsService {
@@ -31,7 +34,7 @@ export class ReviewsService {
         text: dto.message,
         tweetId: dto.tweetId,
         status: 'pending',
-        source: dto.source || 'manual',
+        source: (dto.source as ReviewSource) || 'manual', // Default to 'manual' if not provided
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -123,6 +126,8 @@ export class ReviewsService {
       },
       data: {
         ...updateReviewDto,
+        source: updateReviewDto.source as ReviewSource,
+        status: updateReviewDto.status as ReviewStatus,
         updatedAt: new Date(), // Update the timestamp
       },
     });

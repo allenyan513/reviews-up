@@ -31,8 +31,5 @@
       "import": "./dist/*.js",
       "require": "./dist/*.js"
     }
-  },
-  "dependencies": {
-    "@repo/database": "workspace:*"
   }
 }

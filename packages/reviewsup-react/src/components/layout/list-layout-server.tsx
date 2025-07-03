@@ -1,5 +1,5 @@
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
-import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
+import { ReviewEntity } from '@repo/api/reviews';
+import { ShowcaseConfig } from '@repo/api/showcases';
 import { ListLayoutClient } from './list-layout-client';
 
 interface ListLayoutServerProps {

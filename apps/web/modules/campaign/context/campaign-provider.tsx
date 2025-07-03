@@ -5,9 +5,9 @@ import {
   CampaignEntity,
   CreateCampaignDto,
   createCampaignSchema,
-} from '@repo/api/campaign/index';
+} from '@repo/api/campaign';
 import { useUserContext } from '@/context/UserProvider';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
+import { FormEntity } from '@repo/api/forms';
 
 const CampaignContext = createContext<{
   forms: FormEntity[] | undefined;

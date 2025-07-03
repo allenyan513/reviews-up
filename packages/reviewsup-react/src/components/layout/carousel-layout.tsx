@@ -1,7 +1,7 @@
 'use client';
 import { useRef, useEffect } from 'react';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
-import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
+import { ReviewEntity } from '@repo/api/reviews';
+import { ShowcaseConfig } from '@repo/api/showcases';
 import { ReviewItem1 } from '../item/review-item-1';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';

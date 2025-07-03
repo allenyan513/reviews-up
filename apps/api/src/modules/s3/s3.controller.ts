@@ -1,5 +1,5 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { S3GetSignedUrlDto } from '@repo/api/s3/dto/s3-get-signed-url.dto';
+import { S3GetSignedUrlDto } from '@repo/api/s3';
 import { S3Service } from './s3.service';
 
 @Controller('s3')

@@ -19,8 +19,7 @@ import toast from 'react-hot-toast';
 import { useUserContext } from '@/context/UserProvider';
 import { Tweet } from 'react-tweet/api';
 import { parseTweet } from '@/lib/utils';
-import ReviewImportTiktokDialog from './tiktok';
-import { YtDlpResponse } from '@repo/api/yt-dlp/yt-dlp-response.dto';
+import { YtDlpResponse } from '@repo/api/yt-dlp';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);

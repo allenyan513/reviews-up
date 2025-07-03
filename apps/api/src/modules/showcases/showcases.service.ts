@@ -1,16 +1,16 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
-import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
-import { PrismaService } from '../prisma/prisma.service';
-import { PaginateRequest, PaginateResponse } from '@repo/api/common/paginate';
-import { Showcase } from '@repo/database/generated/client';
 import {
+  CreateShowcaseDto,
+  UpdateShowcaseDto,
   ShowcaseConfig,
   ShowcaseEntity,
-} from '@repo/api/showcases/entities/showcase.entity';
-import { generateShortId } from '../../libs/shortId';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
-import { SortBy } from '@repo/api/common/sortby';
+} from '@repo/api/showcases';
+import { PrismaService } from '../prisma/prisma.service';
+import { PaginateRequest, PaginateResponse } from '@repo/api/common';
+import { Showcase } from '@repo/database/generated/client';
+import { generateShortId } from '@src/libs/shortId';
+import { ReviewEntity } from '@repo/api/reviews';
+import { SortBy } from '@repo/api/common';
 
 @Injectable()
 export class ShowcasesService {

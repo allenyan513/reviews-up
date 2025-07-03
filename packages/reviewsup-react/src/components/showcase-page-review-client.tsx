@@ -5,7 +5,7 @@ import { AvatarListLayout } from './layout/avatar-list-layout';
 import {
   ShowcaseConfig,
   ShowcaseEntity,
-} from '@repo/api/showcases/entities/showcase.entity';
+} from '@repo/api/showcases';
 import { GridLayout } from './layout/grid-layout';
 
 export function ShowcasePageReviewClient(props: {

@@ -1,9 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
-import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
+import { CreateFormDto, UpdateFormDto, FormEntity } from '@repo/api/forms';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateShortId } from '@src/libs/shortId';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
 
 @Injectable()
 export class FormsService {

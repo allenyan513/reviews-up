@@ -1,11 +1,12 @@
-import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
-import { UpdateReviewDto } from '@repo/api/reviews/dto/update-review.dto';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
-import { PaginateResponse } from '@repo/api/common/paginate';
-import { FindAllReviewRequest } from '@repo/api/reviews/dto/find-all-review.dto';
+import {
+  CreateReviewDto,
+  UpdateReviewDto,
+  ReviewEntity,
+  FindAllReviewRequest,
+} from '@repo/api/reviews';
+import { PaginateResponse } from '@repo/api/common';
 import { authFetch } from './auth-fetch';
-import { YtDlpRequest } from '@repo/api/yt-dlp/yt-dlp-request.dto';
-import { YtDlpResponse } from '@repo/api/yt-dlp/yt-dlp-response.dto';
+import { YtDlpRequest, YtDlpResponse } from '@repo/api/yt-dlp';
 
 export const review = {
   getReviews: (

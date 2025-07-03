@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { User } from '@repo/api/users/index';
+import { UserEntity } from '@repo/api/users';
 import { generateShortId } from '../../libs/shortId';
 import { FormsService } from '../forms/forms.service';
 import { ShowcasesService } from '../showcases/showcases.service';
@@ -16,7 +16,7 @@ export class UsersService {
     private showcasesService: ShowcasesService,
   ) {}
 
-  async getProfile(userId: string): Promise<User> {
+  async getProfile(userId: string): Promise<UserEntity> {
     if (!userId) {
       throw new Error('User ID is required');
     }
@@ -60,7 +60,7 @@ export class UsersService {
    * form下创建一个默认的review
    * form下创建一个默认的widget
    */
-  async addDefaultUserData(user: User) {
+  async addDefaultUserData(user: UserEntity) {
     if (!user) {
       throw new Error('User is required to create default workspace and form');
     }

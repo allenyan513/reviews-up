@@ -1,5 +1,5 @@
 'use client';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ReviewEntity } from '@repo/api/reviews';
 import Link from 'next/link';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 

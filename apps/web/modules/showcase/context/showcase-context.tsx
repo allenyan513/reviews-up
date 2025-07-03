@@ -1,13 +1,9 @@
 import { api } from '@/lib/api-client';
 import { createContext, useContext, useState } from 'react';
-import {
-  ShowcaseConfig,
-  ShowcaseEntity,
-} from '@repo/api/showcases/entities/showcase.entity';
-import { PaginateResponse } from '@repo/api/common/paginate';
+import { ShowcaseConfig, ShowcaseEntity } from '@repo/api/showcases';
+import { PaginateResponse } from '@repo/api/common';
 import toast from 'react-hot-toast';
 import { Showcase } from '@repo/database/generated/client/client';
-import { SortBy } from '@/types/sortby';
 
 const ShowcaseContext = createContext<{
   showcase: ShowcaseEntity | undefined;
