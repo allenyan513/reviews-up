@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import PoweredBy from '@/components/powered-by';
+import {PoweredBy }from '@reviewsup/embed-react';
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { Divider } from '@/components/divider';
 import { $Enums } from '@repo/database/generated/client';
@@ -108,26 +108,6 @@ export function FormDefaultPreviewView(props: {
           reviewSource={reviewSource}
           initValue={initValue}
         />
-
-        {/*<Button*/}
-        {/*  onClick={() => {*/}
-        {/*    setReviewSource(null);*/}
-        {/*    setInitValue({*/}
-        {/*      rating: 0,*/}
-        {/*      message: '',*/}
-        {/*      fullName: '',*/}
-        {/*      email: '',*/}
-        {/*      avatarUrl: '',*/}
-        {/*      userUrl: '',*/}
-        {/*      imageUrls: [],*/}
-        {/*      videoUrl: '',*/}
-        {/*      twitterId: '',*/}
-        {/*      reviewerId: user?.id || '',*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*  variant={'ghost'}>*/}
-        {/*  Back*/}
-        {/*</Button>*/}
       </div>
       <PoweredBy />
     </div>
