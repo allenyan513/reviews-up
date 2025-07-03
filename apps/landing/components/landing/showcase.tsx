@@ -9,7 +9,7 @@ import { GoDeviceDesktop } from 'react-icons/go';
 
 export function ShowcaseWrapper(props: {
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
   formId: string;
   items: {
     title: string;
@@ -26,7 +26,7 @@ export function ShowcaseWrapper(props: {
 
   return (
     <section
-      id="showcase"
+      id="widget"
       className="px-4 w-full md:max-w-5xl flex flex-col gap-4"
     >
       <h2 className="w-full text-center text-4xl font-semibold">{title}</h2>

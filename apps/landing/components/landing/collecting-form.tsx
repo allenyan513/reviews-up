@@ -1,17 +1,19 @@
 import Link from 'next/link';
 import { cn } from '@repo/ui/lib/utils';
 import { buttonVariants } from '@repo/ui/button';
+import { BsPhone } from 'react-icons/bs';
 
 export function CollectingForm(props: {
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
   formId: string;
+  buttonText: string;
 }) {
-  const { title, subtitle, formId } = props;
+  const { title, subtitle, formId , buttonText} = props;
 
   return (
     <section
-      id="collecting-form"
+      id="form"
       className="max-w-5xl px-4 flex flex-col items-center w-full"
     >
       <h2 className="w-full text-center text-4xl pb-4 font-semibold">
@@ -24,21 +26,22 @@ export function CollectingForm(props: {
         href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${formId}`}
         target={'_blank'}
         className={cn(
-          buttonVariants({
-            variant: 'outline',
-            size: 'lg',
-            className: 'w-full max-w-md',
-          }),
+          buttonVariants({ size: 'lg' }),
+          'bg-red-400 hover:bg-red-500 rounded-full h-14 text-white font-semibold',
         )}
       >
-        Submit your review
+        {buttonText}
       </Link>
-      <iframe
-        key={formId}
-        id="collecting-form"
-        src="http://localhost:5510/en/forms/329b3b9f3ee"
-        className="w-full h-screen mt-8 rounded-lg border border-gray-200"
-      />
+
+      <div className="relative w-full h-[400px] mt-8 rounded-md overflow-hidden border border-gray-200">
+        <iframe
+          className="w-full h-full pointer-events-none"
+          src={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${formId}`}
+          title="Collecting Form"
+        />
+        <div className="absolute inset-0 backdrop-blur bg-white/10 rounded-md pointer-events-none" />
+      </div>
+
     </section>
   );
 }
