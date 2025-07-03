@@ -6,8 +6,8 @@ import { Button } from '@repo/ui/button';
 
 const FileTreeItem = (props: {
   item: FileTreeItem;
-  activeFile: FileTreeItem;
-  setActiveFile: React.Dispatch<React.SetStateAction<FileTreeItem>>;
+  activeFile: FileTreeItem | undefined;
+  setActiveFile: React.Dispatch<React.SetStateAction<FileTreeItem | undefined>>;
   depth?: number;
 }) => {
   const { item, activeFile, setActiveFile, depth = 0 } = props;
@@ -23,7 +23,7 @@ const FileTreeItem = (props: {
     }
   };
 
-  const isFileActive = item.type === 'file' && activeFile.path === item.path;
+  const isFileActive = item.type === 'file' && activeFile?.path === item.path;
 
   return (
     <div>
@@ -80,36 +80,23 @@ const flattenTree = (tree: any, parentPath = '') => {
   return flatTree;
 };
 
-type FileTreeItem = {
+export type FileTreeItem = {
   path: string;
   name: string;
   type: 'file' | 'folder';
+  lang: string;
   children?: FileTreeItem[];
 };
 
-export function CodeViewer() {
-  const rawFileTree: FileTreeItem[] = [
-    {
-      name: 'app',
-      type: 'folder',
-      path: 'app',
-      children: [
-        { path: 'app/page.tsx', name: 'page.tsx', type: 'file' },
-        { path: 'app/index.css', name: 'index.css', type: 'file' },
-      ],
-    },
-    {
-      name: 'package.json',
-      path: 'package.json',
-      type: 'file',
-    },
-  ];
-  const [activeFile, setActiveFile] = useState<FileTreeItem>({
-    name: 'page.tsx',
-    path: 'app/page.tsx',
-    type: 'file',
-  }); // Default to the first file
-  // Flatten the tree and add 'path' property to each item
+export function CodeViewer(props: {
+  rawFileTree: FileTreeItem[];
+  codeMap: Record<string, string>;
+}) {
+  const { rawFileTree, codeMap } = props;
+  const defaultActiveFile = rawFileTree[0]?.children?.[0];
+  const [activeFile, setActiveFile] = useState<FileTreeItem | undefined>(
+    defaultActiveFile,
+  );
   const fileTreeWithPaths = flattenTree(rawFileTree).filter(
     (item) =>
       item.path.split('/').length === 1 ||
@@ -118,30 +105,9 @@ export function CodeViewer() {
       item.type === 'file',
   );
 
-  const codeMap: Record<string, string> = {
-    'app/page.tsx': `'use client';
-import { ShowcasePageReview, useShowcase } from '@reviewsup/embed-react';
-import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
-      
-export default function Page() {
-  const { showcase, error } = useShowcase(currentShowcaseId);
-        
-  if (!showcase) {
-    return <div>Loading...</div>;
+  if (!activeFile) {
+    return null;
   }
-        
-  return (
-    <>
-      <ShowcasePageReview showcase={showcase} />
-    </>
-  );
-}
- `,
-
-    'app/index.css': `@import "@reviewsup/embed-react/styles.css";`,
-  };
-  const currentCode =
-    codeMap[activeFile.path] || 'Select a file to view its code.';
 
   return (
     <div className="grid grid-cols-12 w-full h-full border border-gray-200 rounded-md min-h-[500px]">
@@ -170,7 +136,10 @@ export default function Page() {
           </Button>
         </div>
         <div className="p-4">
-          <CodeBlockClient lang={'tsx'}>{currentCode}</CodeBlockClient>
+          <CodeBlockClient
+            lang={activeFile.lang}>
+            {codeMap[activeFile.path] || ''}
+          </CodeBlockClient>
         </div>
       </div>
     </div>

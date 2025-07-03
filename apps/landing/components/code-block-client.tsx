@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 export function CodeBlockClient(props: {
   children: string;
-  lang: BundledLanguage;
+  lang: BundledLanguage | string;
   theme?: ThemeRegistrationAny;
 }) {
   const { lang, theme, children } = props;

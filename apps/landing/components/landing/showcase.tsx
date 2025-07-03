@@ -3,7 +3,7 @@ import { ShowcaseClient } from '@reviewsup/embed-react';
 import { useState } from 'react';
 import { cn } from '@repo/ui/lib/utils';
 import { Button } from '@repo/ui/button';
-import { CodeViewer } from '@/components/code-viewer';
+import { CodeViewer, FileTreeItem } from '@/components/code-viewer';
 import { BsPhone, BsTablet, BsWindowDesktop } from 'react-icons/bs';
 import { GoDeviceDesktop } from 'react-icons/go';
 
@@ -14,12 +14,13 @@ export function ShowcaseWrapper(props: {
   items: {
     title: string;
     showcaseId: string;
+    rawFileTree: FileTreeItem[];
+    codeMap: Record<string, string>;
   }[];
 }) {
   const { items, title, subtitle, formId } = props;
-  const defaultShowcaseId = items?.[0]?.showcaseId || '';
-  const [currentShowcaseId, setCurrentShowcaseId] =
-    useState<string>(defaultShowcaseId);
+  const [currentItem, setCurrentItem] = useState<any>(items[0]);
+
   const [view, setView] = useState<'preview' | 'code'>('preview');
   const [mode, setMode] = useState<'mobile' | 'pad' | 'desktop'>('desktop');
 
@@ -28,9 +29,7 @@ export function ShowcaseWrapper(props: {
       id="showcase"
       className="px-4 w-full md:max-w-5xl flex flex-col gap-4"
     >
-      <h2 className="w-full text-center text-4xl font-semibold">
-        {title}
-      </h2>
+      <h2 className="w-full text-center text-4xl font-semibold">{title}</h2>
       <h3 className="text-muted-foreground sm:text-lg text-center mb-4">
         {subtitle}
       </h3>
@@ -38,14 +37,15 @@ export function ShowcaseWrapper(props: {
         {items.map((item) => (
           <div
             onClick={() => {
-              setCurrentShowcaseId(item.showcaseId);
+              // setCurrentShowcaseId(item.showcaseId);
+              setCurrentItem(item);
             }}
             className={cn(
               'flex flex-row',
               'cursor-pointer',
               'px-4 py-2 rounded-md',
               'border border-gray-200',
-              currentShowcaseId === item.showcaseId
+              currentItem?.showcaseId === item.showcaseId
                 ? 'bg-red-100 border-red-300'
                 : 'bg-white',
             )}
@@ -119,12 +119,15 @@ export function ShowcaseWrapper(props: {
             mode === 'desktop' && 'w-full',
           )}
         >
-          <ShowcaseClient
-            showcaseId={currentShowcaseId} />
-
+          <ShowcaseClient showcaseId={currentItem?.showcaseId || ''} />
         </div>
       )}
-      {view === 'code' && <CodeViewer />}
+      {view === 'code' && (
+        <CodeViewer
+          rawFileTree={currentItem.rawFileTree}
+          codeMap={currentItem.codeMap}
+        />
+      )}
     </section>
   );
 }
