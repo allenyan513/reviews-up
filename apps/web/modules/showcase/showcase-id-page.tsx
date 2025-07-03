@@ -45,7 +45,7 @@ export default function ShowcaseIdPage(props: {
           </p>
         </div>
         <div className={'flex flex-row gap-1'}>
-          <ShowcaseEmbedDialog showcaseId={showcase.shortId}>
+          <ShowcaseEmbedDialog showcaseId={showcase.shortId || ''}>
             <Button variant="outline" size={'lg'}>
               <BiCodeAlt className="text-2xl" />
               <span className="hidden md:flex">Add to your website</span>

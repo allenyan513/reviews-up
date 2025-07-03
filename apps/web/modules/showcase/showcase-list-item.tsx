@@ -51,7 +51,7 @@ export function ShowcaseListItem(props: {
               <span className="font-semibold">
                 {config.type?.toUpperCase()} Layout
               </span>{' '}
-              created on {toLocalDateString(item.createdAt.toLocaleString())}
+              created on {toLocalDateString(item.createdAt|| new Date())}
             </p>
           </div>
         </div>
@@ -77,7 +77,7 @@ export function ShowcaseListItem(props: {
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => {
-                  deleteShowcase(item.id);
+                  deleteShowcase(item.id || '');
                 }}
               >
                 Continue

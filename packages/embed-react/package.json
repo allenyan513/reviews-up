@@ -9,7 +9,7 @@
     "dev:components": "tsc --watch",
     "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
     "build:components": "tsc",
-    "publish:pkg": "pnpm build:components && pnpm build:styles && npm publish --access public"
+    "publish": "pnpm build:components && pnpm build:styles && npm publish --access public"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,8 +36,6 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
-    "@repo/api": "workspace:*",
-    "@repo/database": "workspace:*"
+    "@reviewsup/api": "workspace:*"
   }
 }

@@ -10,8 +10,8 @@
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
-    "@repo/api": "workspace:*",
+    "@reviewsup/ui": "workspace:*",
+    "@reviewsup/api": "workspace:*",
     "@reviewsup/embed-react": "workspace:*"
   }
 }

@@ -1,17 +1,17 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { z } from 'zod';
 
-export class CreateFormDto {
-  workspaceId: string;
-  name: string;
-  config?: FormConfig;
-}
+export const createFormSchema = z.object({
+  workspaceId: z.string().min(1, 'Workspace is required'),
+  name: z.string().min(1, 'Form name is required'),
+  config: z.lazy(() => formConfigSchema).optional(),
+});
 
-export class UpdateFormDto extends PartialType(CreateFormDto) {}
+export type CreateFormDto = z.infer<typeof createFormSchema>;
+export type UpdateFormDto = Partial<CreateFormDto>;
 
 export const formEntitySchema = z.object({
   id: z.string(),
-  shortId: z.string(),
+  shortId: z.string().min(1, 'Short ID is required'),
   userId: z.string(),
   workspaceId: z.string(),
   name: z.string().min(1, 'Form name is required'),

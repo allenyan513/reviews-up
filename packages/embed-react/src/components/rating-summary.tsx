@@ -1,5 +1,5 @@
 import React from 'react';
-import StarRating from '@repo/ui/star-rating';
+import StarRating from '@reviewsup/ui/star-rating';
 
 export function RatingSummary(props: { ratings: number[] }) {
   const { ratings = [] } = props;

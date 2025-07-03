@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import type { ReactNode } from 'react';
 import { ReviewItem } from '../item/review-item';
-import { ReviewEntity } from '@repo/api/reviews';
-import { ShowcaseConfig } from '@repo/api/showcases';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import { RatingSummary } from '../rating-summary';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 import { PoweredBy } from '../powered-by';

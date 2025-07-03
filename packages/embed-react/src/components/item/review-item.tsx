@@ -1,6 +1,6 @@
-import { ReviewEntity } from '@repo/api/reviews';
-import Link from 'next/link';
+import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ReviewItemSource } from './review-item-source';
+import Link from 'next/link';
 import StarRating from '@repo/ui/star-rating';
 
 function toLocalDateString(date: Date | string): string {

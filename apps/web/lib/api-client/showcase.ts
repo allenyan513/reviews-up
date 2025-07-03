@@ -7,7 +7,7 @@ import { authFetch } from './auth-fetch';
 
 // Define your API methods, each accepting the session object
 export const showcase = {
-  getShowcases: (workspaceId: string): Promise<PaginateResponse<Showcase>> =>
+  getShowcases: (workspaceId: string): Promise<PaginateResponse<ShowcaseEntity>> =>
     authFetch(`/showcases/workspaceId/${workspaceId}`, 'GET', {}),
   getShowcase: (id: string): Promise<ShowcaseEntity> =>
     authFetch(`/showcases/${id}`, 'GET', {}),

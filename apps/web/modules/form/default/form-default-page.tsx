@@ -24,7 +24,7 @@ export default function FormDefaultPage(props: {
         <FormDefaultPreviewView
           id={id}
           lang={lang}
-          shortId={form.shortId}
+          shortId={form.shortId || ''}
           workspaceId={workspaceId}
           mode={'edit'}
         />

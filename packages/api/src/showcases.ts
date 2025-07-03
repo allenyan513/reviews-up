@@ -1,14 +1,13 @@
 import { reviewEntitySchema } from './reviews';
-import { PartialType } from '@nestjs/mapped-types';
 import { z } from 'zod';
 
-export class CreateShowcaseDto {
-  workspaceId: string;
-  name: string;
-  config?: any;
-}
-
-export class UpdateShowcaseDto extends PartialType(CreateShowcaseDto) {}
+export const createShowcaseSchema = z.object({
+  workspaceId: z.string().min(1, 'Workspace is required'),
+  name: z.string().min(1, 'Showcase name is required'),
+  config: z.lazy(() => showcaseConfigSchema).optional(),
+});
+export type CreateShowcaseDto = z.infer<typeof createShowcaseSchema>;
+export type UpdateShowcaseDto = Partial<CreateShowcaseDto>;
 
 export const showcaseEntitySchema = z.object({
   id: z.string(),

@@ -247,7 +247,7 @@ export function ShowcasePageConfig(props: { className?: string }) {
                 onClick={() => {
                   setShowcaseConfig({
                     ...showcaseConfig,
-                    type: opt.value,
+                    type: opt.value as ShowcaseConfig['type'],
                   });
                 }}
               >

@@ -26,10 +26,10 @@ export default function PublicFormRoute(props: {
       className={
         'flex flex-col w-full min-h-screen justify-center items-center bg-gray-100'
       }
-      id={form.id}
+      id={form.id || ''}
       lang={lang}
-      workspaceId={form.workspaceId}
-      shortId={form.shortId}
+      workspaceId={form.workspaceId || ''}
+      shortId={form.shortId || ''}
       mode={'public'}
     />
   );

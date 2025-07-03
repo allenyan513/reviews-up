@@ -1,6 +1,6 @@
 'use client';
-import { ReviewEntity } from '@repo/api/reviews';
-import { ShowcaseConfig } from '@repo/api/showcases';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import { ReviewItem2 } from '../item/review-item-2';
 import { RatingSummary } from '../rating-summary';
 import React from 'react';

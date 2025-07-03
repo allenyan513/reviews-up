@@ -76,7 +76,7 @@ export class ShowcasesService {
         workspaceId: workspaceId,
       },
     });
-    const items = await this.prismaService.showcase.findMany({
+    const items = (await this.prismaService.showcase.findMany({
       where: {
         userId: uid,
         workspaceId: workspaceId,
@@ -86,7 +86,7 @@ export class ShowcasesService {
       },
       skip: (paginateRequest.page - 1) * paginateRequest.pageSize,
       take: paginateRequest.pageSize,
-    });
+    })) as ShowcaseEntity[];
     return {
       items: items,
       meta: {
@@ -94,7 +94,7 @@ export class ShowcasesService {
         pageSize: paginateRequest.pageSize,
         total: total,
       },
-    } as PaginateResponse<Showcase>;
+    } as PaginateResponse<ShowcaseEntity>;
   }
 
   /**

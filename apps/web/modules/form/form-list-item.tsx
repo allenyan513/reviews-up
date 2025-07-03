@@ -45,7 +45,7 @@ export function FormListItem(props: {
                 {item.reviewCount} responses
               </span>
               <span>•</span>
-              <span> created on {toLocalDateString(item.createdAt)} </span>
+              <span> created on {toLocalDateString(item.createdAt || new Date())} </span>
             </p>
           </div>
         </div>
@@ -70,7 +70,7 @@ export function FormListItem(props: {
               <AlertDialogCancel>Cancel</AlertDialogCancel>
               <AlertDialogAction
                 onClick={() => {
-                  deleteForm(item.id);
+                  deleteForm(item.id || '');
                 }}
               >
                 Continue

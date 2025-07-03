@@ -1,12 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
 import { userEntitySchema } from './users';
 import { z } from 'zod';
 
-export class CreateWorkspaceDto {
-  name: string;
-}
-
-export class UpdateWorkspaceDto extends PartialType(CreateWorkspaceDto) {}
+export const createWorkspaceSchema = z.object({
+  name: z.string().min(1, 'Workspace name is required'),
+});
+export type CreateWorkspaceDto = z.infer<typeof createWorkspaceSchema>;
+export type UpdateWorkspaceDto = Partial<CreateWorkspaceDto>;
 
 export const workspaceEntitySchema = z.object({
   id: z.string(),

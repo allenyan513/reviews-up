@@ -1,5 +1,5 @@
 import { api } from '@/lib/api-client';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useState } from 'react';
 import toast from 'react-hot-toast';
 import { FormEntity, FormConfig } from '@repo/api/forms';
 
@@ -20,10 +20,10 @@ const FormContext = createContext<{
 } | null>(null);
 
 export function FormProvider(props: { children: React.ReactNode }) {
-  const [forms, setForms] = useState<FormEntity[]>();
+  const [forms, setForms] = useState<FormEntity[]>([]);
 
-  const [form, setForm] = useState<FormEntity>();
-  const [formConfig, setFormConfig] = useState<FormConfig>();
+  const [form, setForm] = useState<FormEntity | undefined>();
+  const [formConfig, setFormConfig] = useState<FormConfig | undefined>();
 
   const fetchForms = (workspaceId: string) => {
     api.form
@@ -61,7 +61,7 @@ export function FormProvider(props: { children: React.ReactNode }) {
   };
 
   const updateFormConfig = async () => {
-    if (!form || !formConfig) return;
+    if (!form || !form.id || !formConfig) return;
     try {
       await api.form.updateForm(form.id, {
         config: formConfig,
@@ -91,7 +91,10 @@ export function FormProvider(props: { children: React.ReactNode }) {
         workspaceId: workspaceId,
         name: formName,
       });
-      setForms((prevForms) => [...(prevForms || []), response]);
+      setForms((prevForms: any[]) => {
+        if (!prevForms) return [response];
+        return [...prevForms, response];
+      });
       toast.success('Form created successfully!');
     } catch (error) {
       toast.error('Failed to create form. Please try again.');

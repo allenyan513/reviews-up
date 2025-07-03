@@ -1,8 +1,8 @@
 'use client';
 
 import { ReviewItem } from '../item/review-item';
-import { ReviewEntity } from '@repo/api/reviews';
-import { ShowcaseConfig } from '@repo/api/showcases';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
 
 interface ListLayoutClientProps {
   items: ReviewEntity[];

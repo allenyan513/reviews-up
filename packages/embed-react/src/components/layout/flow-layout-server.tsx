@@ -1,6 +1,6 @@
 import { FlowLayoutClient } from './flow-layout-client';
-import { ReviewEntity } from '@repo/api/reviews';
-import { ShowcaseConfig } from '@repo/api/showcases';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
 
 interface FlowLayoutServerProps {
   items: ReviewEntity[];

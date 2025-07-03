@@ -176,7 +176,7 @@ export function CampaignCreateConfigPage(props: {
           </SelectTrigger>
           <SelectContent>
             {forms.map((form) => (
-              <SelectItem key={form.shortId} value={form.shortId}>
+              <SelectItem key={form.shortId} value={form.shortId || ''}>
                 {form.name}
               </SelectItem>
             ))}

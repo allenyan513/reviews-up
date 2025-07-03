@@ -1,6 +1,6 @@
 'use client';
-import { ReviewEntity } from '@repo/api/reviews';
-import { ShowcaseConfig } from '@repo/api/showcases';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import React, { useState } from 'react';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 import { RatingSummary } from '../rating-summary';
