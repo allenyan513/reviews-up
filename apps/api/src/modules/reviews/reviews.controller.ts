@@ -29,6 +29,11 @@ export class ReviewsController {
     private ytdlpService: YtDlpService,
   ) {}
 
+  @Post('submit')
+  async submit(@Body() createReviewDto: CreateReviewDto) {
+    return this.reviewsService.create(null, createReviewDto);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Post('create')
   async create(

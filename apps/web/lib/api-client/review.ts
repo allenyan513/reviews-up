@@ -20,6 +20,9 @@ export const review = {
     }),
   getReview: (id: string) => authFetch(`/reviews/${id}`, 'GET', {}),
 
+  submitReview: (review: CreateReviewDto): Promise<ReviewEntity> => {
+    return authFetch('/reviews/submit', 'POST', review);
+  },
   /**
    * createReview 是一个受保护的接口，用于创建评论
    * @param dto

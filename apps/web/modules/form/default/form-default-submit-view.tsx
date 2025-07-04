@@ -58,7 +58,7 @@ export function FormDefaultSubmitView(props: {
     }
     setIsSubmitting(true);
     api.review
-      .createReview({
+      .submitReview({
         ...submitForm,
       })
       .then(() => {
