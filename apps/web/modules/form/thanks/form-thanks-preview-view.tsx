@@ -26,14 +26,14 @@ export function FormThanksPreviewView(props: {
         </div>
 
         <Link
-          href={`/profile`}
+          href={process.env.NEXT_PUBLIC_APP_URL as string}
           className={buttonVariants({
             variant: 'default',
             size: 'lg',
             className: '',
           })}
         >
-          My Reviews
+          Go to Reviewsup.io
         </Link>
       </div>
       <PoweredBy />

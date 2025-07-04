@@ -33,13 +33,15 @@ export function CollectingForm(props: {
         {buttonText}
       </Link>
 
-      <div className="relative w-full h-[400px] mt-8 rounded-md overflow-hidden border border-gray-200">
+      <div className="relative w-full h-[450px] mt-8 rounded-md overflow-hidden border border-gray-200">
         <iframe
           className="w-full h-full pointer-events-none"
           src={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${formId}`}
           title="Collecting Form"
         />
-        <div className="absolute inset-0 backdrop-blur bg-white/10 rounded-md pointer-events-none" />
+        {/*从下往上 白色蒙层 一半*/}
+        <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white to-transparent pointer-events-none" />
+
       </div>
 
     </section>

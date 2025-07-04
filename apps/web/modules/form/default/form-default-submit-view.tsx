@@ -11,8 +11,8 @@ import { Required } from '@/components/required';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
 import ReviewImportXDialog from '../../review/twitter';
 import { BsGoogle, BsInstagram, BsTiktok, BsTwitterX } from 'react-icons/bs';
-import { useSession, useUserContext } from '@/context/UserProvider';
 import { parseTweet } from '@/lib/utils';
+import { CreateReviewDto } from '@reviewsup/api/reviews';
 
 /**
  * 从 /forms/[shortId] 提交的表单
@@ -25,50 +25,27 @@ export function FormDefaultSubmitView(props: {
   lang: string;
   shortId: string;
   mode: 'edit' | 'public';
-  reviewSource: ReviewSource | null;
-  initValue: {
-    rating: number;
-    message: string;
-    fullName: string;
-    email: string;
-    avatarUrl: string;
-    userUrl: string;
-    imageUrls: string[];
-    videoUrl: string;
-    twitterId: string;
-    reviewerId?: string;
-  };
 }) {
   const router = useRouter();
-  const { signIn } = useUserContext();
-  const { user } = useSession({
-    required: false,
-  });
-  const { id, workspaceId, lang, shortId, mode, initValue } = props;
+  const { id, workspaceId, lang, shortId, mode } = props;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
-  const [submitForm, setSubmitForm] = useState<{
-    rating: number;
-    message: string;
-    fullName: string;
-    email: string;
-    avatarUrl: string;
-    userUrl: string;
-    imageUrls: string[];
-    videoUrl: string;
-    twitterId: string;
-    reviewerId?: string;
-  }>({
-    rating: initValue.rating,
-    message: initValue.message,
-    fullName: initValue.fullName,
-    email: initValue.email,
-    avatarUrl: initValue.avatarUrl,
-    userUrl: initValue.userUrl,
-    imageUrls: initValue.imageUrls || [],
-    videoUrl: initValue.videoUrl || '',
-    twitterId: initValue.twitterId || '',
-    reviewerId: initValue.reviewerId || '',
+  const [submitForm, setSubmitForm] = useState<CreateReviewDto>({
+    workspaceId: workspaceId,
+    formId: id,
+    rating: 5,
+    message: '',
+    fullName: '',
+    email: '',
+    userUrl: '',
+    avatarUrl: '',
+    imageUrls: [],
+    videoUrl: '',
+    tweetId: '',
+    reviewerId: '',
+    source: 'manual',
+    sourceUrl: '',
+    title: '',
   });
 
   const handleSubmit = () => {
@@ -82,18 +59,7 @@ export function FormDefaultSubmitView(props: {
     setIsSubmitting(true);
     api.review
       .createReview({
-        workspaceId: workspaceId,
-        formId: id,
-        rating: submitForm.rating,
-        message: submitForm.message,
-        fullName: submitForm.fullName,
-        email: submitForm.email,
-        userUrl: submitForm.userUrl,
-        avatarUrl: submitForm.avatarUrl,
-        imageUrls: submitForm.imageUrls,
-        videoUrl: submitForm.videoUrl,
-        tweetId: submitForm.twitterId,
-        reviewerId: submitForm.reviewerId,
+        ...submitForm,
       })
       .then(() => {
         setIsSubmitting(false);
@@ -109,7 +75,7 @@ export function FormDefaultSubmitView(props: {
     <div className="flex flex-col gap-4 w-full items-center">
       <StarRating
         size={'lg'}
-        value={submitForm.rating}
+        value={submitForm.rating || 5}
         onChange={(value) => setSubmitForm({ ...submitForm, rating: value })}
       />
 
@@ -121,12 +87,10 @@ export function FormDefaultSubmitView(props: {
         <div className="flex flex-row items-center justify-center gap-2 w-full">
           <ReviewImportXDialog
             onImport={(tweetId, data) => {
-              if (!user) {
-                signIn();
-                return;
-              }
               const parseData = parseTweet(data);
               setSubmitForm({
+                workspaceId: workspaceId,
+                formId: id,
                 rating: 5,
                 message: parseData?.message || '',
                 fullName: parseData?.fullName || '',
@@ -135,10 +99,12 @@ export function FormDefaultSubmitView(props: {
                 avatarUrl: parseData?.avatarUrl || '',
                 imageUrls: parseData?.imageUrls || [],
                 videoUrl: parseData?.videoUrl || '',
-                twitterId: parseData?.tweetId || '',
-                reviewerId: user?.id,
+                tweetId: parseData?.tweetId || '',
+                reviewerId: '',
+                source: ReviewSource.twitter,
+                sourceUrl: parseData?.tweetUrl || '',
+                title: `@${parseData?.screen_name || ''}`,
               });
-              // setReviewSource(ReviewSource.twitter);
             }}
           >
             <Button variant="outline">
@@ -187,7 +153,7 @@ export function FormDefaultSubmitView(props: {
           <label className="text-sm mt-2">Email</label>
           <input
             type="email"
-            placeholder="john.smith@gmail.com"
+            placeholder="Enter your email"
             className="w-full p-4 border rounded-lg shadow-sm"
             value={submitForm.email}
             onChange={(e) =>
@@ -196,14 +162,14 @@ export function FormDefaultSubmitView(props: {
           />
         </div>
         <div>
-          <label className="text-sm mt-2">Tagline</label>
+          <label className="text-sm mt-2">Title</label>
           <input
             type="text"
-            placeholder="Software Engineer at ABC Corp"
+            placeholder="e.g. Product Manager"
             className="w-full p-4 border rounded-lg shadow-sm"
-            value={submitForm.email}
+            value={submitForm.title}
             onChange={(e) =>
-              setSubmitForm({ ...submitForm, email: e.target.value })
+              setSubmitForm({ ...submitForm, title: e.target.value })
             }
           />
         </div>
@@ -222,7 +188,7 @@ export function FormDefaultSubmitView(props: {
         <div>
           <label className="text-sm mt-2">Avatar</label>
           <AvatarUpload
-            value={submitForm.avatarUrl}
+            value={submitForm.avatarUrl || ''}
             onChange={(value) => {
               setSubmitForm({
                 ...submitForm,
@@ -243,14 +209,15 @@ export function FormDefaultSubmitView(props: {
           placeholder="Write your feedback here..."
         />
         <div className="flex flex-row justify-start w-full gap-2">
-          {submitForm.imageUrls.map((item, index) => (
-            <img
-              key={index}
-              src={item}
-              alt={`Uploaded image ${index + 1}`}
-              className="w-24 h-24 object-cover rounded shadow-sm"
-            />
-          ))}
+          {submitForm.imageUrls &&
+            submitForm.imageUrls.map((item, index) => (
+              <img
+                key={index}
+                src={item}
+                alt={`Uploaded image ${index + 1}`}
+                className="w-24 h-24 object-cover rounded shadow-sm"
+              />
+            ))}
         </div>
         {submitForm.videoUrl && (
           <video
@@ -266,7 +233,7 @@ export function FormDefaultSubmitView(props: {
             onUploadSuccess={(url) => {
               setSubmitForm((prev) => ({
                 ...prev,
-                imageUrls: [...prev.imageUrls, url],
+                imageUrls: [...(prev.imageUrls || []), url],
               }));
             }}
           >

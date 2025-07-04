@@ -35,6 +35,7 @@ export const showcaseConfigSchema = z.object({
   isImageEnabled: z.boolean().default(true),
   isVideoEnabled: z.boolean().default(true),
   isPoweredByEnabled: z.boolean().default(true),
+  isDoFollowEnabled: z.boolean().default(true),
   count: z.number().int().min(1).max(100).default(20),
   sortBy: z.enum(['newest', 'oldest', 'random', 'rating']).default('newest'),
   flow: z

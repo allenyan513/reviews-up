@@ -134,6 +134,7 @@ model Review {
   text          String?
   tweetId       String?
   source        ReviewSource  @default(manual)
+  sourceUrl     String?
   status        ReviewStatus  @default(pending)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt

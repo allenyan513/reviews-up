@@ -87,30 +87,33 @@ export function columns(setData: any): ColumnDef<any>[] {
       enableResizing: true,
       size: 100,
       accessorFn: (row) => ({
-        name: row.reviewerName,
-        email: row.reviewerEmail,
-        image: row.reviewerImage,
+        reviewerName: row.reviewerName,
+        reviewerEmail: row.reviewerEmail,
+        reviewerImage: row.reviewerImage,
+        reviewerTitle: row.reviewerTitle,
         rating: row.rating,
       }),
       cell: ({ row, getValue }) => {
-        const { name, email, image, rating } = getValue<{
-          name: string;
-          email: string | null;
-          image: string | null;
+        const { reviewerName, reviewerEmail, reviewerTitle, reviewerImage, rating } = getValue<{
+          reviewerName: string;
+          reviewerEmail: string | null;
+          reviewerTitle: string | null;
+          reviewerImage: string | null;
           rating: number | null;
         }>();
         return (
           <div className="flex flex-col gap-2 p-2">
             <div className="flex flex-row items-center gap-2">
               <Avatar className="size-10 shadow-md border">
-                <AvatarImage src={image || ''} alt={name || 'Reviewer'} />
+                <AvatarImage src={reviewerImage || ''} alt={reviewerName || 'Reviewer'} />
                 <AvatarFallback className="AvatarFallback" delayMs={600}>
-                  {name.charAt(0).toUpperCase() || 'U'}
+                  {reviewerName.charAt(0).toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <div className="text-sm font-medium text-gray-900">{name}</div>
-                <div className="text-sm text-gray-500">{email}</div>
+                <div className="text-sm font-medium text-gray-900">{reviewerName}</div>
+                <div className="text-sm text-gray-500">{reviewerTitle}</div>
+                <div className="text-sm text-gray-500">{reviewerEmail}</div>
               </div>
             </div>
             <StarRating

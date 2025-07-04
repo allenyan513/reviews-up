@@ -5,7 +5,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
+    "dev:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
     "dev:components": "tsup --watch",
     "build:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "build:components": "tsup",

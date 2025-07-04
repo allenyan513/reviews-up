@@ -1,13 +1,9 @@
-import { useEffect, useState } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import {PoweredBy }from '@reviewsup/embed-react';
+import { PoweredBy } from '@reviewsup/embed-react';
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { Divider } from '@/components/divider';
-import { $Enums } from '@reviewsup/database/generated/client';
-import ReviewSource = $Enums.ReviewSource;
 import { FormDefaultSubmitView } from '@/modules/form/default/form-default-submit-view';
-import { useSession, useUserContext } from '@/context/UserProvider';
 
 /**
  *
@@ -23,49 +19,17 @@ export function FormDefaultPreviewView(props: {
   className?: string;
 }) {
   const { id, workspaceId, lang, shortId, mode, className } = props;
-  const { signIn } = useUserContext();
-  const { user } = useSession({
-    required: false,
-  });
   const { formConfig } = useFormContext();
-  const [reviewSource, setReviewSource] = useState<ReviewSource | null>(null);
-  const [initValue, setInitValue] = useState<{
-    rating: number;
-    message: string;
-    fullName: string;
-    email: string;
-    avatarUrl: string;
-    userUrl: string;
-    imageUrls: string[];
-    videoUrl: string;
-    twitterId: string;
-    source?: ReviewSource;
-    reviewerId?: string;
-  }>({
-    rating: 0,
-    message: '',
-    fullName: '',
-    email: '',
-    avatarUrl: '',
-    userUrl: '',
-    imageUrls: [],
-    videoUrl: '',
-    twitterId: '',
-    reviewerId: user?.id || '',
-  });
-
-  useEffect(() => {
-    if (!user) return;
-    setInitValue((prev) => ({
-      ...prev,
-      reviewerId: user?.id || '',
-    }));
-  }, [user]);
-
-  if (!formConfig || !formConfig.brand || !formConfig.welcome) {
+  if (
+    !id ||
+    !workspaceId ||
+    !shortId ||
+    !formConfig ||
+    !formConfig.brand ||
+    !formConfig.welcome
+  ) {
     return null;
   }
-
   const { brand, welcome } = formConfig;
 
   return (
@@ -105,8 +69,6 @@ export function FormDefaultPreviewView(props: {
           lang={lang}
           shortId={shortId}
           mode={mode}
-          reviewSource={reviewSource}
-          initValue={initValue}
         />
       </div>
       <PoweredBy />

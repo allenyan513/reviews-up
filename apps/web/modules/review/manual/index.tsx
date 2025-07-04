@@ -37,6 +37,7 @@ export default function ReviewImportManualDialog(props: {}) {
     videoUrl: '',
     title: '',
     source: 'manual',
+    sourceUrl: '',
   });
 
   const createReview = async () => {
@@ -70,6 +71,7 @@ export default function ReviewImportManualDialog(props: {}) {
             videoUrl: '',
             title: '',
             source: 'manual',
+            sourceUrl: '',
           });
         }
       }}
@@ -107,7 +109,7 @@ export default function ReviewImportManualDialog(props: {}) {
               <Input
                 id="fullName"
                 type="text"
-                placeholder="John Smith"
+                placeholder="Enter your full name"
                 value={formData.fullName}
                 onChange={(e) =>
                   setFormData({ ...formData, fullName: e.target.value })
@@ -128,7 +130,7 @@ export default function ReviewImportManualDialog(props: {}) {
                 onChange={(e) =>
                   setFormData({ ...formData, email: e.target.value })
                 }
-                placeholder="e.g. john@reviewsup.io"
+                placeholder="Enter your email"
               />
             </div>
             <div>
@@ -145,7 +147,7 @@ export default function ReviewImportManualDialog(props: {}) {
                 onChange={(e) =>
                   setFormData({ ...formData, title: e.target.value })
                 }
-                placeholder="e.g. Co-founder & CTO"
+                placeholder="e.g. Productmanager at Acme Corp"
               />
             </div>
             <div>
@@ -153,7 +155,7 @@ export default function ReviewImportManualDialog(props: {}) {
                 htmlFor="link"
                 className="block text-gray-700 text-sm font-medium mb-1"
               >
-                Link
+                Profile Link
               </label>
               <Input
                 type="url"
@@ -162,16 +164,16 @@ export default function ReviewImportManualDialog(props: {}) {
                 onChange={(e) =>
                   setFormData({ ...formData, userUrl: e.target.value })
                 }
-                placeholder="https://reviews.com/review/123"
+                placeholder="Enter your profile link"
               />
             </div>
 
             <div>
               <label
-                htmlFor="profilePicture"
+                htmlFor="Avatar"
                 className="block text-gray-700 text-sm font-medium mb-1"
               >
-                Profile picture
+                Avatar
               </label>
               <AvatarUpload
                 value={formData.avatarUrl || ''}

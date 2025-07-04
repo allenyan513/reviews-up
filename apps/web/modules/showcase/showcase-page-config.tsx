@@ -10,18 +10,24 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { BsCaretDown, BsCaretUp, BsGear, BsLayers } from 'react-icons/bs';
+import {
+  BsCaretDown,
+  BsCaretUp,
+  BsGear,
+  BsInfo,
+  BsInfoCircle,
+  BsLayers,
+} from 'react-icons/bs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { SortBy } from '@/types/sortby';
 import { layoutOptions } from '@/modules/showcase/layout-options';
 import { sortOptions } from './sort-options';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
-
-type ToggleOptionProps = {
-  label: string;
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-};
 
 function LayoutToggleButton(props: {
   title: string;
@@ -67,17 +73,38 @@ function LayoutToggleButton(props: {
   );
 }
 
-const ToggleOption = ({ label, checked, onChange }: ToggleOptionProps) => (
-  <div className="flex flex-row justify-between items-center w-full">
-    <label className="text-sm">{label}</label>
-    <Input
-      type="checkbox"
-      checked={checked}
-      onChange={(e) => onChange(e.target.checked)}
-      className="w-4 h-4"
-    />
-  </div>
-);
+const ToggleOption = (props: {
+  label: string;
+  checked: boolean;
+  onChange: (checked: boolean) => void;
+  information?: string;
+}) => {
+  const { label, checked, onChange, information } = props;
+  return (
+    <div className="flex flex-row justify-between items-center w-full">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <div className="flex flex-row gap-2 items-center">
+            <label className="text-sm">{label}</label>
+            {information && <BsInfoCircle className="text-md" />}
+          </div>
+        </TooltipTrigger>
+        {information && (
+          <TooltipContent>
+            <p>{information}</p>
+          </TooltipContent>
+        )}
+      </Tooltip>
+
+      <Input
+        type="checkbox"
+        checked={checked}
+        onChange={(e) => onChange(e.target.checked)}
+        className="w-4 h-4"
+      />
+    </div>
+  );
+};
 
 export function ShowcasePageConfig(props: { className?: string }) {
   const {
@@ -264,7 +291,10 @@ export function ShowcasePageConfig(props: { className?: string }) {
             setIsOpen={setIsSettingOpen}
           />
           <div
-            className={cn('flex flex-col gap-4', isSettingOpen ? '' : 'hidden')}
+            className={cn(
+              'flex flex-col gap-4 pb-4',
+              isSettingOpen ? '' : 'hidden',
+            )}
           >
             {renderColumnsCount(showcaseConfig)}
             {renderRowsAndSpeed(showcaseConfig)}
@@ -383,6 +413,17 @@ export function ShowcasePageConfig(props: { className?: string }) {
                   isPoweredByEnabled: checked,
                 })
               }
+            />
+            <ToggleOption
+              label="Dofollow enabled"
+              checked={showcaseConfig.isDoFollowEnabled || false}
+              onChange={(checked) =>
+                setShowcaseConfig({
+                  ...showcaseConfig,
+                  isDoFollowEnabled: checked,
+                })
+              }
+              information={'If enabled, the source link will be dofollow. If disabled, it will be nofollow.'}
             />
           </div>
         </div>

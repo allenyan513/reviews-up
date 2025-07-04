@@ -7,7 +7,10 @@ import {
 import { PrismaService } from '../prisma/prisma.service';
 import { PaginateResponse } from '@reviewsup/api/common';
 import { NotificationsService } from '../notifications/notifications.service';
-import { ReviewSource, ReviewStatus } from '@reviewsup/database/generated/client';
+import {
+  ReviewSource,
+  ReviewStatus,
+} from '@reviewsup/database/generated/client';
 
 @Injectable()
 export class ReviewsService {
@@ -30,11 +33,13 @@ export class ReviewsService {
         reviewerImage: dto.avatarUrl,
         reviewerEmail: dto.email,
         reviewerUrl: dto.userUrl,
+        reviewerTitle: dto.title,
         rating: dto.rating,
         text: dto.message,
         tweetId: dto.tweetId,
         status: 'pending',
         source: (dto.source as ReviewSource) || 'manual', // Default to 'manual' if not provided
+        sourceUrl: dto.sourceUrl || '',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

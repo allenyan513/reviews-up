@@ -15,13 +15,9 @@ export function ListLayoutClient(props: ListLayoutClientProps) {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       {items.map((item, index) => (
         <ReviewItem
-          isSourceEnabled={config.isSourceEnabled}
-          isVideoEnabled={config.isVideoEnabled}
-          isImageEnabled={config.isImageEnabled}
-          isDateEnabled={config.isDateEnabled}
-          isRatingEnabled={config.isRatingEnabled}
           key={item.id}
           review={item}
+          config={config}
         />
       ))}
     </div>

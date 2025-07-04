@@ -19,22 +19,8 @@ interface FlowLayoutClientProps {
 export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
   const columns = useBreakpoints(config.breakpoints);
 
-  const renderItem = (
-    review: ReviewEntity,
-    config: ShowcaseConfig,
-    idx: number,
-  ) => {
-    return (
-      <ReviewItem
-        isSourceEnabled={config.isSourceEnabled}
-        isVideoEnabled={config.isVideoEnabled}
-        isImageEnabled={config.isImageEnabled}
-        isDateEnabled={config.isDateEnabled}
-        isRatingEnabled={config.isRatingEnabled}
-        key={review.id}
-        review={review}
-      />
-    );
+  const renderItem = (review: ReviewEntity, config: ShowcaseConfig) => {
+    return <ReviewItem key={review.id} review={review} config={config} />;
   };
 
   const renderedColumns: ReactNode[][] = Array(columns)
@@ -42,7 +28,7 @@ export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
     .map(() => []);
 
   items.forEach((item, idx) => {
-    renderedColumns[idx % columns].push(renderItem(item, config, idx));
+    renderedColumns[idx % columns].push(renderItem(item, config));
   });
 
   return (

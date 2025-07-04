@@ -32,6 +32,7 @@ export const createReviewSchema = z.object({
   title: z.string().optional(),
   tweetId: z.string().optional(),
   source: z.nativeEnum(ReviewSource).default(ReviewSource.manual).optional(),
+  sourceUrl: z.string().url().optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending).optional(),
 });
 
@@ -64,6 +65,7 @@ export const reviewEntitySchema = z.object({
   text: z.string().optional(),
   tweetId: z.string().optional(),
   source: z.nativeEnum(ReviewSource).default(ReviewSource.manual),
+  sourceUrl: z.string().url().optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending),
   createdAt: z.date(),
   updatedAt: z.date(),

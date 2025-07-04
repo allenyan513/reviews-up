@@ -61,7 +61,14 @@ export class NotificationsService {
     if (!review) {
       throw new Error(`Review with ID ${reviewId} not found`);
     }
-    const ownerId = review.form.userId;
+    const form = review.form;
+    if (!form) {
+      throw new Error(`Form for review with ID ${reviewId} not found`);
+    }
+    const ownerId = form.userId;
+    if (!ownerId) {
+      throw new Error(`Owner ID for review with ID ${reviewId} not found`);
+    }
     const owner = await this.prismaService.user.findUnique({
       where: { id: ownerId },
       select: { email: true },

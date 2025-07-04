@@ -34,14 +34,17 @@ export function parseTweet(data: Tweet | undefined | null) {
       .filter((url) => url !== undefined && url !== null && url !== '') || [];
   const videoUrl = videoUrls.length > 0 ? videoUrls[0] : '';
   const userUrl = `https://x.com/${data.user.screen_name}`;
+  const tweetUrl = `https://x.com/${data.user.screen_name}/status/${data.id_str}`;
   return {
     fullName: data.user.name,
+    screen_name: data.user.screen_name,
     message: data.text,
     email: '',
-    userUrl: userUrl,
     avatarUrl: data.user.profile_image_url_https,
     imageUrls: imageUrls,
     videoUrl: videoUrl || '',
     tweetId: data.id_str,
+    userUrl: userUrl,
+    tweetUrl: tweetUrl,
   };
 }

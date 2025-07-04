@@ -1,6 +1,7 @@
-import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ReviewItemSource } from './review-item-source';
 import StarRating from '../star-rating';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { ReviewEntity } from '@reviewsup/api/reviews';
 
 function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
@@ -16,22 +17,18 @@ function toLocalDateString(date: Date | string): string {
 
 export function ReviewItem(props: {
   review: ReviewEntity;
-  isSourceEnabled?: boolean | undefined;
-  isVideoEnabled?: boolean | undefined;
-  isImageEnabled?: boolean | undefined;
-  isDateEnabled?: boolean | undefined;
-  isRatingEnabled?: boolean | undefined;
+  config?: ShowcaseConfig;
   className?: string;
 }) {
-  const {
-    review,
-    className,
-    isSourceEnabled = true,
-    isVideoEnabled = true,
-    isImageEnabled = true,
-    isDateEnabled = true,
-    isRatingEnabled = true,
-  } = props;
+  const { review, config, className } = props;
+  const { isVideoEnabled, isImageEnabled, isRatingEnabled, isDoFollowEnabled } =
+    (config as ShowcaseConfig) || {
+      isVideoEnabled: true,
+      isImageEnabled: true,
+      isRatingEnabled: true,
+      isDoFollowEnabled: true,
+    };
+
   if (!review) {
     return null;
   }
@@ -54,7 +51,7 @@ export function ReviewItem(props: {
           key={imageMedias[0]?.id}
           src={imageMedias[0]?.url}
           alt={imageMedias[0]?.url}
-          className="w-full h-auto rounded-lg shadow-md"
+          className="w-full h-auto rounded"
         />
       );
     } else if (imageMedias.length == 2) {
@@ -65,7 +62,7 @@ export function ReviewItem(props: {
               key={media.id}
               src={media.url}
               alt={media.url}
-              className="w-full h-auto rounded-lg shadow-md"
+              className="w-full h-auto rounded"
             />
           ))}
         </div>
@@ -78,7 +75,7 @@ export function ReviewItem(props: {
               key={media.id}
               src={media.url}
               alt={media.url}
-              className="w-full h-auto rounded-lg shadow-md"
+              className="w-full h-auto rounded"
             />
           ))}
         </div>
@@ -97,7 +94,7 @@ export function ReviewItem(props: {
           key={videoMedias[0]?.id}
           src={videoMedias[0]?.url}
           controls
-          className="w-full h-auto rounded-lg shadow-md"
+          className="w-full h-auto rounded"
         />
       );
     }
@@ -109,37 +106,40 @@ export function ReviewItem(props: {
       key={review.id}
       className={`bg-white p-4 border border-gray-300 rounded-md shadow-sm flex flex-col gap-4 ${className}`}
     >
-      <a
-        target="_blank"
-        href={`${process.env.NEXT_PUBLIC_APP_URL}/profile/${review.reviewerId}`}
-        className="flex flex-row justify-between"
-      >
-        <div className="flex flex-row gap-2 overflow-x-auto">
-          <div className="relative">
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-              <img
-                src={review.reviewerImage}
-                alt={review.reviewerName}
-                className="w-10 h-10 rounded-full object-cover shadow"
-              />
-            </div>
-            <ReviewItemSource
-              className="absolute bottom-0 right-0"
-              source={review.source as string}
+      <div className="flex flex-row justify-between">
+        <div className="flex flex-row w-full justify-between gap-2 overflow-x-auto items-center">
+          <a
+            target="_blank"
+            href={review.reviewerUrl}
+            rel={
+              isDoFollowEnabled
+                ? 'noopener noreferrer'
+                : 'nofollow noopener noreferrer'
+            }
+            className="flex flex-row gap-3"
+          >
+            <img
+              src={review.reviewerImage}
+              alt={review.reviewerName}
+              className="w-11 h-11 rounded-full object-cover shadow"
             />
-          </div>
-          <div className="flex flex-col justify-center">
-            <p className="text-md font-semibold line-clamp-1">
-              {review.reviewerName}
-            </p>
-            {isDateEnabled && (
-              <p className="text-gray-700 text-sm">
-                {toLocalDateString(review.createdAt)}
+            <div className="flex flex-col justify-center">
+              <p className="text-md font-semibold line-clamp-1">
+                {review.reviewerName}
               </p>
-            )}
-          </div>
+              <p className="text-sm text-gray-500 line-clamp-1">
+                {review.reviewerTitle || toLocalDateString(review.createdAt)  || review.reviewerEmail || ''}
+              </p>
+            </div>
+          </a>
+          <ReviewItemSource
+            className="mr-2"
+            source={review.source as string}
+            sourceUrl={review.sourceUrl}
+            isDoFollowEnabled={isDoFollowEnabled}
+          />
         </div>
-      </a>
+      </div>
       {isRatingEnabled && (
         <StarRating value={review.rating || 5} onChange={() => {}} />
       )}

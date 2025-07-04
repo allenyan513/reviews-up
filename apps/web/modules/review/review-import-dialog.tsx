@@ -46,13 +46,15 @@ export default function ReviewImportDialog() {
         message: parseData?.message,
         fullName: parseData?.fullName,
         email: parseData?.email,
-        userUrl: parseData?.userUrl,
         avatarUrl: parseData?.avatarUrl,
-        source: 'twitter',
         imageUrls: parseData?.imageUrls,
         videoUrl: parseData?.videoUrl,
         tweetId: parseData?.tweetId,
         reviewerId: user?.id || '',
+        source: 'twitter',
+        sourceUrl: parseData?.tweetUrl,
+        userUrl: parseData?.userUrl,
+        title: `@${parseData?.screen_name}`,
       });
       toast.success('Review created successfully!');
       setIsOpen(false);
