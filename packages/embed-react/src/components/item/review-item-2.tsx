@@ -1,6 +1,5 @@
 'use client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import Link from 'next/link';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 
 export function ReviewItem2(props: {
@@ -35,7 +34,7 @@ export function ReviewItem2(props: {
         </p>
       </div>
 
-      <Link
+      <a
         target="_blank"
         href={`${process.env.NEXT_PUBLIC_APP_URL}/profile/${review.reviewerId}`}
         className="flex flex-col gap-2"
@@ -54,7 +53,7 @@ export function ReviewItem2(props: {
             </p>
           </div>
         </div>
-      </Link>
+      </a>
     </div>
   );
 }

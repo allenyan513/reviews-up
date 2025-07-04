@@ -1,34 +1,38 @@
 {
   "name": "@reviewsup/embed-react",
-  "version": "0.0.3",
+  "version": "0.0.11",
   "private": false,
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
-    "dev:components": "tsc --watch",
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
-    "build:components": "tsc",
-    "publish": "pnpm build:components && pnpm build:styles && npm publish --access public"
+    "dev:styles": "tailwindcss -i ./src/index.css -o ./dist/index.css --watch",
+    "dev:components": "tsup --watch",
+    "build:styles": "tailwindcss -i ./src/index.css -o ./dist/index.css",
+    "build:components": "tsup",
+    "publish:pkg": "npm run build:components && npm run build:styles && npm publish --access public"
   },
   "main": "dist/index.js",
+  "module": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "files": [
-    "dist/**/*.{js,d.ts,css}"
+    "dist"
   ],
   "exports": {
-    "./styles.css": "./dist/index.css",
-    ".": "./dist/index.js"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.cjs",
+      "require": "./dist/index.js"
+    },
+    "./styles.css": "./dist/index.css"
   },
   "publishConfig": {
-    "access": "public",
-    "typesVersions": {
-      "*": {
-        "index": [
-          "dist/index.d.ts"
-        ],
-        "*": []
-      }
+    "access": "public"
+  },
+  "typesVersions": {
+    "*": {
+      "*": [
+        "dist/*"
+      ]
     }
   },
   "peerDependencies": {
@@ -36,6 +40,13 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@reviewsup/api": "workspace:*"
+    "@reviewsup/api": "^0.0.2",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss": "^4.1.10",
+    "react-icons": "^5.5.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.10"
   }
 }

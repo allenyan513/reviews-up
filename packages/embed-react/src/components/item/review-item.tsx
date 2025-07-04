@@ -1,7 +1,6 @@
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ReviewItemSource } from './review-item-source';
-import Link from 'next/link';
-import StarRating from '@repo/ui/star-rating';
+import StarRating from '../star-rating';
 
 function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
@@ -110,7 +109,7 @@ export function ReviewItem(props: {
       key={review.id}
       className={`bg-white p-4 border border-gray-300 rounded-md shadow-sm flex flex-col gap-4 ${className}`}
     >
-      <Link
+      <a
         target="_blank"
         href={`${process.env.NEXT_PUBLIC_APP_URL}/profile/${review.reviewerId}`}
         className="flex flex-row justify-between"
@@ -140,7 +139,7 @@ export function ReviewItem(props: {
             )}
           </div>
         </div>
-      </Link>
+      </a>
       {isRatingEnabled && (
         <StarRating value={review.rating || 5} onChange={() => {}} />
       )}

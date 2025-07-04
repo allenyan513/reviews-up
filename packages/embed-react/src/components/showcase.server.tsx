@@ -1,20 +1,19 @@
 import { Suspense } from 'react';
 import { api } from '../api';
 import { ShowcasePageReviewClient } from './showcase-page-review-client';
+import { RequestOptions } from '../api/request-options';
 
-export type ShowcaseContentProps = Omit<ShowcaseProps, 'fallback'>;
-export type ShowcaseProps = {
-  fallback?: React.ReactNode;
-  showcaseId?: string;
-};
-
-export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
+export async function ShowcaseContent(props: {
+  showcaseId: string;
+  options?: RequestOptions;
+}) {
+  const { showcaseId, options } = props;
   if (!showcaseId) {
     return <div>No showcase ID provided.</div>;
   }
   let error;
   let showcase = await api.showcase
-    .getShowcaseByShortId(showcaseId)
+    .getShowcaseByShortId(showcaseId, options)
     .catch((err) => {
       console.error(err);
       error = err;
@@ -29,13 +28,14 @@ export async function ShowcaseContent({ showcaseId }: ShowcaseContentProps) {
 }
 
 export async function ShowcaseServer(props: {
-  fallback?: React.ReactNode;
   showcaseId: string;
+  options?: RequestOptions;
+  fallback?: React.ReactNode;
 }) {
   const { fallback, showcaseId } = props;
   return (
     <Suspense fallback={fallback}>
-      <ShowcaseContent {...props} />
+      <ShowcaseContent showcaseId={showcaseId} options={props.options} />
     </Suspense>
   );
 }

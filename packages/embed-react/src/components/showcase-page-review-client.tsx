@@ -2,10 +2,7 @@ import { FlowLayoutServer } from './layout/flow-layout-server';
 import { ListLayoutServer } from './layout/list-layout-server';
 import { CarouselLayout } from './layout/carousel-layout';
 import { AvatarListLayout } from './layout/avatar-list-layout';
-import {
-  ShowcaseConfig,
-  ShowcaseEntity,
-} from '@reviewsup/api/showcases';
+import { ShowcaseConfig, ShowcaseEntity } from '@reviewsup/api/showcases';
 import { GridLayout } from './layout/grid-layout';
 
 export function ShowcasePageReviewClient(props: {
@@ -16,6 +13,9 @@ export function ShowcasePageReviewClient(props: {
   const { showcase, showcaseConfig, className } = props;
   const { reviews, config } = showcase;
   const defaultConfig = showcaseConfig || (config as ShowcaseConfig);
+  if (!defaultConfig) {
+    return null;
+  }
   const { type } = defaultConfig;
   if (!reviews) {
     return null;

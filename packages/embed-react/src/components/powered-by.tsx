@@ -1,10 +1,9 @@
-import Link from 'next/link';
-import clsx from 'clsx';
+import { cn } from '../lib/utils';
 
 export function PoweredBy(props: { className?: string }) {
   return (
-    <Link
-      className={clsx(
+    <a
+      className={cn(
         'flex items-center justify-center text-xs text-gray-400',
         props.className,
       )}
@@ -12,6 +11,6 @@ export function PoweredBy(props: { className?: string }) {
       target="_blank"
     >
       Powered by reviewsup.io
-    </Link>
+    </a>
   );
 }

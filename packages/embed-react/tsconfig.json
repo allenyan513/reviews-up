@@ -9,7 +9,7 @@
     "moduleResolution": "bundler",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "skipLibCheck": true,
     "isolatedModules": true
   },
