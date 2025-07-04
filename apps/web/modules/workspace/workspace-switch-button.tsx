@@ -6,7 +6,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { WorkspaceEntity } from '@repo/api/workspace';
+import { WorkspaceEntity } from '@reviewsup/api/workspace';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { useUserContext } from '@/context/UserProvider';
 import { WorkspaceAddButton } from '@/modules/workspace/workspace-add-button';

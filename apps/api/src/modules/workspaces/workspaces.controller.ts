@@ -12,7 +12,7 @@ import { WorkspacesService } from './workspaces.service';
 import {
   CreateWorkspaceDto,
   UpdateWorkspaceDto,
-} from '@repo/api/workspace';
+} from '@reviewsup/api/workspace';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';

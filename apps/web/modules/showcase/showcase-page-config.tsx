@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import { SortBy } from '@/types/sortby';
 import { layoutOptions } from '@/modules/showcase/layout-options';
 import { sortOptions } from './sort-options';
-import { ShowcaseConfig } from '@repo/api/showcases';
+import { ShowcaseConfig } from '@reviewsup/api/showcases';
 
 type ToggleOptionProps = {
   label: string;

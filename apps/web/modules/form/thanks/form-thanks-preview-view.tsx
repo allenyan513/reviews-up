@@ -2,7 +2,7 @@
 import Lottie from 'lottie-react';
 import thanks from '@/public/animation/thanks.json';
 import { PoweredBy } from '@reviewsup/embed-react';
-import { FormConfig } from '@repo/api/forms';
+import { FormConfig } from '@reviewsup/api/forms';
 import { Button, buttonVariants } from '@/components/ui/button';
 import Link from 'next/link';
 

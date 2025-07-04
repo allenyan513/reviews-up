@@ -21,8 +21,8 @@ import {
 import React from 'react';
 import { useUserContext } from '@/context/UserProvider';
 import { EmailsInput } from '@/components/emails-input';
-import { CampaignEntity } from '@repo/api/campaign';
-import { cn } from '@repo/ui/lib/utils';
+import { CampaignEntity } from '@reviewsup/api/campaign';
+import { cn } from '@reviewsup/ui/lib/utils';
 
 export function CampaignFormItem(props: {
   label: string;

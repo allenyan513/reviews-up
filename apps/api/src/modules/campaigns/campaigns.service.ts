@@ -5,12 +5,12 @@ import {
   createCampaignSchema,
   FindAllCampaignsRequest,
   UpdateCampaignDto,
-} from '@repo/api/campaign';
+} from '@reviewsup/api/campaign';
 import { ResendEmailService } from '@src/modules/email/resend-email.service';
 import { render } from '@react-email/render';
 import * as React from 'react';
 import CampaignEmail from '@src/emails/campaign-email';
-import { PaginateResponse } from '@repo/api/common';
+import { PaginateResponse } from '@reviewsup/api/common';
 
 @Injectable()
 export class CampaignsService {

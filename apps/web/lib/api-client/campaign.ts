@@ -4,8 +4,8 @@ import {
   CreateCampaignDto,
   FindAllCampaignsRequest,
   UpdateCampaignDto,
-} from '@repo/api/campaign';
-import { PaginateResponse } from '@repo/api/common';
+} from '@reviewsup/api/campaign';
+import { PaginateResponse } from '@reviewsup/api/common';
 
 export const campaign = {
   findAll: (

@@ -1,4 +1,4 @@
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '@reviewsup/ui/lib/utils';
 import Link from 'next/link';
 
 export function Logo(props: {

@@ -1,15 +1,15 @@
 'use client';
 
 import { ColumnDef, useReactTable } from '@tanstack/react-table';
-import { ReviewEntity, ReviewMediaEntity } from '@repo/api/reviews';
+import { ReviewEntity, ReviewMediaEntity } from '@reviewsup/api/reviews';
 import React from 'react';
 import { BsCameraVideo, BsImage } from 'react-icons/bs';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import StarRating from '@repo/ui/star-rating';
+import StarRating from '@reviewsup/ui/star-rating';
 import { api } from '@/lib/api-client';
-import { $Enums } from '@repo/database/generated/client';
+import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 import toast from 'react-hot-toast';
 import {
@@ -32,7 +32,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { toLocalDateString } from '@/lib/utils';
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '@reviewsup/ui/lib/utils';
 import { ReviewItemSource2 } from '@reviewsup/embed-react';
 import {
   DropdownMenu,

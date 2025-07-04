@@ -6,7 +6,7 @@ import { BiArrowBack } from 'react-icons/bi';
 import { CampaignCreateConfigPage } from '../create/config';
 import { CampaignCreatePreviewPage } from '../create/preview';
 import { useCampaignContext } from '@/modules/campaign/context/campaign-provider';
-import { CampaignEntity } from '@repo/api/campaign';
+import { CampaignEntity } from '@reviewsup/api/campaign';
 
 export function CampaignIdPage(props: {
   params: Promise<{

@@ -1,4 +1,4 @@
-import { UserEntity } from '@repo/api/users';
+import { UserEntity } from '@reviewsup/api/users';
 import clsx from 'clsx';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';

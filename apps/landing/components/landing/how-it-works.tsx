@@ -1,8 +1,8 @@
 import React from 'react';
 import { howItWorksSteps } from '@/data/how-it-works';
 import Link from 'next/link';
-import { cn } from '@repo/ui/lib/utils';
-import { buttonVariants } from '@repo/ui/button';
+import { cn } from '@reviewsup/ui/lib/utils';
+import { buttonVariants } from '@reviewsup/ui/button';
 
 export const HowItWorks: React.FC = () => {
   return (

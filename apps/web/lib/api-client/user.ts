@@ -1,5 +1,5 @@
 import { authFetch } from './auth-fetch';
-import { UserEntity } from '@repo/api/users';
+import { UserEntity } from '@reviewsup/api/users';
 
 export const user = {
   findOneBySlug: (slug: string): Promise<UserEntity | null> =>

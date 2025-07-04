@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
-import { Input } from '@repo/ui/input';
-import { Label } from '@repo/ui/label';
+import { Input } from '@reviewsup/ui/input';
+import { Label } from '@reviewsup/ui/label';
 import toast from 'react-hot-toast';
 import {
   Dialog,
@@ -13,14 +13,14 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import StarRating from '@repo/ui/star-rating';
+import StarRating from '@reviewsup/ui/star-rating';
 
 import React, { useState, useRef } from 'react';
 import { BiDownload, BiPlus, BiUser, BiX } from 'react-icons/bi';
 import { api } from '@/lib/api-client';
 import { useUserContext } from '@/context/UserProvider';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
-import { CreateReviewDto } from '@repo/api/reviews';
+import { CreateReviewDto } from '@reviewsup/api/reviews';
 
 export default function ReviewImportManualDialog(props: {}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);

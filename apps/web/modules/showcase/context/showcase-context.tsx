@@ -1,7 +1,7 @@
 import { api } from '@/lib/api-client';
 import { createContext, useContext, useState } from 'react';
-import { ShowcaseConfig, ShowcaseEntity } from '@repo/api/showcases';
-import { PaginateResponse } from '@repo/api/common';
+import { ShowcaseConfig, ShowcaseEntity } from '@reviewsup/api/showcases';
+import { PaginateResponse } from '@reviewsup/api/common';
 import toast from 'react-hot-toast';
 
 const ShowcaseContext = createContext<{

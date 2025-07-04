@@ -1,8 +1,8 @@
 'use client';
 import { ShowcaseClient } from '@reviewsup/embed-react';
 import { useState } from 'react';
-import { cn } from '@repo/ui/lib/utils';
-import { Button } from '@repo/ui/button';
+import { cn } from '@reviewsup/ui/lib/utils';
+import { Button } from '@reviewsup/ui/button';
 import { CodeViewer, FileTreeItem } from '@/components/code-viewer';
 import { BsPhone, BsTablet, BsWindowDesktop } from 'react-icons/bs';
 import { GoDeviceDesktop } from 'react-icons/go';

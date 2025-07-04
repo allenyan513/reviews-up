@@ -2,7 +2,7 @@ import { Open_Sans } from 'next/font/google';
 import './globals.css';
 import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '@reviewsup/ui/lib/utils';
 import { GoogleAnalytics } from '@next/third-parties/google';
 
 const openSans = Open_Sans({

@@ -3,11 +3,11 @@ import {
   CreateReviewDto,
   UpdateReviewDto,
   FindAllReviewRequest,
-} from '@repo/api/reviews';
+} from '@reviewsup/api/reviews';
 import { PrismaService } from '../prisma/prisma.service';
-import { PaginateResponse } from '@repo/api/common';
+import { PaginateResponse } from '@reviewsup/api/common';
 import { NotificationsService } from '../notifications/notifications.service';
-import { ReviewSource, ReviewStatus } from '@repo/database/generated/client';
+import { ReviewSource, ReviewStatus } from '@reviewsup/database/generated/client';
 
 @Injectable()
 export class ReviewsService {

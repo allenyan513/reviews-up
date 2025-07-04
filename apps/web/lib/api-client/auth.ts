@@ -1,5 +1,5 @@
 import { authFetch } from './auth-fetch';
-import { UserEntity } from '@repo/api/users';
+import { UserEntity } from '@reviewsup/api/users';
 
 export const auth = {
   getSession: async (): Promise<UserEntity | null> => {

@@ -39,7 +39,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { BiTrash } from 'react-icons/bi';
 import React from 'react';
-import { Input } from '@repo/ui/input';
+import { Input } from '@reviewsup/ui/input';
 
 export function NavUser({
   user,

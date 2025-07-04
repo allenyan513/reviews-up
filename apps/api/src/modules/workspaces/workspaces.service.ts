@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {
   CreateWorkspaceDto,
   UpdateWorkspaceDto,
-} from '@repo/api/workspace';
+} from '@reviewsup/api/workspace';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateShortId } from '@src/libs/shortId';
 

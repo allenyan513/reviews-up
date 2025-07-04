@@ -18,9 +18,9 @@ import {
   FindAllReviewRequest,
   CreateReviewDto,
   UpdateReviewDto,
-} from '@repo/api/reviews';
+} from '@reviewsup/api/reviews';
 import { YtDlpService } from '../yt-dlp/yt-dlp.service';
-import { YtDlpRequest } from '@repo/api/yt-dlp';
+import { YtDlpRequest } from '@reviewsup/api/yt-dlp';
 
 @Controller('reviews')
 export class ReviewsController {

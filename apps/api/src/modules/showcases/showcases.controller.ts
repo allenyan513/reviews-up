@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ShowcasesService } from './showcases.service';
-import { CreateShowcaseDto, UpdateShowcaseDto } from '@repo/api/showcases';
+import { CreateShowcaseDto, UpdateShowcaseDto } from '@reviewsup/api/showcases';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';

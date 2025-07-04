@@ -8,7 +8,7 @@ import {
   SidebarMenu,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { WorkspaceEntity } from '@repo/api/workspace';
+import { WorkspaceEntity } from '@reviewsup/api/workspace';
 import { WorkspaceSwitchButton } from '@/modules/workspace/workspace-switch-button';
 import { cn } from '@/lib/utils';
 

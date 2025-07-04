@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { UserEntity } from '@repo/api/users';
+import { UserEntity } from '@reviewsup/api/users';
 import { generateShortId } from '../../libs/shortId';
 import { FormsService } from '../forms/forms.service';
 import { ShowcasesService } from '../showcases/showcases.service';

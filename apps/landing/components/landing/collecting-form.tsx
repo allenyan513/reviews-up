@@ -1,6 +1,6 @@
 import Link from 'next/link';
-import { cn } from '@repo/ui/lib/utils';
-import { buttonVariants } from '@repo/ui/button';
+import { cn } from '@reviewsup/ui/lib/utils';
+import { buttonVariants } from '@reviewsup/ui/button';
 import { BsPhone } from 'react-icons/bs';
 
 export function CollectingForm(props: {

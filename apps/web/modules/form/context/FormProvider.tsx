@@ -1,7 +1,7 @@
 import { api } from '@/lib/api-client';
 import { createContext, useContext, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FormEntity, FormConfig } from '@repo/api/forms';
+import { FormEntity, FormConfig } from '@reviewsup/api/forms';
 
 const FormContext = createContext<{
   forms: FormEntity[] | undefined;

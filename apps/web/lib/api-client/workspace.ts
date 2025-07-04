@@ -1,8 +1,8 @@
 import {
   CreateWorkspaceDto,
   UpdateWorkspaceDto,
-} from '@repo/api/workspace';
-import { WorkspaceEntity } from '@repo/api/workspace';
+} from '@reviewsup/api/workspace';
+import { WorkspaceEntity } from '@reviewsup/api/workspace';
 import { authFetch } from './auth-fetch';
 
 export const workspace = {

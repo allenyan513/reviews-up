@@ -1,4 +1,4 @@
-import { FormEntity } from '@repo/api/forms';
+import { FormEntity } from '@reviewsup/api/forms';
 import Link from 'next/link';
 import { BiEdit, BiFile, BiMailSend, BiShare, BiTrash } from 'react-icons/bi';
 import {

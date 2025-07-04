@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import axios from 'axios';
-import { YtDlpRequest, YtDlpResponse } from '@repo/api/yt-dlp';
+import { YtDlpRequest, YtDlpResponse } from '@reviewsup/api/yt-dlp';
 
 @Injectable()
 export class YtDlpService {

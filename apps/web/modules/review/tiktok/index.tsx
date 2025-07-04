@@ -13,7 +13,7 @@ import {
 import React, { useState, useRef } from 'react';
 import { api } from '@/lib/api-client';
 import { Input } from '@/components/ui/input';
-import { YtDlpResponse } from '@repo/api/yt-dlp';
+import { YtDlpResponse } from '@reviewsup/api/yt-dlp';
 import toast from 'react-hot-toast';
 
 export default function ReviewImportTiktokDialog(props: {

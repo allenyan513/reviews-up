@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import {PoweredBy }from '@reviewsup/embed-react';
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { Divider } from '@/components/divider';
-import { $Enums } from '@repo/database/generated/client';
+import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewSource = $Enums.ReviewSource;
 import { FormDefaultSubmitView } from '@/modules/form/default/form-default-submit-view';
 import { useSession, useUserContext } from '@/context/UserProvider';

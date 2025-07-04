@@ -1,7 +1,7 @@
 import {
   ShowcaseConfig,
   ShowcaseEntity,
-} from '@repo/api/showcases';
+} from '@reviewsup/api/showcases';
 import { useShowcaseContext } from '@/modules/showcase/context/showcase-context';
 import Link from 'next/link';
 import { BiFile, BiTrash } from 'react-icons/bi';

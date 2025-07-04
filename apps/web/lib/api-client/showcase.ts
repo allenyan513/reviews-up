@@ -1,8 +1,7 @@
-import { PaginateResponse } from '@repo/api/common';
-import { CreateShowcaseDto } from '@repo/api/showcases';
-import { Form, Showcase } from '@repo/database/generated/client/client';
-import { ShowcaseEntity } from '@repo/api/showcases';
-import { UpdateShowcaseDto } from '@repo/api/showcases';
+import { PaginateResponse } from '@reviewsup/api/common';
+import { CreateShowcaseDto } from '@reviewsup/api/showcases';
+import { ShowcaseEntity } from '@reviewsup/api/showcases';
+import { UpdateShowcaseDto } from '@reviewsup/api/showcases';
 import { authFetch } from './auth-fetch';
 
 // Define your API methods, each accepting the session object

@@ -1,7 +1,7 @@
 import { i18nLanguages } from '@/config/i18n-config';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@repo/ui/lib/utils';
+import { cn } from '@reviewsup/ui/lib/utils';
 
 export function I18nEntries(props: { className?: string }) {
   const pathname = usePathname();

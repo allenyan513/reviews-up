@@ -4,7 +4,7 @@ import { Suspense, use, useEffect, useState } from 'react';
 import {
   ShowcaseConfig,
   ShowcaseEntity,
-} from '@repo/api/showcases';
+} from '@reviewsup/api/showcases';
 import toast from 'react-hot-toast';
 import { ShowcasePageReviewClient } from '@reviewsup/embed-react';
 

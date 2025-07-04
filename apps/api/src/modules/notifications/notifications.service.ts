@@ -7,7 +7,7 @@ import { EMAIL_ADMIN, EMAIL_FROM } from '../email/email.constants';
 import { WelcomeEmail } from '@src/emails/welcome-email';
 import { ReviewSubmitEmail } from '@src/emails/review-submitted-email';
 import DailyAnalyticsEmail from '../..//emails/daily-analytics-email';
-import { User } from '@repo/database/generated/client';
+import { User } from '@reviewsup/database/generated/client';
 
 @Injectable()
 export class NotificationsService {

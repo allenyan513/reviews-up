@@ -3,10 +3,10 @@ import {
   UpdateReviewDto,
   ReviewEntity,
   FindAllReviewRequest,
-} from '@repo/api/reviews';
-import { PaginateResponse } from '@repo/api/common';
+} from '@reviewsup/api/reviews';
+import { PaginateResponse } from '@reviewsup/api/common';
 import { authFetch } from './auth-fetch';
-import { YtDlpRequest, YtDlpResponse } from '@repo/api/yt-dlp';
+import { YtDlpRequest, YtDlpResponse } from '@reviewsup/api/yt-dlp';
 
 export const review = {
   getReviews: (

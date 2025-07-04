@@ -1,4 +1,4 @@
-import { $Enums } from '@repo/database/generated/client';
+import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 
 export const defaultUserData = {

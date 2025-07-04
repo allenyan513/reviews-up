@@ -8,7 +8,7 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { ConfigService } from '@nestjs/config';
 import * as fs from 'fs';
 import axios from 'axios';
-import { S3SignedUrlEntity } from '@repo/api/s3';
+import { S3SignedUrlEntity } from '@reviewsup/api/s3';
 
 @Injectable()
 export class S3Service {

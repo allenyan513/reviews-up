@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { CodeBlockClient } from '@/components/code-block-client';
 import { BsCopy, BsFile, BsFolder } from 'react-icons/bs';
-import { cn } from '@repo/ui/lib/utils';
-import { Button } from '@repo/ui/button';
+import { cn } from '@reviewsup/ui/lib/utils';
+import { Button } from '@reviewsup/ui/button';
 
 const FileTreeItem = (props: {
   item: FileTreeItem;

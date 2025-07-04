@@ -4,13 +4,13 @@ import {
   UpdateShowcaseDto,
   ShowcaseConfig,
   ShowcaseEntity,
-} from '@repo/api/showcases';
+} from '@reviewsup/api/showcases';
 import { PrismaService } from '../prisma/prisma.service';
-import { PaginateRequest, PaginateResponse } from '@repo/api/common';
-import { Showcase } from '@repo/database/generated/client';
+import { PaginateRequest, PaginateResponse } from '@reviewsup/api/common';
+import { Showcase } from '@reviewsup/database/generated/client';
 import { generateShortId } from '@src/libs/shortId';
-import { ReviewEntity } from '@repo/api/reviews';
-import { SortBy } from '@repo/api/common';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import { SortBy } from '@reviewsup/api/common';
 
 @Injectable()
 export class ShowcasesService {

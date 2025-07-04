@@ -18,7 +18,7 @@ import {
   FindAllCampaignsRequest,
   findAllCampaignsRequestSchema,
   UpdateCampaignDto,
-} from '@repo/api/campaign';
+} from '@reviewsup/api/campaign';
 
 @Controller('campaigns')
 export class CampaignsController {

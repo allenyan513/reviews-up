@@ -4,7 +4,7 @@ import {
   UpdateFormDto,
   FormEntity,
   FormConfig,
-} from '@repo/api/forms';
+} from '@reviewsup/api/forms';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateShortId } from '@src/libs/shortId';
 

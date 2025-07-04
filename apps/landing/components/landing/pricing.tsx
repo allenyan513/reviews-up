@@ -1,6 +1,6 @@
 import React from 'react';
 import { Check } from 'lucide-react';
-import { Button, buttonVariants } from '@repo/ui/button';
+import { Button, buttonVariants } from '@reviewsup/ui/button';
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '@repo/ui/card';
+} from '@reviewsup/ui/card';
 import Link from 'next/link';
 
 type PricingCardProps = {

@@ -1,4 +1,4 @@
-import { S3SignedUrlEntity, S3GetSignedUrlDto } from '@repo/api/s3';
+import { S3SignedUrlEntity, S3GetSignedUrlDto } from '@reviewsup/api/s3';
 import { authFetch } from './auth-fetch';
 
 export const s3 = {
