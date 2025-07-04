@@ -7,7 +7,7 @@
   "scripts": {
     "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
     "dev:components": "tsup --watch",
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
+    "build:styles": "mkdir -p dist && tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "build:components": "tsup",
     "publish:pkg": "npm run build:components && npm run build:styles && npm publish --access public"
   },
