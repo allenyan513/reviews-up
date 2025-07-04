@@ -12,7 +12,7 @@
     },
     "build:styles": {
       "dependsOn": [
-        "^build"
+        "build:components"
       ],
       "outputs": [
         "dist/**"
@@ -28,8 +28,8 @@
     },
     "dev": {
       "with": [
-        "dev:styles",
-        "dev:components"
+        "dev:components",
+        "dev:styles"
       ]
     },
     "dev:styles": {
