@@ -5,9 +5,9 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:styles": "tailwindcss -i ./src/index.css -o ./dist/index.css --watch",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
     "dev:components": "tsup --watch",
-    "build:styles": "tailwindcss -i ./src/index.css -o ./dist/index.css",
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "build:components": "tsup",
     "publish:pkg": "npm run build:components && npm run build:styles && npm publish --access public"
   },
@@ -23,7 +23,7 @@
       "import": "./dist/index.cjs",
       "require": "./dist/index.js"
     },
-    "./styles.css": "./dist/index.css"
+    "./styles.css": "./dist/styles.css"
   },
   "publishConfig": {
     "access": "public"

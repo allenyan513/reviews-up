@@ -8,16 +8,16 @@
     "dist"
   ],
   "exports": {
-    "./styles.css": "./dist/index.css",
+    "./styles.css": "./dist/styles.css",
     "./*": "./dist/*.js",
     "./hooks": "./dist/hooks/*.js",
     "./lib": "./dist/lib/*.js"
   },
   "license": "MIT",
   "scripts": {
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css",
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
     "build:components": "tsc",
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/index.css --watch",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
     "dev:components": "tsc --watch"
   },
   "peerDependencies": {
