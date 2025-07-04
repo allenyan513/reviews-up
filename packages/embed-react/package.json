@@ -1,6 +1,6 @@
 {
   "name": "@reviewsup/embed-react",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "private": false,
   "license": "MIT",
   "type": "module",
@@ -40,7 +40,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@reviewsup/api": "^0.0.3",
+    "@reviewsup/api": "workspace:*",
     "clsx": "^2.1.1",
     "tailwind-merge": "^3.3.0",
     "tailwindcss": "^4.1.10",
