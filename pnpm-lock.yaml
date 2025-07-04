@@ -467,8 +467,8 @@ importers:
   packages/embed-react:
     dependencies:
       '@reviewsup/api':
-        specifier: ^0.0.2
-        version: 0.0.2
+        specifier: workspace:*
+        version: link:../api
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -2605,9 +2605,6 @@ packages:
     resolution: {integrity: sha512-COIazDAx1ncDg046cTJ8SFYsX8aS3lB/08LDnbkH/SkdYrFPWDlXMrO/sUam8j1WWM+PJ+4d1mj7tODIKNiFog==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
-  '@reviewsup/api@0.0.2':
-    resolution: {integrity: sha512-zVL2XoUzUSxaLpu/GtETl847z+TvKeyFxqtjEwKN8u0Rr2Wqiqo7425Js5DZHA/IjVItLurvxBsPzI8UKdizsA==}
 
   '@rollup/rollup-android-arm-eabi@4.44.1':
     resolution: {integrity: sha512-JAcBr1+fgqx20m7Fwe1DxPUl/hPkee6jA6Pl7n1v2EFiktAHenTaXl5aIFjUIEsfn9w3HE4gK1lEgNGMzBDs1w==}
@@ -10225,10 +10222,6 @@ snapshots:
   '@react-types/shared@3.30.0(react@19.1.0)':
     dependencies:
       react: 19.1.0
-
-  '@reviewsup/api@0.0.2':
-    dependencies:
-      zod: 3.25.71
 
   '@rollup/rollup-android-arm-eabi@4.44.1':
     optional: true
