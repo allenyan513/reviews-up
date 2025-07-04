@@ -2,18 +2,8 @@ import { ReviewItemSource } from './review-item-source';
 import StarRating from '../star-rating';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import { ReviewEntity } from '@reviewsup/api/reviews';
+import { toLocalDateString } from '../../lib/utils';
 
-function toLocalDateString(date: Date | string): string {
-  const _date = new Date(date);
-  // 获取浏览器语言
-  const locale =
-    typeof navigator !== 'undefined' ? navigator.language : 'en-US';
-  return new Intl.DateTimeFormat(locale, {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  }).format(_date);
-}
 
 export function ReviewItem(props: {
   review: ReviewEntity;
@@ -21,13 +11,19 @@ export function ReviewItem(props: {
   className?: string;
 }) {
   const { review, config, className } = props;
-  const { isVideoEnabled, isImageEnabled, isRatingEnabled, isDoFollowEnabled } =
-    (config as ShowcaseConfig) || {
-      isVideoEnabled: true,
-      isImageEnabled: true,
-      isRatingEnabled: true,
-      isDoFollowEnabled: true,
-    };
+  const {
+    isSourceEnabled,
+    isVideoEnabled,
+    isImageEnabled,
+    isRatingEnabled,
+    isDoFollowEnabled,
+  } = (config as ShowcaseConfig) || {
+    isSourceEnabled: true,
+    isVideoEnabled: true,
+    isImageEnabled: true,
+    isRatingEnabled: true,
+    isDoFollowEnabled: true,
+  };
 
   if (!review) {
     return null;
@@ -124,20 +120,25 @@ export function ReviewItem(props: {
               className="w-11 h-11 rounded-full object-cover shadow"
             />
             <div className="flex flex-col justify-center">
-              <p className="text-md font-semibold line-clamp-1">
+              <p className="text-md text-black font-semibold line-clamp-1">
                 {review.reviewerName}
               </p>
               <p className="text-sm text-gray-500 line-clamp-1">
-                {review.reviewerTitle || toLocalDateString(review.createdAt)  || review.reviewerEmail || ''}
+                {review.reviewerTitle ||
+                  toLocalDateString(review.createdAt) ||
+                  review.reviewerEmail ||
+                  ''}
               </p>
             </div>
           </a>
-          <ReviewItemSource
-            className="mr-2"
-            source={review.source as string}
-            sourceUrl={review.sourceUrl}
-            isDoFollowEnabled={isDoFollowEnabled}
-          />
+          {isSourceEnabled && (
+            <ReviewItemSource
+              className="mr-2"
+              source={review.source as string}
+              sourceUrl={review.sourceUrl}
+              isDoFollowEnabled={isDoFollowEnabled}
+            />
+          )}
         </div>
       </div>
       {isRatingEnabled && (

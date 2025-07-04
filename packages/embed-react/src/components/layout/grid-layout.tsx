@@ -1,11 +1,11 @@
 'use client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
-import { ReviewItem2 } from '../item/review-item-2';
 import { RatingSummary } from '../rating-summary';
 import React from 'react';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 import { PoweredBy } from '../powered-by';
+import { ReviewItem1 } from '../item/review-item-1';
 
 export function GridLayout(props: {
   items: ReviewEntity[];
@@ -23,14 +23,14 @@ export function GridLayout(props: {
         className="w-full grid gap-4"
       >
         {items.map((item, idx) => (
-          <ReviewItem2
+          <ReviewItem1
             key={item.id}
-            isSourceEnabled={config.isSourceEnabled}
-            isVideoEnabled={config.isVideoEnabled}
-            isImageEnabled={config.isImageEnabled}
-            isDateEnabled={config.isDateEnabled}
-            isRatingEnabled={config.isRatingEnabled}
             review={item}
+            config={config}
+            style={{
+              width: '100%',
+              height: '300px',
+            }}
           />
         ))}
       </div>

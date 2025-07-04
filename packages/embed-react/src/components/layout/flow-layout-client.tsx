@@ -33,11 +33,11 @@ export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4">
-      <div style={{ display: 'flex', gap: '16px' }}>
+      <div className='flex gap-2 md:gap-4'>
         {renderedColumns.map((colItems, colIdx) => (
           <div key={colIdx} style={{ flex: 1 }}>
             {colItems.map((child, i) => (
-              <div key={i} style={{ marginBottom: '16px' }}>
+              <div key={i} className="mb-2 md:mb-4">
                 {child}
               </div>
             ))}

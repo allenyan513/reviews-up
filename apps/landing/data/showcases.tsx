@@ -96,7 +96,7 @@ export const showcaseData: {
       codeMap: codeMap,
     },
     {
-      title: 'Avatar List',
+      title: 'Avatar',
       showcaseId:
         process.env.NODE_ENV === 'development' ? '148ac173529' : 'b68f3f0a0a2',
       rawFileTree: rawFileTree,

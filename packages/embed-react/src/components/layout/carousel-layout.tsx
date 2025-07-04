@@ -6,7 +6,6 @@ import { ReviewItem1 } from '../item/review-item-1';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';
 
-// Internal component for a single carousel row
 function CarouselRow({
   items,
   config,
@@ -62,22 +61,18 @@ function CarouselRow({
   const duplicatedItems = items.length > 0 ? [...items, ...items] : [];
 
   return (
-    <div className="overflow-hidden w-full relative">
+    <div className="w-full relative overflow-x-hidden">
       <div
         ref={ref}
         className="flex flex-row gap-4 p-4"
         style={{ willChange: 'transform' }}
       >
         {duplicatedItems.map((item, idx) => (
-          <div key={`${item ? (item as any).id || idx : idx}-${idx}`}>
+          <div key={idx}>
             <ReviewItem1
-              key={item.id}
-              isSourceEnabled={config.isSourceEnabled}
-              isVideoEnabled={config.isVideoEnabled}
-              isImageEnabled={config.isImageEnabled}
-              isDateEnabled={config.isDateEnabled}
-              isRatingEnabled={config.isRatingEnabled}
               review={item}
+              config={config}
+              className="w-[400px] h-[300px]"
             />
           </div>
         ))}
@@ -110,7 +105,7 @@ export function CarouselLayout(props: {
   const rowsOfItems = distributeItemsIntoRows(items, rows);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="hidden md:flex md:flex-col gap-4 w-full">
       <div className="w-full flex flex-col">
         {rowsOfItems.map((rowItems, rowIndex) => {
           const rowReverse = rowIndex % 2 !== 0;

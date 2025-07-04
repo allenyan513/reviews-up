@@ -18,7 +18,7 @@ export function RatingSummary(props: { ratings: number[] }) {
           ({totalReviews} reviews)
         </span>
       </div>
-      <StarRating value={averageRating} onChange={null} />
+      <StarRating value={averageRating} onChange={null} size={'md'}/>
     </div>
   );
 }

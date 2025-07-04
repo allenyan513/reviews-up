@@ -41,8 +41,7 @@ export function ShowcaseWrapper(props: {
               setCurrentItem(item);
             }}
             className={cn(
-              'flex flex-row',
-              'cursor-pointer',
+              'cursor-pointer line-clamp-1 overflow-hidden',
               'px-4 py-2 rounded-md',
               'border border-gray-200',
               currentItem?.showcaseId === item.showcaseId
