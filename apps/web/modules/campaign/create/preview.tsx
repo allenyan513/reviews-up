@@ -4,7 +4,7 @@ import { useCampaignContext } from '@/modules/campaign/context/campaign-provider
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import Link from 'next/link';
-import { CampaignEntity } from '@repo/api/campaign/index';
+import { CampaignEntity } from '@repo/api/campaign';
 import { PoweredBy } from '@reviewsup/embed-react';
 
 export function CampaignCreatePreviewPage(props: {

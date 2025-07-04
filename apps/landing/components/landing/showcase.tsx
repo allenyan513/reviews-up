@@ -119,7 +119,12 @@ export function ShowcaseWrapper(props: {
             mode === 'desktop' && 'w-full',
           )}
         >
-          <ShowcaseClient showcaseId={currentItem?.showcaseId || ''} />
+          <ShowcaseClient
+            showcaseId={currentItem?.showcaseId || ''}
+            options={{
+              url: process.env.NEXT_PUBLIC_API_URL as string,
+            }}
+          />
         </div>
       )}
       {view === 'code' && (

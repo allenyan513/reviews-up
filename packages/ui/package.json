@@ -1,6 +1,6 @@
 {
-  "name": "@repo/ui",
-  "version": "0.0.0",
+  "name": "@reviewsup/ui",
+  "version": "0.0.1",
   "sideEffects": [
     "**/*.css"
   ],

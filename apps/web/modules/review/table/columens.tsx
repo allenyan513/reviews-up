@@ -1,15 +1,13 @@
 'use client';
 
 import { ColumnDef, useReactTable } from '@tanstack/react-table';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ReviewEntity, ReviewMediaEntity } from '@repo/api/reviews';
 import React from 'react';
 import { BsCameraVideo, BsImage } from 'react-icons/bs';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
-import { ReviewMedia } from '@repo/api/reviews/entities/review-media.entity';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import StarRating from '@repo/ui/star-rating';
-import { ReviewItemSource } from '@reviewsup/embed-react';
 import { api } from '@/lib/api-client';
 import { $Enums } from '@repo/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
@@ -136,7 +134,7 @@ export function columns(setData: any): ColumnDef<any>[] {
       cell: ({ row, getValue }) => {
         const { text, medias, tweetId } = getValue<{
           text: string;
-          medias: ReviewMedia[] | null;
+          medias: ReviewMediaEntity[] | null;
           tweetId: string;
         }>();
         return (

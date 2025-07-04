@@ -9,8 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FormsService } from './forms.service';
-import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
-import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
+import { CreateFormDto, UpdateFormDto } from '@repo/api/forms';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';

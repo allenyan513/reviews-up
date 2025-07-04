@@ -9,8 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ShowcasesService } from './showcases.service';
-import { CreateShowcaseDto } from '@repo/api/showcases/dto/create-showcase.dto';
-import { UpdateShowcaseDto } from '@repo/api/showcases/dto/update-showcase.dto';
+import { CreateShowcaseDto, UpdateShowcaseDto } from '@repo/api/showcases';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
@@ -25,6 +24,7 @@ export class ShowcasesController {
   async findOneByShortId(@Param('shortId') shortId: string) {
     return this.showcasesService.findOneByShortId(shortId);
   }
+
   @UseGuards(JwtAuthGuard)
   @Get(':id')
   async findOne(@Jwt() jwt: JwtPayload, @Param('id') id: string) {

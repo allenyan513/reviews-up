@@ -1,8 +1,8 @@
 import { authFetch } from './auth-fetch';
-import { User } from '@repo/api/users/index';
+import { UserEntity } from '@repo/api/users';
 
 export const user = {
-  findOneBySlug: (slug: string): Promise<User | null> =>
+  findOneBySlug: (slug: string): Promise<UserEntity | null> =>
     authFetch(`/users/slug/${slug}`, 'GET', {}),
 
   deleteAccount: (): Promise<void> => authFetch(`/users/delete`, 'DELETE', {}),

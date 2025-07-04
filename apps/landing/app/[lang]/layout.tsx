@@ -32,14 +32,17 @@ export default async function RootLayout(props: {
           appLink={process.env.NEXT_PUBLIC_APP_URL as string}
           items={[
             { title: 'Home', href: '/' },
-            { title: 'Widgets', href: '/#widget' },
-            { title: 'Form', href: '/#form' },
             { title: 'Features', href: '/#features' },
             { title: 'Pricing', href: '/#pricing' },
             { title: 'FAQ', href: '/#faq' },
             {
               title: 'Documents',
-              href: process.env.NEXT_PUBLIC_DOCS_URL as string,
+              href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
+              external: true,
+            },
+            {
+              title: 'Blog',
+              href: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
               external: true,
             },
           ]}

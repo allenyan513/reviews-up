@@ -15,7 +15,7 @@ import { cn } from '@/lib/utils';
 import { SortBy } from '@/types/sortby';
 import { layoutOptions } from '@/modules/showcase/layout-options';
 import { sortOptions } from './sort-options';
-import { ShowcaseConfig } from '@repo/api/showcases/entities/showcase.entity';
+import { ShowcaseConfig } from '@repo/api/showcases';
 
 type ToggleOptionProps = {
   label: string;
@@ -247,7 +247,7 @@ export function ShowcasePageConfig(props: { className?: string }) {
                 onClick={() => {
                   setShowcaseConfig({
                     ...showcaseConfig,
-                    type: opt.value,
+                    type: opt.value as ShowcaseConfig['type'],
                   });
                 }}
               >

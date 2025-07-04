@@ -17,7 +17,7 @@ export default function ShowcaseListPage(props: {
     getShowcases(params.workspaceId);
   }, []);
 
-  if (!showcases) {
+  if (!showcases || !showcases.items) {
     return null;
   }
   return (
@@ -34,8 +34,8 @@ export default function ShowcaseListPage(props: {
 
       {/* Showcase List */}
       <div className="space-y-4 w-full">
-        {showcases?.items &&
-          showcases?.items.map((item) => (
+        {showcases.items &&
+          showcases.items.map((item) => (
             <ShowcaseListItem
               key={item.id}
               item={item}

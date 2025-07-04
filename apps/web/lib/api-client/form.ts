@@ -1,7 +1,5 @@
-import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
+import { CreateFormDto, FormEntity, UpdateFormDto } from '@repo/api/forms';
 import { Form } from '@repo/database/generated/client/client';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
-import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
 import { authFetch } from './auth-fetch';
 
 export const form = {

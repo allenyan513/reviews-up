@@ -1,19 +1,14 @@
 import { api } from '@/lib/api-client';
 import { createContext, useContext, useState } from 'react';
-import {
-  ShowcaseConfig,
-  ShowcaseEntity,
-} from '@repo/api/showcases/entities/showcase.entity';
-import { PaginateResponse } from '@repo/api/common/paginate';
+import { ShowcaseConfig, ShowcaseEntity } from '@repo/api/showcases';
+import { PaginateResponse } from '@repo/api/common';
 import toast from 'react-hot-toast';
-import { Showcase } from '@repo/database/generated/client/client';
-import { SortBy } from '@/types/sortby';
 
 const ShowcaseContext = createContext<{
   showcase: ShowcaseEntity | undefined;
   setShowcase: (showcase: ShowcaseEntity) => void;
-  showcases: PaginateResponse<Showcase> | undefined;
-  setShowcases: (showcases: PaginateResponse<Showcase>) => void;
+  showcases: PaginateResponse<ShowcaseEntity> | undefined;
+  setShowcases: (showcases: PaginateResponse<ShowcaseEntity>) => void;
   showcaseConfig: ShowcaseConfig | undefined;
   setShowcaseConfig: (config: ShowcaseConfig) => void;
   getShowcase: (showcaseId: string) => void;
@@ -24,7 +19,7 @@ const ShowcaseContext = createContext<{
 } | null>(null);
 
 export function ShowcaseProvider(props: { children: React.ReactNode }) {
-  const [showcases, setShowcases] = useState<PaginateResponse<Showcase>>();
+  const [showcases, setShowcases] = useState<PaginateResponse<ShowcaseEntity>>();
   const [showcase, setShowcase] = useState<ShowcaseEntity>();
   const [showcaseConfig, setShowcaseConfig] = useState<ShowcaseConfig>();
 
@@ -74,7 +69,7 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
   };
 
   const saveChange = async () => {
-    if (!showcase) return;
+    if (!showcase || !showcase.id) return;
     try {
       await api.showcase.updateShowcase(showcase.id, {
         config: showcaseConfig,

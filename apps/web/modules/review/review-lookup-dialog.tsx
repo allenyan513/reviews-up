@@ -7,7 +7,7 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, { useState } from 'react';
-import { ReviewEntity } from '@repo/api/reviews/entities/review.entity';
+import { ReviewEntity } from '@repo/api/reviews';
 import { ReviewItem } from '@reviewsup/embed-react';
 
 export default function ReviewLookupDialog(props: {

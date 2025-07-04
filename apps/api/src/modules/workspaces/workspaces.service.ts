@@ -1,8 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
-import { UpdateWorkspaceDto } from '@repo/api/workspaces/dto/update-workspace.dto';
+import {
+  CreateWorkspaceDto,
+  UpdateWorkspaceDto,
+} from '@repo/api/workspace';
 import { PrismaService } from '../prisma/prisma.service';
-import { generateShortId } from '../../libs/shortId';
+import { generateShortId } from '@src/libs/shortId';
 
 @Injectable()
 export class WorkspacesService {

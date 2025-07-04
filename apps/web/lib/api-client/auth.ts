@@ -1,15 +1,15 @@
 import { authFetch } from './auth-fetch';
-import { User } from '@repo/api/users/index';
+import { UserEntity } from '@repo/api/users';
 
 export const auth = {
-  getSession: async (): Promise<User | null> => {
+  getSession: async (): Promise<UserEntity | null> => {
     try {
       return await authFetch('/users/profile', 'GET', {});
     } catch (error) {
       return null;
     }
   },
-  googleSignIn: async (): Promise<User | null> => {
+  googleSignIn: async (): Promise<UserEntity | null> => {
     return await authFetch('/auth/google', 'GET');
   },
 

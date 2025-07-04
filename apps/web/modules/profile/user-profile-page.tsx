@@ -1,11 +1,11 @@
-import { User } from '@repo/api/users/index';
+import { UserEntity } from '@repo/api/users';
 import clsx from 'clsx';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { ListLayoutClient } from '@reviewsup/embed-react';
 import { PoweredBy } from '@reviewsup/embed-react';
 
-export function UserProfilePage(props: { user: User; className?: string }) {
+export function UserProfilePage(props: { user: UserEntity; className?: string }) {
   const { user, className } = props;
   const { avatarUrl, name, email } = user;
   return (

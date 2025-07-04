@@ -1,12 +1,14 @@
-import { CreateWorkspaceDto } from '@repo/api/workspaces/dto/create-workspace.dto';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import {
+  CreateWorkspaceDto,
+  UpdateWorkspaceDto,
+} from '@repo/api/workspace';
+import { WorkspaceEntity } from '@repo/api/workspace';
 import { authFetch } from './auth-fetch';
-import { UpdateWorkspaceDto } from '@repo/api/workspaces/dto/update-workspace.dto';
 
 export const workspace = {
-  createWorkspace: (dto: CreateWorkspaceDto): Promise<Workspace> =>
+  createWorkspace: (dto: CreateWorkspaceDto): Promise<WorkspaceEntity> =>
     authFetch('/workspaces', 'POST', dto),
 
-  update: (workspaceId: string, dto: UpdateWorkspaceDto): Promise<Workspace> =>
+  update: (workspaceId: string, dto: UpdateWorkspaceDto): Promise<WorkspaceEntity> =>
     authFetch(`/workspaces/${workspaceId}`, 'PATCH', dto),
 };

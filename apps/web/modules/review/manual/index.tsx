@@ -20,7 +20,7 @@ import { BiDownload, BiPlus, BiUser, BiX } from 'react-icons/bi';
 import { api } from '@/lib/api-client';
 import { useUserContext } from '@/context/UserProvider';
 import AvatarUpload from '@/modules/review/manual/avatar-upload';
-import { CreateReviewDto } from '@repo/api/reviews/dto/create-review.dto';
+import { CreateReviewDto } from '@repo/api/reviews';
 
 export default function ReviewImportManualDialog(props: {}) {
   const [isOpen, setIsOpen] = useState<boolean>(false);

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 export function FormPageConfig() {
   const { form, formConfig, setFormConfig } = useFormContext();
   const updateFormConfig = async () => {
-    if (!form || !formConfig) return;
+    if (!form || !formConfig || !form.id) return;
     try {
       await api.form.updateForm(form.id, {
         config: formConfig,

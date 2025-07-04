@@ -1,9 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateFormDto } from '@repo/api/forms/dto/create-form.dto';
-import { UpdateFormDto } from '@repo/api/forms/dto/update-form.dto';
+import {
+  CreateFormDto,
+  UpdateFormDto,
+  FormEntity,
+  FormConfig,
+} from '@repo/api/forms';
 import { PrismaService } from '../prisma/prisma.service';
 import { generateShortId } from '@src/libs/shortId';
-import { FormEntity } from '@repo/api/forms/entities/form.entity';
 
 @Injectable()
 export class FormsService {
@@ -20,7 +23,7 @@ export class FormsService {
     if (!user) {
       throw new Error('User not found');
     }
-    const config = {
+    const config: FormConfig = {
       brand: {
         name: user.name,
         logo: user.avatarUrl,
@@ -39,9 +42,10 @@ export class FormsService {
     };
     return this.prismaService.form.create({
       data: {
-        ...createFormDto,
         shortId: generateShortId(),
         userId: uid,
+        workspaceId: createFormDto.workspaceId,
+        name: createFormDto.name,
         config: config,
       },
     });

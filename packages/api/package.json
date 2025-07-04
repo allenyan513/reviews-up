@@ -1,11 +1,12 @@
 {
-  "name": "@repo/api",
-  "version": "0.0.0",
-  "private": true,
+  "name": "@reviewsup/api",
+  "version": "0.0.2",
+  "private": false,
   "license": "MIT",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc"
+    "build": "tsc",
+    "publish:pkg": "pnpm version patch && pnpm build && npm publish --access public"
   },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -18,7 +19,7 @@
   "typesVersions": {
     "*": {
       "*": [
-        "src/*"
+        "dist/*"
       ]
     }
   },
@@ -33,6 +34,6 @@
     }
   },
   "dependencies": {
-    "@repo/database": "workspace:*"
+    "zod": "^3.25.56"
   }
 }

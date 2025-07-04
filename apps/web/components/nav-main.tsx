@@ -8,12 +8,12 @@ import {
   SidebarMenu,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { Workspace } from '@repo/api/workspaces/entities/workspace.entity';
+import { WorkspaceEntity } from '@repo/api/workspace';
 import { WorkspaceSwitchButton } from '@/modules/workspace/workspace-switch-button';
 import { cn } from '@/lib/utils';
 
 export function NavMain(props: {
-  workspace: Workspace | null | undefined;
+  workspace: WorkspaceEntity | null | undefined;
   items: {
     title: string;
     url: string;

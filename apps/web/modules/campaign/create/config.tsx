@@ -21,7 +21,7 @@ import {
 import React from 'react';
 import { useUserContext } from '@/context/UserProvider';
 import { EmailsInput } from '@/components/emails-input';
-import { CampaignEntity } from '@repo/api/campaign/index';
+import { CampaignEntity } from '@repo/api/campaign';
 import { cn } from '@repo/ui/lib/utils';
 
 export function CampaignFormItem(props: {
@@ -176,7 +176,7 @@ export function CampaignCreateConfigPage(props: {
           </SelectTrigger>
           <SelectContent>
             {forms.map((form) => (
-              <SelectItem key={form.shortId} value={form.shortId}>
+              <SelectItem key={form.shortId} value={form.shortId || ''}>
                 {form.name}
               </SelectItem>
             ))}
