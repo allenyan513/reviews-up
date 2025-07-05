@@ -45,12 +45,6 @@ export default function ShowcaseIdPage(props: {
           </p>
         </div>
         <div className={'flex flex-row gap-1'}>
-          <ShowcaseEmbedDialog showcaseId={showcase.shortId || ''}>
-            <Button variant="outline" size={'lg'}>
-              <BiCodeAlt className="text-2xl" />
-              <span className="hidden md:flex">Add to your website</span>
-            </Button>
-          </ShowcaseEmbedDialog>
 
           <Button
             onClick={() => {
@@ -69,12 +63,18 @@ export default function ShowcaseIdPage(props: {
             onClick={() => {
               window.open(`/showcases/${showcase.shortId}`, '_blank');
             }}
-            variant="default"
+            variant="outline"
             size={'lg'}
           >
             <BsBoxArrowUpRight className="text-2xl" />
             <span className="hidden md:flex">Open</span>
           </Button>
+          <ShowcaseEmbedDialog showcaseId={showcase.shortId || ''}>
+            <Button className="" variant="default" size={'lg'}>
+              <BiCodeAlt className="text-2xl" />
+              <span className="hidden md:flex">Add to your website</span>
+            </Button>
+          </ShowcaseEmbedDialog>
         </div>
       </div>
 

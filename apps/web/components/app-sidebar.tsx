@@ -9,6 +9,7 @@ import {
   IconTable,
   IconUser,
   IconMail,
+  IconClipboardText,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -79,12 +80,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               icon: IconTable,
               active: path.includes('/forms'),
             },
-            {
-              title: 'Campaigns',
-              url: `/${lang}/${defaultWorkspace?.id}/campaigns`,
-              icon: IconMail,
-              active: path.includes('/campaigns'),
-            },
+            // {
+            //   title: 'Campaigns',
+            //   url: `/${lang}/${defaultWorkspace?.id}/campaigns`,
+            //   icon: IconMail,
+            //   active: path.includes('/campaigns'),
+            // },
             {
               title: 'Settings',
               url: `/${lang}/settings`,
@@ -93,7 +94,19 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
           ]}
         />
-        <NavSecondary items={data.navSecondary} className="mt-auto" />
+        <NavSecondary items={[
+          {
+            title: 'Documents',
+            url: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
+            icon: IconClipboardText,
+            external: true,
+          },
+          {
+            title: 'Contact Us',
+            url: 'mailto:support@reviewsup.io',
+            icon: IconMail,
+          },
+        ]} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
         <NavUser

@@ -1,80 +1,96 @@
-import { Steps } from 'nextra/components'
+# Quick Start
 
-# Get Started
+Welcome to [reviewsup.io](https://reviewsup.io)!
+This guide will help you quickly embed user reviews into your application or website.
 
-Introduction
-收集表单
-如何创建
-表单分为收集页和感谢页
-收集页用户可以填写 品牌名称 logo 介绍 链接
-标题和内容 用来告诉用户为什么你需要收集他们的反馈或者testimonials
+---
 
-导入反馈方式目前支持从twitter导入。和手动导入
+## Step 1: Log In and Preview Sample Reviews
 
-如何用户使用twitter导入。只需要填写tweet url即可自动导入 内容。比如 头像 名称 文本 图片和视频
+Go to [app.reviewsup.io](https://app.reviewsup.io) and log in to your account.
+When you log in for the first time, you’ll see a few sample reviews preloaded into your dashboard—perfect for getting familiar with how things work.
 
-手动导入需要手动输入这些内容
+On the **Reviews page**, click the **Status** tag in the table to toggle the visibility of each review.
 
-感谢页允许用户自定义 感谢标题 感谢问题
-是markdown格式。
+![step-1](/img.png)
 
-创建完收集表单后， 可以设置成public或者private
-Private状态下 即使用户访问到这个页面，也是无法显示的
-切换到public后，其他用户可以公开访问，
-填写表单的时候 首先需要登录才能填写
+---
 
-被收集者，在感谢页可以跳转到reviewsup.io的反馈列表页公开的，管理自己的review ，删除或者隐藏
+## Step 2: Get the Embed Code
 
+Go to the **Widgets page**, select the default **Default Widget**, and click the **“Add to your website”** button in the top right corner to view the auto-generated embed code.
 
-管理评价反馈
-默认所有提交的review都是pending状态，用户提交review你将收到邮件提醒， 由于免费用户只能最多收集30个，所以最多也只有30份通知邮件
-你可以在review页面点击pending切换到public状态，再点击切换到hidden状态
-Review页面提供筛选 排序功能，分页等功能
+You can copy and paste this snippet directly into your frontend project to quickly display reviews.
 
-在review页，你可以不通过收集表单的方式来收集review，你可以自己导入这些反馈，操作和用户导入一致
+![step-2](/img_1.png)
 
-手动导入的并不会显示到 my review 里面
+---
 
-Showcase 页面 显示页面
-Showcase管理可以快速嵌入网站片段或者react组件到你的网站，或者直接分享给用户浏览
+## Step 3: Integrate Reviewsup into Your Project (Next.js Example)
 
-点击创建showcase，输入showcase的name
-Showcase管理目前分成两块
-Layout和design
+### 1. Install the Package
 
-Layout是设置showcase的布局样式，目前主要的是两种 flowlayout 和multi casoue  ，
+Run the following command in the root directory of your project to install the Reviewsup React component library [@reviewsup/embed-react](https://www.npmjs.com/package/@reviewsup/embed-react):
 
-Flowlayout分成n列，每一列的评价上下精密排序，我们可以设置在不同屏幕尺寸下的列数
-目前默认是 sm 1 md2 lg3
+```sh npm2yarn
+npm install @reviewsup/embed-react
+```
 
-单行多反馈横向滚动布局
-可设置方向和活动数据。
-无限滚动
+---
 
-多行多反馈横向滚动布局
-可设置每一行的滚动方向和速度
-反馈数据会被一分为n份 用来填充，数据不足会复制数据。
+### 2. Import Global Styles
 
-视频卡片布局
-视频卡片比较有设计感，
-后续有设计感的布局也是一个产品卖点
-免费额度内完成反馈模块的介入
+Add the following line to your `global.css` file to include Reviewsup’s default styles:
 
-Design设置
-可以选择是否显示 视频 图片 评价分数 时间 等参数
-可以设置 表单数据来源 排序方式等
-置顶某几个评论
+```css
+@import '@reviewsup/embed-react/styles.css';
+```
 
-右侧是预览页面
+---
 
-右上角可以选择public or private，来设置是否可以公开访问这个showcase
-可以复制链接。可以打开浏览
+### 3. Embed the Component
 
-Embed模块
-有多种方式可以让showcase嵌入到你的网站中，
-第一种方式 如果你选择使用的是js，复制代码到你的目标网页，就会自动的异步加载代码片段到你的网页中
-大致原理就是 js代码会在网页加载完成之后开始执行，全局搜索目标I’d，然后在div 动态插入iframe ，这种方式的好处是非常容易理解， 但是是iframe 应该不会被seo爬取，也就无法给你的网站增加啊内容，另外也不能给reciewsup.io增加回访
+Import and use the component on any page where you want to display reviews:
 
-另外一种方式就是如果你们使用react nextjs 等前端框架开发，使用了服务端渲染或者客户端渲染的方式，那就可以使用npm install reviewsup/embed-react，嵌入react组件
-一起编译一起渲染。
-服务端渲染组件可以缓存 加载速度更快，
+```tsx
+'use client';
+import './global.css';
+import { ShowcaseClient } from '@reviewsup/embed-react';
+
+export default function Page() {
+  return (
+    <div>
+      <ShowcaseClient showcaseId={'YOUR_WIDGET_ID'} />
+    </div>
+  );
+}
+```
+
+> Replace `'YOUR_WIDGET_ID'` with the actual Widget ID from your Reviewsup dashboard.
+
+---
+
+### 4. Start the Development Server
+
+Run the following command to start your app:
+
+```sh npm2yarn
+npm run dev
+```
+
+You should now see the Reviewsup review widget rendered on your page.
+
+---
+
+## Example Repository
+
+Want to see more usage examples? Check out our official demo project:
+
+[https://github.com/allenyan513/reviewsup-embed-example](https://github.com/allenyan513/reviewsup-embed-example)
+
+---
+
+If you have any questions, feel free to submit an issue on GitHub or contact us through the official website.
+Thanks for using Reviewsup — make your product more persuasive with real user reviews!
+
+---

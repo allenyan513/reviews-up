@@ -1,0 +1,144 @@
+# Forms
+
+**Forms** allow you to collect user-generated reviews directly from your own website or application, without needing to import them manually or rely on third-party platforms.
+They are fully customizable, embeddable, and directly linked to your Reviewsup account.
+
+This is the recommended way to gather authentic feedback, testimonials, or social proof from users, customers, or team members.
+
+---
+
+## 1. What is a Form in Reviewsup?
+
+A **Form** in Reviewsup is a hosted or embeddable review submission form that you can share via a link or embed into your website. Submissions collected through a Form are automatically added to your Reviews library for approval and display.
+
+---
+
+## 2. Creating a Form
+
+To create a new form:
+
+1. Log in to [Reviewsup.io](https://app.reviewsup.io)
+2. Go to the **Forms** section in the sidebar
+3. Click **“Create New Form”**
+4. Configure the form fields, branding, and behavior
+
+You can:
+
+* Set a custom title and welcome message
+* Choose which fields are required
+* Customize colors, logos, and layout
+* Enable image or video uploads
+* Auto-tag or auto-categorize submissions
+
+---
+
+## 3. Supported Form Fields
+
+Here are the fields you can enable in a form:
+
+| Field          | Required | Description                                  |
+| -------------- | -------- | -------------------------------------------- |
+| Full Name      | ✅        | The name of the person submitting the review |
+| Email          | Optional | Used for verification or follow-up           |
+| Title          | Optional | Role, job title, or relationship             |
+| Avatar / Photo | Optional | Profile image of the reviewer                |
+| Message        | ✅        | The core review content                      |
+| Rating (1–5)   | Optional | Numeric rating with star UI                  |
+| Upload Image   | Optional | Supporting screenshots, product photos       |
+| Upload Video   | Optional | Video testimonial support                    |
+| Custom Tags    | Optional | Internal metadata for organization           |
+
+---
+
+## 4. Embedding a Form on Your Website
+
+You can embed the form on your site using the provided iframe or React component.
+
+### Example: Embed via `<iframe>`
+
+```html
+<iframe
+  src="https://app.reviewsup.io/form/YOUR_FORM_ID"
+  width="100%"
+  height="600"
+  frameborder="0"
+></iframe>
+```
+
+### Example: Using React SDK
+
+```tsx
+'use client';
+import { ReviewForm } from '@reviewsup/embed-react';
+
+export default function CollectFeedback() {
+  return (
+    <div>
+      <ReviewForm formId="YOUR_FORM_ID" />
+    </div>
+  );
+}
+```
+
+> Replace `"YOUR_FORM_ID"` with the actual ID shown in your dashboard.
+
+---
+
+## 5. Review Submission Workflow
+
+1. Users fill out and submit the form.
+2. The submission is added to your **Reviews** page with `status = hidden` by default.
+3. You can review, edit, and approve the review before publishing it to any widget.
+4. Approved reviews can be pinned, featured, or styled like any other review.
+
+---
+
+## 6. Use Cases
+
+* Collect testimonials after a purchase or signup
+* Ask for feedback after customer support interactions
+* Create public "wall of love" pages with real reviews
+* Share private form links for beta testers or partners
+
+---
+
+## 7. Best Practices
+
+* Keep forms short to increase completion rates
+* Use images or avatars to personalize the experience
+* Offer incentives (optional) to encourage more responses
+* Share the form link in follow-up emails, newsletters, or in-app popups
+
+---
+
+## 8. Example Link Format
+
+Direct access to a form looks like:
+
+```
+https://app.reviewsup.io/form/YOUR_FORM_ID
+```
+
+---
+
+## 9. Coming Soon
+
+We plan to support:
+
+* **Webhooks**: trigger actions on new submissions (e.g. Slack notifications)
+* **Captcha** / spam protection
+* **Form analytics** (conversion rate, drop-off rate)
+* **A/B testing for form designs**
+
+---
+
+## 10. Related Docs
+
+* [Widgets Overview](./widgets.md)
+* [Managing Reviews](./reviews.md)
+* [Quick Start Guide](./quick-start.md)
+
+---
+
+For questions, issues, or feature requests, [open a GitHub issue](https://github.com/allenyan513/reviewsup-embed-example/issues) or [contact support](https://app.reviewsup.io/contact).
+

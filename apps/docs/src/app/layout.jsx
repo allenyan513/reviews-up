@@ -5,22 +5,22 @@ import { getPageMap } from 'nextra/page-map'
 import 'nextra-theme-docs/style.css'
 
 export const metadata = {
-  metadataBase: new URL('https://nextra.site'),
+  metadataBase: new URL('https://reviewsup.io'),
   title: {
-    template: '%s - Nextra'
+    template: '%s - reviewsup.io',
   },
-  description: 'Nextra: the Next.js site builder',
-  applicationName: 'Nextra',
+  description: 'reviewsup.io is an open-source project for managing reviews in a simple and efficient way.',
+  applicationName: 'reviewsup.io',
   generator: 'Next.js',
   appleWebApp: {
-    title: 'Nextra'
+    title: 'reviewsup.io',
   },
   other: {
     'msapplication-TileImage': '/ms-icon-144x144.png',
     'msapplication-TileColor': '#fff'
   },
   twitter: {
-    site: 'https://nextra.site'
+    site: 'https://reviewsup.io',
   }
 }
 
@@ -28,10 +28,19 @@ export default async function RootLayout({ children }) {
   const navbar = (
     <Navbar
       logo={
-        <div>
+        <div
+          style={{
+          display: 'flex',
+          alignItems: 'center',
+          fontSize: '1em',
+          color: 'inherit',
+          textDecoration: 'none'
+        }}>
+          <img src={'/favicon.ico'} alt="Reviewsup.io Logo" style={{ height: '1.5em', marginRight: '0.5em' }} />
           <b>Reviewsup.io</b>
         </div>
       }
+      logoLink={process.env.NEXT_PUBLIC_WWW_URL || 'https://reviewsup.io'}
       projectLink={'https://github.com/allenyan513/reviewsup.io'}
     />
   )
@@ -41,11 +50,9 @@ export default async function RootLayout({ children }) {
       <Head faviconGlyph="✦" />
       <body>
         <Layout
-          // banner={<Banner storageKey="Nextra 2">Nextra 2 Alpha</Banner>}
           navbar={navbar}
-          // footer={<Footer>MIT {new Date().getFullYear()} © Nextra.</Footer>}
           editLink="Edit this page on GitHub"
-          docsRepositoryBase="https://github.com/shuding/nextra/blob/main/examples/docs"
+          docsRepositoryBase="https://github.com/allenyan513/reviewsup.io"
           sidebar={{ defaultMenuCollapseLevel: 1 }}
           pageMap={pageMap}
         >

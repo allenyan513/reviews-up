@@ -1,0 +1,142 @@
+# Widgets
+
+**Widgets** are the core display units in [reviewsup.io](https://reviewsup.io), allowing you to embed curated user reviews into any website or app with minimal setup.
+You can customize the appearance, behavior, and data source of each widget to match your brand and design goals.
+
+---
+
+## 1. What is a Widget?
+
+A **widget** is an embeddable component that displays selected reviews on your site. You can think of it as a "review showcase" that pulls in content from your Reviews library based on your settings.
+
+Each widget has a unique `widget ID` and can be used multiple times across different pages or platforms.
+
+---
+
+## 2. Accessing Your Widgets
+
+To manage your widgets:
+
+1. Log in to [app.reviewsup.io](https://app.reviewsup.io)
+2. Navigate to the **Widgets** tab in the sidebar
+3. You will see a list of your existing widgets, including a **Default Widget** created automatically for you
+
+From here, you can:
+
+* View widget details
+* Edit appearance and behavior
+* Copy the embed code
+* Create new widgets
+
+![accessing-your-widgets](/img_5.png)
+
+---
+
+## 3. Adding a Widget to Your Website
+
+### 3.1 Copy Embed Code
+
+To embed a widget:
+
+1. Click on your desired widget
+2. Click the **"Add to your website"** button (top right)
+3. Copy the generated HTML or React snippet
+
+You can choose to:
+
+* Embed as a static `<iframe>` or script tag
+* Use the React SDK: [`@reviewsup/embed-react`](https://www.npmjs.com/package/@reviewsup/embed-react)
+
+---
+
+### 3.2 Using the React SDK (Recommended)
+
+Install the SDK:
+
+```bash
+npm install @reviewsup/embed-react
+```
+
+Import and use it in your component:
+
+```tsx
+'use client';
+import { ShowcaseClient } from '@reviewsup/embed-react';
+
+export default function Reviews() {
+  return (
+    <div>
+      <ShowcaseClient showcaseId={'YOUR_WIDGET_ID'} />
+    </div>
+  );
+}
+```
+
+> Replace `YOUR_WIDGET_ID` with the actual ID from your dashboard.
+
+---
+
+## 4. Widget Customization
+
+Each widget can be configured to control:
+
+* **Layout** (Flow, Grid, Carousel, Avatar, etc.)
+* **Max reviews**: Limit the number of reviews displayed
+* **Sort order** (latest, highest-rated, custom)
+* **Review filters** (e.g., only featured or with 4+ stars)
+* **Auto Dark/Light mode**: Automatically adapt to user preferences
+* **Custom Display**: Enable/disable showing rating, date, and other metadata
+
+[//]  # (You can access these options by clicking **Edit Widget** on the widget card.)
+All of these settings are available in the left modal, after change any settings, click the **Save** button to apply changes.
+
+![widget-customization](/img_6.png)
+
+---
+
+### 4.1. Layout Options
+
+Widgets support serveral built-in layouts to suit different design needs:
+
+| Mode        | Description                             |
+| ----------- | --------------------------------------- |
+| Flow Layout | Reviews displayed in a serveral columns , each review has its own height |
+| Grid Layout  | Reviews displayed in a grid format, all reviews have the same height and width |
+| Carousel   Layout | Reviews scroll horizontally in one or more rows , each row can control different direction and spped |
+| Avatar Layout | Reviews displayed with user avatars, ideal for personal testimonials |
+
+---
+
+### 4.2. Settings Options
+
+| Mode        | Description                             |
+| ----------- | --------------------------------------- |
+| Max Count | Limit the number of reviews displayed in the widget |
+| Sort by | Control the order of reviews (latest, highest-rated, custom) |
+| Filters | Apply filters to show only specific reviews (e.g., featured, 4+ stars) |
+| Auto Dark/Light Mode | Automatically adapt to user preferences for dark or light mode |
+| Custom Display | Enable/disable showing rating, date, and other metadata |
+
+
+### 4.3. Responsive & Lightweight
+
+All widgets are:
+
+* **Responsive** – work across mobile, tablet, and desktop
+* **SEO-friendly** – support server-side rendering when using the React SDK
+* **Lazy-loaded** – only load when visible to improve performance
+
+---
+
+## 5. Troubleshooting
+
+**Widget not showing up?** Check the following:
+
+* Is the `widgetId` correct?
+* Have you added at least one visible review to the widget?
+* Is the widget set to "active"?
+* Check browser console for network or CORS issues
+
+---
+
+If you encounter issues or have feature suggestions, feel free to [open an issue on GitHub](https://github.com/allenyan513/reviewsup-embed-example/issues) or contact us via the [official site](https://app.reviewsup.io).
