@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://docs.reviewsup.io
+
+# Sitemaps
+Sitemap: https://docs.reviewsup.io/sitemap.xml
