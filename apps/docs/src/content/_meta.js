@@ -1,7 +1,12 @@
 export default {
-  index: '',
+  'index': '',
   'get-started': '',
-  features: '',
-  themes: '',
-  advanced: '',
+  'features': '',
+  'self-hosting': '',
+  'api-reference': '',
+  'contributing-guide': '',
+  'changelog':'',
+  'faq': '',
+  'license': '',
+  'community': '',
 };

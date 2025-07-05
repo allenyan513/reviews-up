@@ -1,0 +1,93 @@
+#  Quick Start
+
+欢迎使用 [Reviewsup.io](https://app.reviewsup.io)！本指南将带你快速完成组件嵌入流程，以便在你的应用或网站中展示用户评论。
+
+---
+
+## 第一步：登录并查看示例评论
+
+访问 [https://app.reviewsup.io](https://app.reviewsup.io) 并登录账号。
+首次登录后，我们已为你预置了一些示例评论，便于你快速了解系统功能。
+
+在 **Reviews 页面**，你可以通过点击表格中的 **Status（状态）** 标签，灵活切换该评论的显示或隐藏状态。
+
+![step-1](/img.png)
+
+---
+
+## 第二步：获取嵌入代码片段
+
+进入 **Widgets 页面**，选择系统默认创建的 **Default Widget**。点击右上角的 **“Add to your website”** 按钮，即可查看自动生成的嵌入代码。
+
+这些代码片段可直接用于你的前端项目，实现评论组件的快速集成。
+
+![step-2](/img_1.png)
+
+---
+
+## 第三步：集成 Reviewsup 到你的项目（以 Next.js 为例）
+
+### 1. 安装依赖包
+
+在你的项目根目录中执行以下命令，安装 Reviewsup 的前端组件库 [@reviewsup/embed-react](https://www.npmjs.com/package/@reviewsup/embed-react)：
+
+```bash
+npm install @reviewsup/embed-react
+```
+
+---
+
+### 2. 引入全局样式
+
+在 `global.css` 文件中添加以下内容以引入 Reviewsup 的默认样式：
+
+```css
+@import '@reviewsup/embed-react/styles.css';
+```
+
+---
+
+### 3. 嵌入组件
+
+在你想要展示评论的页面中引入组件：
+
+```tsx
+'use client';
+import './global.css';
+import { ShowcaseClient } from '@reviewsup/embed-react';
+
+export default function Page() {
+  return (
+    <div>
+      <ShowcaseClient showcaseId={'YOUR_WIDGET_ID'} />
+    </div>
+  );
+}
+```
+
+> 请将 `'YOUR_WIDGET_ID'` 替换为你在平台上生成的实际 Widget ID。
+
+---
+
+### 4. 启动本地开发环境
+
+执行以下命令，启动你的应用：
+
+```bash
+npm run dev
+```
+
+现在你应该可以在页面中看到 Reviewsup 评论组件成功渲染。
+
+---
+
+## 示例代码仓库
+
+想了解更多使用方式？你可以查看我们的官方示例项目：
+
+[https://github.com/allenyan513/reviewsup-embed-example](https://github.com/allenyan513/reviewsup-embed-example)
+
+---
+
+如有任何问题，欢迎在 GitHub 上提交 issue 或通过官网联系我们。
+感谢使用 Reviewsup，让你的产品更具说服力！
