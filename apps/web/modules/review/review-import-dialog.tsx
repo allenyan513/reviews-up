@@ -28,6 +28,7 @@ import { parseTweet } from '@/lib/utils';
 import ReviewImportTiktokDialog from './tiktok';
 import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
 import ReviewImportGoogleMapDialog from '@/modules/review/google';
+import ImportLinkedInDialog from './linkedin';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -193,14 +194,53 @@ export default function ReviewImportDialog() {
                 Google
               </Button>
             </ReviewImportGoogleMapDialog>
-            <Button
-              size={'lg'}
-              className="w-full items-center justify-center text-sm"
-              variant={'outline'}
+            <ImportLinkedInDialog
+              onImport={(linkedinEmbedCode) => {
+                if (!defaultWorkspace) {
+                  toast.error('Please select a workspace first.');
+                  return;
+                }
+                if (!linkedinEmbedCode) {
+                  toast.error('LinkedIn embed code is required.');
+                  return;
+                }
+                api.review
+                  .createReview({
+                    workspaceId: defaultWorkspace.id,
+                    reviewerId: user?.id || '',
+                    rating: 5,
+                    message: 'message from LinkedIn',
+                    fullName: 'LinkedIn User',
+                    email: '',
+                    avatarUrl: '',
+                    userUrl: '',
+                    imageUrls: [],
+                    videoUrl: '',
+                    source: 'linkedin',
+                    sourceUrl: linkedinEmbedCode.src,
+                    extra: {
+                      ...linkedinEmbedCode
+                    },
+                  })
+                  .then(() => {
+                    toast.success('Review imported successfully!');
+                    setIsOpen(false);
+                  })
+                  .catch((error) => {
+                    console.error('Error importing LinkedIn review:', error);
+                    toast.error('Failed to import LinkedIn review.');
+                  });
+              }}
             >
-              <BsLinkedin />
-              LinkedIn
-            </Button>
+              <Button
+                size={'lg'}
+                className="w-full items-center justify-center text-sm"
+                variant={'outline'}
+              >
+                <BsLinkedin />
+                LinkedIn
+              </Button>
+            </ImportLinkedInDialog>
             <Button
               size={'lg'}
               className="w-full items-center justify-center text-sm"

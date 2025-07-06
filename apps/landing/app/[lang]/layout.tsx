@@ -33,7 +33,7 @@ export default async function RootLayout(props: {
           items={[
             { title: 'Home', href: '/' },
             { title: 'Features', href: '/#features' },
-            { title: 'Pricing', href: '/#pricing' },
+            // { title: 'Pricing', href: '/#pricing' },
             { title: 'FAQ', href: '/#faq' },
             {
               title: 'Documents',

@@ -5,10 +5,11 @@ export function ReviewItemSource2(props: {
   const { source, className } = props;
 
   const iconUrl = {
+    manual: 'https://app.reviewsup.io/img/logo-32.png',
     tiktok: 'https://www.tiktok.com/favicon.ico',
     twitter: 'https://abs.twimg.com/favicons/twitter.3.ico',
-    manual: 'https://app.reviewsup.io/img/logo-32.png',
     google: 'https://www.google.com/favicon.ico',
+    linkedin: 'https://www.linkedin.com/favicon.ico',
   };
 
   return (

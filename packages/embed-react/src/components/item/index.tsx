@@ -1,9 +1,10 @@
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
-import { TikTokEmbed } from './tiktok-embed';
+import { TikTokEmbed } from '../embed/tiktok-embed';
 import { ReviewItem } from './review-item';
 import React from 'react';
 import { ReviewItem1 } from './review-item-1';
+import { LinkedinEmbed } from '../embed/linkedin-embed';
 
 export function renderItem(
   review: ReviewEntity,
@@ -21,6 +22,15 @@ export function renderItem(
         thumbnailHeight={review.extra.thumbnail_height}
         width={width}
         height={height}
+      />
+    );
+  } else if (review.source === 'linkedin') {
+    return (
+      <LinkedinEmbed
+        key={review.id}
+        linkedinEmbedCode={{
+          ...review.extra,
+        }}
       />
     );
   } else {

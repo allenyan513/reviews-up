@@ -93,12 +93,12 @@ export default async function LandingPage(props: {
         items={featureData.items}
       />
 
-      <div id="pricing" />
-      <PricingGrid
-        title={t(pricingData.title)}
-        subtitle={t(pricingData.subtitle)}
-        items={pricingData.items}
-      />
+      {/*<div id="pricing" />*/}
+      {/*<PricingGrid*/}
+      {/*  title={t(pricingData.title)}*/}
+      {/*  subtitle={t(pricingData.subtitle)}*/}
+      {/*  items={pricingData.items}*/}
+      {/*/>*/}
 
       <div id={'faqs'} />
       <FAQ data={faqData} />
