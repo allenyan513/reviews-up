@@ -7,6 +7,11 @@ import {
 import { PaginateResponse } from '@reviewsup/api/common';
 import { authFetch } from './auth-fetch';
 import { YtDlpRequest, YtDlpResponse } from '@reviewsup/api/yt-dlp';
+import {
+  TiktokOembedRequest,
+  TiktokOembedResponse,
+} from '@reviewsup/api/tiktok';
+import { GoogleMapRequest, GoogleMapResponse } from '@reviewsup/api/google';
 
 export const review = {
   getReviews: (
@@ -36,4 +41,10 @@ export const review = {
 
   parse: (request: YtDlpRequest): Promise<YtDlpResponse> =>
     authFetch('/reviews/parse', 'POST', request),
+
+  parseTiktok: (request: TiktokOembedRequest): Promise<TiktokOembedResponse> =>
+    authFetch('/reviews/parse/tiktok', 'POST', request),
+
+  parseGoogleMap: (request: GoogleMapRequest): Promise<GoogleMapResponse> =>
+    authFetch('/reviews/parse/google', 'POST', request),
 };

@@ -3,7 +3,8 @@
 import { ColumnDef, useReactTable } from '@tanstack/react-table';
 import { ReviewEntity, ReviewMediaEntity } from '@reviewsup/api/reviews';
 import React from 'react';
-import { BsCameraVideo, BsImage } from 'react-icons/bs';
+import { BsCameraVideo, BsFilter, BsImage, BsSortDown } from 'react-icons/bs';
+import { BiSort, BiFilterAlt ,BiSortAlt2} from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -94,7 +95,13 @@ export function columns(setData: any): ColumnDef<any>[] {
         rating: row.rating,
       }),
       cell: ({ row, getValue }) => {
-        const { reviewerName, reviewerEmail, reviewerTitle, reviewerImage, rating } = getValue<{
+        const {
+          reviewerName,
+          reviewerEmail,
+          reviewerTitle,
+          reviewerImage,
+          rating,
+        } = getValue<{
           reviewerName: string;
           reviewerEmail: string | null;
           reviewerTitle: string | null;
@@ -105,22 +112,88 @@ export function columns(setData: any): ColumnDef<any>[] {
           <div className="flex flex-col gap-2 p-2">
             <div className="flex flex-row items-center gap-2">
               <Avatar className="size-10 shadow-md border">
-                <AvatarImage src={reviewerImage || ''} alt={reviewerName || 'Reviewer'} />
+                <AvatarImage
+                  src={reviewerImage || ''}
+                  alt={reviewerName || 'Reviewer'}
+                />
                 <AvatarFallback className="AvatarFallback" delayMs={600}>
                   {reviewerName.charAt(0).toUpperCase() || 'U'}
                 </AvatarFallback>
               </Avatar>
               <div>
-                <div className="text-sm font-medium text-gray-900">{reviewerName}</div>
+                <div className="text-sm font-medium text-gray-900">
+                  {reviewerName}
+                </div>
                 <div className="text-sm text-gray-500">{reviewerTitle}</div>
                 <div className="text-sm text-gray-500">{reviewerEmail}</div>
               </div>
             </div>
+            {/*<StarRating*/}
+            {/*  size={'sm'}*/}
+            {/*  className="ml-1"*/}
+            {/*  value={rating || 5}*/}
+            {/*  onChange={() => {}}*/}
+            {/*/>*/}
+          </div>
+        );
+      },
+    },
+    {
+      accessorKey: 'rating',
+      header: ({ column }) => {
+        return (
+          <div className="flex flex-row items-center gap-2">
+            <p>Rating</p>
+            <BiSortAlt2
+              className="cursor-pointer text-lg"
+              onClick={() =>
+                column.toggleSorting(column.getIsSorted() === 'asc')
+              }
+            />
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <BiFilterAlt className="cursor-pointer text-lg" />
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start">
+                <DropdownMenuItem
+                  onClick={() => column.setFilterValue(1)}
+                >
+                  1/5
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column.setFilterValue(2)}
+                >
+                  2/5
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column.setFilterValue(3)}
+                >
+                  3/5
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column.setFilterValue(4)}
+                >
+                  4/5
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => column.setFilterValue(5)}
+                >
+                  5/5
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+        );
+      },
+      cell: ({ row }) => {
+        const rating = row.getValue('rating') as number | null;
+        return (
+          <div className="flex items-center">
             <StarRating
               size={'sm'}
-              className="ml-1"
               value={rating || 5}
               onChange={() => {}}
+              className="ml-1"
             />
           </div>
         );
@@ -140,23 +213,28 @@ export function columns(setData: any): ColumnDef<any>[] {
           medias: ReviewMediaEntity[] | null;
           tweetId: string;
         }>();
+        const review = row.original as ReviewEntity;
         return (
-          <div className="text-sm text-gray-700  max-w-md whitespace-normal flex flex-col">
-            <p>{text}</p>
-            <div className="flex flex-row gap-1 mt-2">
-              {medias &&
-                medias.length > 0 &&
-                medias.map((media) => {
-                  if (media.type === 'video') {
-                    return <BsCameraVideo key={media.id} className="text-xl" />;
-                  } else if (media.type === 'image') {
-                    return <BsImage key={media.id} className="text-xl" />;
-                  } else {
-                    return null;
-                  }
-                })}
+          <ReviewLookupDialog review={review}>
+            <div className="text-sm text-gray-700  max-w-md whitespace-break-spaces flex flex-col cursor-pointer">
+              <p className="whitespace-break-spaces line-clamp-3">{text}</p>
+              <div className="flex flex-row gap-1 mt-2">
+                {medias &&
+                  medias.length > 0 &&
+                  medias.map((media) => {
+                    if (media.type === 'video') {
+                      return (
+                        <BsCameraVideo key={media.id} className="text-xl" />
+                      );
+                    } else if (media.type === 'image') {
+                      return <BsImage key={media.id} className="text-xl" />;
+                    } else {
+                      return null;
+                    }
+                  })}
+              </div>
             </div>
-          </div>
+          </ReviewLookupDialog>
         );
       },
     },
@@ -256,9 +334,6 @@ export function columns(setData: any): ColumnDef<any>[] {
         const review = row.original;
         return (
           <div className="flex items-center space-x-2">
-            <ReviewLookupDialog review={review}>
-              <BiShow className={'text-2xl cursor-pointer'} />
-            </ReviewLookupDialog>
             <AlertDialog>
               <AlertDialogTrigger asChild>
                 <BiTrash className={'text-2xl text-red-400 cursor-pointer'} />

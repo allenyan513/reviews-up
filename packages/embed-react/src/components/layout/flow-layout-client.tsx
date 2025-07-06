@@ -2,12 +2,12 @@
 
 import React from 'react';
 import type { ReactNode } from 'react';
-import { ReviewItem } from '../item/review-item';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import { RatingSummary } from '../rating-summary';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 import { PoweredBy } from '../powered-by';
+import { renderItem } from '../item';
 
 interface FlowLayoutClientProps {
   items: ReviewEntity[];
@@ -19,25 +19,21 @@ interface FlowLayoutClientProps {
 export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
   const columns = useBreakpoints(config.breakpoints);
 
-  const renderItem = (review: ReviewEntity, config: ShowcaseConfig) => {
-    return <ReviewItem key={review.id} review={review} config={config} />;
-  };
-
   const renderedColumns: ReactNode[][] = Array(columns)
     .fill(null)
     .map(() => []);
 
   items.forEach((item, idx) => {
-    renderedColumns[idx % columns].push(renderItem(item, config));
+    renderedColumns[idx % columns].push(renderItem(item, 'style', config));
   });
 
   return (
     <div className="w-full flex flex-col justify-center items-center gap-4">
-      <div className='flex gap-2 md:gap-4'>
+      <div className="flex flex-row gap-4">
         {renderedColumns.map((colItems, colIdx) => (
           <div key={colIdx} style={{ flex: 1 }}>
             {colItems.map((child, i) => (
-              <div key={i} className="mb-2 md:mb-4">
+              <div key={i} className="mb-4">
                 {child}
               </div>
             ))}

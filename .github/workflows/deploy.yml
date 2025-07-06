@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - dev
-      - feature/pnpm
+      - feature/docs
 jobs:
   deploy:
     runs-on: ubuntu-latest

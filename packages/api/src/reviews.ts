@@ -10,10 +10,24 @@ export const ReviewStatus = {
 export const ReviewSource = {
   manual: 'manual',
   json: 'json',
+  csv: 'csv',
   twitter: 'twitter',
   google: 'google',
+  yelp: 'yelp',
+  g2: 'g2',
+  appsumo: 'appsumo',
+  amazon: 'amazon',
+  capterra: 'capterra',
+  producthunt: 'producthunt',
   facebook: 'facebook',
   trustpilot: 'trustpilot',
+  tiktok: 'tiktok',
+  instagram: 'instagram',
+  linkedin: 'linkedin',
+  youtube: 'youtube',
+  vimeo: 'vimeo',
+  wistia: 'wistia',
+  soundcloud: 'soundcloud',
 };
 
 export const createReviewSchema = z.object({
@@ -34,6 +48,7 @@ export const createReviewSchema = z.object({
   source: z.nativeEnum(ReviewSource).default(ReviewSource.manual).optional(),
   sourceUrl: z.string().url().optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending).optional(),
+  extra: z.any().optional(),
 });
 
 export type CreateReviewDto = z.infer<typeof createReviewSchema>;
@@ -67,6 +82,7 @@ export const reviewEntitySchema = z.object({
   source: z.nativeEnum(ReviewSource).default(ReviewSource.manual),
   sourceUrl: z.string().url().optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending),
+  extra: z.any().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
   medias: z.array(z.lazy(() => reviewMediaEntitySchema)).optional(),

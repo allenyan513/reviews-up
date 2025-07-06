@@ -21,6 +21,11 @@ import {
 } from '@reviewsup/api/reviews';
 import { YtDlpService } from '../yt-dlp/yt-dlp.service';
 import { YtDlpRequest } from '@reviewsup/api/yt-dlp';
+import {
+  TiktokOembedRequest,
+  tiktokOembedRequestShema,
+} from '@reviewsup/api/tiktok';
+import { GoogleMapRequest } from '@reviewsup/api/google';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -83,5 +88,26 @@ export class ReviewsController {
   @Post('parse')
   async parse(@Jwt() jwt: JwtPayload, @Body() request: YtDlpRequest) {
     return this.ytdlpService.parse(request);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('parse/tiktok')
+  async parseTiktok(
+    @Jwt() jwt: JwtPayload,
+    @Body() request: TiktokOembedRequest,
+  ) {
+    const validatedRequest = tiktokOembedRequestShema.parse(
+      request,
+    ) as TiktokOembedRequest;
+    return this.reviewsService.parseTiktok(validatedRequest);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('parse/google')
+  async searchPlaces(
+    @Jwt() jwt: JwtPayload,
+    @Body() request: GoogleMapRequest,
+  ) {
+    return await this.reviewsService.searchPlaces(request);
   }
 }

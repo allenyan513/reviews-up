@@ -21,10 +21,24 @@ enum ReviewStatus {
 enum ReviewSource {
   manual
   json
+  csv
   twitter
   google
+  yelp
+  g2
+  appsumo
+  amazon
+  capterra
+  producthunt
   facebook
   trustpilot
+  tiktok
+  instagram
+  linkedin
+  youtube
+  vimeo
+  wistia
+  soundcloud
 }
 
 enum SubscriptionTier {
@@ -136,6 +150,7 @@ model Review {
   source        ReviewSource  @default(manual)
   sourceUrl     String?
   status        ReviewStatus  @default(pending)
+  extra         Json?         @default("{}")
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   form          Form?         @relation(fields: [formId], references: [id], onDelete: Cascade)

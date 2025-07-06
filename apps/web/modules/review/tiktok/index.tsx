@@ -11,35 +11,40 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, { useState, useRef } from 'react';
-import { api } from '@/lib/api-client';
 import { Input } from '@/components/ui/input';
-import { YtDlpResponse } from '@reviewsup/api/yt-dlp';
 import toast from 'react-hot-toast';
+import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
+import { api } from '@/lib/api-client';
+import { TikTokEmbed } from '@reviewsup/embed-react';
 
 export default function ReviewImportTiktokDialog(props: {
-  onImport: (response: YtDlpResponse | undefined) => void;
   children: React.ReactNode;
+  onImport?: (data: TiktokOembedResponse | undefined) => void;
 }) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tiktokUrl, setTiktokUrl] = useState<string>('');
-  const [ytDlpResponse, setYtDlpResponse] = useState<
-    YtDlpResponse | undefined
+  const [tiktokResponse, setTiktokResponse] = useState<
+    TiktokOembedResponse | undefined
   >();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setTiktokUrl(inputValue);
+    //check if the input is a valid TikTok URL
+    if (!inputValue.match(/https:\/\/www\.tiktok\.com\/@[\w-]+\/video\/\d+/)) {
+      setTiktokResponse(undefined);
+      return;
+    }
     api.review
-      .parse({
+      .parseTiktok({
         url: inputValue,
       })
-      .then((response) => {
-        if (response) {
-          setYtDlpResponse(response);
-        }
+      .then((response: TiktokOembedResponse) => {
+        setTiktokResponse(response);
       })
       .catch((error) => {
-        toast.error('Error parsing TikTok URL:', error);
+        console.error('Error fetching TikTok data:', error);
+        toast.error('Failed to fetch TikTok data');
       });
   };
 
@@ -53,13 +58,13 @@ export default function ReviewImportTiktokDialog(props: {
       <DialogTrigger asChild>{props.children}</DialogTrigger>
       <DialogContent className="sm:max-w-xl overflow-x-scroll max-h-screen">
         <DialogHeader>
-          <DialogTitle>Import Review from X</DialogTitle>
+          <DialogTitle>Import from Tiktok</DialogTitle>
           <DialogDescription>
             {/*Anyone who has this link will be able to view this.*/}
           </DialogDescription>
         </DialogHeader>
-        <div className="max-w-4xl font-sans">
-          <div className="mb-6">
+        <div className="max-w-4xl font-sans flex flex-col w-full items-center">
+          <div className="mb-6 w-full text-start">
             <label
               htmlFor="tweetUrl"
               className="block text-gray-700 text-sm font-medium mb-1"
@@ -70,9 +75,17 @@ export default function ReviewImportTiktokDialog(props: {
               id="tiktokUrl"
               value={tiktokUrl}
               onChange={onChange}
-              placeholder="https://x.com/username/status/1234567890123456789"
+              placeholder="https://www.tiktok.com/@username/video/1234567890123456789"
+              className="w-full max-w-4xl"
             ></Input>
           </div>
+          {tiktokResponse && (
+            <TikTokEmbed
+              tiktokId={tiktokResponse.embed_product_id || ''}
+              thumbnailWidth={tiktokResponse.thumbnail_width || 0}
+              thumbnailHeight={tiktokResponse.thumbnail_height || 0}
+            />
+          )}
         </div>
         <DialogFooter className="">
           <DialogClose asChild>
@@ -84,7 +97,7 @@ export default function ReviewImportTiktokDialog(props: {
             size={'lg'}
             type="submit"
             onClick={() => {
-              props.onImport(ytDlpResponse);
+              props.onImport?.(tiktokResponse);
               setIsOpen(false);
             }}
             className="ml-2"

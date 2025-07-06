@@ -8,7 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import React, { useState } from 'react';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ReviewItem } from '@reviewsup/embed-react';
+import { renderItem } from '@reviewsup/embed-react';
 
 export default function ReviewLookupDialog(props: {
   review: ReviewEntity | null;
@@ -28,7 +28,7 @@ export default function ReviewLookupDialog(props: {
             View the details of the selected review.
           </DialogDescription>
         </DialogHeader>
-        <ReviewItem review={review} />
+        {renderItem(review, 'style')}
       </DialogContent>
     </Dialog>
   );

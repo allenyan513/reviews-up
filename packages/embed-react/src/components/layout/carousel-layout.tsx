@@ -5,6 +5,7 @@ import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import { ReviewItem1 } from '../item/review-item-1';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';
+import { renderItem } from '../item';
 
 function CarouselRow({
   items,
@@ -69,11 +70,7 @@ function CarouselRow({
       >
         {duplicatedItems.map((item, idx) => (
           <div key={idx}>
-            <ReviewItem1
-              review={item}
-              config={config}
-              className="w-[400px] h-[300px]"
-            />
+            {renderItem(item, 'style-1', config, '400px', '300px')}
           </div>
         ))}
       </div>

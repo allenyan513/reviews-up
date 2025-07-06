@@ -13,13 +13,21 @@ import React, { useEffect, useState } from 'react';
 import { BiDownload, BiPlus, BiX } from 'react-icons/bi';
 import ReviewImportManualDialog from './manual';
 import ReviewImportXDialog from './twitter';
-import { BsFacebook, BsGoogle, BsLinkedin, BsTwitterX } from 'react-icons/bs';
+import {
+  BsFacebook,
+  BsGoogle,
+  BsLinkedin,
+  BsTwitterX,
+  BsTiktok,
+} from 'react-icons/bs';
 import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
 import { useUserContext } from '@/context/UserProvider';
 import { Tweet } from 'react-tweet/api';
 import { parseTweet } from '@/lib/utils';
-import { YtDlpResponse } from '@reviewsup/api/yt-dlp';
+import ReviewImportTiktokDialog from './tiktok';
+import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
+import ReviewImportGoogleMapDialog from '@/modules/review/google';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -64,7 +72,7 @@ export default function ReviewImportDialog() {
     }
   };
 
-  const importFromTiktok = async (data: YtDlpResponse | undefined | null) => {
+  const importFromTiktok = async (data: TiktokOembedResponse | undefined) => {
     try {
       if (!data || !defaultWorkspace) {
         toast.error('Tweet ID is missing');
@@ -74,15 +82,16 @@ export default function ReviewImportDialog() {
         workspaceId: defaultWorkspace.id,
         rating: 5,
         message: data.title,
-        fullName: data.title,
-        email: '',
-        userUrl: '',
-        avatarUrl: '',
-        source: 'manual',
-        imageUrls: [data.thumbnail],
-        videoUrl: data.video_url,
-        tweetId: '',
+        fullName: data.author_name,
+        imageUrls: [data.thumbnail_url || ''],
         reviewerId: user?.id || '',
+        source: 'tiktok',
+        sourceUrl: data.url,
+        userUrl: data.author_url,
+        title: data.author_url?.replace('https://www.tiktok.com/@', '@') || '',
+        extra: {
+          ...data,
+        },
       });
       toast.success('Review created successfully!');
       setIsOpen(false);
@@ -112,25 +121,78 @@ export default function ReviewImportDialog() {
                 importFromX(tweetId, data);
               }}
             >
-              <div>
-                <Button
-                  size={'lg'}
-                  className="w-full items-center justify-center text-sm"
-                  variant={'outline'}
-                >
-                  <BsTwitterX />
-                  Twitter/X
-                </Button>
-              </div>
+              <Button
+                size={'lg'}
+                className="w-full items-center justify-center text-sm"
+                variant={'outline'}
+              >
+                <BsTwitterX />
+                Twitter/X
+              </Button>
             </ReviewImportXDialog>
-            <Button
-              size={'lg'}
-              className="w-full items-center justify-center text-sm"
-              variant={'outline'}
+            <ReviewImportTiktokDialog
+              onImport={(data) => {
+                importFromTiktok(data);
+              }}
             >
-              <BsGoogle />
-              Google
-            </Button>
+              <Button
+                size={'lg'}
+                className="w-full items-center justify-center text-sm"
+                variant={'outline'}
+              >
+                <BsTiktok />
+                TikTok
+              </Button>
+            </ReviewImportTiktokDialog>
+            <ReviewImportGoogleMapDialog
+              onImport={async (place) => {
+                if (!defaultWorkspace) {
+                  toast.error('Please select a workspace first.');
+                  return;
+                }
+                if (!place || !place.reviews || place.reviews.length === 0) {
+                  toast.error('No reviews found for this place.');
+                  return;
+                }
+                const results = await Promise.all(
+                  place.reviews.map((review) => {
+                    return api.review.createReview({
+                      workspaceId: defaultWorkspace.id,
+                      reviewerId: user?.id || '',
+                      rating: review.rating,
+                      message: review.text?.text,
+                      fullName: review.authorAttribution?.displayName,
+                      email: '',
+                      avatarUrl: review.authorAttribution?.photoUri,
+                      userUrl: review.authorAttribution?.uri,
+                      imageUrls: [],
+                      videoUrl: '',
+                      source: 'google',
+                      sourceUrl: review.googleMapsUri || place.googleMapsUri,
+                      title: '',
+                      extra: {
+                        ...review,
+                      },
+                    });
+                  }),
+                );
+                if (results && results.length > 0) {
+                  toast.success('Reviews imported successfully!');
+                  setIsOpen(false);
+                } else {
+                  toast.error('Failed to import reviews.');
+                }
+              }}
+            >
+              <Button
+                size={'lg'}
+                className="w-full items-center justify-center text-sm"
+                variant={'outline'}
+              >
+                <BsGoogle />
+                Google
+              </Button>
+            </ReviewImportGoogleMapDialog>
             <Button
               size={'lg'}
               className="w-full items-center justify-center text-sm"
