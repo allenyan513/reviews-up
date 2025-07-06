@@ -42,7 +42,7 @@ export default function ReviewImportXDialog(props: {
       }}
     >
       <DialogTrigger asChild>{props.children}</DialogTrigger>
-      <DialogContent className="sm:max-w-xl overflow-x-scroll max-h-screen">
+      <DialogContent className="w-full md:min-w-2xl overflow-x-scroll max-h-screen">
         <DialogHeader>
           <DialogTitle>Import Review from X</DialogTitle>
           <DialogDescription>

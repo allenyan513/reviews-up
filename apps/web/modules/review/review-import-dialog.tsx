@@ -29,6 +29,7 @@ import ReviewImportTiktokDialog from './tiktok';
 import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
 import ReviewImportGoogleMapDialog from '@/modules/review/google';
 import ImportLinkedInDialog from './linkedin';
+import { ReviewItemSource } from '@reviewsup/embed-react';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
@@ -110,13 +111,13 @@ export default function ReviewImportDialog() {
           Import Reviews
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="w-full md:min-w-2xl">
         <DialogHeader>
           <DialogTitle>Import Reviews</DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 w-full">
           <label>Import Reviews from Third Platform</label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <ReviewImportXDialog
               onImport={(tweetId, data) => {
                 importFromX(tweetId, data);
@@ -127,7 +128,10 @@ export default function ReviewImportDialog() {
                 className="w-full items-center justify-center text-sm"
                 variant={'outline'}
               >
-                <BsTwitterX />
+                <ReviewItemSource
+                  source={'twitter'}
+                  clickable={false}
+                />
                 Twitter/X
               </Button>
             </ReviewImportXDialog>
@@ -141,7 +145,9 @@ export default function ReviewImportDialog() {
                 className="w-full items-center justify-center text-sm"
                 variant={'outline'}
               >
-                <BsTiktok />
+                <ReviewItemSource
+                  clickable={false}
+                  source={'tiktok'}/>
                 TikTok
               </Button>
             </ReviewImportTiktokDialog>
@@ -190,7 +196,9 @@ export default function ReviewImportDialog() {
                 className="w-full items-center justify-center text-sm"
                 variant={'outline'}
               >
-                <BsGoogle />
+                <ReviewItemSource
+                  clickable={false}
+                  source={'google'}/>
                 Google
               </Button>
             </ReviewImportGoogleMapDialog>
@@ -237,18 +245,12 @@ export default function ReviewImportDialog() {
                 className="w-full items-center justify-center text-sm"
                 variant={'outline'}
               >
-                <BsLinkedin />
+                <ReviewItemSource
+                  clickable={false}
+                  source={'linkedin'}/>
                 LinkedIn
               </Button>
             </ImportLinkedInDialog>
-            <Button
-              size={'lg'}
-              className="w-full items-center justify-center text-sm"
-              variant={'outline'}
-            >
-              <BsFacebook />
-              Facebook
-            </Button>
           </div>
 
           {/* or */}
