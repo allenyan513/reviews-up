@@ -31,6 +31,8 @@ export function renderItem(
         linkedinEmbedCode={{
           ...review.extra,
         }}
+        width={width}
+        height={height}
       />
     );
   } else {
