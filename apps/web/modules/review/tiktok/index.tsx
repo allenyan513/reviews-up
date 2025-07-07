@@ -15,19 +15,56 @@ import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
 import { api } from '@/lib/api-client';
-import { TikTokEmbed } from '@reviewsup/embed-react';
+import { ReviewItemSource, TikTokEmbed } from '@reviewsup/embed-react';
+import Link from 'next/link';
 
-export default function ReviewImportTiktokDialog(props: {
-  children: React.ReactNode;
-  onImport?: (data: TiktokOembedResponse | undefined) => void;
+export function ReviewImportTiktokDialog(props: {
+  workspaceId: string;
+  onImportStart?: () => void;
+  onImportSuccess?: () => void;
+  onImportFailed?: (error: Error) => void;
 }) {
+  const { workspaceId, onImportStart, onImportSuccess, onImportFailed } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tiktokUrl, setTiktokUrl] = useState<string>('');
   const [tiktokResponse, setTiktokResponse] = useState<
     TiktokOembedResponse | undefined
   >();
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const submitReview = async () => {
+    try {
+      if (!workspaceId || !tiktokResponse) {
+        throw new Error('No tiktok url provided');
+      }
+      if (onImportStart) {
+        onImportStart();
+      }
+      await api.review.createReview({
+        workspaceId: workspaceId,
+        rating: 5,
+        message: tiktokResponse.title,
+        fullName: tiktokResponse.author_name,
+        imageUrls: [tiktokResponse.thumbnail_url || ''],
+        source: 'tiktok',
+        sourceUrl: tiktokResponse.url,
+        userUrl: tiktokResponse.author_url,
+        title: tiktokResponse.author_url?.replace('https://www.tiktok.com/@', '@') || '',
+        extra: {
+          ...tiktokResponse,
+        },
+      });
+      setIsOpen(false);
+      if (onImportSuccess) {
+        onImportSuccess();
+      }
+    } catch (error) {
+      if (onImportFailed) {
+        onImportFailed(error as Error);
+      }
+    }
+  };
+
+  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const inputValue = e.target.value;
     setTiktokUrl(inputValue);
     //check if the input is a valid TikTok URL
@@ -53,9 +90,22 @@ export default function ReviewImportTiktokDialog(props: {
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
+        if(!open){
+          setTiktokUrl('');
+          setTiktokResponse(undefined);
+        }
       }}
     >
-      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button
+          size={'lg'}
+          className="w-full items-center justify-center text-sm"
+          variant={'outline'}
+        >
+          <ReviewItemSource clickable={false} source={'tiktok'} />
+          TikTok
+        </Button>
+      </DialogTrigger>
       <DialogContent className="w-full md:min-w-2xl overflow-x-scroll max-h-screen">
         <DialogHeader>
           <DialogTitle>Import from Tiktok</DialogTitle>
@@ -67,17 +117,25 @@ export default function ReviewImportTiktokDialog(props: {
           <div className="mb-6 w-full text-start">
             <label
               htmlFor="tweetUrl"
-              className="block text-gray-700 text-sm font-medium mb-1"
+              className="block text-gray-700 text-sm font-medium mb-2"
             >
               Tiktok URL:
+              <Link
+                href="https://docs.reviewsup.io/docs/how-to/get-embed-code/tiktok"
+                target="_blank"
+                className="text-blue-500 hover:underline ml-2"
+              >
+                How to get TikTok URL?
+              </Link>
             </label>
-            <Input
+            <textarea
               id="tiktokUrl"
+              rows={3}
               value={tiktokUrl}
               onChange={onChange}
               placeholder="https://www.tiktok.com/@username/video/1234567890123456789"
-              className="w-full max-w-4xl"
-            ></Input>
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            ></textarea>
           </div>
           {tiktokResponse && (
             <TikTokEmbed
@@ -96,11 +154,9 @@ export default function ReviewImportTiktokDialog(props: {
           <Button
             size={'lg'}
             type="submit"
-            onClick={() => {
-              props.onImport?.(tiktokResponse);
-              setIsOpen(false);
-            }}
+            onClick={submitReview}
             className="ml-2"
+            disabled={!tiktokResponse}
           >
             Import
           </Button>

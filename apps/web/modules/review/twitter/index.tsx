@@ -10,27 +10,72 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 
 import { Input } from '@/components/ui/input';
 import { Tweet, useTweet } from 'react-tweet';
-import { Tweet as TweetEntity } from 'react-tweet/api';
+import { parseTweet } from '@/lib/utils';
+import { api } from '@/lib/api-client';
+import { ReviewItemSource } from '@reviewsup/embed-react';
+import Link from 'next/link';
 
-export default function ReviewImportXDialog(props: {
-  onImport: (tweetId: string, data: TweetEntity | null | undefined) => void;
-  children: React.ReactNode;
+export function ReviewImportXDialog(props: {
+  workspaceId: string;
+  onImportStart?: () => void;
+  onImportSuccess?: () => void;
+  onImportFailed?: (error: Error) => void;
 }) {
+  const { workspaceId, onImportSuccess, onImportFailed, onImportStart } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [tweetId, setTweetId] = useState<string | null>(null);
-  const { data } = useTweet(tweetId || '');
+  const [tweetId, setTweetId] = useState<string>('');
+  const [inputValue, setInputValue] = useState<string>('');
+  const { data } = useTweet(tweetId);
 
-  const handleTweetIdChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
+  useEffect(() => {
+    if (!inputValue) {
+      return;
+    }
     if (inputValue.match(/https:\/\/x\.com\/\w+\/status\/\d+/)) {
       const tweetId = inputValue.match(/status\/(\d+)/)?.[1] || null;
-      setTweetId(tweetId);
+      setTweetId(tweetId || '');
     } else {
-      setTweetId(null);
+      setTweetId('');
+    }
+  }, [inputValue]);
+
+  const submitReviews = async () => {
+    try {
+      if (!workspaceId || !data) {
+        throw new Error('Workspace ID or tweet data is missing');
+      }
+      if (onImportStart) {
+        onImportStart();
+      }
+      const parseData = parseTweet(data);
+      await api.review.createReview({
+        workspaceId: workspaceId,
+        rating: 5,
+        message: parseData?.message,
+        fullName: parseData?.fullName,
+        email: parseData?.email,
+        avatarUrl: parseData?.avatarUrl,
+        imageUrls: parseData?.imageUrls,
+        videoUrl: parseData?.videoUrl,
+        tweetId: parseData?.tweetId,
+        reviewerId: '',
+        source: 'twitter',
+        sourceUrl: parseData?.tweetUrl,
+        userUrl: parseData?.userUrl,
+        title: `@${parseData?.screen_name}`,
+      });
+      setIsOpen(false);
+      if (onImportSuccess) {
+        onImportSuccess();
+      }
+    } catch (error) {
+      if (onImportFailed) {
+        onImportFailed(error as Error);
+      }
     }
   };
 
@@ -39,9 +84,22 @@ export default function ReviewImportXDialog(props: {
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
+        if (!open) {
+          setInputValue('');
+          setTweetId('');
+        }
       }}
     >
-      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button
+          size={'lg'}
+          className="w-full items-center justify-center text-sm"
+          variant={'outline'}
+        >
+          <ReviewItemSource source={'twitter'} clickable={false} />
+          Twitter/X
+        </Button>
+      </DialogTrigger>
       <DialogContent className="w-full md:min-w-2xl overflow-x-scroll max-h-screen">
         <DialogHeader>
           <DialogTitle>Import Review from X</DialogTitle>
@@ -53,15 +111,27 @@ export default function ReviewImportXDialog(props: {
           <div className="mb-6">
             <label
               htmlFor="tweetUrl"
-              className="block text-gray-700 text-sm font-medium mb-1"
+              className="block text-gray-700 text-sm font-medium mb-2"
             >
-              X URL:
+              Twitter/X URL:
+              <Link
+                href="https://docs.reviewsup.io/docs/how-to/get-embed-code/twitter"
+                target="_blank"
+                className="text-blue-500 hover:underline ml-2"
+              >
+                How to get Twitter/X URL?
+              </Link>
             </label>
-            <Input
+            <textarea
               id="tweetUrl"
-              onChange={handleTweetIdChange}
+              value={inputValue}
+              rows={3}
+              onChange={(e) => {
+                setInputValue(e.target.value);
+              }}
               placeholder="https://x.com/username/status/1234567890123456789"
-            ></Input>
+              className="w-full max-w-4xl p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
           </div>
           {/*preview*/}
           <div className="items-center justify-between">
@@ -77,11 +147,9 @@ export default function ReviewImportXDialog(props: {
           <Button
             size={'lg'}
             type="submit"
-            onClick={() => {
-              props.onImport(tweetId || '', data);
-              setIsOpen(false);
-            }}
+            onClick={submitReviews}
             className="ml-2"
+            disabled={!tweetId}
           >
             Import
           </Button>

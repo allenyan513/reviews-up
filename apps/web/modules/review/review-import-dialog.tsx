@@ -1,107 +1,24 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useEffect, useState } from 'react';
-import { BiDownload, BiPlus, BiX } from 'react-icons/bi';
+import React, { useState } from 'react';
+import { BiPlus } from 'react-icons/bi';
 import ReviewImportManualDialog from './manual';
-import ReviewImportXDialog from './twitter';
-import {
-  BsFacebook,
-  BsGoogle,
-  BsLinkedin,
-  BsTwitterX,
-  BsTiktok,
-} from 'react-icons/bs';
-import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
 import { useUserContext } from '@/context/UserProvider';
-import { Tweet } from 'react-tweet/api';
-import { parseTweet } from '@/lib/utils';
-import ReviewImportTiktokDialog from './tiktok';
-import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
-import ReviewImportGoogleMapDialog from '@/modules/review/google';
-import ImportLinkedInDialog from './linkedin';
-import { ReviewItemSource } from '@reviewsup/embed-react';
+import { ReviewImportTiktokDialog } from './tiktok';
+import { ReviewImportGoogleMapDialog } from '@/modules/review/google';
+import { ReviewImportXDialog } from './twitter';
+import { ImportLinkedInDialog } from './linkedin';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultWorkspace, user, signIn } = useUserContext();
-
-  /**
-   * 将tweet数据转换成 review数据，然后发送给服务端， 服务端不需要做任何转换
-   * @param tweetId
-   * @param data
-   */
-  const importFromX = async (
-    tweetId: string,
-    data: Tweet | undefined | null,
-  ) => {
-    try {
-      if (!tweetId || !data || !defaultWorkspace) {
-        toast.error('Tweet ID is missing');
-        return;
-      }
-      const parseData = parseTweet(data);
-      await api.review.createReview({
-        workspaceId: defaultWorkspace.id,
-        rating: 5,
-        message: parseData?.message,
-        fullName: parseData?.fullName,
-        email: parseData?.email,
-        avatarUrl: parseData?.avatarUrl,
-        imageUrls: parseData?.imageUrls,
-        videoUrl: parseData?.videoUrl,
-        tweetId: parseData?.tweetId,
-        reviewerId: user?.id || '',
-        source: 'twitter',
-        sourceUrl: parseData?.tweetUrl,
-        userUrl: parseData?.userUrl,
-        title: `@${parseData?.screen_name}`,
-      });
-      toast.success('Review created successfully!');
-      setIsOpen(false);
-    } catch (error) {
-      toast('Failed to create review. Please try again.');
-      return;
-    }
-  };
-
-  const importFromTiktok = async (data: TiktokOembedResponse | undefined) => {
-    try {
-      if (!data || !defaultWorkspace) {
-        toast.error('Tweet ID is missing');
-        return;
-      }
-      await api.review.createReview({
-        workspaceId: defaultWorkspace.id,
-        rating: 5,
-        message: data.title,
-        fullName: data.author_name,
-        imageUrls: [data.thumbnail_url || ''],
-        reviewerId: user?.id || '',
-        source: 'tiktok',
-        sourceUrl: data.url,
-        userUrl: data.author_url,
-        title: data.author_url?.replace('https://www.tiktok.com/@', '@') || '',
-        extra: {
-          ...data,
-        },
-      });
-      toast.success('Review created successfully!');
-      setIsOpen(false);
-    } catch (error) {
-      toast('Failed to create review. Please try again.');
-      return;
-    }
-  };
+  const { defaultWorkspace, user } = useUserContext();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -119,138 +36,49 @@ export default function ReviewImportDialog() {
           <label>Import Reviews from Third Platform</label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <ReviewImportXDialog
-              onImport={(tweetId, data) => {
-                importFromX(tweetId, data);
+              workspaceId={defaultWorkspace?.id || ''}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('Twitter reviews imported successfully!');
+                setIsOpen(false);
               }}
-            >
-              <Button
-                size={'lg'}
-                className="w-full items-center justify-center text-sm"
-                variant={'outline'}
-              >
-                <ReviewItemSource
-                  source={'twitter'}
-                  clickable={false}
-                />
-                Twitter/X
-              </Button>
-            </ReviewImportXDialog>
+              onImportFailed={(error) => {
+                toast.error('Failed to import Twitter reviews.');
+              }}
+            />
             <ReviewImportTiktokDialog
-              onImport={(data) => {
-                importFromTiktok(data);
+              workspaceId={defaultWorkspace?.id || ''}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('TikTok reviews imported successfully!');
+                setIsOpen(false);
               }}
-            >
-              <Button
-                size={'lg'}
-                className="w-full items-center justify-center text-sm"
-                variant={'outline'}
-              >
-                <ReviewItemSource
-                  clickable={false}
-                  source={'tiktok'}/>
-                TikTok
-              </Button>
-            </ReviewImportTiktokDialog>
+              onImportFailed={(error) => {
+                toast.error('Failed to import TikTok reviews.');
+              }}
+            ></ReviewImportTiktokDialog>
             <ReviewImportGoogleMapDialog
-              onImport={async (place) => {
-                if (!defaultWorkspace) {
-                  toast.error('Please select a workspace first.');
-                  return;
-                }
-                if (!place || !place.reviews || place.reviews.length === 0) {
-                  toast.error('No reviews found for this place.');
-                  return;
-                }
-                const results = await Promise.all(
-                  place.reviews.map((review) => {
-                    return api.review.createReview({
-                      workspaceId: defaultWorkspace.id,
-                      reviewerId: user?.id || '',
-                      rating: review.rating,
-                      message: review.text?.text,
-                      fullName: review.authorAttribution?.displayName,
-                      email: '',
-                      avatarUrl: review.authorAttribution?.photoUri,
-                      userUrl: review.authorAttribution?.uri,
-                      imageUrls: [],
-                      videoUrl: '',
-                      source: 'google',
-                      sourceUrl: review.googleMapsUri || place.googleMapsUri,
-                      title: '',
-                      extra: {
-                        ...review,
-                      },
-                    });
-                  }),
-                );
-                if (results && results.length > 0) {
-                  toast.success('Reviews imported successfully!');
-                  setIsOpen(false);
-                } else {
-                  toast.error('Failed to import reviews.');
-                }
+              workspaceId={defaultWorkspace?.id || ''}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('TikTok reviews imported successfully!');
+                setIsOpen(false);
               }}
-            >
-              <Button
-                size={'lg'}
-                className="w-full items-center justify-center text-sm"
-                variant={'outline'}
-              >
-                <ReviewItemSource
-                  clickable={false}
-                  source={'google'}/>
-                Google
-              </Button>
-            </ReviewImportGoogleMapDialog>
+              onImportFailed={(error) => {
+                toast.error('Failed to import TikTok reviews.');
+              }}
+            />
             <ImportLinkedInDialog
-              onImport={(linkedinEmbedCode) => {
-                if (!defaultWorkspace) {
-                  toast.error('Please select a workspace first.');
-                  return;
-                }
-                if (!linkedinEmbedCode) {
-                  toast.error('LinkedIn embed code is required.');
-                  return;
-                }
-                api.review
-                  .createReview({
-                    workspaceId: defaultWorkspace.id,
-                    reviewerId: user?.id || '',
-                    rating: 5,
-                    message: 'message from LinkedIn',
-                    fullName: 'LinkedIn User',
-                    email: '',
-                    avatarUrl: '',
-                    userUrl: '',
-                    imageUrls: [],
-                    videoUrl: '',
-                    source: 'linkedin',
-                    sourceUrl: linkedinEmbedCode.src,
-                    extra: {
-                      ...linkedinEmbedCode
-                    },
-                  })
-                  .then(() => {
-                    toast.success('Review imported successfully!');
-                    setIsOpen(false);
-                  })
-                  .catch((error) => {
-                    console.error('Error importing LinkedIn review:', error);
-                    toast.error('Failed to import LinkedIn review.');
-                  });
+              workspaceId={defaultWorkspace?.id || ''}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('TikTok reviews imported successfully!');
+                setIsOpen(false);
               }}
-            >
-              <Button
-                size={'lg'}
-                className="w-full items-center justify-center text-sm"
-                variant={'outline'}
-              >
-                <ReviewItemSource
-                  clickable={false}
-                  source={'linkedin'}/>
-                LinkedIn
-              </Button>
-            </ImportLinkedInDialog>
+              onImportFailed={(error) => {
+                toast.error('Failed to import TikTok reviews.');
+              }}
+            />
           </div>
 
           {/* or */}

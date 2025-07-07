@@ -18,6 +18,7 @@ import {
   FindAllReviewRequest,
   CreateReviewDto,
   UpdateReviewDto,
+  createReviewSchema,
 } from '@reviewsup/api/reviews';
 import { YtDlpService } from '../yt-dlp/yt-dlp.service';
 import { YtDlpRequest } from '@reviewsup/api/yt-dlp';
@@ -45,7 +46,10 @@ export class ReviewsController {
     @Jwt() jwt: JwtPayload,
     @Body() createReviewDto: CreateReviewDto,
   ) {
-    return this.reviewsService.create(jwt.userId, createReviewDto);
+    const validatedDto = createReviewSchema.parse(
+      createReviewDto,
+    ) as CreateReviewDto;
+    return this.reviewsService.create(jwt.userId, validatedDto);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -33,7 +33,7 @@ export const ReviewSource = {
 export const createReviewSchema = z.object({
   userId: z.string().optional(),
   workspaceId: z.string().min(1, 'Workspace is required'),
-  formId: z.string(),
+  formId: z.string().optional(),
   rating: z.number().min(1).max(5).optional(),
   message: z.string().optional(),
   reviewerId: z.string().optional(),

@@ -13,12 +13,16 @@ import {
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { LinkedinEmbedCode } from '@reviewsup/api/linkedin';
-import { LinkedinEmbed } from '@reviewsup/embed-react';
+import { LinkedinEmbed, ReviewItemSource } from '@reviewsup/embed-react';
+import { api } from '@/lib/api-client';
 
-export default function ImportLinkedInDialog(props: {
-  children: React.ReactNode;
-  onImport?: (linkedinEmbedCode: LinkedinEmbedCode) => void;
+export function ImportLinkedInDialog(props: {
+  workspaceId: string;
+  onImportStart?: () => void;
+  onImportSuccess?: () => void;
+  onImportFailed?: (error: Error) => void;
 }) {
+  const { workspaceId, onImportStart, onImportSuccess, onImportFailed } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +30,40 @@ export default function ImportLinkedInDialog(props: {
     LinkedinEmbedCode | undefined
   >(undefined);
   const [loading, setLoading] = useState<boolean>(false);
+
+  const submitReview = async () => {
+    try {
+      if (!workspaceId || !linkedinEmbedCode) {
+        throw new Error('No tiktok url provided');
+      }
+      if (onImportStart) {
+        onImportStart();
+      }
+      await api.review.createReview({
+        workspaceId: workspaceId,
+        rating: 5,
+        message: 'message from LinkedIn',
+        fullName: 'LinkedIn User',
+        email: undefined,
+        avatarUrl: undefined,
+        userUrl: undefined,
+        imageUrls: [],
+        videoUrl: undefined,
+        source: 'linkedin',
+        sourceUrl: linkedinEmbedCode.src,
+        extra: {
+          ...linkedinEmbedCode,
+        },
+      });
+      if (onImportSuccess) {
+        onImportSuccess();
+      }
+    } catch (error) {
+      if (onImportFailed) {
+        onImportFailed(error as Error);
+      }
+    }
+  };
 
   /**
    * <iframe src="https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7344111479064850435?collapsed=1" height="551" width="504" frameborder="0" allowfullscreen="" title="Embedded post"></iframe>
@@ -77,7 +115,16 @@ export default function ImportLinkedInDialog(props: {
         }
       }}
     >
-      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button
+          size={'lg'}
+          className="w-full items-center justify-center text-sm"
+          variant={'outline'}
+        >
+          <ReviewItemSource clickable={false} source={'linkedin'} />
+          LinkedIn
+        </Button>
+      </DialogTrigger>
       <DialogContent className="w-full md:min-w-2xl overflow-x-scroll max-h-screen">
         <DialogHeader>
           <DialogTitle>Import from LinkedIn</DialogTitle>
@@ -124,12 +171,7 @@ export default function ImportLinkedInDialog(props: {
           <Button
             size={'lg'}
             type="submit"
-            onClick={() => {
-              setIsOpen(false);
-              if (props.onImport) {
-                props.onImport(linkedinEmbedCode!);
-              }
-            }}
+            onClick={submitReview}
             className="ml-2"
             disabled={!linkedinEmbedCode}
           >

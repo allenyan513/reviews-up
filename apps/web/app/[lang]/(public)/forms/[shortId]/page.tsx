@@ -24,7 +24,7 @@ export default function PublicFormRoute(props: {
   return (
     <FormDefaultPreviewView
       className={
-        'flex flex-col w-full min-h-screen justify-center items-center bg-gray-100'
+        'flex flex-col w-full min-h-screen justify-center items-center bg-gray-100 p-4'
       }
       id={form.id || ''}
       lang={lang}

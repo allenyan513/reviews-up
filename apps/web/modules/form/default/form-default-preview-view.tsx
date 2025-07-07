@@ -4,7 +4,8 @@ import { PoweredBy } from '@reviewsup/embed-react';
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { Divider } from '@/components/divider';
 import { FormDefaultSubmitView } from '@/modules/form/default/form-default-submit-view';
-
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 /**
  *
  * @param props
@@ -34,8 +35,8 @@ export function FormDefaultPreviewView(props: {
 
   return (
     <div className={className}>
-      <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
-        <div className="flex flex-row gap-4 w-full justify-between items-center">
+      <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg lg:max-w-2xl lg:mx-auto gap-8 bg-white">
+        <div className="flex flex-col md:flex-row gap-4 w-full justify-between items-center">
           <div className="flex flex-row items-center gap-4">
             <Avatar className="size-16 shadow-md border rounded-full">
               <AvatarImage src={brand.logo} alt={brand.name} />
@@ -53,16 +54,16 @@ export function FormDefaultPreviewView(props: {
               window.open(brand.url, '_blank');
             }}
             size={'lg'}
+            className="w-full md:w-auto"
           >
             Visit
           </Button>
         </div>
         <Divider />
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 rich-text">
           <h2 className="text-xl font-semibold text-center">{welcome.title}</h2>
-          <p className="text-gray-600">{welcome.message}</p>
+          <Markdown children={welcome?.message} remarkPlugins={[remarkGfm]} />
         </div>
-
         <FormDefaultSubmitView
           id={id}
           workspaceId={workspaceId}
@@ -71,7 +72,7 @@ export function FormDefaultPreviewView(props: {
           mode={mode}
         />
       </div>
-      <PoweredBy />
+      <PoweredBy className="py-8" />
     </div>
   );
 }

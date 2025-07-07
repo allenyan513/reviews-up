@@ -20,7 +20,7 @@ export default function FormDefaultPage(props: {
       <div className="md:col-span-4 border-l md:border-gray-300 px-4 flex flex-col gap-4">
         <FormPageConfig />
       </div>
-      <div className="md:col-span-8 flex flex-col w-full h-[760px] overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center">
+      <div className="md:col-span-8 flex flex-col w-full h-[760px] overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center justify-center">
         <FormDefaultPreviewView
           id={id}
           lang={lang}

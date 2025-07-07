@@ -24,10 +24,13 @@ import { ReviewItemSource } from '@reviewsup/embed-react';
 import { ReviewsupAvatar } from '@reviewsup/ui/reviewsup-avatar';
 import toast from 'react-hot-toast';
 
-export default function ReviewImportGoogleMapDialog(props: {
-  children: React.ReactNode;
-  onImport?: (place: GooglePlace) => void;
+export function ReviewImportGoogleMapDialog(props: {
+  workspaceId: string;
+  onImportStart?: () => void;
+  onImportSuccess?: () => void;
+  onImportFailed?: (error: Error) => void;
 }) {
+  const { workspaceId, onImportStart, onImportSuccess, onImportFailed } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [textQuery, setTextQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,6 +39,50 @@ export default function ReviewImportGoogleMapDialog(props: {
     GoogleMapResponse | undefined
   >(undefined);
   const [currentPlace, setCurrentPlace] = useState<GooglePlace | null>(null);
+
+  const submitReview = async () => {
+    try {
+      if (!workspaceId || !currentPlace || !currentPlace.reviews) {
+        throw new Error('No google map found');
+      }
+      if (onImportStart) {
+        onImportStart();
+      }
+      const results = await Promise.all(
+        currentPlace.reviews.map((review) => {
+          return api.review.createReview({
+            workspaceId: workspaceId,
+            rating: review.rating,
+            message: review.text?.text,
+            fullName: review.authorAttribution?.displayName,
+            email: undefined,
+            avatarUrl: review.authorAttribution?.photoUri,
+            userUrl: review.authorAttribution?.uri,
+            imageUrls: [],
+            videoUrl: undefined,
+            source: 'google',
+            sourceUrl: review.googleMapsUri || currentPlace.googleMapsUri,
+            title: '',
+            extra: {
+              ...review,
+            },
+          });
+        }),
+      );
+      if (results && results.length > 0) {
+        setIsOpen(false);
+        if( onImportSuccess) {
+          onImportSuccess();
+        }
+      } else {
+        throw new Error('No reviews found to import');
+      }
+    } catch (error) {
+      if (onImportFailed) {
+        onImportFailed(error as Error);
+      }
+    }
+  };
 
   const renderPlaces = () => {
     if (
@@ -65,7 +112,9 @@ export default function ReviewImportGoogleMapDialog(props: {
                 setOpen(true);
               }}
             >
-              <p>{place.displayName?.text} - {place.formattedAddress}</p>
+              <p>
+                {place.displayName?.text} - {place.formattedAddress}
+              </p>
               <div className="flex flex-row items-center gap-2 mt-2">
                 <StarRating
                   value={place.rating || 0}
@@ -170,7 +219,16 @@ export default function ReviewImportGoogleMapDialog(props: {
         }
       }}
     >
-      <DialogTrigger asChild>{props.children}</DialogTrigger>
+      <DialogTrigger asChild>
+        <Button
+          size={'lg'}
+          className="w-full items-center justify-center text-sm"
+          variant={'outline'}
+        >
+          <ReviewItemSource clickable={false} source={'google'} />
+          Google
+        </Button>
+      </DialogTrigger>
       <DialogContent className="w-full md:min-w-2xl overflow-x-scroll max-h-screen">
         <DialogHeader>
           <DialogTitle>Import from Google Map</DialogTitle>
@@ -218,12 +276,7 @@ export default function ReviewImportGoogleMapDialog(props: {
           <Button
             size={'lg'}
             type="submit"
-            onClick={() => {
-              setIsOpen(false);
-              if (props.onImport && currentPlace) {
-                props.onImport(currentPlace);
-              }
-            }}
+            onClick={submitReview}
             disabled={!currentPlace}
             className="ml-2"
           >
