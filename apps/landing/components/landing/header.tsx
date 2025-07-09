@@ -116,6 +116,18 @@ export function Header(props: NavProps) {
             className={cn(
               buttonVariants({ size: 'lg' }),
               'rounded-full hidden md:inline-flex',
+              'text-black bg-white border '
+            )}
+          >
+            Free Launch
+          </Link>
+          <Link
+            href={props.appLink || ''}
+            target="_blank"
+            className={cn(
+              buttonVariants({ size: 'lg' }),
+              'rounded-full hidden md:inline-flex',
+              'text-white bg-red-400',
             )}
           >
             Get Started

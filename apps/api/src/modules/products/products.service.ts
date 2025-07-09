@@ -243,4 +243,21 @@ export class ProductsService {
     }
     this.logger.debug(`onReviewSubmitted completed for reviewId: ${reviewId}`);
   }
+
+  async findBySlug(slug: string) {
+    this.logger.debug(`Finding product by slug: ${slug}`);
+    const product = await this.prismaService.product.findUnique({
+      where: {
+        slug: slug,
+      },
+      include: {
+        form: true,
+      },
+    });
+    if (!product) {
+      this.logger.warn(`Product with slug ${slug} not found`);
+      return null;
+    }
+    return product;
+  }
 }

@@ -6,7 +6,7 @@ import {
   Patch,
   Param,
   Delete,
-  UseGuards
+  UseGuards,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
@@ -15,13 +15,12 @@ import { ProductsService } from '@src/modules/products/products.service';
 import {
   CreateProductRequest,
   findAllRequestSchema,
-  UpdateProductRequest
+  UpdateProductRequest,
 } from '@reviewsup/api/products';
 
 @Controller('products')
 export class ProductsController {
-  constructor(private readonly productsService: ProductsService) {
-  }
+  constructor(private readonly productsService: ProductsService) {}
 
   // @UseGuards(JwtAuthGuard)
   // @Post('crawl')
@@ -54,7 +53,7 @@ export class ProductsController {
   async update(
     @Jwt() jwt: JwtPayload,
     @Param('id') id: string,
-    @Body() updateReviewDto: UpdateProductRequest
+    @Body() updateReviewDto: UpdateProductRequest,
   ) {
     return this.productsService.update(jwt.userId, id, updateReviewDto);
   }
@@ -65,6 +64,14 @@ export class ProductsController {
     return this.productsService.remove(jwt.userId, id);
   }
 
+  @Post('public/list')
+  async publicList(@Body() request: any) {
+    const validatedRequest = findAllRequestSchema.parse(request);
+    return this.productsService.findAll(null, validatedRequest);
+  }
 
-
+  @Get('public/slug/:slug')
+  async publicSlug(@Param('slug') slug: string) {
+    return this.productsService.findBySlug(slug);
+  }
 }
