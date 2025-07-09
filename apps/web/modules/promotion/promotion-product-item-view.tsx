@@ -4,7 +4,7 @@ import React, { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
 import { buttonVariants } from '@reviewsup/ui/button';
-import { BiPlus, BiShareAlt } from 'react-icons/bi';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import {
   Tooltip,
@@ -38,19 +38,30 @@ export function ProductItemView(props: {
     return (
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link
-            href={`/forms/${product.form?.shortId}`}
-            target={'_blank'}
-            className={cn(
-              buttonVariants({
-                variant: 'default',
-                size: 'lg',
-              }),
-              message ? 'cursor-not-allowed opacity-50' : '',
-            )}
-          >
-            Start Review
-          </Link>
+          {message ? (
+            <span
+              className={cn(
+                buttonVariants({
+                  variant: 'default',
+                  size: 'sm',
+                }),
+                'cursor-not-allowed opacity-50 mb-2 mx-2 text-sm',
+              )}
+            >
+              Leave a Review
+            </span>
+          ) : (
+            <Link
+              href={`/forms/${product.form?.shortId}`}
+              target={'_blank'}
+              className={cn(
+                buttonVariants({ variant: 'default', size: 'sm' }),
+                'mb-2 mx-2 text-sm',
+              )}
+            >
+              Leave a Review
+            </Link>
+          )}
         </TooltipTrigger>
         {message && (
           <TooltipContent>
@@ -63,30 +74,45 @@ export function ProductItemView(props: {
   return (
     <div
       key={product.id}
-      className="border border-gray-200 rounded-md bg-white shadow-md flex flex-col"
+      className="border border-gray-200 rounded-md bg-white shadow-md flex flex-col flex-grow"
     >
-      {product.screenshot && (
-        <img
-          className="w-full rounded-t-md border-b aspect-video object-cover"
-          src={product.screenshot}
-          alt={product.name}
-        />
+      {product.screenshot ? (
+        <Link
+          href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${product.slug}`}
+          target="_blank"
+        >
+          <img
+            className="w-full rounded-t-md border-b aspect-video object-cover"
+            src={product.screenshot}
+            alt={product.name}
+          />
+        </Link>
+      ) : (
+        <div className="w-full rounded-t-md border-b aspect-video bg-gray-100 flex items-center justify-center"></div>
       )}
-      <div className="flex flex-col gap-2 p-4">
+      <Link
+        href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${product.slug}`}
+        target="_blank"
+        className="flex flex-col flex-grow gap-2 p-4"
+      >
         <div className="flex flex-row items-center gap-2">
-          {product.icon && (
+          {product.icon ? (
             <img className="w-5 h-5" src={product.icon} alt={product.name} />
+          ) : (
+            <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center"></div>
           )}
-          <h2 className="">{product.name}</h2>
-          <Link href={product.url || ''} target="_blank">
-            <BiShareAlt />
-          </Link>
+          <h2>{product.name ? product.name : 'YOUR PRODUCT NAME'}</h2>
         </div>
         <p className="text-sm text-gray-600 min-h-10 line-clamp-2 whitespace-break-spaces overflow-x-hidden">
-          {product.description}
+          {product.description
+            ? product.description
+            : 'YOUR PRODUCT DESCRIPTION'}
         </p>
-        {renderButton(product)}
-      </div>
+        <div className="text-sm text-gray-500">
+          <span>#{product.category}</span>
+        </div>
+      </Link>
+      {renderButton(product)}
     </div>
   );
 }

@@ -1,51 +1,32 @@
 'use client';
-
 import React, { use, useEffect, useState } from 'react';
-import Link from 'next/link';
-import { api } from '@/lib/api-client';
-import { useSession } from '@/context/UserProvider';
 import {
   ProductCategory,
   ProductEntity,
   ProductStatus,
   findAllRequestSchema,
 } from '@reviewsup/api/products';
-import { ReviewEntity } from '@reviewsup/api/reviews';
 import { Input } from '@reviewsup/ui/input';
 import { Checkbox } from '@reviewsup/ui/checkbox';
 import { Label } from '@reviewsup/ui/label';
-import { ProductItemView } from '@/modules/promotion/promotion-product-item-view';
+import { ProductItemView } from './product-item';
+import { fetchProductList } from '@/actions/fetch-product-list';
 
-export function PromotionAppsToReview(props: {
+export function ProductList(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
-  const { user } = useSession();
+  const { lang } = use(props.params);
   const [products, setProducts] = useState<ProductEntity[]>([]);
   const [originalProducts, setOriginalProducts] = useState<ProductEntity[]>([]);
-  const [submittedReviews, setSubmittedReviews] = useState<ReviewEntity[]>([]);
-
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [search, setSearch] = useState<string>('');
   const [categories, setCategories] = useState<string[]>([]);
 
-  const fetchData = () => {
-    if (!workspaceId) {
-      return null;
-    }
-    const validatedRequest = findAllRequestSchema.parse({
-      status: [ProductStatus.pendingForReceive, ProductStatus.listing],
-      page: page,
-      pageSize: pageSize,
-      search: undefined,
-      categories: categories,
-    });
-    api.product
-      .findAll(validatedRequest)
+  useEffect(() => {
+    fetchProductList(page, pageSize, categories)
       .then((response) => {
         setProducts(response);
         setOriginalProducts(response);
@@ -53,26 +34,6 @@ export function PromotionAppsToReview(props: {
       .catch((error) => {
         console.error('Error fetching products:', error);
       });
-  };
-
-  useEffect(() => {
-    fetchData();
-
-    if (user) {
-      api.review
-        .findAllByReviewerId(user.id)
-        .then((response) => {
-          setSubmittedReviews(response);
-          console.log('Submitted reviews:', response);
-        })
-        .catch((error) => {
-          console.error('Error fetching reviews:', error);
-        });
-    }
-  }, [workspaceId, user]);
-
-  useEffect(() => {
-    fetchData();
   }, [categories]);
 
   useEffect(() => {
@@ -88,25 +49,17 @@ export function PromotionAppsToReview(props: {
   }, [search, originalProducts]);
 
   return (
-    <div className="p-4 md:p-8 flex flex-col">
-      <div className="flex flex-row justify-between items-center mb-8">
-        <div>
-          <Link
-            href={`/${lang}/${workspaceId}/forms`}
-            className="flex flex-row items-center gap-2 "
-          >
-            <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-              Apps to Review
-            </h1>
-          </Link>
-          <p className="mt-1 text-gray-600 hidden md:flex">
-            Review other products to receive feedback on your own.
-          </p>
-        </div>
-        <div className={'flex flex-row gap-1 md:gap-2'}></div>
+    <div className="flex flex-col pt-32 px-32 gap-16">
+      <div className="flex flex-col gap-4 text-center">
+        <h1 className="text-5xl font-bold">
+          {/*  发现那些需要意见反馈的应用*/}
+          Join the Feedback Community
+        </h1>
+        <h2 className="text-xl text-gray-600 max-w-5xl mx-auto">
+          Support developers by trying out apps and sharing your reviews. Together, we build better products.
+        </h2>
       </div>
       <div className="grid grid-cols-12 gap-16">
-        {/* 搜索，筛选 分类，*/}
         <div className="col-span-2 flex flex-col gap-4">
           <h2>Filter Products</h2>
           <Input
@@ -122,7 +75,7 @@ export function PromotionAppsToReview(props: {
           <div className="flex flex-col gap-2">
             {Object.entries(ProductCategory).map(([key, value]) => (
               <div
-                className="flex flex-row items-center gap-2 bg-gray-50 p-3 rounded-md hover:bg-gray-100 cursor-pointer"
+                className="flex flex-row items-center gap-2 bg-gray-50 p-3 rounded-md hover:bg-gray-100"
                 key={key}
               >
                 <Checkbox
@@ -155,15 +108,10 @@ export function PromotionAppsToReview(props: {
         </div>
 
         {/*  产品grid*/}
-        <div className="col-span-10 grid grid-cols-3 items-start gap-4">
+        <div className="col-span-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-start gap-4">
           {products &&
             products.map((product) => (
-              <ProductItemView
-                key={product.id}
-                product={product}
-                user={user}
-                submittedReviews={submittedReviews}
-              />
+              <ProductItemView key={product.id} product={product} />
             ))}
         </div>
       </div>
