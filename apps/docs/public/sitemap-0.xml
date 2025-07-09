@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://docs.reviewsup.io/icon.png</loc><lastmod>2025-07-09T15:46:56.778Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/opengraph-image.png</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/blog</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/api-reference</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/changelog</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/community</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/contributing-guide</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/faq</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/features/forms</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/features/reviews</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/features/widgets</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/get-started</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/license</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://docs.reviewsup.io/docs/self-hosting</loc><lastmod>2025-07-09T15:46:56.779Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/icon.png</loc><lastmod>2025-07-09T19:50:28.743Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/opengraph-image.png</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/blog</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/api-reference</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/changelog</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/community</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/contributing-guide</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/faq</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/features/forms</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/features/reviews</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/features/widgets</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/get-started</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/license</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://docs.reviewsup.io/docs/self-hosting</loc><lastmod>2025-07-09T19:50:28.744Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

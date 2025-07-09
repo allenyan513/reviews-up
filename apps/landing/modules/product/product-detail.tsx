@@ -4,15 +4,8 @@ import { BsBoxArrowUp } from 'react-icons/bs';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-
-
-export default async function ProductDetail(props: {
-  params: Promise<{
-    lang: string;
-    slug: string;
-  }>;
-}) {
-  const { lang, slug } = await props.params;
+export async function ProductDetail(props: { lang: string; slug: string }) {
+  const { lang, slug } = props;
   const product = await fetchProductDetail(slug);
   return (
     <div>
@@ -71,25 +64,37 @@ export default async function ProductDetail(props: {
           <div className="flex flex-col rounded border border-gray-300 px-5 py-4 gap-2 bg-white">
             <h2 className="h3">What is {product.name}?</h2>
             <div className="rich-text text-start">
-              <Markdown children={product.longDescription} remarkPlugins={[remarkGfm]} />
+              <Markdown
+                children={product.longDescription}
+                remarkPlugins={[remarkGfm]}
+              />
             </div>
             <div className="divider" />
 
             <h2 className="h3">How to use {product.name}?</h2>
             <div className="rich-text text-start">
-              <Markdown children={product.howToUse} remarkPlugins={[remarkGfm]} />
+              <Markdown
+                children={product.howToUse}
+                remarkPlugins={[remarkGfm]}
+              />
             </div>
             <div className="divider" />
 
             <h2 className="h3">Core features of {product.name}</h2>
             <div className="rich-text text-start">
-              <Markdown children={product.features} remarkPlugins={[remarkGfm]} />
+              <Markdown
+                children={product.features}
+                remarkPlugins={[remarkGfm]}
+              />
             </div>
             <div className="divider" />
 
             <h2 className="h3">Use cases of {product.name}</h2>
             <div className="rich-text text-start">
-              <Markdown children={product.useCase} remarkPlugins={[remarkGfm]} />
+              <Markdown
+                children={product.useCase}
+                remarkPlugins={[remarkGfm]}
+              />
             </div>
             <div className="divider" />
             <h2 className="h3">FAQ of {product.name}</h2>
