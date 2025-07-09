@@ -19,11 +19,10 @@ export async function generateMetadata(props: {
   };
 }
 
-export default function Page(props: {
+export default async function Page(props: {
   params: Promise<{
     lang: string;
   }>;
-  children: React.ReactNode;
 }) {
   return <ProductList params={props.params} />;
 }

@@ -1,5 +1,5 @@
 import { fetchProductDetail } from '@/actions/fetch-product-detail';
-import ProductDetail from '@/modules/product/product-detail';
+import { ProductDetail } from '@/modules/product/product-detail';
 import { Metadata } from 'next';
 
 export async function generateMetadata(props: {
@@ -22,12 +22,12 @@ export async function generateMetadata(props: {
   };
 }
 
-export default function Page(props: {
+export default async function Page(props: {
   params: Promise<{
     lang: string;
     slug: string;
   }>;
-  children: React.ReactNode;
 }) {
-  return <ProductDetail params={props.params} />;
+  const { lang, slug } = await props.params;
+  return <ProductDetail lang={lang} slug={slug} />;
 }
