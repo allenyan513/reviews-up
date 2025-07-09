@@ -13,5 +13,8 @@ export * from './components/layout/carousel-layout';
 export * from './components/layout/avatar-list-layout';
 export * from './components/powered-by';
 export * from './components/showcase-page-review-client';
+export * from './components/embed/tiktok-embed';
+export * from './components/embed/linkedin-embed';
+export * from './components/item/index';
 
 export * from './hooks/use-showcase';

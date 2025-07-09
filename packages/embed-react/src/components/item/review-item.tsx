@@ -114,11 +114,21 @@ export function ReviewItem(props: {
             }
             className="flex flex-row gap-3"
           >
-            <img
-              src={review.reviewerImage}
-              alt={review.reviewerName}
-              className="w-11 h-11 rounded-full object-cover shadow"
-            />
+            {review.reviewerImage ? (
+              <img
+                src={review.reviewerImage}
+                alt={review.reviewerName}
+                className="w-11 h-11 rounded-full object-cover shadow"
+              />
+            ) : (
+              <div className="w-11 h-11 rounded-full bg-gray-200 flex items-center justify-center">
+                <span className="text-gray-500">
+                  {review.reviewerName
+                    ? review.reviewerName.charAt(0).toUpperCase()
+                    : 'U'}
+                </span>
+              </div>
+            )}
             <div className="flex flex-col justify-center">
               <p className="text-md text-black font-semibold line-clamp-1">
                 {review.reviewerName}

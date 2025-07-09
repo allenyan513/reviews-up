@@ -1,96 +1,24 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
-  DialogClose,
   DialogContent,
-  DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import React, { useEffect, useState } from 'react';
-import { BiDownload, BiPlus, BiX } from 'react-icons/bi';
+import React, { useState } from 'react';
+import { BiPlus } from 'react-icons/bi';
 import ReviewImportManualDialog from './manual';
-import ReviewImportXDialog from './twitter';
-import { BsFacebook, BsGoogle, BsLinkedin, BsTwitterX } from 'react-icons/bs';
-import { api } from '@/lib/api-client';
 import toast from 'react-hot-toast';
 import { useUserContext } from '@/context/UserProvider';
-import { Tweet } from 'react-tweet/api';
-import { parseTweet } from '@/lib/utils';
-import { YtDlpResponse } from '@reviewsup/api/yt-dlp';
+import { ReviewImportTiktokDialog } from './tiktok';
+import { ReviewImportGoogleMapDialog } from '@/modules/review/google';
+import { ReviewImportXDialog } from './twitter';
+import { ImportLinkedInDialog } from './linkedin';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultWorkspace, user, signIn } = useUserContext();
-
-  /**
-   * 将tweet数据转换成 review数据，然后发送给服务端， 服务端不需要做任何转换
-   * @param tweetId
-   * @param data
-   */
-  const importFromX = async (
-    tweetId: string,
-    data: Tweet | undefined | null,
-  ) => {
-    try {
-      if (!tweetId || !data || !defaultWorkspace) {
-        toast.error('Tweet ID is missing');
-        return;
-      }
-      const parseData = parseTweet(data);
-      await api.review.createReview({
-        workspaceId: defaultWorkspace.id,
-        rating: 5,
-        message: parseData?.message,
-        fullName: parseData?.fullName,
-        email: parseData?.email,
-        avatarUrl: parseData?.avatarUrl,
-        imageUrls: parseData?.imageUrls,
-        videoUrl: parseData?.videoUrl,
-        tweetId: parseData?.tweetId,
-        reviewerId: user?.id || '',
-        source: 'twitter',
-        sourceUrl: parseData?.tweetUrl,
-        userUrl: parseData?.userUrl,
-        title: `@${parseData?.screen_name}`,
-      });
-      toast.success('Review created successfully!');
-      setIsOpen(false);
-    } catch (error) {
-      toast('Failed to create review. Please try again.');
-      return;
-    }
-  };
-
-  const importFromTiktok = async (data: YtDlpResponse | undefined | null) => {
-    try {
-      if (!data || !defaultWorkspace) {
-        toast.error('Tweet ID is missing');
-        return;
-      }
-      await api.review.createReview({
-        workspaceId: defaultWorkspace.id,
-        rating: 5,
-        message: data.title,
-        fullName: data.title,
-        email: '',
-        userUrl: '',
-        avatarUrl: '',
-        source: 'manual',
-        imageUrls: [data.thumbnail],
-        videoUrl: data.video_url,
-        tweetId: '',
-        reviewerId: user?.id || '',
-      });
-      toast.success('Review created successfully!');
-      setIsOpen(false);
-    } catch (error) {
-      toast('Failed to create review. Please try again.');
-      return;
-    }
-  };
+  const { defaultWorkspace, user } = useUserContext();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -100,53 +28,61 @@ export default function ReviewImportDialog() {
           Import Reviews
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="w-full md:min-w-2xl">
         <DialogHeader>
           <DialogTitle>Import Reviews</DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-1 gap-4">
+        <div className="grid grid-cols-1 gap-4 w-full">
           <label>Import Reviews from Third Platform</label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <ReviewImportXDialog
-              onImport={(tweetId, data) => {
-                importFromX(tweetId, data);
+              workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('Twitter reviews imported successfully!');
+                setIsOpen(false);
               }}
-            >
-              <div>
-                <Button
-                  size={'lg'}
-                  className="w-full items-center justify-center text-sm"
-                  variant={'outline'}
-                >
-                  <BsTwitterX />
-                  Twitter/X
-                </Button>
-              </div>
-            </ReviewImportXDialog>
-            <Button
-              size={'lg'}
-              className="w-full items-center justify-center text-sm"
-              variant={'outline'}
-            >
-              <BsGoogle />
-              Google
-            </Button>
-            <Button
-              size={'lg'}
-              className="w-full items-center justify-center text-sm"
-              variant={'outline'}
-            >
-              <BsLinkedin />
-              LinkedIn
-            </Button>
-            <Button
-              size={'lg'}
-              className="w-full items-center justify-center text-sm"
-              variant={'outline'}
-            >
-              <BsFacebook />
-              Facebook
-            </Button>
+              onImportFailed={(error) => {
+                toast.error('Failed to import Twitter reviews.');
+              }}
+            />
+            <ReviewImportTiktokDialog
+              workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('TikTok reviews imported successfully!');
+                setIsOpen(false);
+              }}
+              onImportFailed={(error) => {
+                toast.error('Failed to import TikTok reviews.');
+              }}
+            ></ReviewImportTiktokDialog>
+            <ReviewImportGoogleMapDialog
+              workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('TikTok reviews imported successfully!');
+                setIsOpen(false);
+              }}
+              onImportFailed={(error) => {
+                toast.error('Failed to import TikTok reviews.');
+              }}
+            />
+            <ImportLinkedInDialog
+              workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
+              onImportStart={() => {}}
+              onImportSuccess={() => {
+                toast.success('TikTok reviews imported successfully!');
+                setIsOpen(false);
+              }}
+              onImportFailed={(error) => {
+                toast.error('Failed to import TikTok reviews.');
+              }}
+            />
           </div>
 
           {/* or */}

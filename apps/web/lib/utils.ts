@@ -42,7 +42,7 @@ export function parseTweet(data: Tweet | undefined | null) {
     email: '',
     avatarUrl: data.user.profile_image_url_https,
     imageUrls: imageUrls,
-    videoUrl: videoUrl || '',
+    videoUrl: videoUrl || undefined,
     tweetId: data.id_str,
     userUrl: userUrl,
     tweetUrl: tweetUrl,

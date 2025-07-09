@@ -3,7 +3,8 @@
   "tasks": {
     "dev": {
       "dependsOn": [
-        "^db:generate"
+        "^db:generate",
+        "^db:migrate:deploy"
       ],
       "cache": false,
       "persistent": true
@@ -11,7 +12,8 @@
     "build": {
       "dependsOn": [
         "^build",
-        "^db:generate"
+        "^db:generate",
+        "^db:migrate:deploy"
       ],
       "outputs": [
         "dist/**",
@@ -20,9 +22,13 @@
       ]
     },
     "db:generate": {
+      "dependsOn": ["^db:migrate:deploy"],
       "cache": false
     },
     "db:migrate": {
+      "cache": false
+    },
+    "db:migrate:deploy": {
       "cache": false
     }
   }

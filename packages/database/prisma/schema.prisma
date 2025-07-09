@@ -21,10 +21,24 @@ enum ReviewStatus {
 enum ReviewSource {
   manual
   json
+  csv
   twitter
   google
+  yelp
+  g2
+  appsumo
+  amazon
+  capterra
+  producthunt
   facebook
   trustpilot
+  tiktok
+  instagram
+  linkedin
+  youtube
+  vimeo
+  wistia
+  soundcloud
 }
 
 enum SubscriptionTier {
@@ -36,6 +50,33 @@ enum MediaType {
   image
   video
   audio
+}
+
+enum ProductStatus {
+  waitingForAdminReview
+  rejected
+  pendingForSubmit
+  pendingForReceive
+  listing
+}
+
+enum ProductCategory {
+  ai
+  analytics
+  automation
+  crm
+  design
+  development
+  eCommerce
+  education
+  finance
+  health
+  marketing
+  productivity
+  projectManagement
+  security
+  socialMedia
+  tools
 }
 
 enum CampaignStatus {
@@ -67,8 +108,10 @@ model User {
   Form             Form[]
   Showcase         Showcase[]
   Account          Account[]
-  Review           Review[]
   Campaign         Campaign[]
+  Product          Product[]
+  ownerReviews     Review[]         @relation("ReviewOwner")
+  reviewerReviews  Review[]         @relation("ReviewReviewer")
 }
 
 model Account {
@@ -102,6 +145,7 @@ model Workspace {
   Review    Review[]
   Showcase  Showcase[]
   Campaign  Campaign[]
+  Product   Product[]
 }
 
 model Form {
@@ -117,13 +161,14 @@ model Form {
   workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   Review      Review[]
   Campaign    Campaign[]
+  Product     Product[]
 }
 
 model Review {
   id            String        @id @default(uuid())
   workspaceId   String
+  ownerId       String?
   formId        String?
-  userId        String?
   reviewerId    String?
   reviewerName  String
   reviewerImage String?
@@ -136,11 +181,13 @@ model Review {
   source        ReviewSource  @default(manual)
   sourceUrl     String?
   status        ReviewStatus  @default(pending)
+  extra         Json?         @default("{}")
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   form          Form?         @relation(fields: [formId], references: [id], onDelete: Cascade)
   workspace     Workspace     @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  reviewer      User?         @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  owner         User?          @relation("ReviewOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  reviewer      User?         @relation("ReviewReviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
   medias        ReviewMedia[]
 }
 
@@ -188,4 +235,38 @@ model Campaign {
   user        User           @relation(fields: [userId], references: [id], onDelete: Cascade)
   form        Form           @relation(fields: [formId], references: [id], onDelete: Cascade)
   workspace   Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+}
+
+model Product {
+  id                 String           @id @default(uuid())
+  userId             String
+  workspaceId        String
+  formId             String
+  name               String
+  slug               String           @unique
+  url                String
+  status             ProductStatus    @default(waitingForAdminReview)
+  taskReviewCount    Int              @default(0)
+  submitReviewCount  Int              @default(0)
+  receiveReviewCount Int              @default(0)
+  description        String?
+  icon               String?
+  screenshot         String?
+  longDescription    String?
+  features           String?
+  useCase            String?
+  howToUse           String?
+  faq                String?
+  category           ProductCategory?
+  redditUrl          String?
+  twitterUrl         String?
+  facebookUrl        String?
+  instagramUrl       String?
+  youtubeUrl         String?
+  tiktokUrl          String?
+  createdAt          DateTime         @default(now())
+  updatedAt          DateTime         @updatedAt
+  user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  workspace          Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  form               Form             @relation(fields: [formId], references: [id], onDelete: Cascade)
 }

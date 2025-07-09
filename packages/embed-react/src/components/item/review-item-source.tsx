@@ -3,11 +3,19 @@ export function ReviewItemSource(props: {
   sourceUrl?: string;
   className?: string;
   isDoFollowEnabled?: boolean;
+  clickable?: boolean;
 }) {
-  const { source, sourceUrl, className } = props;
+  const { source, sourceUrl, className, clickable = true } = props;
+  const iconUrl = {
+    manual: 'https://app.reviewsup.io/img/logo-32.png',
+    tiktok: 'https://www.tiktok.com/favicon.ico',
+    twitter: 'https://abs.twimg.com/favicons/twitter.3.ico',
+    google: 'https://www.google.com/favicon.ico',
+    linkedin: 'https://www.linkedin.com/favicon.ico',
+  };
   return (
     <div className={className}>
-      {source === 'twitter' && (
+      {clickable ? (
         <a
           href={sourceUrl || '#'}
           target="_blank"
@@ -19,9 +27,16 @@ export function ReviewItemSource(props: {
         >
           <img
             className="w-6 h-6 rounded"
-            src="https://abs.twimg.com/favicons/twitter.3.ico"
+            src={iconUrl[source] || ''}
+            alt={`${source} icon`}
           />
         </a>
+      ) : (
+        <img
+          className="w-6 h-6 rounded"
+          src={iconUrl[source] || ''}
+          alt={`${source} icon`}
+        />
       )}
     </div>
   );

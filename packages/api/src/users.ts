@@ -16,7 +16,8 @@ export const userEntitySchema = z.object({
     .nativeEnum(SubscriptionTier)
     .default(SubscriptionTier.free),
   Workspace: z.lazy(() => z.array(workspaceEntitySchema)).optional(),
-  Review: z.lazy(() => z.array(reviewEntitySchema)).optional(),
+  ownerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
+  reviewerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
 });

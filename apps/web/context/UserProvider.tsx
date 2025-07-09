@@ -160,11 +160,11 @@ interface UseSessionOptions {
   onUnauthenticated?: () => void;
 }
 
-export function useSession(options: UseSessionOptions) {
+export function useSession(options?: UseSessionOptions) {
   const { user } = useUserContext();
 
   useEffect(() => {
-    if (!user && options.required) {
+    if (!user && options?.required) {
       if (options.onUnauthenticated) {
         options.onUnauthenticated();
       } else {

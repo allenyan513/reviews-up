@@ -5,7 +5,7 @@ import { RatingSummary } from '../rating-summary';
 import React from 'react';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 import { PoweredBy } from '../powered-by';
-import { ReviewItem1 } from '../item/review-item-1';
+import { renderItem } from '../item';
 
 export function GridLayout(props: {
   items: ReviewEntity[];
@@ -22,17 +22,9 @@ export function GridLayout(props: {
         }}
         className="w-full grid gap-4"
       >
-        {items.map((item, idx) => (
-          <ReviewItem1
-            key={item.id}
-            review={item}
-            config={config}
-            style={{
-              width: '100%',
-              height: '300px',
-            }}
-          />
-        ))}
+        {items.map((item, idx) => {
+          return renderItem(item, 'style-1', config, '100%', '300px');
+        })}
       </div>
       {config.isRatingSummaryEnabled && (
         <RatingSummary ratings={items.map((item) => item.rating || 0)} />

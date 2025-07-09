@@ -12,7 +12,7 @@ export function ReviewItem1(props: {
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const { review, config, className, style = {} } = props;
+  const { review, config, className, style} = props;
   const {
     isSourceEnabled = true,
     isRatingEnabled = true,
@@ -25,8 +25,8 @@ export function ReviewItem1(props: {
   return (
     <div
       key={review.id}
-      className={`flex flex-col justify-between gap-2 p-4 text-black bg-white rounded-lg shadow-lg ${className}`}
       style={{ ...style }}
+      className={`flex flex-col justify-between gap-2 p-4 text-black bg-white rounded-lg shadow-lg ${className}`}
     >
       <div className="flex flex-col gap-2 flex-grow min-h-0 overflow-hidden">
         <BiSolidQuoteLeft className="w-8 h-8 min-h-8" />

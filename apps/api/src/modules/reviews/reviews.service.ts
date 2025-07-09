@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   CreateReviewDto,
   UpdateReviewDto,
@@ -11,6 +11,18 @@ import {
   ReviewSource,
   ReviewStatus,
 } from '@reviewsup/database/generated/client';
+import {
+  TiktokOembedResponse,
+  TiktokOembedRequest,
+} from '@reviewsup/api/tiktok';
+import axios from 'axios';
+import { PlacesClient } from '@googlemaps/places';
+import {
+  GoogleMapRequest,
+  GoogleMapResponse,
+  googleMapResponseSchema,
+} from '@reviewsup/api/google';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class ReviewsService {
@@ -18,17 +30,33 @@ export class ReviewsService {
 
   constructor(
     private prismaService: PrismaService,
+    private productsService: ProductsService,
     private notificationService: NotificationsService,
   ) {}
 
   async create(uid: string, dto: CreateReviewDto) {
     this.logger.debug(`Creating review for user ${uid}`, dto);
+    // find out ownerId
+    const owner = await this.prismaService.workspace.findUnique({
+      where: {
+        id: dto.workspaceId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+    if (!owner) {
+      throw new HttpException(
+        `Workspace with ID ${dto.workspaceId} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
     const review = await this.prismaService.review.create({
       data: {
         workspaceId: dto.workspaceId,
         formId: dto.formId,
-        userId: uid,
-        reviewerId: dto.reviewerId || uid, // Use userId if reviewerId is not provided
+        ownerId: owner.userId,
+        reviewerId: dto.reviewerId || uid,
         reviewerName: dto.fullName,
         reviewerImage: dto.avatarUrl,
         reviewerEmail: dto.email,
@@ -40,6 +68,9 @@ export class ReviewsService {
         status: 'pending',
         source: (dto.source as ReviewSource) || 'manual', // Default to 'manual' if not provided
         sourceUrl: dto.sourceUrl || '',
+        extra: {
+          ...dto.extra, // Include any additional data
+        },
         createdAt: new Date(),
         updatedAt: new Date(),
       },
@@ -64,6 +95,8 @@ export class ReviewsService {
         },
       });
     }
+    // Update the product if there is new review submitted
+    await this.productsService.onReviewSubmitted(review.id);
     // notify the creator of the form
     this.notificationService
       .onReviewSubmitted(review.id)
@@ -147,4 +180,87 @@ export class ReviewsService {
   }
 
   async notifyFormCreator(reviewId: string, dto: UpdateReviewDto) {}
+
+  async parseTiktok(
+    request: TiktokOembedRequest,
+  ): Promise<TiktokOembedResponse> {
+    const res = await axios.get(
+      `https://www.tiktok.com/oembed?url=${encodeURIComponent(request.url)}`,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    if (res.status !== 200) {
+      throw new Error(`Failed to fetch TikTok data: ${res.statusText}`);
+    }
+    return {
+      ...res.data,
+      url: request.url,
+    } as TiktokOembedResponse;
+  }
+
+  /**
+   * https://developers.google.com/maps/documentation/places/web-service/data-fields?hl=zh-cn&_gl=1*1al7rgh*_up*MQ..*_ga*NjM2Mjc0MDkwLjE3NTE3NzUxNzA.*_ga_NRWSTWS78N*czE3NTE3NzUxNjkkbzEkZzEkdDE3NTE3NzUxNzAkajU5JGwwJGgw
+   * @param request
+   */
+  async searchPlaces(
+    request: GoogleMapRequest,
+  ): Promise<GoogleMapResponse | null> {
+    const placesClient = new PlacesClient({
+      projectId: process.env.GOOGLE_CLOUD_PROJECT,
+      apiKey: process.env.GOOGLE_MAPS_API_KEY,
+    });
+    const places = await placesClient
+      .searchText(
+        {
+          textQuery: request.textQuery,
+        },
+        {
+          otherArgs: {
+            headers: {
+              'X-Goog-FieldMask':
+                'places.id,places.displayName,places.formattedAddress,places.reviews,places.rating,places.userRatingCount,places.reviewSummary,places.googleMapsUri,places.websiteUri',
+            },
+          },
+        },
+      )
+      .then((response) => {
+        if (!response || !response.length) {
+          throw new Error('No results found for the given search name');
+        }
+        if (!response[0].places || response[0].places.length === 0) {
+          throw new Error('No places found in the response');
+        }
+        return response[0].places;
+      });
+    return googleMapResponseSchema.parse({
+      places: places,
+    });
+  }
+
+  async findAllByReviewerId(reviewerId: string) {
+    const reviews = await this.prismaService.review.findMany({
+      where: {
+        reviewerId: reviewerId,
+      },
+      select: {
+        id: true,
+        reviewerId: true,
+        formId: true,
+        form: true,
+      },
+    });
+    return reviews.map((review) => {
+      return {
+        id: review.id,
+        reviewerId: review.reviewerId,
+        formId: review.formId,
+        form: {
+          shortId: review.form?.shortId,
+        },
+      };
+    });
+  }
 }

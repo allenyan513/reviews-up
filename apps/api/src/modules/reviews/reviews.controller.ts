@@ -18,9 +18,15 @@ import {
   FindAllReviewRequest,
   CreateReviewDto,
   UpdateReviewDto,
+  createReviewSchema,
 } from '@reviewsup/api/reviews';
 import { YtDlpService } from '../yt-dlp/yt-dlp.service';
 import { YtDlpRequest } from '@reviewsup/api/yt-dlp';
+import {
+  TiktokOembedRequest,
+  tiktokOembedRequestShema,
+} from '@reviewsup/api/tiktok';
+import { GoogleMapRequest } from '@reviewsup/api/google';
 
 @Controller('reviews')
 export class ReviewsController {
@@ -40,7 +46,16 @@ export class ReviewsController {
     @Jwt() jwt: JwtPayload,
     @Body() createReviewDto: CreateReviewDto,
   ) {
-    return this.reviewsService.create(jwt.userId, createReviewDto);
+    const validatedDto = createReviewSchema.parse(
+      createReviewDto,
+    ) as CreateReviewDto;
+    return this.reviewsService.create(jwt.userId, validatedDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('findAllByReviewerId')
+  async findAllByReviewerId(@Jwt() jwt: JwtPayload) {
+    return this.reviewsService.findAllByReviewerId(jwt.userId);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -83,5 +98,26 @@ export class ReviewsController {
   @Post('parse')
   async parse(@Jwt() jwt: JwtPayload, @Body() request: YtDlpRequest) {
     return this.ytdlpService.parse(request);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('parse/tiktok')
+  async parseTiktok(
+    @Jwt() jwt: JwtPayload,
+    @Body() request: TiktokOembedRequest,
+  ) {
+    const validatedRequest = tiktokOembedRequestShema.parse(
+      request,
+    ) as TiktokOembedRequest;
+    return this.reviewsService.parseTiktok(validatedRequest);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('parse/google')
+  async searchPlaces(
+    @Jwt() jwt: JwtPayload,
+    @Body() request: GoogleMapRequest,
+  ) {
+    return await this.reviewsService.searchPlaces(request);
   }
 }

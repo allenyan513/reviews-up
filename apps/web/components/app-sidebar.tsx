@@ -10,6 +10,8 @@ import {
   IconUser,
   IconMail,
   IconClipboardText,
+  IconRocket,
+  IconBuildingStore,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -36,7 +38,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = props.lang;
-  const { user, defaultWorkspace, signOut , deleteAccount} = useUserContext();
+  const { user, defaultWorkspace, signOut, deleteAccount } = useUserContext();
   const path = usePathname();
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -80,12 +82,26 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               icon: IconTable,
               active: path.includes('/forms'),
             },
-            // {
-            //   title: 'Campaigns',
-            //   url: `/${lang}/${defaultWorkspace?.id}/campaigns`,
-            //   icon: IconMail,
-            //   active: path.includes('/campaigns'),
-            // },
+            {
+              title: 'Launch',
+              url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
+              icon: IconRocket,
+              active: false,
+              children: [
+                {
+                  title: 'My products',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
+                  icon: IconUser,
+                  active: path.includes('/promotion/my-products'),
+                },
+                {
+                  title: 'Apps to Review',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/apps-to-review`,
+                  icon: IconBuildingStore,
+                  active: path.includes('/promotion/apps-to-review'),
+                },
+              ],
+            },
             {
               title: 'Settings',
               url: `/${lang}/settings`,
@@ -94,19 +110,22 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
           ]}
         />
-        <NavSecondary items={[
-          {
-            title: 'Documents',
-            url: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
-            icon: IconClipboardText,
-            external: true,
-          },
-          {
-            title: 'Contact Us',
-            url: 'mailto:support@reviewsup.io',
-            icon: IconMail,
-          },
-        ]} className="mt-auto" />
+        <NavSecondary
+          items={[
+            {
+              title: 'Documents',
+              url: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
+              icon: IconClipboardText,
+              external: true,
+            },
+            {
+              title: 'Contact Us',
+              url: 'mailto:support@reviewsup.io',
+              icon: IconMail,
+            },
+          ]}
+          className="mt-auto"
+        />
       </SidebarContent>
       <SidebarFooter>
         <NavUser

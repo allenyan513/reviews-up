@@ -5,7 +5,7 @@ import ReviewImportDialog from '@/modules/review/review-import-dialog';
 import { useUserContext } from '@/context/UserProvider';
 import { api } from '@/lib/api-client';
 import { DataTable } from '@/components/data-table';
-import { columns } from '@/modules/review/table/columens';
+import { columns } from '@/modules/review/review-list-page-columns';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 export default function ReviewsPage(props: {
