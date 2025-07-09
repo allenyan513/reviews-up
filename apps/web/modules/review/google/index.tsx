@@ -23,14 +23,23 @@ import StarRating from '@reviewsup/ui/star-rating';
 import { ReviewItemSource } from '@reviewsup/embed-react';
 import { ReviewsupAvatar } from '@reviewsup/ui/reviewsup-avatar';
 import toast from 'react-hot-toast';
+import { useSession } from '@/context/UserProvider';
 
 export function ReviewImportGoogleMapDialog(props: {
   workspaceId: string;
+  formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
   onImportFailed?: (error: Error) => void;
 }) {
-  const { workspaceId, onImportStart, onImportSuccess, onImportFailed } = props;
+  const {
+    workspaceId,
+    formId,
+    onImportStart,
+    onImportSuccess,
+    onImportFailed,
+  } = props;
+  const { user } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [textQuery, setTextQuery] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
@@ -50,28 +59,32 @@ export function ReviewImportGoogleMapDialog(props: {
       }
       const results = await Promise.all(
         currentPlace.reviews.map((review) => {
-          return api.review.createReview({
-            workspaceId: workspaceId,
-            rating: review.rating,
-            message: review.text?.text,
-            fullName: review.authorAttribution?.displayName,
-            email: undefined,
-            avatarUrl: review.authorAttribution?.photoUri,
-            userUrl: review.authorAttribution?.uri,
-            imageUrls: [],
-            videoUrl: undefined,
-            source: 'google',
-            sourceUrl: review.googleMapsUri || currentPlace.googleMapsUri,
-            title: '',
-            extra: {
-              ...review,
+          return api.review.createReview(
+            {
+              workspaceId: workspaceId,
+              formId: formId,
+              rating: review.rating,
+              message: review.text?.text,
+              fullName: review.authorAttribution?.displayName,
+              email: undefined,
+              avatarUrl: review.authorAttribution?.photoUri,
+              userUrl: review.authorAttribution?.uri,
+              imageUrls: [],
+              videoUrl: undefined,
+              source: 'google',
+              sourceUrl: review.googleMapsUri || currentPlace.googleMapsUri,
+              title: '',
+              extra: {
+                ...review,
+              },
             },
-          });
+            user,
+          );
         }),
       );
       if (results && results.length > 0) {
         setIsOpen(false);
-        if( onImportSuccess) {
+        if (onImportSuccess) {
           onImportSuccess();
         }
       } else {

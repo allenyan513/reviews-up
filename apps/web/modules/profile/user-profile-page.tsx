@@ -43,7 +43,7 @@ export function UserProfilePage(props: { user: UserEntity; className?: string })
           {/*<h2 className="text-xl font-semibold">Reviews</h2>*/}
         </div>
         <ListLayoutClient
-          items={user.Review || []}
+          items={user.ownerReviews || []}
           config={{
             type: 'list',
             isRatingEnabled: true,

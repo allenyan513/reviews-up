@@ -18,6 +18,7 @@ import { YtDlpModule } from '@src/modules/yt-dlp/yt-dlp.module';
 import { CampaignsModule } from './modules/campaigns/campaigns.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { ProductsModule } from './modules/products/products.module';
 
 @Module({
   imports: [
@@ -47,6 +48,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     YtDlpModule,
     CampaignsModule,
     AnalyticsModule,
+    ProductsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

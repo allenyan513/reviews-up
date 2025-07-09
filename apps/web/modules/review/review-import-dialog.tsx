@@ -37,6 +37,7 @@ export default function ReviewImportDialog() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <ReviewImportXDialog
               workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('Twitter reviews imported successfully!');
@@ -48,6 +49,7 @@ export default function ReviewImportDialog() {
             />
             <ReviewImportTiktokDialog
               workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('TikTok reviews imported successfully!');
@@ -59,6 +61,7 @@ export default function ReviewImportDialog() {
             ></ReviewImportTiktokDialog>
             <ReviewImportGoogleMapDialog
               workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('TikTok reviews imported successfully!');
@@ -70,6 +73,7 @@ export default function ReviewImportDialog() {
             />
             <ImportLinkedInDialog
               workspaceId={defaultWorkspace?.id || ''}
+              formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('TikTok reviews imported successfully!');

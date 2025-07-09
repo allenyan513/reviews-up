@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserEntity } from '@reviewsup/api/users';
-import { generateShortId } from '../../libs/shortId';
+import { generateShortId } from '@src/libs/shortId';
 import { FormsService } from '../forms/forms.service';
 import { ShowcasesService } from '../showcases/showcases.service';
 import { defaultUserData } from './default-data';
@@ -48,7 +48,8 @@ export class UsersService {
       where: { id: slug },
       include: {
         Workspace: true,
-        Review: true,
+        reviewerReviews: true,
+        ownerReviews: true,
       },
     });
   }

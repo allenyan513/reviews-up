@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, Logger } from '@nestjs/common';
 import {
   CreateReviewDto,
   UpdateReviewDto,
@@ -22,6 +22,7 @@ import {
   GoogleMapResponse,
   googleMapResponseSchema,
 } from '@reviewsup/api/google';
+import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class ReviewsService {
@@ -29,17 +30,33 @@ export class ReviewsService {
 
   constructor(
     private prismaService: PrismaService,
+    private productsService: ProductsService,
     private notificationService: NotificationsService,
   ) {}
 
   async create(uid: string, dto: CreateReviewDto) {
     this.logger.debug(`Creating review for user ${uid}`, dto);
+    // find out ownerId
+    const owner = await this.prismaService.workspace.findUnique({
+      where: {
+        id: dto.workspaceId,
+      },
+      select: {
+        userId: true,
+      },
+    });
+    if (!owner) {
+      throw new HttpException(
+        `Workspace with ID ${dto.workspaceId} not found`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
     const review = await this.prismaService.review.create({
       data: {
         workspaceId: dto.workspaceId,
         formId: dto.formId,
-        userId: uid,
-        reviewerId: dto.reviewerId || uid, // Use userId if reviewerId is not provided
+        ownerId: owner.userId,
+        reviewerId: dto.reviewerId || uid,
         reviewerName: dto.fullName,
         reviewerImage: dto.avatarUrl,
         reviewerEmail: dto.email,
@@ -78,6 +95,8 @@ export class ReviewsService {
         },
       });
     }
+    // Update the product if there is new review submitted
+    await this.productsService.onReviewSubmitted(review.id);
     // notify the creator of the form
     this.notificationService
       .onReviewSubmitted(review.id)
@@ -202,7 +221,7 @@ export class ReviewsService {
           otherArgs: {
             headers: {
               'X-Goog-FieldMask':
-                'places.id,places.displayName,places.formattedAddress,places.reviews,places.rating,places.userRatingCount,places.reviewSummary,places.googleMapsUri,places.websiteUri'
+                'places.id,places.displayName,places.formattedAddress,places.reviews,places.rating,places.userRatingCount,places.reviewSummary,places.googleMapsUri,places.websiteUri',
             },
           },
         },
@@ -218,6 +237,30 @@ export class ReviewsService {
       });
     return googleMapResponseSchema.parse({
       places: places,
+    });
+  }
+
+  async findAllByReviewerId(reviewerId: string) {
+    const reviews = await this.prismaService.review.findMany({
+      where: {
+        reviewerId: reviewerId,
+      },
+      select: {
+        id: true,
+        reviewerId: true,
+        formId: true,
+        form: true,
+      },
+    });
+    return reviews.map((review) => {
+      return {
+        id: review.id,
+        reviewerId: review.reviewerId,
+        formId: review.formId,
+        form: {
+          shortId: review.form?.shortId,
+        },
+      };
     });
   }
 }

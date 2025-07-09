@@ -10,6 +10,7 @@ import { ReviewImportXDialog } from '@/modules/review/twitter';
 import { ReviewImportGoogleMapDialog } from '@/modules/review/google';
 import { ImportLinkedInDialog } from '@/modules/review/linkedin';
 import { ManualImportView } from '@/modules/review/manual/manual-import-view';
+import { useSession } from '@/context/UserProvider';
 
 /**
  * 从 /forms/[shortId] 提交的表单
@@ -24,9 +25,11 @@ export function FormDefaultSubmitView(props: {
   mode: 'edit' | 'public';
 }) {
   const router = useRouter();
+  const { user } = useSession();
   const { id, workspaceId, lang, shortId, mode } = props;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  const [isAddReviewManually, setIsAddReviewManually] = useState<boolean>(false);
+  const [isAddReviewManually, setIsAddReviewManually] =
+    useState<boolean>(false);
   const [submitForm, setSubmitForm] = useState<CreateReviewDto | undefined>(
     undefined,
   );
@@ -40,11 +43,16 @@ export function FormDefaultSubmitView(props: {
       return;
     }
     setIsSubmitting(true);
+
     api.review
-      .submitReview({
-        workspaceId: workspaceId,
-        ...submitForm,
-      })
+      .createReview(
+        {
+          workspaceId: workspaceId,
+          formId: id,
+          ...submitForm,
+        },
+        user,
+      )
       .then(() => {
         toast.success('Review submitted successfully!');
         setIsSubmitting(false);
@@ -64,6 +72,7 @@ export function FormDefaultSubmitView(props: {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           <ReviewImportXDialog
             workspaceId={workspaceId}
+            formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
             }}
@@ -79,6 +88,7 @@ export function FormDefaultSubmitView(props: {
           />
           <ReviewImportTiktokDialog
             workspaceId={workspaceId}
+            formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
             }}
@@ -94,6 +104,7 @@ export function FormDefaultSubmitView(props: {
           />
           <ReviewImportGoogleMapDialog
             workspaceId={workspaceId}
+            formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
             }}
@@ -109,6 +120,7 @@ export function FormDefaultSubmitView(props: {
           />
           <ImportLinkedInDialog
             workspaceId={workspaceId}
+            formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
             }}

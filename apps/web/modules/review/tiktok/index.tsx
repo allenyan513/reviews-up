@@ -11,20 +11,28 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import React, { useState, useRef } from 'react';
-import { Input } from '@/components/ui/input';
 import toast from 'react-hot-toast';
 import { TiktokOembedResponse } from '@reviewsup/api/tiktok';
 import { api } from '@/lib/api-client';
 import { ReviewItemSource, TikTokEmbed } from '@reviewsup/embed-react';
 import Link from 'next/link';
+import { useSession } from '@/context/UserProvider';
 
 export function ReviewImportTiktokDialog(props: {
   workspaceId: string;
+  formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
   onImportFailed?: (error: Error) => void;
 }) {
-  const { workspaceId, onImportStart, onImportSuccess, onImportFailed } = props;
+  const { user } = useSession();
+  const {
+    workspaceId,
+    formId,
+    onImportStart,
+    onImportSuccess,
+    onImportFailed,
+  } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tiktokUrl, setTiktokUrl] = useState<string>('');
   const [tiktokResponse, setTiktokResponse] = useState<
@@ -39,20 +47,28 @@ export function ReviewImportTiktokDialog(props: {
       if (onImportStart) {
         onImportStart();
       }
-      await api.review.createReview({
-        workspaceId: workspaceId,
-        rating: 5,
-        message: tiktokResponse.title,
-        fullName: tiktokResponse.author_name,
-        imageUrls: [tiktokResponse.thumbnail_url || ''],
-        source: 'tiktok',
-        sourceUrl: tiktokResponse.url,
-        userUrl: tiktokResponse.author_url,
-        title: tiktokResponse.author_url?.replace('https://www.tiktok.com/@', '@') || '',
-        extra: {
-          ...tiktokResponse,
+      await api.review.createReview(
+        {
+          workspaceId: workspaceId,
+          formId: formId,
+          rating: 5,
+          message: tiktokResponse.title,
+          fullName: tiktokResponse.author_name,
+          imageUrls: [tiktokResponse.thumbnail_url || ''],
+          source: 'tiktok',
+          sourceUrl: tiktokResponse.url,
+          userUrl: tiktokResponse.author_url,
+          title:
+            tiktokResponse.author_url?.replace(
+              'https://www.tiktok.com/@',
+              '@',
+            ) || '',
+          extra: {
+            ...tiktokResponse,
+          },
         },
-      });
+        user,
+      );
       setIsOpen(false);
       if (onImportSuccess) {
         onImportSuccess();
@@ -90,7 +106,7 @@ export function ReviewImportTiktokDialog(props: {
       open={isOpen}
       onOpenChange={(open) => {
         setIsOpen(open);
-        if(!open){
+        if (!open) {
           setTiktokUrl('');
           setTiktokResponse(undefined);
         }

@@ -12,20 +12,22 @@ import {
 } from '@/components/ui/dialog';
 import React, { useState, useRef, useEffect } from 'react';
 
-import { Input } from '@/components/ui/input';
 import { Tweet, useTweet } from 'react-tweet';
 import { parseTweet } from '@/lib/utils';
 import { api } from '@/lib/api-client';
 import { ReviewItemSource } from '@reviewsup/embed-react';
 import Link from 'next/link';
+import { useSession } from '@/context/UserProvider';
 
 export function ReviewImportXDialog(props: {
   workspaceId: string;
+  formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
   onImportFailed?: (error: Error) => void;
 }) {
-  const { workspaceId, onImportSuccess, onImportFailed, onImportStart } = props;
+  const { user } = useSession();
+  const { workspaceId,formId, onImportSuccess, onImportFailed, onImportStart } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tweetId, setTweetId] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
@@ -52,22 +54,26 @@ export function ReviewImportXDialog(props: {
         onImportStart();
       }
       const parseData = parseTweet(data);
-      await api.review.createReview({
-        workspaceId: workspaceId,
-        rating: 5,
-        message: parseData?.message,
-        fullName: parseData?.fullName,
-        email: parseData?.email,
-        avatarUrl: parseData?.avatarUrl,
-        imageUrls: parseData?.imageUrls,
-        videoUrl: parseData?.videoUrl,
-        tweetId: parseData?.tweetId,
-        reviewerId: '',
-        source: 'twitter',
-        sourceUrl: parseData?.tweetUrl,
-        userUrl: parseData?.userUrl,
-        title: `@${parseData?.screen_name}`,
-      });
+      await api.review.createReview(
+        {
+          workspaceId: workspaceId,
+          formId: formId,
+          rating: 5,
+          message: parseData?.message,
+          fullName: parseData?.fullName,
+          email: parseData?.email,
+          avatarUrl: parseData?.avatarUrl,
+          imageUrls: parseData?.imageUrls,
+          videoUrl: parseData?.videoUrl,
+          tweetId: parseData?.tweetId,
+          reviewerId: '',
+          source: 'twitter',
+          sourceUrl: parseData?.tweetUrl,
+          userUrl: parseData?.userUrl,
+          title: `@${parseData?.screen_name}`,
+        },
+        user,
+      );
       setIsOpen(false);
       if (onImportSuccess) {
         onImportSuccess();

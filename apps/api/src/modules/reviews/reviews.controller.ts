@@ -53,6 +53,12 @@ export class ReviewsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Get('findAllByReviewerId')
+  async findAllByReviewerId(@Jwt() jwt: JwtPayload) {
+    return this.reviewsService.findAllByReviewerId(jwt.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Get('workspaceId/:workspaceId')
   async findAll(
     @Jwt() jwt: JwtPayload,

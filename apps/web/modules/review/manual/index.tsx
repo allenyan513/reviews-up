@@ -14,11 +14,12 @@ import {
 import React, { useState } from 'react';
 import { BiPlus } from 'react-icons/bi';
 import { api } from '@/lib/api-client';
-import { useUserContext } from '@/context/UserProvider';
+import { useSession, useUserContext } from '@/context/UserProvider';
 import { CreateReviewDto } from '@reviewsup/api/reviews';
 import { ManualImportView } from './manual-import-view';
 
 export default function ReviewImportManualDialog(props: {}) {
+  const { user } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const { defaultWorkspace } = useUserContext();
   const [formData, setFormData] = useState<CreateReviewDto | undefined>(
@@ -30,10 +31,13 @@ export default function ReviewImportManualDialog(props: {}) {
       if (!formData) {
         return;
       }
-      await api.review.createReview({
-        workspaceId: defaultWorkspace?.id || '',
-        ...formData,
-      });
+      await api.review.createReview(
+        {
+          workspaceId: defaultWorkspace?.id || '',
+          ...formData,
+        },
+        user,
+      );
       toast.success('Review created successfully!');
       setIsOpen(false);
     } catch (error) {

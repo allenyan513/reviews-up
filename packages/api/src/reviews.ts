@@ -69,7 +69,7 @@ export const reviewEntitySchema = z.object({
   id: z.string().min(1, 'Review ID is required'),
   workspaceId: z.string().min(1, 'Workspace ID is required'),
   formId: z.string().optional(),
-  userId: z.string().optional(),
+  ownerId: z.string().optional(),
   reviewerId: z.string().optional(),
   reviewerName: z.string().min(1, 'Reviewer name is required'),
   reviewerImage: z.string().url().optional(),

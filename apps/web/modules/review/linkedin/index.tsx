@@ -15,14 +15,23 @@ import Link from 'next/link';
 import { LinkedinEmbedCode } from '@reviewsup/api/linkedin';
 import { LinkedinEmbed, ReviewItemSource } from '@reviewsup/embed-react';
 import { api } from '@/lib/api-client';
+import { useSession } from '@/context/UserProvider';
 
 export function ImportLinkedInDialog(props: {
   workspaceId: string;
+  formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
   onImportFailed?: (error: Error) => void;
 }) {
-  const { workspaceId, onImportStart, onImportSuccess, onImportFailed } = props;
+  const { user } = useSession();
+  const {
+    workspaceId,
+    formId,
+    onImportStart,
+    onImportSuccess,
+    onImportFailed,
+  } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [inputValue, setInputValue] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
@@ -39,22 +48,26 @@ export function ImportLinkedInDialog(props: {
       if (onImportStart) {
         onImportStart();
       }
-      await api.review.createReview({
-        workspaceId: workspaceId,
-        rating: 5,
-        message: 'message from LinkedIn',
-        fullName: 'LinkedIn User',
-        email: undefined,
-        avatarUrl: undefined,
-        userUrl: undefined,
-        imageUrls: [],
-        videoUrl: undefined,
-        source: 'linkedin',
-        sourceUrl: linkedinEmbedCode.src,
-        extra: {
-          ...linkedinEmbedCode,
+      await api.review.createReview(
+        {
+          workspaceId: workspaceId,
+          formId: formId,
+          rating: 5,
+          message: 'message from LinkedIn',
+          fullName: 'LinkedIn User',
+          email: undefined,
+          avatarUrl: undefined,
+          userUrl: undefined,
+          imageUrls: [],
+          videoUrl: undefined,
+          source: 'linkedin',
+          sourceUrl: linkedinEmbedCode.src,
+          extra: {
+            ...linkedinEmbedCode,
+          },
         },
-      });
+        user,
+      );
       if (onImportSuccess) {
         onImportSuccess();
       }

@@ -70,18 +70,18 @@ export default function FormIdLayout(props: {
           </p>
         </div>
         <div className={'flex flex-row gap-1 md:gap-2'}>
-          <Button
-            onClick={() => {
-              router.push(
-                `/${lang}/${workspaceId}/campaigns/create?formId=${form.id}`,
-              );
-            }}
-            variant="outline"
-            size={'lg'}
-          >
-            <BsSend className="text-2xl" />
-            <span className="hidden md:inline">Invite Reviews</span>
-          </Button>
+          {/*<Button*/}
+          {/*  onClick={() => {*/}
+          {/*    router.push(*/}
+          {/*      `/${lang}/${workspaceId}/campaigns/create?formId=${form.id}`,*/}
+          {/*    );*/}
+          {/*  }}*/}
+          {/*  variant="outline"*/}
+          {/*  size={'lg'}*/}
+          {/*>*/}
+          {/*  <BsSend className="text-2xl" />*/}
+          {/*  <span className="hidden md:inline">Invite Reviews</span>*/}
+          {/*</Button>*/}
           <Button
             onClick={() => {
               navigator.clipboard.writeText(

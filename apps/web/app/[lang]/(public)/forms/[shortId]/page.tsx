@@ -10,7 +10,6 @@ export default function PublicFormRoute(props: {
     lang: string;
   }>;
 }) {
-  const { user } = useSession({ required: false });
   const { lang, shortId } = use(props.params);
   const { form, fetchFormByShortId } = useFormContext();
   useEffect(() => {

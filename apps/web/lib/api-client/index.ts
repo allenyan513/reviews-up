@@ -6,6 +6,7 @@ import { review } from './review';
 import { workspace } from './workspace';
 import { user } from './user';
 import { campaign } from './campaign';
+import { product } from './product';
 
 export const api = {
   form: form,
@@ -16,4 +17,5 @@ export const api = {
   workspace: workspace,
   user: user,
   campaign: campaign,
+  product: product,
 };
