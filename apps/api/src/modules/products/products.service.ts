@@ -42,6 +42,7 @@ export class ProductsService {
         icon: dto.icon,
         screenshot: dto.screenshot,
         category: dto.category as ProductCategory,
+        description: dto.description,
         longDescription: dto.longDescription,
         features: dto.features,
         useCase: dto.useCase,

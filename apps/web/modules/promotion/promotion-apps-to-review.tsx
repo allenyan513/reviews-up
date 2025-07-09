@@ -26,6 +26,7 @@ export function PromotionAppsToReview(props: {
   const { lang, workspaceId } = use(props.params);
   const { user } = useSession();
   const [products, setProducts] = useState<ProductEntity[]>([]);
+  const [originalProducts, setOriginalProducts] = useState<ProductEntity[]>([]);
   const [submittedReviews, setSubmittedReviews] = useState<ReviewEntity[]>([]);
 
   const [page, setPage] = useState<number>(1);
@@ -41,13 +42,14 @@ export function PromotionAppsToReview(props: {
       status: [ProductStatus.pendingForReceive, ProductStatus.listing],
       page: page,
       pageSize: pageSize,
-      search: search,
+      search: undefined,
       categories: categories,
     });
     api.product
       .findAll(validatedRequest)
       .then((response) => {
         setProducts(response);
+        setOriginalProducts(response);
       })
       .catch((error) => {
         console.error('Error fetching products:', error);
@@ -71,13 +73,23 @@ export function PromotionAppsToReview(props: {
   }, [workspaceId, user]);
 
   useEffect(() => {
-    console.log('params changed:', search, categories);
-    fetchData()
-  }, [search, categories]);
+    fetchData();
+  }, [categories]);
+
+  useEffect(() => {
+    if (search.trim() === '') {
+      setProducts(originalProducts);
+    } else {
+      setProducts(
+        originalProducts.filter((product) =>
+          product?.name?.toLowerCase().includes(search.toLowerCase()),
+        ),
+      );
+    }
+  }, [search, originalProducts]);
 
   return (
-    <div className="min-h-screen p-4 md:p-8 flex flex-col">
-      {/* Header Section */}
+    <div className="p-4 md:p-8 flex flex-col">
       <div className="flex flex-row justify-between items-center mb-8">
         <div>
           <Link
@@ -94,7 +106,7 @@ export function PromotionAppsToReview(props: {
         </div>
         <div className={'flex flex-row gap-1 md:gap-2'}></div>
       </div>
-      <div className="grid grid-cols-12 gap-8">
+      <div className="grid grid-cols-12 gap-16">
         {/* 搜索，筛选 分类，*/}
         <div className="col-span-2 flex flex-col gap-4">
           <h2>Filter Products</h2>
@@ -104,11 +116,9 @@ export function PromotionAppsToReview(props: {
             className="mb-4"
             value={search}
             onChange={(e) => {
-              const query = e.target.value.toLowerCase();
-              setSearch(query);
+              setSearch(e.target.value);
             }}
           />
-
           <h2>Categories</h2>
           <div className="flex flex-col gap-2">
             {Object.entries(ProductCategory).map(([key, value]) => (
@@ -146,7 +156,7 @@ export function PromotionAppsToReview(props: {
         </div>
 
         {/*  产品grid*/}
-        <div className="col-span-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 items-start">
+        <div className="col-span-10 grid grid-cols-3 items-start gap-4">
           {products &&
             products.map((product) => (
               <ProductItemView
