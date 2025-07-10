@@ -1,6 +1,7 @@
 import { workspaceEntitySchema } from './workspace';
 import { reviewEntitySchema } from './reviews';
 import { z } from 'zod';
+import { Decimal } from '@prisma/client/runtime/library';
 
 export const SubscriptionTier = {
   free: 'free',
@@ -15,6 +16,12 @@ export const userEntitySchema = z.object({
   subscriptionTier: z
     .nativeEnum(SubscriptionTier)
     .default(SubscriptionTier.free),
+  balance: z
+    .string()
+    .refine((val) => !isNaN(Number(val)), {
+      message: 'Balance must be a valid number',
+    })
+    .transform((val) => new Decimal(val)),
   Workspace: z.lazy(() => z.array(workspaceEntitySchema)).optional(),
   ownerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
   reviewerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
@@ -27,7 +34,7 @@ export const createUserSchema = z.object({
   email: z.string().email('Invalid email format'),
   name: z.string().optional(),
   avatarUrl: z.string().url().optional(),
-})
+});
 export type CreateUserDto = z.infer<typeof createUserSchema>;
 export type UpdateUserDto = Partial<CreateUserDto>;
 
@@ -44,6 +51,5 @@ export const createAccountSchema = z.object({
   scope: z.string().optional(),
   idToken: z.string().optional(),
   sessionState: z.string().optional(),
-})
+});
 export type CreateAccountDto = z.infer<typeof createAccountSchema>;
-

@@ -22,11 +22,11 @@ import {
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  // @UseGuards(JwtAuthGuard)
-  // @Post('crawl')
-  // async crawl(@Jwt() jwt: JwtPayload, @Body() request: CreateProductRequest) {
-  //   return this.productsService.crawl(jwt.userId, request);
-  // }
+  @UseGuards(JwtAuthGuard)
+  @Post('crawl')
+  async crawlProductInfo(@Jwt() jwt: JwtPayload, @Body('url') url: string) {
+    return this.productsService.crawlProductInfo(jwt.userId, url);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('create')
@@ -74,4 +74,11 @@ export class ProductsController {
   async publicSlug(@Param('slug') slug: string) {
     return this.productsService.findBySlug(slug);
   }
+
+  //
+  // @UseGuards(JwtAuthGuard)
+  // @Post('submit/paid')
+  // async submitWithPaid(@Jwt() jwt: JwtPayload) {
+  //   return this.productsService.submitWithPaid(jwt.userId, request);
+  // }
 }

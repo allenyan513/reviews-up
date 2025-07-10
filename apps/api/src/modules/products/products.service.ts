@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
+  CrawlProductResponse,
   CreateProductRequest,
   FindAllRequest,
   ProductEntity,
@@ -10,15 +11,179 @@ import slugify from 'slugify';
 import { $Enums } from '@reviewsup/database/generated/client';
 import ProductStatus = $Enums.ProductStatus;
 import ProductCategory = $Enums.ProductCategory;
+import { OrdersService } from '../orders/orders.service';
+import { RRResponse } from '@reviewsup/api/common';
+import { CreateOneTimePaymentResponse } from '@reviewsup/api/orders';
+import { BrowserlessService } from '@src/modules/browserless/browserless.service';
+import { S3Service } from '@src/modules/s3/s3.service';
+import * as fs from 'fs';
+import * as mime from 'mime-types';
+import { hash } from '@src/libs/utils';
 
 @Injectable()
 export class ProductsService {
   private logger = new Logger('ProductsService');
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private orderService: OrdersService,
+    private browserlessService: BrowserlessService, // Assuming BrowserService is defined elsewhere
+    private s3Service: S3Service, // Assuming S3Service is defined elsewhere
+  ) {}
 
-  async create(uid: string, dto: CreateProductRequest) {
+  async crawlProductInfo(userId: string, url: string) {
+    this.logger.debug(
+      `Crawling product info for user ${userId} with URL: ${url}`,
+    );
+    const validatedUrl = new URL(url);
+    const { title, description, faviconFilePath, screenshotFilePath } =
+      await this.browserlessService.extract(validatedUrl.href);
+    this.logger.debug(`Extracted Result:`, {
+      title,
+      description,
+      faviconFilePath,
+      screenshotFilePath,
+    });
+    const faviconKey = `${hash(Date.now().toString())}${mime.lookup(faviconFilePath)}`;
+    await this.s3Service.uploadFile(
+      faviconKey,
+      fs.readFileSync(faviconFilePath),
+      mime.lookup(faviconFilePath) || 'image/png',
+    );
+    const screenshotKey = `${hash(Date.now().toString())}${mime.lookup(screenshotFilePath)}`;
+    await this.s3Service.uploadFile(
+      screenshotKey,
+      fs.readFileSync(screenshotFilePath),
+      mime.lookup(screenshotFilePath) || 'image/png',
+    );
+    return {
+      title: title,
+      description: description,
+      faviconUrl: this.s3Service.getUrl(faviconKey),
+      screenshotUrl: this.s3Service.getUrl(screenshotKey),
+    } as CrawlProductResponse;
+  }
+
+  /**
+   * 申请创建一个产品
+   * 分成多种提交方式：1）免费提交 2）付费提交
+   * 付费提交需要检查用户是否有足够的余额，没有的话就返回支付链接,如果有余额的话就直接创建产品
+   * @param uid
+   * @param dto
+   */
+  async create(
+    uid: string,
+    dto: CreateProductRequest,
+  ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
     this.logger.debug(`Creating review for user ${uid}`, dto);
+    if (dto.submitOption === 'paid-submit') {
+      return this.createPaidSubmit(uid, dto);
+    } else if (dto.submitOption === 'free-submit') {
+      return this.createFreeSubmit(uid, dto);
+    } else {
+      this.logger.error(`Unknown submit option: ${dto.submitOption}`);
+      return {
+        code: 400,
+        message: 'Unknown submit option',
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 创建一个付费提交的产品
+   * @param uid
+   * @param dto
+   */
+  async createPaidSubmit(
+    uid: string,
+    dto: CreateProductRequest,
+  ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
+    // Check if the user has enough balance for paid submission
+    const user = await this.prismaService.user.findUnique({
+      where: { id: uid },
+      select: { balance: true },
+    });
+    if (!user) {
+      throw new Error(`User with ID ${uid} not found`);
+    }
+    const stripeProductId = process.env.STRIPE_PAID_SUBMIT_PRODUCT_ID;
+    const stripeProductPriceDecimal =
+      await this.orderService.getProductPriceDecimal(stripeProductId);
+    if (user.balance.lt(stripeProductPriceDecimal)) {
+      this.logger.debug(
+        `User ${uid} does not have enough balance for paid submission`,
+      );
+      const session = await this.orderService.createOneTimePayment(uid, {
+        productId: stripeProductId,
+      });
+      // save product as a draft
+      // await this.save(uid, dto);
+      // Return the session for payment
+      return {
+        code: 600,
+        message: 'Insufficient balance for paid submission',
+        data: session as CreateOneTimePaymentResponse,
+      };
+    } else {
+      this.logger.debug(`User ${uid} has enough balance for paid submission`);
+      // Deduct the balance from the user
+      await this.prismaService.user.update({
+        where: { id: uid },
+        data: {
+          balance: {
+            decrement: stripeProductPriceDecimal,
+          },
+        },
+      });
+      // Create the product directly
+      const product = await this.prismaService.product.create({
+        data: {
+          workspaceId: dto.workspaceId,
+          formId: dto.formId,
+          name: dto.name,
+          url: dto.url,
+          status: 'listing', // Set status to 'listing' for paid submissions
+          featured: true, // Mark as featured, because it's a paid submission
+          icon: dto.icon,
+          screenshot: dto.screenshot,
+          category: dto.category as ProductCategory,
+          description: dto.description,
+          longDescription: dto.longDescription,
+          features: dto.features,
+          useCase: dto.useCase,
+          howToUse: dto.howToUse,
+          faq: dto.faq,
+          //-----------//
+          userId: uid,
+          slug: slugify(dto.name, {
+            lower: true,
+            strict: true,
+          }),
+          taskReviewCount: 0,
+          submitReviewCount: 0,
+          receiveReviewCount: 0,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+      });
+      return {
+        code: 200,
+        message: 'Product created successfully',
+        data: product as ProductEntity,
+      };
+    }
+  }
+
+  /**
+   * 创建一个免费提交的产品
+   * @param uid
+   * @param dto
+   */
+  async createFreeSubmit(
+    uid: string,
+    dto: CreateProductRequest,
+  ): Promise<RRResponse<ProductEntity>> {
     const pendingTasks = await this.prismaService.product.count({
       where: {
         status: {
@@ -30,7 +195,6 @@ export class ProductsService {
       },
     });
     const taskReviewCount = Math.min(10, pendingTasks);
-    // If there are no pending tasks, set status to 'listing' immediately
     const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';
     const product = await this.prismaService.product.create({
       data: {
@@ -61,8 +225,57 @@ export class ProductsService {
         updatedAt: new Date(),
       },
     });
-    return product;
+    return {
+      code: 200,
+      message: 'Product created successfully',
+      data: product,
+    };
   }
+
+  // /**
+  //  * 创建一个免费提交的产品
+  //  * @param uid
+  //  * @param dto
+  //  */
+  // async save(
+  //   uid: string,
+  //   dto: CreateProductRequest,
+  // ): Promise<RRResponse<ProductEntity>> {
+  //   const product = await this.prismaService.product.create({
+  //     data: {
+  //       workspaceId: dto.workspaceId,
+  //       formId: dto.formId,
+  //       name: dto.name,
+  //       url: dto.url,
+  //       status: 'draft',
+  //       icon: dto.icon,
+  //       screenshot: dto.screenshot,
+  //       category: dto.category as ProductCategory,
+  //       description: dto.description,
+  //       longDescription: dto.longDescription,
+  //       features: dto.features,
+  //       useCase: dto.useCase,
+  //       howToUse: dto.howToUse,
+  //       faq: dto.faq,
+  //       //-----------//
+  //       userId: uid,
+  //       slug: slugify(dto.name, {
+  //         lower: true,
+  //         strict: true,
+  //       }),
+  //       taskReviewCount: 0,
+  //       submitReviewCount: 0,
+  //       receiveReviewCount: 0,
+  //       createdAt: new Date(),
+  //       updatedAt: new Date(),
+  //     },
+  //   });
+  //   return {
+  //     code: 200,
+  //     message: 'Product created successfully',
+  //     data: product,
+  //   };
+  // }
 
   async findAll(
     userId: string,
@@ -111,12 +324,21 @@ export class ProductsService {
     });
   }
 
-  async update(uid: string, id: string, request: UpdateProductRequest) {
+  async update(uid: string, id: string, dto: UpdateProductRequest) {
     return this.prismaService.product.update({
       where: {
         id: id,
       },
       data: {
+        icon: dto.icon,
+        screenshot: dto.screenshot,
+        category: dto.category as ProductCategory,
+        description: dto.description,
+        longDescription: dto.longDescription,
+        features: dto.features,
+        useCase: dto.useCase,
+        howToUse: dto.howToUse,
+        faq: dto.faq,
         updatedAt: new Date(), // Update the timestamp
       },
     });

@@ -14,22 +14,23 @@ import { S3SignedUrlEntity } from '@reviewsup/api/s3';
 export class S3Service {
   private logger = new Logger('S3Service');
   private s3Client: S3Client | null = null;
+  private region = '';
   private bucketName = '';
 
   constructor(private readonly configService: ConfigService) {
     this.bucketName = this.configService.get('AWS_S3_BUCKET_NAME') || '';
-    const region = this.configService.get('AWS_DEFAULT_REGION') || '';
+    this.region = this.configService.get('AWS_DEFAULT_REGION') || '';
     const accessKeyId = this.configService.get('AWS_ACCESS_KEY_ID') || '';
     const secretAccessKey =
       this.configService.get('AWS_SECRET_ACCESS_KEY') || '';
-    if (!this.bucketName || !region || !accessKeyId || !secretAccessKey) {
+    if (!this.bucketName || !this.region || !accessKeyId || !secretAccessKey) {
       this.logger.error(
         'AWS S3 configuration is not properly set in environment variables.',
       );
       return;
     }
     this.s3Client = new S3Client({
-      region: region,
+      region: this.region,
       credentials: {
         accessKeyId: accessKeyId,
         secretAccessKey: secretAccessKey,
@@ -107,5 +108,13 @@ export class S3Service {
         ContentType: contentType,
       }),
     );
+  }
+
+  /**
+   * s3.us-east-2.amazonaws.com/{bucketName}/{key}
+   * @param key
+   */
+  getUrl(key: string): string {
+    return `https://s3.${this.region}.amazonaws.com/${this.bucketName}/${key}`;
   }
 }

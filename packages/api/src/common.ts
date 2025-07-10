@@ -24,3 +24,8 @@ export enum SortBy {
   rating = 'rating',
 }
 
+export type RRResponse<T> = {
+  code: number;
+  message: string;
+  data: T;
+};

@@ -21,6 +21,7 @@ export const ProductCategory = {
 };
 
 export const ProductStatus = {
+  draft: 'draft',
   waitingForAdminReview: 'waitingForAdminReview',
   rejected: 'rejected',
   pendingForSubmit: 'pendingForSubmit',
@@ -31,19 +32,32 @@ export const ProductStatus = {
 export const createProductSchema = z.object({
   workspaceId: z.string().min(1, 'Workspace ID is required'),
   formId: z.string().min(1, 'Form ID is required'),
-  name: z.string().min(1, 'Name is required'),
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .max(24, 'Name must be less than 24 characters'),
   url: z.string().url('Invalid URL').min(1, 'URL is required'),
-  description: z.string().optional(),
-  icon: z.string().url('Invalid URL').optional(),
-  screenshot: z.string().url('Invalid URL').optional(),
+  description: z
+    .string()
+    .min(1, 'Description is required')
+    .max(160, 'Description must be less than 160 characters')
+    .optional(),
+  icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
+  screenshot: z
+    .string()
+    .url('Invalid URL')
+    .min(1, 'Screenshot URL is required'),
+  category: z
+    .nativeEnum(ProductCategory)
+    .default(ProductCategory.ai),
   longDescription: z.string().optional(),
   features: z.string().optional(),
   useCase: z.string().optional(),
   howToUse: z.string().optional(),
   faq: z.string().optional(),
-  category: z
-    .nativeEnum(ProductCategory)
-    .default(ProductCategory.ai)
+
+  submitOption: z
+    .enum(['free-submit', 'paid-submit', 'save-draft', 'crawl-product-info'])
     .optional(),
 });
 
@@ -55,8 +69,14 @@ export const productSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
   workspaceId: z.string().min(1, 'Workspace ID is required'),
   formId: z.string().min(1, 'Form ID is required'),
-  name: z.string().min(1, 'Name is required'),
-  slug: z.string().min(1, 'Slug is required'),
+  name: z
+    .string()
+    .min(1, 'Name is required')
+    .max(24, 'Name must be less than 24 characters'),
+  slug: z
+    .string()
+    .min(1, 'Slug is required')
+    .max(48, 'Slug must be less than 48 characters'),
   url: z.string().url('Invalid URL').min(1, 'URL is required'),
   status: z
     .nativeEnum(ProductStatus)
@@ -65,18 +85,26 @@ export const productSchema = z.object({
   taskReviewCount: z.number().int().default(0),
   submitReviewCount: z.number().int().default(0),
   receiveReviewCount: z.number().int().default(0),
-  description: z.string().optional(),
-  icon: z.string().url('Invalid URL').optional(),
-  screenshot: z.string().url('Invalid URL').optional(),
+  featured: z.boolean().default(false),
+  description: z
+    .string()
+    .min(1, 'Description is required')
+    .max(160, 'Description must be less than 160 characters')
+    .optional(),
+  icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
+  screenshot: z
+    .string()
+    .url('Invalid URL')
+    .min(1, 'Screenshot URL is required'),
+  category: z
+    .nativeEnum(ProductCategory)
+    .default(ProductCategory.ai),
   longDescription: z.string().optional(),
   features: z.string().optional(),
   useCase: z.string().optional(),
   howToUse: z.string().optional(),
   faq: z.string().optional(),
-  category: z
-    .nativeEnum(ProductCategory)
-    .default(ProductCategory.ai)
-    .optional(),
+
   createdAt: z.date(),
   updatedAt: z.date(),
   form: z.lazy(() => formEntitySchema).optional(),
@@ -89,10 +117,15 @@ export const findAllRequestSchema = z.object({
   page: z.coerce.number().int().min(1).default(1).optional(),
   pageSize: z.coerce.number().int().min(1).max(100).default(10).optional(),
   search: z.string().optional(),
-  categories: z
-    .array(z.nativeEnum(ProductCategory))
-    .optional()
-    .default([]),
+  categories: z.array(z.nativeEnum(ProductCategory)).optional().default([]),
 });
 
 export type FindAllRequest = z.infer<typeof findAllRequestSchema>;
+
+export const crawlProductResponseSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  description: z.string().min(1, 'Description is required'),
+  faviconUrl: z.string().url('Invalid URL').optional(),
+  screenshotUrl: z.string().url('Invalid URL').optional(),
+});
+export type CrawlProductResponse = z.infer<typeof crawlProductResponseSchema>;

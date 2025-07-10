@@ -24,8 +24,19 @@ export class UsersService {
       where: {
         id: userId,
       },
-      include: {
-        Workspace: true,
+      select: {
+        name: true,
+        email: true,
+        balance: true,
+        avatarUrl: true,
+        subscriptionTier: true,
+        Workspace: {
+          select: {
+            id: true,
+            name: true,
+            shortId: true,
+          },
+        },
       },
     });
     return user;
