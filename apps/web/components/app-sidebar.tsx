@@ -66,24 +66,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           workspace={defaultWorkspace}
           items={[
             {
-              title: 'Reviews',
-              url: `/${lang}/${defaultWorkspace?.id}/reviews`,
-              icon: IconStar,
-              active: path.includes('/reviews'),
-            },
-            {
-              title: 'Showcases',
-              url: `/${lang}/${defaultWorkspace?.id}/showcases`,
-              icon: IconCode,
-              active: path.includes('/showcases'),
-            },
-            {
-              title: 'Forms',
-              url: `/${lang}/${defaultWorkspace?.id}/forms`,
-              icon: IconTable,
-              active: path.includes('/forms'),
-            },
-            {
               title: 'Launch',
               url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
               icon: IconRocket,
@@ -103,6 +85,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 },
               ],
             },
+            {
+              title: 'Reviews',
+              url: `/${lang}/${defaultWorkspace?.id}/reviews`,
+              icon: IconStar,
+              active: path.includes('/reviews'),
+            },
+            {
+              title: 'Showcases',
+              url: `/${lang}/${defaultWorkspace?.id}/showcases`,
+              icon: IconCode,
+              active: path.includes('/showcases'),
+            },
+            {
+              title: 'Forms',
+              url: `/${lang}/${defaultWorkspace?.id}/forms`,
+              icon: IconTable,
+              active: path.includes('/forms'),
+            },
+
             {
               title: 'Settings',
               url: `/${lang}/settings`,

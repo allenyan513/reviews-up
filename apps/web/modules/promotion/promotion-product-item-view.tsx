@@ -101,7 +101,7 @@ export function ProductItemView(props: {
           ) : (
             <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center"></div>
           )}
-          <h2>{product.name ? product.name : 'YOUR PRODUCT NAME'}</h2>
+          <h2 className={'line-clamp-1'}>{product.name ? product.name : 'YOUR PRODUCT NAME'}</h2>
         </div>
         <p className="text-sm text-gray-600 min-h-10 line-clamp-2 whitespace-break-spaces overflow-x-hidden">
           {product.description

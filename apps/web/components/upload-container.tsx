@@ -6,6 +6,7 @@ export function UploadContainer(props: {
   accept: 'image/*' | 'video/*' | 'audio/*';
   onUploadSuccess: (value: string) => void;
   children: React.ReactNode;
+  disabled?: boolean;
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { uploadFile, status, error } = useUploadS3();
@@ -32,6 +33,7 @@ export function UploadContainer(props: {
         accept={props.accept}
         className="hidden"
         onChange={handleFileChange}
+        disabled={props.disabled}
       />
     </div>
   );

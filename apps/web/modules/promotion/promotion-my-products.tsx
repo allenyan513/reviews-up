@@ -1,6 +1,20 @@
 'use client';
 
 import React, { use, useEffect, useState } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from '@reviewsup/ui/dropdown-menu';
 import Link from 'next/link';
 import { BiPlus, BiShareAlt } from 'react-icons/bi';
 import { buttonVariants } from '@reviewsup/ui/button';
@@ -14,7 +28,15 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { BsInfoCircle, BsTrash, BsBoxArrowUpRight } from 'react-icons/bs';
+import {
+  BsInfoCircle,
+  BsTrash,
+  BsBoxArrowUpRight,
+  BsEye,
+  BsThreeDotsVertical,
+} from 'react-icons/bs';
+import { FiEdit } from 'react-icons/fi';
+import { useRouter } from 'next/navigation';
 
 export function PromotionMyProducts(props: {
   params: Promise<{
@@ -23,6 +45,7 @@ export function PromotionMyProducts(props: {
   }>;
 }) {
   const { lang, workspaceId } = use(props.params);
+  const router = useRouter();
   const [products, setProducts] = useState<ProductEntity[]>([]);
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
@@ -55,6 +78,7 @@ export function PromotionMyProducts(props: {
       .findAll({
         workspaceId: workspaceId,
         status: [
+          // ProductStatus.draft,
           ProductStatus.waitingForAdminReview,
           ProductStatus.pendingForReceive,
           ProductStatus.pendingForSubmit,
@@ -118,23 +142,46 @@ export function PromotionMyProducts(props: {
                     src={product.icon}
                     alt={product.name}
                   />
-                  <h2 className="text-2xl">{product.name}</h2>
-                  <Link
-                    className="mt-0"
-                    href={product.url || ''}
-                    target="_blank"
-                  >
-                    <BsBoxArrowUpRight />
-                  </Link>
+                  <h2 className="text-2xl line-clamp-1">
+                    {product.name}
+                    {/*{product.status === ProductStatus.draft && (*/}
+                    {/*  <span className="text-gray-500 text-sm"> (Draft)</span>*/}
+                    {/*)}*/}
+                  </h2>
                 </div>
+                <div className="flex flex-row items-center gap-2 text-lg">
+                  {/*{product.status === 'draft' ? (*/}
+                  {/*  <Link*/}
+                  {/*    href={`/${lang}/${workspaceId}/promotion/my-products/draft/${product.id}`}*/}
+                  {/*  >*/}
+                  {/*    <FiEdit />*/}
+                  {/*  </Link>*/}
+                  {/*) : (*/}
+                  <Link
+                    href={`/${lang}/${workspaceId}/promotion/my-products/edit/${product.id}`}
+                  >
+                    <FiEdit />
+                  </Link>
+                  {/*)}*/}
 
-                <div>
-                  <BsTrash
-                    className="text-red-500"
-                    onClick={() => {
-                      onClickDelete(product.id || '');
-                    }}
-                  />
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <BsThreeDotsVertical />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56" align="start">
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onClick={(e) => {
+                            e.preventDefault();
+                            onClickDelete(product?.id || '');
+                          }}
+                        >
+                          Delete
+                          <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
 

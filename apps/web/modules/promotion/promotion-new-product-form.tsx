@@ -1,0 +1,652 @@
+'use client';
+
+import React, { use, useEffect, useState } from 'react';
+import Link from 'next/link';
+import {
+  Form,
+  FormField,
+  FormLabel,
+  FormMessage,
+  FormControl,
+} from '@reviewsup/ui/form';
+import { CreateProductRequest, ProductCategory } from '@reviewsup/api/products';
+import slugify from 'slugify';
+import { Input } from '@reviewsup/ui/input';
+import { Textarea } from '@reviewsup/ui/textarea';
+import { Button, buttonVariants } from '@reviewsup/ui/button';
+import { Required } from '@reviewsup/ui/required';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+  SelectTrigger,
+  SelectGroup,
+} from '@reviewsup/ui/select';
+import { useRouter } from 'next/navigation';
+import { api } from '@/lib/api-client';
+import { FormEntity } from '@reviewsup/api/forms';
+import { cn } from '@/lib/utils';
+import { BsCaretDownFill } from 'react-icons/bs';
+import { UploadContainer } from '@/components/upload-container';
+import { BiImage } from 'react-icons/bi';
+import toast from 'react-hot-toast';
+import { useWatch, type UseFormReturn } from 'react-hook-form';
+import { CreateOneTimePaymentResponse } from '@reviewsup/api/orders';
+import { useUserContext } from '@/context/UserProvider';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
+
+export function PromotionNewProductForm(props: {
+  lang: string;
+  workspaceId: string;
+  form: UseFormReturn;
+  mode: 'new' | 'edit';
+  id?: string;
+}) {
+  const { lang, workspaceId, form, mode, id } = props;
+  const productId = id || '';
+  const router = useRouter();
+
+  const { user } = useUserContext();
+  const [advance, setAdvance] = useState<boolean>(mode === 'edit' || false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isCrawling, setIsCrawling] = useState<boolean>(false);
+  const [forms, setForms] = useState<FormEntity[]>([]);
+  const [formsLoaded, setFormsLoaded] = useState(false); // New state to track if forms are loaded
+  const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
+
+  const handleCrawlProductInfo = async () => {
+    try {
+      const url = form.getValues('url');
+      setIsCrawling(true);
+      const response = await api.product.crawlOne(url);
+      const { title, description, faviconUrl, screenshotUrl } = response;
+      form.setValue('name', title);
+      form.setValue('description', description);
+      form.setValue('icon', faviconUrl);
+      form.setValue('screenshot', screenshotUrl);
+      setIsCrawling(false);
+    } catch (error) {
+      setIsCrawling(false);
+      toast.error('Failed to fetch product info. Please try again.');
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      setLoading(true);
+      const values = form.getValues();
+      const response = await api.product.updateOne(productId, {
+        ...values,
+      }); // 你需要实现这个API
+      toast.success('Product updated successfully!');
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      toast.error('Failed to update product. Please try again.');
+    }
+  };
+
+  const onSubmit = async (data: CreateProductRequest) => {
+    try {
+      console.log('Submitting product data:', data);
+      setLoading(true);
+      const response = await api.product.createOne(data);
+      if (response.code === 600) {
+        const data = response.data as CreateOneTimePaymentResponse;
+        const { sessionUrl } = data;
+        setLoading(false);
+        setIsCheckDialogOpen(true);
+        window.open(sessionUrl, '_blank');
+      } else {
+        toast.success('Product Submitted Successfully!');
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        setLoading(false);
+        router.push(`/${lang}/${workspaceId}/promotion/my-products`);
+      }
+    } catch (error) {
+      setLoading(false);
+      toast.error('Failed to submit product. Please try again.');
+    }
+  };
+
+  useEffect(() => {
+    if (!workspaceId) {
+      return;
+    }
+    api.form
+      .getForms(workspaceId)
+      .then((response) => {
+        setForms(response);
+        setFormsLoaded(true);
+        if (response && response.length > 0 && !form.getValues('formId')) {
+          form.setValue('formId', response?.[0]?.id || '');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching forms:', error);
+        setFormsLoaded(true);
+      });
+  }, [workspaceId, form]);
+
+  return (
+    <div className="md:col-span-8 flex flex-col border border-gray-200 rounded-md bg-white shadow-md p-6">
+      <Form {...form}>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            // if (form.getValues('submitOption') === 'save-draft') {
+            //   handleSaveDraft();
+            // } else if (
+            if (form.getValues('submitOption') === 'crawl-product-info') {
+              handleCrawlProductInfo();
+            } else if (form.getValues('submitOption') === 'update') {
+              handleUpdate();
+            } else {
+              form.handleSubmit(onSubmit)();
+            }
+          }}
+          className="space-y-4"
+        >
+          <h2 className="text-lg font-semibold">Basic Information</h2>
+          <FormField
+            control={form.control}
+            name="formId"
+            render={({ field }) => (
+              <div>
+                <FormLabel className="mb-2">
+                  Binding Collection Form <Required />
+                </FormLabel>
+                <FormControl>
+                  <div className="flex flex-row items-center gap-2 mb-2">
+                    {formsLoaded ? (
+                      <Select
+                        disabled={props.mode === 'edit'}
+                        value={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <SelectTrigger className="w-full">
+                          <SelectValue placeholder="Select a form" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectGroup>
+                            {forms.map((item) => (
+                              <SelectItem key={item.id} value={item.id || ''}>
+                                {item.name}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                    ) : (
+                      <Input
+                        disabled
+                        placeholder="Loading forms..."
+                        className="w-full"
+                      />
+                    )}
+                    <Link
+                      href={`/${lang}/${workspaceId}/forms/${form.watch('formId')}/default`}
+                      target="_blank"
+                      className={cn(
+                        buttonVariants({ variant: 'default' }),
+                        // 'disabled:opacity-50 disabled:pointer-events-none',
+                        form.watch('formId') === ''
+                          ? 'opacity-50 pointer-events-none'
+                          : '',
+                        mode === 'edit' ? 'opacity-50 pointer-events-none' : '',
+                      )}
+                    >
+                      Edit
+                    </Link>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </div>
+            )}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Product Name <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      disabled={props.mode === 'edit'}
+                      placeholder="Product Name"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                  <p className="mt-2 text-sm text-gray-500">
+                    https://reviewsup.io/products/
+                    {slugify(field.value || '', {
+                      lower: true,
+                      strict: true,
+                    })}
+                  </p>
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="url"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Product URL <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row gap-2 items-center">
+                      <Input
+                        disabled={props.mode === 'edit'}
+                        placeholder="https://yourproduct.com"
+                        {...field}
+                      />
+                      <Button
+                        onClick={() => {
+                          form.setValue('submitOption', 'crawl-product-info');
+                        }}
+                        disabled={
+                          field.value === '' ||
+                          isCrawling ||
+                          props.mode === 'edit'
+                        }
+                      >
+                        {isCrawling ? 'Fetch...' : 'Auto fulfill'}
+                      </Button>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 ">
+            <FormField
+              control={form.control}
+              name="description"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Product Description <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Short description" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="category"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Product Category
+                    <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Select a Product Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          {Object.entries(ProductCategory).map(
+                            ([key, value]) => (
+                              <SelectItem key={key} value={value}>
+                                {/*capitalize the first letter of each word*/}
+                                {key
+                                  .split(/(?=[A-Z])/)
+                                  .map(
+                                    (word) =>
+                                      word.charAt(0).toUpperCase() +
+                                      word.slice(1).toLowerCase(),
+                                  )
+                                  .join(' ')}
+                              </SelectItem>
+                            ),
+                          )}
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="icon"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">
+                      Product Icon
+                      <Required />
+                    </FormLabel>
+                    <FormControl>
+                      {/*<Input placeholder="https://icon.url" {...field} />*/}
+                      <div className="flex flex-row items-center gap-2">
+                        {field.value && (
+                          <img
+                            src={field.value}
+                            alt="Product Icon"
+                            className="w-11 h-11 rounded border border-gray-300"
+                          />
+                        )}
+                        <UploadContainer
+                          accept={'image/*'}
+                          onUploadSuccess={(url) => {
+                            field.onChange(url);
+                          }}
+                        >
+                          <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+                        </UploadContainer>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="screenshot"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">
+                      Product Screenshot
+                      <Required />
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-row items-end gap-2">
+                        {field.value && (
+                          <img
+                            src={field.value}
+                            alt="Product Icon"
+                            className="w-96 h-auto rounded border border-gray-300"
+                          />
+                        )}
+                        <UploadContainer
+                          accept={'image/*'}
+                          onUploadSuccess={(url) => {
+                            field.onChange(url);
+                          }}
+                        >
+                          <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+                        </UploadContainer>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+            </div>
+            <h2
+              className="text-lg font-semibold cursor-pointer mt-8"
+              onClick={() => setAdvance(!advance)}
+            >
+              Advance Information{' '}
+              <BsCaretDownFill className="inline-block ml-2" />
+            </h2>
+            <div className={cn('', advance ? 'flex flex-col gap-4' : 'hidden')}>
+              <FormField
+                control={form.control}
+                name="longDescription"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">What is it?</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Detailed description (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="howToUse"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">How to Use?</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Instructions (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="features"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">Features</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        placeholder="Key features (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="useCase"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">Use Case</FormLabel>
+                    <FormControl>
+                      <Textarea placeholder="Use cases (optional)" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="faq"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2">FAQ</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        rows={6}
+                        placeholder="Frequently asked questions (optional)"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+            </div>
+          </div>
+          <div
+            className={cn(
+              'flex flex-row items-center justify-between mb-4 mt-8',
+              mode === 'edit' ? 'hidden' : '',
+            )}
+          >
+            <h2 className="text-lg font-semibold">Submit Options</h2>
+            {/*<Button*/}
+            {/*  variant="outline"*/}
+            {/*  size="sm"*/}
+            {/*  onClick={() => {*/}
+            {/*    form.setValue('submitOption', 'save-draft');*/}
+            {/*  }}*/}
+            {/*  className="flex items-center gap-2"*/}
+            {/*>*/}
+            {/*  Save Draft*/}
+            {/*</Button>*/}
+          </div>
+
+          {/* Update Button */}
+          <Button
+            variant="default"
+            size="lg"
+            onClick={() => {
+              form.setValue('submitOption', 'update');
+            }}
+            className={cn(
+              'flex items-center mt-8',
+              mode === 'edit' ? '' : 'hidden',
+            )}
+          >
+            Update
+          </Button>
+
+          <div
+            className={cn(
+              'grid grid-cols-1 md:grid-cols-2 gap-4',
+              mode === 'edit' ? 'hidden' : '',
+            )}
+          >
+            <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
+              <h3 className="text-xl font-semibold">Free Submit</h3>
+              <h4 className="text-sm text-gray-500 ml-2">
+                No cost, requires community engagement
+              </h4>
+              <ul className="text-start list-disc pl-4 mt-4">
+                <li>Join the community, review other products</li>
+                <li>
+                  Submit at least{' '}
+                  <span className="text-red-500 font-bold">10</span> reviews to
+                  make your product publicly visible.
+                </li>
+                <li>
+                  If you've submitted more reviews than you've received, your
+                  product enters the listing queue.
+                </li>
+                <li>
+                  If submitted reviews are fewer than received reviews, your
+                  product will not be visible for review.
+                </li>
+              </ul>
+              <Button
+                disabled={loading}
+                variant="outline"
+                size="lg"
+                type="submit"
+                className="w-full mt-4"
+                onClick={() => {
+                  form.setValue('submitOption', 'free-submit');
+                }}
+              >
+                Free Submit
+              </Button>
+            </div>
+            <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
+              <h3 className="text-xl font-semibold">Paid Submit</h3>
+              <h4 className="text-sm text-gray-500 ml-2">
+                Instant listing with premium perks
+              </h4>
+              <ul className={'text-start list-disc pl-4 mt-4'}>
+                <li>Get listed immediately—no reviews required</li>
+                <li>Your product appears at the top of the listing page</li>
+                <li>Receive a “Featured” badge</li>
+              </ul>
+              <AlertDialog>
+                <AlertDialogTrigger asChild>
+                  <Button disabled={loading} size="lg" className="w-full mt-4">
+                    Submit for $9.9
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      You are about to submit your product for a one-time fee of
+                      <span className="text-red-500"> $9.9</span>. This will
+                      allow your product to be listed immediately without the
+                      need for reviews.
+                      <br />
+                      <br />
+                      Please ensure that all information is correct before
+                      proceeding.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      type="submit"
+                      onClick={() => {
+                        form.setValue('submitOption', 'paid-submit');
+                        form.handleSubmit(onSubmit)();
+                      }}
+                    >
+                      Confirm
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+
+              <AlertDialog
+                open={isCheckDialogOpen}
+                onOpenChange={setIsCheckDialogOpen}
+              >
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      {/*支付成功了吗？*/}
+                      Do you have a successful payment?
+                    </AlertDialogTitle>
+
+                    <AlertDialogDescription>
+                      {/*充值成功后，点击“继续”按钮以完成产品提交。*/}
+                      After successful payment, click the "Continue" button to
+                      complete the product submission.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      type="submit"
+                      onClick={() => {
+                        form.setValue('submitOption', 'paid-submit');
+                        form.handleSubmit(onSubmit)();
+                      }}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+              <p className="text-sm text-gray-500 mt-2">
+                Current Balance: ${user?.balance || 0}
+              </p>
+            </div>
+          </div>
+        </form>
+      </Form>
+    </div>
+  );
+}

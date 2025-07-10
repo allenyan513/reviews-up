@@ -19,6 +19,8 @@ import { CampaignsModule } from './modules/campaigns/campaigns.module';
 import { AnalyticsModule } from './modules/analytics/analytics.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { ProductsModule } from './modules/products/products.module';
+import { OrdersModule } from './modules/orders/orders.module';
+import { BrowserlessModule } from '@src/modules/browserless/browserless.module';
 
 @Module({
   imports: [
@@ -49,6 +51,8 @@ import { ProductsModule } from './modules/products/products.module';
     CampaignsModule,
     AnalyticsModule,
     ProductsModule,
+    OrdersModule,
+    BrowserlessModule,
   ],
   controllers: [AppController],
   providers: [AppService],

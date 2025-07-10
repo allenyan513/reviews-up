@@ -7,10 +7,16 @@ export default function Page(props: {
   params: Promise<{
     lang: string;
     workspaceId: string;
+    id: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
+  const { lang, workspaceId, id } = use(props.params);
   return (
-    <PromotionNewProduct mode="new" lang={lang} workspaceId={workspaceId} />
+    <PromotionNewProduct
+      mode="edit"
+      lang={lang}
+      workspaceId={workspaceId}
+      id={id}
+    />
   );
 }
