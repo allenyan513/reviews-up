@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { reviewEntitySchema } from './reviews';
 
 export const createFormSchema = z.object({
   workspaceId: z.string().min(1, 'Workspace is required'),
@@ -19,6 +20,7 @@ export const formEntitySchema = z.object({
   config: z.optional(z.lazy(() => formConfigSchema)),
   createdAt: z.date(),
   updatedAt: z.date(),
+  Review: z.any(),
 });
 export type FormEntity = z.infer<typeof formEntitySchema>;
 

@@ -92,7 +92,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: path.includes('/reviews'),
             },
             {
-              title: 'Showcases',
+              title: 'Widgets',
               url: `/${lang}/${defaultWorkspace?.id}/showcases`,
               icon: IconCode,
               active: path.includes('/showcases'),

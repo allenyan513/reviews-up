@@ -187,7 +187,7 @@ export class ProductsService {
     const pendingTasks = await this.prismaService.product.count({
       where: {
         status: {
-          in: ['pendingForReceive', 'pendingForSubmit'], // Only count products that are pending or under review
+          in: ['pendingForReceive', 'pendingForSubmit', 'listing'], // Only count products that are pending or under review
         },
         userId: {
           not: uid,
@@ -307,11 +307,32 @@ export class ProductsService {
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },
-      include: {
-        form: true,
-      },
       take: request.pageSize || 10,
       skip: (request.page - 1) * (request.pageSize || 10),
+      // include:{
+      //   form: true, // Include the form relation
+      // }
+      select: {
+        id: true,
+        name: true,
+        slug: true,
+        status: true,
+        description: true,
+        featured: true,
+        formId: true,
+        form: {
+          select: {
+            id: true,
+            name: true,
+            Review: true,
+          },
+        },
+        icon: true,
+        screenshot: true,
+        taskReviewCount: true,
+        submitReviewCount: true,
+        receiveReviewCount: true,
+      },
     })) as ProductEntity[];
     return items;
   }
@@ -473,7 +494,13 @@ export class ProductsService {
         slug: slug,
       },
       include: {
-        form: true,
+        form: {
+          select: {
+            id: true,
+            name: true,
+            Review: true, // Include reviews related to the form
+          },
+        }
       },
     });
     if (!product) {

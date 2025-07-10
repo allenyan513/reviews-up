@@ -96,7 +96,7 @@ export function PromotionAppsToReview(props: {
             className="flex flex-row items-center gap-2 "
           >
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-              Apps to Review
+              Listing in Queue
             </h1>
           </Link>
           <p className="mt-1 text-gray-600 hidden md:flex">
@@ -122,7 +122,7 @@ export function PromotionAppsToReview(props: {
           <div className="flex flex-col gap-2">
             {Object.entries(ProductCategory).map(([key, value]) => (
               <div
-                className="flex flex-row items-center gap-2 bg-gray-50 p-3 rounded-md hover:bg-gray-100 cursor-pointer"
+                className="flex flex-row items-center gap-2 bg-gray-50 p-3 rounded-md hover:bg-gray-100"
                 key={key}
               >
                 <Checkbox

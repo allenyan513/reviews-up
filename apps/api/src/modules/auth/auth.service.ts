@@ -7,6 +7,9 @@ import { EMAIL_FROM } from '@src/modules/email/email.constants';
 import { UsersService } from '../users/users.service';
 import { ResendEmailService } from '@src/modules/email/resend-email.service';
 import { NotificationsService } from '../notifications/notifications.service';
+import { render } from '@react-email/render';
+import * as React from 'react';
+import EmailSigninEmail from '@src/emails/email-signin-email';
 
 @Injectable()
 export class AuthService {
@@ -70,11 +73,16 @@ export class AuthService {
     const token = this.generateJwt(jwtPayload);
     const encodedRedirect = encodeURIComponent(redirect);
     const magicLink = `${process.env.NEXT_PUBLIC_API_URL}/auth/magic-login?token=${token}&redirect=${encodedRedirect}`;
+    const html = await render(
+      React.createElement(EmailSigninEmail, {
+        url: magicLink
+      }),
+    );
     await this.emailService.send({
       from: EMAIL_FROM,
-      to: email,
-      subject: 'Your Magic Login Link',
-      html: `<p>Click the link to login: <a href="${magicLink}">${magicLink}</a></p>`,
+      to: [email],
+      subject: `Sign in to Reviewsup.io`,
+      html: html,
     });
     return {
       message: 'Magic link sent successfully',

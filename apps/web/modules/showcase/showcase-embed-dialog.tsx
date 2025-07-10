@@ -25,17 +25,16 @@ export function ShowcaseEmbedDialog(props: {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Embed Showcase</DialogTitle>
+          <DialogTitle>Add a Widget on your website</DialogTitle>
           <DialogDescription>
-            Embed this showcase on your website using JavaScript or React
+            Add or embed a widget on your website using JavaScript or React
             component. or share the link to this showcase.
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-4">
           <div className="space-y-4 flex flex-row">
             <p>
-              {' '}
-              Embed Showcase ID:
+              Widget ID:
               <span
                 onClick={() => {
                   navigator.clipboard.writeText(showcaseId);

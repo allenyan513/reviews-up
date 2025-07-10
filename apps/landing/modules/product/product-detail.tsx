@@ -1,15 +1,55 @@
 import { fetchProductDetail } from '@/actions/fetch-product-detail';
 import Link from 'next/link';
-import { BsBoxArrowUp } from 'react-icons/bs';
+import { BsBoxArrowUp, BsPencil } from 'react-icons/bs';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import { ProductEntity } from '@reviewsup/api/products';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import StarRating from '@reviewsup/ui/star-rating';
+import React from 'react';
+
+export function toLocalDateString(date: Date | string): string {
+  const _date = new Date(date);
+  const locale =
+    typeof navigator !== 'undefined' ? navigator.language : 'en-US';
+  return new Intl.DateTimeFormat(locale, {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  }).format(_date);
+}
 
 export async function ProductDetail(props: { lang: string; slug: string }) {
   const { lang, slug } = props;
   const product = await fetchProductDetail(slug);
+
+  const renderRating = (product: ProductEntity) => {
+    if (!product.form) {
+      return null;
+    }
+    const reviews = (product.form.Review as ReviewEntity[]) || [];
+    const totalRating = reviews.reduce(
+      (acc, review) => acc + (review?.rating || 0),
+      0,
+    );
+    const rating = (totalRating / reviews.length).toFixed(1);
+
+    return (
+      <div className="flex flex-row items-center gap-2 text-lg">
+        <span className="text-yellow-500 font-bold">{rating}</span>
+        <StarRating
+          className="mt-[1px]"
+          size={'md'}
+          value={parseFloat(rating)}
+        />
+        <span className="text-black text-md">({reviews.length} reviews)</span>
+      </div>
+    );
+  };
+
   return (
     <div>
-      <div className="flex flex-col gap-8 pt-24 pb-8 px-48 bg-linear">
+      <div className="flex flex-col gap-8 pt-24 pb-8 px-4 md:px-48 bg-linear">
         <div className="flex flex-row gap-2 items-center">
           {product.icon && (
             <img
@@ -36,20 +76,31 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             </Link>
           </div>
           <div className="flex-1 flex flex-col gap-3 justify-start items-start">
-            <Link
-              className=" inline-flex items-center bg-black text-white px-3 py-2 rounded gap-2 "
-              href={product.url || ''}
-              target="_blank"
-            >
-              <span>Visit {product.name}</span>
-              <BsBoxArrowUp />
-            </Link>
             <div className="flex flex-row items-center gap-4">
-              <p className="w-36 font-semibold">AddedOn:</p>
-              <p className="">{product.createdAt?.toLocaleString()}</p>
+              <Link
+                className="rounded-full bg-red-400 text-white px-3 py-2 inline-flex items-center gap-2 hover:bg-red-500 transition-colors duration-300"
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.form?.shortId}`}
+                target="_blank"
+              >
+                <BsPencil />
+                <span>Write a review</span>
+              </Link>
+              <Link
+                className="rounded-full bg-white text-black px-3 py-2 inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors duration-300"
+                href={product.url || ''}
+                target="_blank"
+              >
+                <BsBoxArrowUp />
+                <span>Visit {product.name}</span>
+              </Link>
             </div>
+            {renderRating(product)}
 
-            <p className="w-32 font-semibold">Categories:</p>
+            <div className="flex flex-row items-center gap-4">
+              <p className="font-semibold">Added On:</p>
+              <p className="">{toLocalDateString(product.createdAt || '')}</p>
+            </div>
+            <p className="font-semibold">Categories:</p>
             <div className="flex flex-row flex-wrap gap-2">
               <Link href={``} className="product-category">
                 {product.category}
@@ -58,8 +109,10 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col lg:flex-row gap-8 px-48 py-8 w-full">
-        <div className="w-full">
+
+      <div className="flex flex-col md:grid-cols-12 md:grid gap-8 px-4 md:px-48 py-8 w-full">
+        <div className='md:col-span-8 flex flex-col gap-4'>
+          <h2 className="h2">{product.name} Reviews</h2>
           <p className="h2">{product.name} Product Information</p>
           <div className="flex flex-col rounded border border-gray-300 px-5 py-4 gap-2 bg-white">
             <h2 className="h3">What is {product.name}?</h2>
@@ -103,6 +156,8 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             </div>
             <div className="divider" />
           </div>
+        </div>
+        <div className='md:col-span-4 flex flex-col gap-4'>
         </div>
       </div>
     </div>
