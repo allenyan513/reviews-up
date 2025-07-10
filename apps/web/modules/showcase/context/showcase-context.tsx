@@ -62,9 +62,9 @@ export function ShowcaseProvider(props: { children: React.ReactNode }) {
         name: workspaceName,
       });
       await getShowcases(workspaceId);
-      toast.success('Showcase created successfully');
+      toast.success('Widget created successfully');
     } catch (error) {
-      toast.error('Failed to create showcase');
+      toast.error('Failed to create widget');
     }
   };
 

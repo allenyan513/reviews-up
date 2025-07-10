@@ -24,7 +24,7 @@ export default function ShowcaseListPage(props: {
     <div className="min-h-screen p-6 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
-          <h1 className="text-3xl font-semibold text-gray-900">Showcases</h1>
+          <h1 className="text-3xl font-semibold text-gray-900">Widgets</h1>
           <p className="mt-1 text-gray-600 hidden md:flex">
             Easily collect testimonials from your customers using a simple link
           </p>

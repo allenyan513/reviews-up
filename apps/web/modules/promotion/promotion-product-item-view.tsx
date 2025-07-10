@@ -4,7 +4,6 @@ import React, { use, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
 import { buttonVariants } from '@reviewsup/ui/button';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import {
   Tooltip,
@@ -13,6 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { UserEntity } from '@reviewsup/api/users';
+import StarRating from '@reviewsup/ui/star-rating';
 
 export function ProductItemView(props: {
   product: ProductEntity;
@@ -71,6 +71,31 @@ export function ProductItemView(props: {
       </Tooltip>
     );
   };
+
+  const renderRating = (product: ProductEntity) => {
+    if (!product.form) {
+      return null;
+    }
+    const reviews = product.form.Review as ReviewEntity[] || [];
+    console.log('reviews', reviews);
+    const totalRating = reviews.reduce(
+      (acc, review) => acc + (review?.rating || 0),
+      0,
+    );
+    const rating = (totalRating / reviews.length).toFixed(1);
+
+    return (
+      <div className="flex flex-row items-center gap-2 text-sm">
+        <span className="text-yellow-500">{rating}</span>
+        <StarRating
+          className='mt-[1px]'
+          size={'sm'}
+          value={parseFloat(rating)} onChange={() => {}} />
+        <span className="text-gray-500">({reviews.length} reviews)</span>
+      </div>
+    );
+  };
+
   return (
     <div
       key={product.id}
@@ -101,18 +126,21 @@ export function ProductItemView(props: {
           ) : (
             <div className="w-5 h-5 bg-gray-200 rounded-full flex items-center justify-center"></div>
           )}
-          <h2 className={'line-clamp-1'}>{product.name ? product.name : 'YOUR PRODUCT NAME'}</h2>
+          <h2 className={'line-clamp-1'}>
+            {product.name ? product.name : 'YOUR PRODUCT NAME'}
+          </h2>
         </div>
         <p className="text-sm text-gray-600 min-h-10 line-clamp-2 whitespace-break-spaces overflow-x-hidden">
           {product.description
             ? product.description
             : 'YOUR PRODUCT DESCRIPTION'}
         </p>
-        <div className="text-sm text-gray-500">
-          <span>#{product.category}</span>
-        </div>
+        {/*<div className="text-sm text-gray-500">*/}
+        {/*  <span>#{product.category}</span>*/}
+        {/*</div>*/}
+        {renderRating(product)}
       </Link>
-      {renderButton(product)}
+      {/*{renderButton(product)}*/}
     </div>
   );
 }

@@ -32,21 +32,21 @@ export default function DialogNewShowcase(props: {}) {
       <DialogTrigger asChild>
         <Button size={'lg'}>
           <BiPlus className="text-2xl" />
-          New Showcase
+          Add Widget
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>New Showcase</DialogTitle>
+          <DialogTitle>Add a Widget</DialogTitle>
           <DialogDescription>
             {/*Anyone who has this link will be able to view this.*/}
           </DialogDescription>
         </DialogHeader>
         <div className="flex flex-col gap-2 py-8">
-          <Label htmlFor="workspace-name">Showcase Name</Label>
+          <Label htmlFor="workspace-name">Widget Name</Label>
           <Input
             id="showcase-name"
-            placeholder="e.g. My New Showcase"
+            placeholder="e.g. New Widget"
             className="w-full"
             value={submitForm.name}
             onChange={(e) =>
@@ -75,7 +75,7 @@ export default function DialogNewShowcase(props: {}) {
             }}
             className="ml-2"
           >
-            Create Showcase
+            Add
           </Button>
         </DialogFooter>
       </DialogContent>

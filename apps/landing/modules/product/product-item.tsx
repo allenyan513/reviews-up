@@ -2,9 +2,35 @@ import React from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
 import { buttonVariants } from '@reviewsup/ui/button';
+import { ReviewEntity } from '@reviewsup/api/reviews';
+import StarRating from '@reviewsup/ui/star-rating';
 
 export function ProductItemView(props: { product: ProductEntity }) {
   const { product } = props;
+
+  const renderRating = (product: ProductEntity) => {
+    if (!product.form) {
+      return null;
+    }
+    const reviews = (product.form.Review as ReviewEntity[]) || [];
+    const totalRating = reviews.reduce(
+      (acc, review) => acc + (review?.rating || 0),
+      0,
+    );
+    const rating = (totalRating / reviews.length).toFixed(1);
+
+    return (
+      <div className="flex flex-row items-center gap-2 text-sm">
+        <span className="text-yellow-500 font-bold">{rating}</span>
+        <StarRating
+          className="mt-[1px]"
+          size={'sm'}
+          value={parseFloat(rating)}
+        />
+        <span className="text-black text-md">({reviews.length} reviews)</span>
+      </div>
+    );
+  };
 
   const renderButton = (product: ProductEntity) => {
     return (
@@ -52,12 +78,12 @@ export function ProductItemView(props: { product: ProductEntity }) {
             ? product.description
             : 'YOUR PRODUCT DESCRIPTION'}
         </p>
-        <div className="text-sm text-gray-500">
-          <span>#{product.category}</span>
-        </div>
+        {/*<div className="text-sm text-gray-500">*/}
+        {/*  <span>#{product.category}</span>*/}
+        {/*</div>*/}
+        {/*{renderButton(product)}*/}
+        {renderRating(product)}
       </Link>
-
-      {renderButton(product)}
     </div>
   );
 }
