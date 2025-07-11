@@ -26,6 +26,9 @@ export function PromotionNewProduct(props: {
     defaultValues: {
       workspaceId: workspaceId,
       formId: '',
+      formShortId: '',
+      widgetId: '',
+      widgetShortId: '',
       name: '',
       description: '',
       url: '',
@@ -52,6 +55,9 @@ export function PromotionNewProduct(props: {
           form.reset({
             workspaceId: product.workspaceId,
             formId: product.formId,
+            formShortId: product.formShortId || '',
+            widgetId: product.widgetId,
+            widgetShortId: product.widgetShortId || '',
             name: product.name,
             description: product.description || '',
             url: product.url,

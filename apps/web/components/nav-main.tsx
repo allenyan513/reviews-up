@@ -47,13 +47,13 @@ export function NavMain(props: {
                 </div>
               </Link>
               {item.children && item.children.length > 0 && (
-                <div className="flex flex-col gap-0">
+                <div className="flex flex-col gap-1">
                   {item.children.map((child) => (
                     <Link
                       key={child.title}
                       href={child.url}
                       className={cn(
-                        'cursor-pointer flex flex-row items-center gap-2 h-12 px-10 rounded font-semibold',
+                        'cursor-pointer flex flex-row items-center gap-2 h-10 px-8 rounded font-semibold',
                         child.active
                           ? 'text-red-400 bg-red-100'
                           : 'text-muted-foreground hover:bg-muted hover:text-foreground',

@@ -16,13 +16,12 @@ import { Checkbox } from '@reviewsup/ui/checkbox';
 import { Label } from '@reviewsup/ui/label';
 import { ProductItemView } from '@/modules/promotion/promotion-product-item-view';
 
-export function PromotionAppsToReview(props: {
-  params: Promise<{
-    lang: string;
-    workspaceId: string;
-  }>;
+export function PromotionProductListings(props: {
+  lang: string;
+  workspaceId: string;
+  status: 'pendingForReceive' | 'listing';
 }) {
-  const { lang, workspaceId } = use(props.params);
+  const { lang, workspaceId, status } = props;
   const { user } = useSession();
   const [products, setProducts] = useState<ProductEntity[]>([]);
   const [originalProducts, setOriginalProducts] = useState<ProductEntity[]>([]);
@@ -38,7 +37,7 @@ export function PromotionAppsToReview(props: {
       return null;
     }
     const validatedRequest = findAllRequestSchema.parse({
-      status: [ProductStatus.pendingForReceive, ProductStatus.listing],
+      status: [status],
       page: page,
       pageSize: pageSize,
       search: undefined,
@@ -96,7 +95,9 @@ export function PromotionAppsToReview(props: {
             className="flex flex-row items-center gap-2 "
           >
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-              Listing in Queue
+              {/*Listing in Queue*/}
+              { status === 'pendingForReceive' && 'Pending Products' }
+              { status === 'listing' && 'Public Products' }
             </h1>
           </Link>
           <p className="mt-1 text-gray-600 hidden md:flex">

@@ -9,6 +9,7 @@ import {
   FormMessage,
   FormControl,
 } from '@reviewsup/ui/form';
+import { LoadingText } from '@reviewsup/ui/loading-text';
 import { CreateProductRequest, ProductCategory } from '@reviewsup/api/products';
 import slugify from 'slugify';
 import { Input } from '@reviewsup/ui/input';
@@ -29,7 +30,7 @@ import { FormEntity } from '@reviewsup/api/forms';
 import { cn } from '@/lib/utils';
 import { BsCaretDownFill } from 'react-icons/bs';
 import { UploadContainer } from '@/components/upload-container';
-import { BiImage } from 'react-icons/bi';
+import { BiCodeAlt, BiImage } from 'react-icons/bi';
 import toast from 'react-hot-toast';
 import { useWatch, type UseFormReturn } from 'react-hook-form';
 import { CreateOneTimePaymentResponse } from '@reviewsup/api/orders';
@@ -45,6 +46,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
+import { ShowcaseEntity } from '@reviewsup/api/showcases';
+import { ShowcaseEmbedDialog } from '@/modules/showcase/showcase-embed-dialog';
+import { VerifyWidgetEmbedding } from '@/components/verify-widget-embedding';
 
 export function PromotionNewProductForm(props: {
   lang: string;
@@ -62,8 +66,11 @@ export function PromotionNewProductForm(props: {
   const [loading, setLoading] = useState<boolean>(false);
   const [isCrawling, setIsCrawling] = useState<boolean>(false);
   const [forms, setForms] = useState<FormEntity[]>([]);
+  const [widgets, setWidgets] = useState<ShowcaseEntity[]>([]);
   const [formsLoaded, setFormsLoaded] = useState(false); // New state to track if forms are loaded
+  const [widgetsLoaded, setWidgetsLoaded] = useState(false); // New state to track if widgets are loaded
   const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
+  const [taskReviewCount, setTaskReviewCount] = useState<number>(0);
 
   const handleCrawlProductInfo = async () => {
     try {
@@ -108,10 +115,13 @@ export function PromotionNewProductForm(props: {
         setLoading(false);
         setIsCheckDialogOpen(true);
         window.open(sessionUrl, '_blank');
-      } else {
-        toast.success('Product Submitted Successfully!');
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+      } else if (response.code === 400) {
         setLoading(false);
+        const message = response.message;
+        toast.error(message || 'Failed to submit product. Please try again.');
+      } else {
+        setLoading(false);
+        toast.success('Product Submitted Successfully!');
         router.push(`/${lang}/${workspaceId}/promotion/my-products`);
       }
     } catch (error) {
@@ -129,25 +139,56 @@ export function PromotionNewProductForm(props: {
       .then((response) => {
         setForms(response);
         setFormsLoaded(true);
-        if (response && response.length > 0 && !form.getValues('formId')) {
+        const newMode = mode === 'new';
+        const formId = form.getValues('formId');
+        if (!formId && !newMode) {
+          return;
+        }
+        if (response && response.length > 0) {
           form.setValue('formId', response?.[0]?.id || '');
+          form.setValue('formShortId', response?.[0]?.shortId || '');
         }
       })
       .catch((error) => {
         console.error('Error fetching forms:', error);
         setFormsLoaded(true);
       });
-  }, [workspaceId, form]);
+    api.showcase
+      .getShowcases(workspaceId)
+      .then((response) => {
+        const widgets = response.items;
+        setWidgets(widgets);
+        setWidgetsLoaded(true);
+        const newMode = mode === 'new';
+        const widgetId = form.getValues('widgetId');
+        if (!widgetId && !newMode) {
+          return;
+        }
+        if (widgets && widgets.length > 0) {
+          form.setValue('widgetId', widgets?.[0]?.id || '');
+          form.setValue('widgetShortId', widgets?.[0]?.shortId || '');
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching showcases:', error);
+      });
+
+    api.product
+      .taskReviewCount()
+      .then((response) => {
+        setTaskReviewCount(response.data);
+      })
+      .catch((error) => {
+        setTaskReviewCount(10);
+      });
+  }, [workspaceId, form, mode]);
 
   return (
-    <div className="md:col-span-8 flex flex-col border border-gray-200 rounded-md bg-white shadow-md p-6">
+    <div className="md:col-span-8 flex flex-col">
       <Form {...form}>
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            // if (form.getValues('submitOption') === 'save-draft') {
-            //   handleSaveDraft();
-            // } else if (
             if (form.getValues('submitOption') === 'crawl-product-info') {
               handleCrawlProductInfo();
             } else if (form.getValues('submitOption') === 'update') {
@@ -159,62 +200,182 @@ export function PromotionNewProductForm(props: {
           className="space-y-4"
         >
           <h2 className="text-lg font-semibold">Basic Information</h2>
-          <FormField
-            control={form.control}
-            name="formId"
-            render={({ field }) => (
-              <div>
-                <FormLabel className="mb-2">
-                  Binding Collection Form <Required />
-                </FormLabel>
-                <FormControl>
-                  <div className="flex flex-row items-center gap-2 mb-2">
-                    {formsLoaded ? (
-                      <Select
-                        disabled={props.mode === 'edit'}
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a form" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {forms.map((item) => (
-                              <SelectItem key={item.id} value={item.id || ''}>
-                                {item.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    ) : (
-                      <Input
-                        disabled
-                        placeholder="Loading forms..."
-                        className="w-full"
-                      />
-                    )}
-                    <Link
-                      href={`/${lang}/${workspaceId}/forms/${form.watch('formId')}/default`}
-                      target="_blank"
-                      className={cn(
-                        buttonVariants({ variant: 'default' }),
-                        // 'disabled:opacity-50 disabled:pointer-events-none',
-                        form.watch('formId') === ''
-                          ? 'opacity-50 pointer-events-none'
-                          : '',
-                        mode === 'edit' ? 'opacity-50 pointer-events-none' : '',
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="formId"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Binding Form <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row items-center gap-2 mb-2">
+                      {formsLoaded ? (
+                        <Select
+                          disabled={props.mode === 'edit'}
+                          value={field.value}
+                          onValueChange={(selectedId) => {
+                            const selectedForm = forms.find(
+                              (item) => item.id === selectedId,
+                            );
+                            if (selectedForm) {
+                              form.setValue('formId', selectedForm.id || '');
+                              form.setValue(
+                                'formShortId',
+                                selectedForm.shortId || '',
+                              );
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a form" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {forms.map((item) => (
+                                <SelectItem key={item.id} value={item.id || ''}>
+                                  {item.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          disabled
+                          placeholder="Loading forms..."
+                          className="w-full"
+                        />
                       )}
-                    >
-                      Edit
-                    </Link>
-                  </div>
-                </FormControl>
-                <FormMessage />
-              </div>
-            )}
-          />
+                      <Link
+                        href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}
+                        target="_blank"
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          // 'disabled:opacity-50 disabled:pointer-events-none',
+                          form.watch('formId') === ''
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                          mode === 'edit'
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                        )}
+                      >
+                        Preview
+                      </Link>
+                      <Link
+                        href={`/${lang}/${workspaceId}/forms/${form.watch('formId')}/default`}
+                        target="_blank"
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          // 'disabled:opacity-50 disabled:pointer-events-none',
+                          form.watch('formId') === ''
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                          mode === 'edit'
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                        )}
+                      >
+                        Edit
+                      </Link>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="widgetId"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Embedding Widget <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row items-center gap-2 mb-2">
+                      {widgetsLoaded ? (
+                        <Select
+                          disabled={props.mode === 'edit'}
+                          value={field.value}
+                          onValueChange={(selectedId) => {
+                            const selectedWidget = widgets.find(
+                              (item) => item.id === selectedId,
+                            );
+                            if (selectedWidget) {
+                              form.setValue(
+                                'widgetId',
+                                selectedWidget.id || '',
+                              );
+                              form.setValue(
+                                'widgetShortId',
+                                selectedWidget.shortId || '',
+                              );
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a Widget" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {widgets.map((item) => (
+                                <SelectItem key={item.id} value={item.id || ''}>
+                                  {item.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          disabled
+                          placeholder="Loading widgets..."
+                          className="w-full"
+                        />
+                      )}
+                      <Link
+                        href={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
+                        target="_blank"
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          form.watch('widgetId') === ''
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                          mode === 'edit'
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                        )}
+                      >
+                        Preview
+                      </Link>
+                      <Link
+                        href={`/${lang}/${workspaceId}/showcases/${form.watch('widgetId')}`}
+                        target="_blank"
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          // 'disabled:opacity-50 disabled:pointer-events-none',
+                          form.watch('widgetId') === ''
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                          mode === 'edit'
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                        )}
+                      >
+                        Edit
+                      </Link>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+          </div>
 
           <div className="grid grid-cols-2 gap-4">
             <FormField
@@ -497,16 +658,6 @@ export function PromotionNewProductForm(props: {
             )}
           >
             <h2 className="text-lg font-semibold">Submit Options</h2>
-            {/*<Button*/}
-            {/*  variant="outline"*/}
-            {/*  size="sm"*/}
-            {/*  onClick={() => {*/}
-            {/*    form.setValue('submitOption', 'save-draft');*/}
-            {/*  }}*/}
-            {/*  className="flex items-center gap-2"*/}
-            {/*>*/}
-            {/*  Save Draft*/}
-            {/*</Button>*/}
           </div>
 
           {/* Update Button */}
@@ -536,19 +687,44 @@ export function PromotionNewProductForm(props: {
                 No cost, requires community engagement
               </h4>
               <ul className="text-start list-disc pl-4 mt-4">
-                <li>Join the community, review other products</li>
-                <li>
-                  Submit at least{' '}
-                  <span className="text-red-500 font-bold">10</span> reviews to
-                  make your product publicly visible.
+                <li className="">
+                  <div className="flex flex-row items-center gap-1">
+                    <ShowcaseEmbedDialog
+                      url={form.watch('url')}
+                      showcaseShortId={form.watch('widgetShortId') || ''}
+                    >
+                      <span className="text-blue-500 hover:underline cursor-pointer">
+                        Embed the widget{' '}
+                      </span>
+                    </ShowcaseEmbedDialog>
+                    on your website and
+                    <VerifyWidgetEmbedding
+                      url={form.watch('url')}
+                      showcaseShortId={form.watch('widgetShortId')}
+                    >
+                      Verify
+                    </VerifyWidgetEmbedding>
+                  </div>
                 </li>
                 <li>
-                  If you've submitted more reviews than you've received, your
-                  product enters the listing queue.
-                </li>
-                <li>
-                  If submitted reviews are fewer than received reviews, your
-                  product will not be visible for review.
+                  Write at least
+                  <span className="text-red-500 font-bold px-1">
+                    {taskReviewCount}
+                  </span>
+                  reviews or testimonials for other products which listing in
+                  <Link
+                    href={`/${lang}/${workspaceId}/promotion/pending-listings`}
+                    className="text-blue-500 hover:underline px-1"
+                  >
+                    pending
+                  </Link>
+                  or
+                  <Link
+                    href={`/${lang}/${workspaceId}/promotion/public-listings`}
+                    className="text-blue-500 hover:underline px-1"
+                  >
+                    public
+                  </Link>
                 </li>
               </ul>
               <Button
@@ -561,7 +737,11 @@ export function PromotionNewProductForm(props: {
                   form.setValue('submitOption', 'free-submit');
                 }}
               >
-                Free Submit
+                {loading ? (
+                  <LoadingText>Submitting...</LoadingText>
+                ) : (
+                  'Submit for Free'
+                )}
               </Button>
             </div>
             <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">

@@ -22,26 +22,42 @@ export class BrowserlessService {
 
   constructor() {}
 
-  async extract(url: string): Promise<{
+  async extract(
+    url: string,
+    options?: {
+      contentEnable?: boolean;
+      faviconEnable?: boolean;
+      screenshotEnable?: boolean;
+    },
+  ): Promise<{
     title: string;
     description: string;
-    faviconFilePath: string;
-    screenshotFilePath: string;
+    content?: string;
+    faviconFilePath?: string;
+    screenshotFilePath?: string;
   }> {
+    const contentEnable = options.contentEnable || false;
+    const faviconEnable = options.faviconEnable || false;
+    const screenshotEnable = options.screenshotEnable || false;
     const { page, browser } = await this.openUrl(url);
     // 生成首页截图，转换成 png, jpeg, webp 等格式
     const title = await page.title();
     const content = await page.content();
     const $ = cheerio.load(content);
     const description = $('meta[name="description"]').attr('content') || '';
-    const faviconFilePath = await this.getFaviconFilePath($, url);
-    const screenshotFilePath = `/tmp/${hash(url)}.png`;
-    await this.screenshot(page, screenshotFilePath);
+    const faviconFilePath = faviconEnable
+      ? await this.getFaviconFilePath($, url)
+      : undefined;
+    const screenshotFilePath = screenshotEnable
+      ? await this.screenshot(page, url)
+      : undefined;
+
     // 关闭浏览器
     await browser.close();
     return {
       title: title,
       description: description,
+      content: contentEnable ? content : undefined,
       faviconFilePath: faviconFilePath,
       screenshotFilePath: screenshotFilePath,
     };
@@ -69,11 +85,9 @@ export class BrowserlessService {
     };
   }
 
-  async screenshot(
-    page: puppeteer.Page,
-    outputPath: string = 'screenshot.png',
-  ) {
+  async screenshot(page: puppeteer.Page, url: string) {
     try {
+      const outputPath = `/tmp/${hash(url)}.png`;
       const screenshot = await page.screenshot({
         fullPage: false,
         clip: {

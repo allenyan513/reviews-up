@@ -9,13 +9,12 @@ import { columns } from '@/modules/review/review-list-page-columns';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 export default function ReviewsPage(props: {
-  params: Promise<{
-    lang: string;
-    workspaceId: string;
-  }>;
+  lang: string;
+  workspaceId: string;
+  status: string | undefined;
 }) {
+  const { lang, workspaceId, status } = props;
   const { defaultWorkspace } = useUserContext();
-
   const fetchReviews = async (
     pageIndex: number,
     pageSize: number,
@@ -52,7 +51,13 @@ export default function ReviewsPage(props: {
           <ReviewImportDialog />
         </div>
       </div>
-      <DataTable fetchData={fetchReviews} columns={columns} />
+      <DataTable
+        fetchData={fetchReviews}
+        columns={columns}
+        defaultColumnFilters={
+          status === 'all' ? [] : [{ id: 'status', value: status }]
+        }
+      />
     </div>
   );
 }

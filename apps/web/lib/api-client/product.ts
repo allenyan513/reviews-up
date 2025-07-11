@@ -22,4 +22,6 @@ export const product = {
   updateOne: (id: string, dto: UpdateProductRequest) =>
     authFetch(`/products/${id}`, 'PATCH', dto),
   deleteOne: (id: string) => authFetch(`/products/${id}`, 'DELETE', {}),
+  taskReviewCount: (): Promise<RRResponse<number>> =>
+    authFetch('/products/taskReviewCount', 'GET', {}),
 };

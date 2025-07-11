@@ -43,14 +43,18 @@ interface DataTableProps<TData, TValue> {
   columns: (
     setData: React.Dispatch<React.SetStateAction<TData[]>>,
   ) => ColumnDef<TData, TValue>[];
+  defaultColumnFilters?: ColumnFiltersState;
 }
 
 export function DataTable<TData, TValue>({
   fetchData,
   columns,
+  defaultColumnFilters = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  console.log('defaultColumnFilters', defaultColumnFilters);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(defaultColumnFilters);
+  console.log('columnFilters', columnFilters);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,

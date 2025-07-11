@@ -55,3 +55,9 @@ export const showcaseConfigSchema = z.object({
 });
 
 export type ShowcaseConfig = z.infer<typeof showcaseConfigSchema>;
+
+export const verifyWidgetEmbeddingSchema = z.object({
+  url: z.string().url().min(1, 'URL is required'),
+  showcaseShortId: z.string().min(1, 'showcaseShortId is required'),
+});
+export type VerifyWidgetEmbeddingRequest = z.infer<typeof verifyWidgetEmbeddingSchema>;

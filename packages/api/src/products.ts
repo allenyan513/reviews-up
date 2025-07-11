@@ -32,6 +32,9 @@ export const ProductStatus = {
 export const createProductSchema = z.object({
   workspaceId: z.string().min(1, 'Workspace ID is required'),
   formId: z.string().min(1, 'Form ID is required'),
+  formShortId: z.string().min(1, 'Form Short ID is required'),
+  widgetId: z.string().min(1, 'Widget ID is required'),
+  widgetShortId: z.string().min(1, 'Widget Short ID is required'),
   name: z
     .string()
     .min(1, 'Name is required')
@@ -69,6 +72,7 @@ export const productSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
   workspaceId: z.string().min(1, 'Workspace ID is required'),
   formId: z.string().min(1, 'Form ID is required'),
+  widgetId: z.string().min(1, 'Widget ID is required'),
   name: z
     .string()
     .min(1, 'Name is required')

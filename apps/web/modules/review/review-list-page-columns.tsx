@@ -217,7 +217,7 @@ export function columns(setData: any): ColumnDef<any>[] {
         return (
           <ReviewLookupDialog review={review}>
             <div className="text-sm text-gray-700  max-w-md whitespace-break-spaces flex flex-col cursor-pointer">
-              <p className="whitespace-break-spaces line-clamp-3">{text}</p>
+              <p className="whitepace-break-spaces line-clamp-3">{text}</p>
               <div className="flex flex-row gap-1 mt-2">
                 {medias &&
                   medias.length > 0 &&
