@@ -7,10 +7,11 @@ export default function Page(props: {
   params: Promise<{
     lang: string;
     workspaceId: string;
+    status: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
+  const { lang, workspaceId, status } = use(props.params);
   return (
-    <ReviewListPage lang={lang} workspaceId={workspaceId} status={undefined} />
+    <ReviewListPage lang={lang} workspaceId={workspaceId} status={status} />
   );
 }

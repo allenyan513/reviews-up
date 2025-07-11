@@ -12,6 +12,8 @@ import {
   IconMail,
   IconClipboardText,
   IconRocket,
+  IconCheckbox,
+  IconForbid2,
   IconBuildingStore,
 } from '@tabler/icons-react';
 
@@ -78,19 +80,52 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   active: path.includes('/promotion/my-products'),
                 },
                 {
-                  title: 'Listing Queue',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/apps-to-review`,
+                  title: 'Pending',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/pending-listings`,
                   icon: IconHourglassEmpty,
-                  active: path.includes('/promotion/apps-to-review'),
+                  active: path.includes('/promotion/pending-listings'),
+                },
+                {
+                  title: 'Public',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/public-listings`,
+                  icon: IconCheckbox,
+                  active: path.includes('/promotion/public-listings'),
                 },
               ],
             },
             {
               title: 'Reviews',
-              url: `/${lang}/${defaultWorkspace?.id}/reviews`,
+              url: `/${lang}/${defaultWorkspace?.id}/reviews/all`,
               icon: IconStar,
-              active: path.includes('/reviews'),
+              active: false,
+              children: [
+                {
+                  title: 'All',
+                  url: `/${lang}/${defaultWorkspace?.id}/reviews/all`,
+                  icon: IconUser,
+                  active: path.includes('/reviews/all'),
+                },
+                {
+                  title: 'Pending',
+                  url: `/${lang}/${defaultWorkspace?.id}/reviews/pending`,
+                  icon: IconHourglassEmpty,
+                  active: path.includes('/reviews/pending'),
+                },
+                {
+                  title: 'Public',
+                  url: `/${lang}/${defaultWorkspace?.id}/reviews/public`,
+                  icon: IconCheckbox,
+                  active: path.includes('/reviews/public'),
+                },
+                {
+                  title: 'Hidden',
+                  url: `/${lang}/${defaultWorkspace?.id}/reviews/hidden`,
+                  icon: IconForbid2,
+                  active: path.includes('/reviews/hidden'),
+                },
+              ],
             },
+
             {
               title: 'Widgets',
               url: `/${lang}/${defaultWorkspace?.id}/showcases`,

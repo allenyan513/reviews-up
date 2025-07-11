@@ -19,6 +19,7 @@ import { S3Service } from '@src/modules/s3/s3.service';
 import * as fs from 'fs';
 import * as mime from 'mime-types';
 import { hash } from '@src/libs/utils';
+import { ShowcasesService } from '@src/modules/showcases/showcases.service';
 
 @Injectable()
 export class ProductsService {
@@ -27,8 +28,9 @@ export class ProductsService {
   constructor(
     private prismaService: PrismaService,
     private orderService: OrdersService,
-    private browserlessService: BrowserlessService, // Assuming BrowserService is defined elsewhere
-    private s3Service: S3Service, // Assuming S3Service is defined elsewhere
+    private showcaseService: ShowcasesService,
+    private browserlessService: BrowserlessService,
+    private s3Service: S3Service,
   ) {}
 
   async crawlProductInfo(userId: string, url: string) {
@@ -36,8 +38,12 @@ export class ProductsService {
       `Crawling product info for user ${userId} with URL: ${url}`,
     );
     const validatedUrl = new URL(url);
-    const { title, description, faviconFilePath, screenshotFilePath } =
-      await this.browserlessService.extract(validatedUrl.href);
+    const { title, description, content, faviconFilePath, screenshotFilePath } =
+      await this.browserlessService.extract(validatedUrl.href, {
+        contentEnable: false,
+        faviconEnable: true,
+        screenshotEnable: true,
+      });
     this.logger.debug(`Extracted Result:`, {
       title,
       description,
@@ -175,15 +181,7 @@ export class ProductsService {
     }
   }
 
-  /**
-   * 创建一个免费提交的产品
-   * @param uid
-   * @param dto
-   */
-  async createFreeSubmit(
-    uid: string,
-    dto: CreateProductRequest,
-  ): Promise<RRResponse<ProductEntity>> {
+  async getTaskReviewCount(uid: string): Promise<RRResponse<number>> {
     const pendingTasks = await this.prismaService.product.count({
       where: {
         status: {
@@ -194,7 +192,39 @@ export class ProductsService {
         },
       },
     });
-    const taskReviewCount = Math.min(10, pendingTasks);
+    return {
+      code: 200,
+      message: 'Task review count retrieved successfully',
+      data: Math.min(10, pendingTasks), // Limit to a maximum of 10
+    };
+  }
+
+  /**
+   * 创建一个免费提交的产品
+   * @param uid
+   * @param dto
+   */
+  async createFreeSubmit(
+    uid: string,
+    dto: CreateProductRequest,
+  ): Promise<RRResponse<ProductEntity>> {
+    //step1. verify if the widget is embedded in the url website
+    const verifyResult = await this.showcaseService.verifyWidgetEmbedding(uid, {
+      url: dto.url,
+      showcaseShortId: dto.widgetShortId,
+    });
+    if (verifyResult.code !== 200 || !verifyResult.data) {
+      this.logger.error(
+        `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
+      );
+      return {
+        code: 400,
+        message: 'Widget embedding verification failed',
+        data: null,
+      };
+    }
+    const taskReviewCountResult = await this.getTaskReviewCount(uid);
+    const taskReviewCount = taskReviewCountResult.data || 0;
     const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';
     const product = await this.prismaService.product.create({
       data: {
@@ -231,51 +261,6 @@ export class ProductsService {
       data: product,
     };
   }
-
-  // /**
-  //  * 创建一个免费提交的产品
-  //  * @param uid
-  //  * @param dto
-  //  */
-  // async save(
-  //   uid: string,
-  //   dto: CreateProductRequest,
-  // ): Promise<RRResponse<ProductEntity>> {
-  //   const product = await this.prismaService.product.create({
-  //     data: {
-  //       workspaceId: dto.workspaceId,
-  //       formId: dto.formId,
-  //       name: dto.name,
-  //       url: dto.url,
-  //       status: 'draft',
-  //       icon: dto.icon,
-  //       screenshot: dto.screenshot,
-  //       category: dto.category as ProductCategory,
-  //       description: dto.description,
-  //       longDescription: dto.longDescription,
-  //       features: dto.features,
-  //       useCase: dto.useCase,
-  //       howToUse: dto.howToUse,
-  //       faq: dto.faq,
-  //       //-----------//
-  //       userId: uid,
-  //       slug: slugify(dto.name, {
-  //         lower: true,
-  //         strict: true,
-  //       }),
-  //       taskReviewCount: 0,
-  //       submitReviewCount: 0,
-  //       receiveReviewCount: 0,
-  //       createdAt: new Date(),
-  //       updatedAt: new Date(),
-  //     },
-  //   });
-  //   return {
-  //     code: 200,
-  //     message: 'Product created successfully',
-  //     data: product,
-  //   };
-  // }
 
   async findAll(
     userId: string,
@@ -500,7 +485,7 @@ export class ProductsService {
             name: true,
             Review: true, // Include reviews related to the form
           },
-        }
+        },
       },
     });
     if (!product) {

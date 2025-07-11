@@ -1,7 +1,7 @@
 'use client';
 
 import React, { use } from 'react';
-import ReviewListPage from '@/modules/review/review-list-page';
+import { PromotionProductListings } from '@/modules/promotion/promotion-product-listings';
 
 export default function Page(props: {
   params: Promise<{
@@ -11,6 +11,10 @@ export default function Page(props: {
 }) {
   const { lang, workspaceId } = use(props.params);
   return (
-    <ReviewListPage lang={lang} workspaceId={workspaceId} status={undefined} />
+    <PromotionProductListings
+      lang={lang}
+      workspaceId={workspaceId}
+      status={'pendingForReceive'}
+    />
   );
 }

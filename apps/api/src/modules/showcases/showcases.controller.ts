@@ -9,7 +9,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ShowcasesService } from './showcases.service';
-import { CreateShowcaseDto, UpdateShowcaseDto } from '@reviewsup/api/showcases';
+import { CreateShowcaseDto, UpdateShowcaseDto, verifyWidgetEmbeddingSchema } from '@reviewsup/api/showcases';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
@@ -19,6 +19,14 @@ export class ShowcasesController {
   constructor(private readonly showcasesService: ShowcasesService) {}
 
   /** Public endpoints for showcases */
+  @UseGuards(JwtAuthGuard)
+  @Post('verify')
+  async verify(@Jwt() jwt: JwtPayload,
+               @Body() request: any,
+  ) {
+    const validatedRequest =  verifyWidgetEmbeddingSchema.parse(request);
+    return this.showcasesService.verifyWidgetEmbedding(jwt.userId, validatedRequest);
+  }
 
   @Get('shortId/:shortId')
   async findOneByShortId(@Param('shortId') shortId: string) {
@@ -73,4 +81,6 @@ export class ShowcasesController {
   async remove(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
     return this.showcasesService.remove(jwt.userId, id);
   }
+
+
 }

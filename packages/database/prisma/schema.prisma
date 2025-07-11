@@ -257,6 +257,7 @@ model Product {
   userId             String
   workspaceId        String
   formId             String
+  widgetId           String           @default("")
   name               String
   slug               String           @unique
   url                String

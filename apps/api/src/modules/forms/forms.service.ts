@@ -86,10 +86,17 @@ export class FormsService {
     return form;
   }
 
+  /**
+   * find form by shortId or id
+   * @param shortId
+   */
   async findOneByShortId(shortId: string) {
-    return this.prismaService.form.findUnique({
+    return this.prismaService.form.findFirst({
       where: {
-        shortId: shortId,
+        OR: [
+          { shortId: shortId },
+          { id: shortId },
+        ],
       },
     });
   }

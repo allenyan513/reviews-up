@@ -17,10 +17,17 @@ import {
   findAllRequestSchema,
   UpdateProductRequest,
 } from '@reviewsup/api/products';
+import { RRResponse } from '@reviewsup/api/common';
 
 @Controller('products')
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
+
+  @UseGuards(JwtAuthGuard)
+  @Get('taskReviewCount')
+  async getTaskReviewCount(uid: string): Promise<RRResponse<number>> {
+    return this.productsService.getTaskReviewCount(uid);
+  }
 
   @UseGuards(JwtAuthGuard)
   @Post('crawl')
@@ -74,11 +81,4 @@ export class ProductsController {
   async publicSlug(@Param('slug') slug: string) {
     return this.productsService.findBySlug(slug);
   }
-
-  //
-  // @UseGuards(JwtAuthGuard)
-  // @Post('submit/paid')
-  // async submitWithPaid(@Jwt() jwt: JwtPayload) {
-  //   return this.productsService.submitWithPaid(jwt.userId, request);
-  // }
 }

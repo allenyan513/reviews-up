@@ -4,13 +4,20 @@ import {
   UpdateShowcaseDto,
   ShowcaseConfig,
   ShowcaseEntity,
+  VerifyWidgetEmbeddingRequest,
 } from '@reviewsup/api/showcases';
 import { PrismaService } from '../prisma/prisma.service';
-import { PaginateRequest, PaginateResponse } from '@reviewsup/api/common';
+import {
+  PaginateRequest,
+  PaginateResponse,
+  RRResponse,
+} from '@reviewsup/api/common';
 import { Showcase } from '@reviewsup/database/generated/client';
 import { generateShortId } from '@src/libs/shortId';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { SortBy } from '@reviewsup/api/common';
+import { BrowserlessService } from '@src/modules/browserless/browserless.service';
+import * as cheerio from 'cheerio';
 
 @Injectable()
 export class ShowcasesService {
@@ -38,7 +45,10 @@ export class ShowcasesService {
     speed: 40,
   };
 
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private browserlessService: BrowserlessService, // Assuming you have a BrowsersService for browserless operations
+  ) {}
 
   async create(uid: string, createShowcaseDto: CreateShowcaseDto) {
     return this.prismaService.showcase.create({
@@ -129,9 +139,12 @@ export class ShowcasesService {
 
   async findOneByShortId(shortId: string) {
     this.logger.debug(`Finding showcase by shortId: ${shortId}`);
-    const showcase = await this.prismaService.showcase.findUnique({
+    const showcase = await this.prismaService.showcase.findFirst({
       where: {
-        shortId: shortId,
+        OR: [
+          { shortId: shortId },
+          { id: shortId }, // Allow searching by ID as well
+        ],
       },
     });
     if (!showcase) {
@@ -221,5 +234,35 @@ export class ShowcasesService {
       sortedReviews = reviews;
     }
     return sortedReviews;
+  }
+
+  async verifyWidgetEmbedding(
+    uid: string,
+    request: VerifyWidgetEmbeddingRequest,
+  ): Promise<RRResponse<boolean>> {
+    this.logger.debug('Verifying embended widget for showcase', request);
+    const { content } = await this.browserlessService.extract(request.url, {
+      contentEnable: true,
+      faviconEnable: false,
+      screenshotEnable: false,
+    });
+    const $ = cheerio.load(content);
+    //查询是否存在 <div id="reviewsup-showcase-1db8f570b48">
+    const widgetSelector = `#reviewsup-showcase-${request.showcaseShortId}`;
+    const widgetExists = $(widgetSelector).length > 0;
+    this.logger.debug(
+      `Widget exists for showcase ${request.showcaseShortId}: ${widgetExists}`,
+    );
+    //查询是否存在 <script id="revewsup-embed-js" type="text/javascript" src="https://reviewsup.com/js/embed.js" defer></script>
+    const scriptSelector = `script#revewsup-embed-js[src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js"]`;
+    const scriptExists = $(scriptSelector).length > 0;
+    this.logger.debug(
+      `Script exists for showcase ${request.showcaseShortId}: ${scriptExists}`,
+    );
+    return {
+      code: 200,
+      message: 'Widget verification successful',
+      data: widgetExists && scriptExists,
+    } as RRResponse<boolean>;
   }
 }
