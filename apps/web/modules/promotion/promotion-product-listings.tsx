@@ -157,6 +157,11 @@ export function PromotionProductListings(props: {
 
         {/*  产品grid*/}
         <div className="col-span-10 grid grid-cols-3 items-start gap-4">
+          { products.length === 0 && (
+            <div className="col-span-3 text-center text-gray-500">
+              No products found.
+            </div>
+          )}
           {products &&
             products.map((product) => (
               <ProductItemView

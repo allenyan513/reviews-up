@@ -48,8 +48,6 @@ export class ProductsController {
     return this.productsService.findAll(jwt.userId, validatedRequest);
   }
 
-  //查询全部已经评价过的form
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);

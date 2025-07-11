@@ -72,7 +72,9 @@ export const productSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
   workspaceId: z.string().min(1, 'Workspace ID is required'),
   formId: z.string().min(1, 'Form ID is required'),
-  widgetId: z.string().min(1, 'Widget ID is required'),
+  formShortId: z.string().min(1, 'Form Short ID is required'),
+  showcaseId: z.string().min(1, 'Showcase ID is required'),
+  showcaseShortId: z.string().min(1, 'Showcase Short ID is required'),
   name: z
     .string()
     .min(1, 'Name is required')

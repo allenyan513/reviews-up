@@ -9,7 +9,7 @@ export default function Page(props: { params: Promise<{ lang: string }> }) {
       if (!user) {
         return redirect(`/auth/signin`);
       } else {
-        return redirect(`/${user?.Workspace?.[0]?.id}/reviews`);
+        return redirect(`/${user?.Workspace?.[0]?.id}/promotion/my-products`);
       }
     });
   }, []);

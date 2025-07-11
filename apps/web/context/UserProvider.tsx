@@ -79,6 +79,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
 
   const signOut = () => {
     localStorage.removeItem('access_token');
+    setDefaultWorkspace(null);
     redirect('/auth/signin');
   };
 
