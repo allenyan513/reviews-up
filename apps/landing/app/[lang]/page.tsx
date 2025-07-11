@@ -9,7 +9,7 @@ import { hero3 } from '@/data/hero';
 import { ShowcaseWrapper } from '@/components/landing/showcase';
 import { Badge } from '@/components/badge';
 import { useTranslate } from '@/locales/dictionaries';
-import { showcaseData } from '@/data/showcases';
+import { getShowcaseData } from '@/data/showcases';
 import { featureData } from '@/data/features';
 import { pricingData } from '@/data/pricings';
 import { faqData } from '@/data/faqs';
@@ -49,6 +49,7 @@ export default async function LandingPage(props: {
 }) {
   const { lang } = await props.params;
   const t = await useTranslate(lang);
+  const showcaseData = getShowcaseData();
 
   return (
     <div className="flex flex-col w-full items-center gap-8 md:gap-12">
@@ -68,7 +69,6 @@ export default async function LandingPage(props: {
       <ShowcaseWrapper
         title={t(showcaseData.title)}
         subtitle={showcaseData.subtitle}
-        formId={showcaseData.formId}
         items={showcaseData.items}
       />
 
@@ -80,11 +80,8 @@ export default async function LandingPage(props: {
         buttonText={collectingFormData.buttonText}
       />
 
-
       <div id="how-it-works" />
       <HowItWorks />
-
-
 
       <div id="features" />
       <FeatureGrid

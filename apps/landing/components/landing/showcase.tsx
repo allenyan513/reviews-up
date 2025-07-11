@@ -11,7 +11,6 @@ import Link from 'next/link';
 export function ShowcaseWrapper(props: {
   title: string;
   subtitle: React.ReactNode;
-  formId: string;
   items: {
     title: string;
     showcaseId: string;
@@ -19,7 +18,7 @@ export function ShowcaseWrapper(props: {
     codeMap: Record<string, string>;
   }[];
 }) {
-  const { items, title, subtitle, formId } = props;
+  const { items, title, subtitle } = props;
   const [currentItem, setCurrentItem] = useState<any>(items[0]);
 
   const [view, setView] = useState<'preview' | 'code'>('preview');
