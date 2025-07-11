@@ -147,6 +147,9 @@ export class ProductsService {
         data: {
           workspaceId: dto.workspaceId,
           formId: dto.formId,
+          formShortId: dto.formShortId,
+          showcaseId: dto.widgetId,
+          showcaseShortId: dto.widgetShortId,
           name: dto.name,
           url: dto.url,
           status: 'listing', // Set status to 'listing' for paid submissions
@@ -230,6 +233,9 @@ export class ProductsService {
       data: {
         workspaceId: dto.workspaceId,
         formId: dto.formId,
+        formShortId: dto.formShortId,
+        showcaseId: dto.widgetId,
+        showcaseShortId: dto.widgetShortId,
         name: dto.name,
         url: dto.url,
         status: status,
@@ -322,12 +328,12 @@ export class ProductsService {
     return items;
   }
 
-  async findOne(id: string) {
+  async findOne(id: string): Promise<ProductEntity> {
     return this.prismaService.product.findFirst({
       where: {
         id: id,
       },
-    });
+    }) as ProductEntity;
   }
 
   async update(uid: string, id: string, dto: UpdateProductRequest) {

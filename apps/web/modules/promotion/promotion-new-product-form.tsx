@@ -258,9 +258,6 @@ export function PromotionNewProductForm(props: {
                           form.watch('formId') === ''
                             ? 'opacity-50 pointer-events-none'
                             : '',
-                          mode === 'edit'
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
                         )}
                       >
                         Preview
@@ -272,9 +269,6 @@ export function PromotionNewProductForm(props: {
                           buttonVariants({ variant: 'default' }),
                           // 'disabled:opacity-50 disabled:pointer-events-none',
                           form.watch('formId') === ''
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
-                          mode === 'edit'
                             ? 'opacity-50 pointer-events-none'
                             : '',
                         )}
@@ -346,9 +340,6 @@ export function PromotionNewProductForm(props: {
                           form.watch('widgetId') === ''
                             ? 'opacity-50 pointer-events-none'
                             : '',
-                          mode === 'edit'
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
                         )}
                       >
                         Preview
@@ -360,9 +351,6 @@ export function PromotionNewProductForm(props: {
                           buttonVariants({ variant: 'default' }),
                           // 'disabled:opacity-50 disabled:pointer-events-none',
                           form.watch('widgetId') === ''
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
-                          mode === 'edit'
                             ? 'opacity-50 pointer-events-none'
                             : '',
                         )}

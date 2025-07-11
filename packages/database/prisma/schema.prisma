@@ -228,6 +228,7 @@ model Showcase {
   updatedAt   DateTime  @updatedAt
   user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   Workspace   Workspace @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  Product     Product[]
 }
 
 //邮件营销活动表
@@ -257,7 +258,9 @@ model Product {
   userId             String
   workspaceId        String
   formId             String
-  widgetId           String           @default("")
+  formShortId        String           @default("")
+  showcaseId         String
+  showcaseShortId    String           @default("")
   name               String
   slug               String           @unique
   url                String
@@ -286,6 +289,7 @@ model Product {
   user               User             @relation(fields: [userId], references: [id], onDelete: Cascade)
   workspace          Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   form               Form             @relation(fields: [formId], references: [id], onDelete: Cascade)
+  showcase           Showcase         @relation(fields: [showcaseId], references: [id], onDelete: Cascade)
 }
 
 model Order {

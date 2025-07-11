@@ -14,7 +14,8 @@ export const product = {
     authFetch(`/products/findAll`, 'POST', request),
   crawlOne: (url: string): Promise<CrawlProductResponse> =>
     authFetch('/products/crawl', 'POST', { url }),
-  findOne: (id: string) => authFetch(`/products/${id}`, 'GET', {}),
+  findOne: (id: string): Promise<ProductEntity> =>
+    authFetch(`/products/${id}`, 'GET', {}),
   createOne: (
     dto: CreateProductRequest,
   ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> =>
