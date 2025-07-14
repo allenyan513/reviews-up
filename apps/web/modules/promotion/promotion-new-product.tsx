@@ -12,6 +12,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { ProductItemView } from '@/modules/promotion/promotion-product-item-view';
 import { PromotionNewProductForm } from '@/modules/promotion/promotion-new-product-form';
 import { api } from '@/lib/api-client';
+import slugify from 'slugify';
+import { BsBoxArrowUpRight } from 'react-icons/bs';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@reviewsup/ui/tabs';
 
 export function PromotionNewProduct(props: {
   mode: 'new' | 'edit';
@@ -106,26 +109,66 @@ export function PromotionNewProduct(props: {
           mode={mode}
           id={productId || ''}
         />
-        <div className="md:col-span-3 w-full">
-          <h2 className="text-sm text-gray-500 mb-2">Preview</h2>
-          <ProductItemView
-            product={
-              {
-                id: '',
-                name: form.watch('name'),
-                description: form.watch('description'),
-                url: form.watch('url'),
-                icon: form.watch('icon'),
-                screenshot: form.watch('screenshot'),
-                longDescription: form.watch('longDescription'),
-                features: form.watch('features'),
-                useCase: form.watch('useCase'),
-                howToUse: form.watch('howToUse'),
-                faq: form.watch('faq'),
-                category: form.watch('category'),
-              } as ProductEntity
-            }
-          />
+        <div className="md:col-span-4 w-full space-y-2">
+          <Tabs defaultValue="product">
+            <TabsList>
+              <TabsTrigger value="product">Product</TabsTrigger>
+              <TabsTrigger value="form">Form</TabsTrigger>
+              <TabsTrigger value="widget">Widget</TabsTrigger>
+            </TabsList>
+            <TabsContent value="product">
+              <ProductItemView
+                product={
+                  {
+                    id: '',
+                    name: form.watch('name'),
+                    description: form.watch('description'),
+                    url: form.watch('url'),
+                    icon: form.watch('icon'),
+                    screenshot: form.watch('screenshot'),
+                    longDescription: form.watch('longDescription'),
+                    features: form.watch('features'),
+                    useCase: form.watch('useCase'),
+                    howToUse: form.watch('howToUse'),
+                    faq: form.watch('faq'),
+                    category: form.watch('category'),
+                  } as ProductEntity
+                }
+              />
+              <Link
+                target="_blank"
+                className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
+                href={`https://reviewsup.io/products/${slugify(
+                  form.watch('name') || '',
+                  { lower: true, strict: true },
+                )}`}
+              >
+                <span>
+                  https://reviewsup.io/products/
+                  {slugify(form.watch('name') || '', {
+                    lower: true,
+                    strict: true,
+                  })}
+                </span>
+                <BsBoxArrowUpRight />
+              </Link>
+            </TabsContent>
+
+            <TabsContent value="form">
+              <iframe
+                src={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}
+                className="w-full h-96 border rounded-md"
+                title="Form Preview"
+              />
+            </TabsContent>
+            <TabsContent value="widget">
+              <iframe
+                src={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
+                className="w-full h-96 border rounded-md"
+                title="Widget Preview"
+              />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

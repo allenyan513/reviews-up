@@ -5,9 +5,8 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ProductEntity } from '@reviewsup/api/products';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseServer, StarRatingServer } from '@reviewsup/embed-react';
+import { StarRatingServer } from '@reviewsup/embed-react';
 import React, { Suspense } from 'react';
-import { ShowcaseClient } from '@reviewsup/embed-react';
 import { ProductDetailReviews } from './product-detail-reviews';
 
 export function toLocalDateString(date: Date | string): string {

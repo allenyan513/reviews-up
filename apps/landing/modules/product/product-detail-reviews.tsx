@@ -1,6 +1,6 @@
 'use client';
 import React, { Suspense } from 'react';
-import { ShowcaseClient, ShowcaseServer } from '@reviewsup/embed-react';
+import { ShowcaseClient } from '@reviewsup/embed-react';
 
 export function ProductDetailReviews(props: {
   showcaseShortId: string;
