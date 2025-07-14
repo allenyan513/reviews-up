@@ -13,7 +13,6 @@ import { BsGithub } from 'react-icons/bs';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
 import { useState } from 'react';
 import Link from 'next/link';
-import { VerifyWidgetEmbedding } from '@/components/verify-widget-embedding';
 import toast from 'react-hot-toast';
 import { useVerifyEmbed } from '@/hooks/use-verify-embed';
 

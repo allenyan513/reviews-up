@@ -77,7 +77,6 @@ export function ProductItemView(props: {
       return null;
     }
     const reviews = (product.form.Review as ReviewEntity[]) || [];
-    console.log('reviews', reviews);
     const totalRating = reviews.reduce(
       (acc, review) => acc + (review?.rating || 0),
       0,

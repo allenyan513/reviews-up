@@ -48,7 +48,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { ShowcaseEntity } from '@reviewsup/api/showcases';
 import { ShowcaseEmbedDialog } from '@/modules/showcase/showcase-embed-dialog';
-import { VerifyWidgetEmbedding } from '@/components/verify-widget-embedding';
 import { useVerifyEmbed } from '@/hooks/use-verify-embed';
 
 export function PromotionNewProductForm(props: {
