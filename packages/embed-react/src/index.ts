@@ -18,5 +18,6 @@ export * from './components/embed/linkedin-embed';
 export * from './components/item/index';
 export * from './components/star-rating';
 export * from './components/star-rating.server';
+export * from './components/reviewsup';
 
 export * from './hooks/use-showcase';

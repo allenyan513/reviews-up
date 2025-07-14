@@ -204,7 +204,6 @@ export function PromotionNewProductForm(props: {
           className="space-y-4"
         >
           <h2 className="text-lg font-semibold">Basic Information</h2>
-
           <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -386,13 +385,7 @@ export function PromotionNewProductForm(props: {
                     />
                   </FormControl>
                   <FormMessage />
-                  <p className="mt-2 text-sm text-gray-500">
-                    https://reviewsup.io/products/
-                    {slugify(field.value || '', {
-                      lower: true,
-                      strict: true,
-                    })}
-                  </p>
+
                 </div>
               )}
             />

@@ -13,6 +13,5 @@ export function ShowcaseClient(props: {
   if (!showcase) {
     return null;
   }
-
   return <ShowcasePageReviewClient showcase={showcase} />;
 }
