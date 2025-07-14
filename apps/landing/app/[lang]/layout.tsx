@@ -62,9 +62,11 @@ export default async function RootLayout(props: {
           linkedinLink="https://www.linkedin.com/in/ligangyan/"
         />
       </body>
-      <GoogleAnalytics
-        gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
-      />
+      {process.env.NODE_ENV === 'production' && (
+        <GoogleAnalytics
+          gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+        />
+      )}
     </html>
   );
 }

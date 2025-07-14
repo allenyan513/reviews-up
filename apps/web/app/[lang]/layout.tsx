@@ -22,9 +22,11 @@ export default async function RootLayout(props: {
   return (
     <html lang={lang} translate="no">
       <body className={openSans.className}>{props.children}</body>
-      <GoogleAnalytics
-        gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
-      />
+      {process.env.NODE_ENV === 'production' && (
+        <GoogleAnalytics
+          gaId={`${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_ID}`}
+        />
+      )}
     </html>
   );
 }
