@@ -7,11 +7,9 @@ export default function Page(props: { params: Promise<{ lang: string }> }) {
   useEffect(() => {
     api.auth.getSession().then((user) => {
       if (!user) {
-        return redirect(
-          `/auth/signin?redirect=${encodeURIComponent(`/${user.Workspace[0].id}/promotion/my-products`)}`,
-        );
+        redirect(`/auth/signin?redirect=${encodeURIComponent(`/launch`)}`);
       } else {
-        return redirect(`/${user.Workspace[0].id}/promotion/my-products`);
+        redirect(`/${user.Workspace[0].id}/promotion/my-products`);
       }
     });
   }, []);
