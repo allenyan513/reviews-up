@@ -10,7 +10,6 @@ interface UserContextProps {
   defaultWorkspace: WorkspaceEntity | null | undefined;
   setDefaultWorkspace: (workspace: WorkspaceEntity | null) => void;
   switchDefaultWorkspace: (workspace: WorkspaceEntity | null) => void;
-  getSession: () => void;
   googleSignIn: (redirect?: string) => void;
   githubSignIn: (redirect?: string) => void;
   twitterSignIn: (redirect?: string) => void;
@@ -23,7 +22,13 @@ interface UserContextProps {
 const UserContext = createContext<UserContextProps | null>(null);
 
 export function UserProvider(props: { children: React.ReactNode }) {
-  const [user, setUser] = useState<UserEntity | null>(null);
+  /**
+   * Important:
+   * undefined is used to indicate that the user state is still being fetched.
+   * null indicates that the user is not logged in.
+   * not null indicates that the user is logged in.
+   */
+  const [user, setUser] = useState<UserEntity | null | undefined>(undefined);
   const [defaultWorkspace, setDefaultWorkspace] = useLocalStorageState<
     WorkspaceEntity | null | undefined
   >(`${user?.id}_workspace`, {
@@ -79,6 +84,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
 
   const signOut = () => {
     localStorage.removeItem('access_token');
+    setUser(null);
     setDefaultWorkspace(null);
     redirect('/auth/signin');
   };
@@ -99,30 +105,26 @@ export function UserProvider(props: { children: React.ReactNode }) {
     }
   };
 
-  const getSession = async (): Promise<void> => {
-    try {
-      const user = await api.auth.getSession();
-      if (user) {
-        setUser(user);
-      }
-    } catch (error) {
-      // console.error('Failed to get session:', error);
-    }
-  };
-
   useEffect(() => {
-    getSession();
+    api.auth
+      .getSession()
+      .then((user) => setUser(user))
+      .catch((error) => {
+        setUser(null);
+      });
   }, []);
 
   useEffect(() => {
-    if (!user) {
-      return;
-    }
-    if (!defaultWorkspace) {
-      const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
-      setDefaultWorkspace(firstWorkspace);
+    if (user === undefined) {
+      // User state is still being fetched
+    } else if (user === null) {
+      // User is not logged in
+      setDefaultWorkspace(null);
     } else {
-      console.log('Default workspace already set:', defaultWorkspace);
+      if (!defaultWorkspace) {
+        const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
+        setDefaultWorkspace(firstWorkspace);
+      }
     }
   }, [user]);
 
@@ -139,7 +141,6 @@ export function UserProvider(props: { children: React.ReactNode }) {
         sendMagicLink,
         signIn,
         signOut,
-        getSession,
         deleteAccount,
       }}
     >
@@ -158,21 +159,21 @@ export function useUserContext() {
 
 interface UseSessionOptions {
   required?: boolean;
-  onUnauthenticated?: () => void;
+  onUnauthenticated?: (user: UserEntity) => void;
 }
 
 export function useSession(options?: UseSessionOptions) {
   const { user } = useUserContext();
 
   useEffect(() => {
-    if (!user && options?.required) {
-      if (options.onUnauthenticated) {
-        options.onUnauthenticated();
-      } else {
-        console.warn(
-          'No onUnauthenticated handler provided, redirecting to signin',
-        );
-      }
+    if (user === undefined) {
+      // User state is still being fetched
+      return;
+    }
+    if (user === null && options?.required && options?.onUnauthenticated) {
+      // User is not logged in and required authentication and callback is provided
+      options.onUnauthenticated(user);
+      return;
     }
   }, [user, options]);
 

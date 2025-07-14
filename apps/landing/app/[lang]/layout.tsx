@@ -30,6 +30,7 @@ export default async function RootLayout(props: {
           websiteName={'Reviewsup.io'}
           githubLink="https://github.com/allenyan513/reviewsup.io"
           appLink={process.env.NEXT_PUBLIC_APP_URL as string}
+          launchLink={`${process.env.NEXT_PUBLIC_APP_URL}/launch`}
           items={[
             { title: 'Home', href: '/' },
             { title: 'Features', href: '/#features' },

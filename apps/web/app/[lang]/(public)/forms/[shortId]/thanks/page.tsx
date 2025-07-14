@@ -10,9 +10,6 @@ export default function PublicFormThanksRoute(props: {
     lang: string;
   }>;
 }) {
-  const { user } = useSession({
-    required: true,
-  });
   const { shortId } = use(props.params);
   const { formConfig, fetchFormByShortId } = useFormContext();
 

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import StarRating from '@reviewsup/ui/star-rating';
+import { StarRating } from '@reviewsup/embed-react';
 import { Label } from '@reviewsup/ui/label';
 import { Input } from '@reviewsup/ui/input';
 import AvatarUpload from './avatar-upload';

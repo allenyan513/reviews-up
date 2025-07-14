@@ -2,7 +2,7 @@
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
-import StarRating from '../star-rating';
+import { StarRating } from '../star-rating';
 import { ReviewItemSource } from './review-item-source';
 import { toLocalDateString } from '../../lib/utils';
 
@@ -12,7 +12,7 @@ export function ReviewItem1(props: {
   className?: string;
   style?: React.CSSProperties;
 }) {
-  const { review, config, className, style} = props;
+  const { review, config, className, style } = props;
   const {
     isSourceEnabled = true,
     isRatingEnabled = true,
@@ -30,7 +30,7 @@ export function ReviewItem1(props: {
     >
       <div className="flex flex-col gap-2 flex-grow min-h-0 overflow-hidden">
         <BiSolidQuoteLeft className="w-8 h-8 min-h-8" />
-        <p className="text-black whitespace-break-spaces overflow-auto flex-grow min-h-0" >
+        <p className="text-black whitespace-break-spaces overflow-auto flex-grow min-h-0">
           {review.text}
         </p>
       </div>

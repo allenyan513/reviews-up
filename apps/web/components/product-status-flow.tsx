@@ -17,7 +17,7 @@ export type StatusStep = (typeof statusSteps)[number] | 'rejected';
 // 状态标签映射（可自定义为中文或其他语言）
 const statusLabels: Record<StatusStep, string> = {
   // waitingForAdminReview: 'Pending for Admin Review',
-  pendingForSubmit: 'Writing for Submit',
+  pendingForSubmit: 'Writing Reviews',
   pendingForReceive: 'Pending',
   listing: 'Public',
   rejected: 'Rejected',

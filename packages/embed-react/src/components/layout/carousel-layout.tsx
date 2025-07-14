@@ -1,8 +1,8 @@
-'use client';
+'use client'
+
 import { useRef, useEffect } from 'react';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
-import { ReviewItem1 } from '../item/review-item-1';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';
 import { renderItem } from '../item';

@@ -5,8 +5,10 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { ProductEntity } from '@reviewsup/api/products';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import StarRating from '@reviewsup/ui/star-rating';
-import React from 'react';
+import { ShowcaseServer, StarRatingServer } from '@reviewsup/embed-react';
+import React, { Suspense } from 'react';
+import { ShowcaseClient } from '@reviewsup/embed-react';
+import { ProductDetailReviews } from './product-detail-reviews';
 
 export function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
@@ -37,7 +39,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
     return (
       <div className="flex flex-row items-center gap-2 text-lg">
         <span className="text-yellow-500 font-bold">{rating}</span>
-        <StarRating
+        <StarRatingServer
           className="mt-[1px]"
           size={'md'}
           value={parseFloat(rating)}
@@ -79,7 +81,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             <div className="flex flex-row items-center gap-4">
               <Link
                 className="rounded-full bg-red-400 text-white px-3 py-2 inline-flex items-center gap-2 hover:bg-red-500 transition-colors duration-300"
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.form?.shortId}`}
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.formShortId}`}
                 target="_blank"
               >
                 <BsPencil />
@@ -111,54 +113,83 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
       </div>
 
       <div className="flex flex-col md:grid-cols-12 md:grid gap-8 px-4 md:px-48 py-8 w-full">
-        <div className='md:col-span-8 flex flex-col gap-4'>
+        <div className="md:col-span-8 flex flex-col gap-4">
           <h2 className="h2">{product.name} Reviews</h2>
+          <ProductDetailReviews
+            showcaseShortId={product.showcaseShortId || ''}
+            options={{
+              url: process.env.NEXT_PUBLIC_API_URL as string,
+            }}
+          />
           <p className="h2">{product.name} Product Information</p>
           <div className="flex flex-col rounded border border-gray-300 px-5 py-4 gap-2 bg-white">
-            <h2 className="h3">What is {product.name}?</h2>
-            <div className="rich-text text-start">
-              <Markdown
-                children={product.longDescription}
-                remarkPlugins={[remarkGfm]}
-              />
-            </div>
-            <div className="divider" />
+            {product.longDescription && (
+              <>
+                <h2 className="h3">What is {product.name}?</h2>
+                <div className="rich-text text-start">
+                  <Markdown
+                    children={product.longDescription}
+                    remarkPlugins={[remarkGfm]}
+                  />
+                </div>
+                <div className="divider" />
+              </>
+            )}
 
-            <h2 className="h3">How to use {product.name}?</h2>
-            <div className="rich-text text-start">
-              <Markdown
-                children={product.howToUse}
-                remarkPlugins={[remarkGfm]}
-              />
-            </div>
-            <div className="divider" />
+            {product.howToUse && (
+              <>
+                <h2 className="h3">How to use {product.name}?</h2>
+                <div className="rich-text text-start">
+                  <Markdown
+                    children={product.howToUse}
+                    remarkPlugins={[remarkGfm]}
+                  />
+                </div>
+                <div className="divider" />
+              </>
+            )}
 
-            <h2 className="h3">Core features of {product.name}</h2>
-            <div className="rich-text text-start">
-              <Markdown
-                children={product.features}
-                remarkPlugins={[remarkGfm]}
-              />
-            </div>
-            <div className="divider" />
+            {product.features && (
+              <>
+                <h2 className="h3">Core features of {product.name}</h2>
+                <div className="rich-text text-start">
+                  <Markdown
+                    children={product.features}
+                    remarkPlugins={[remarkGfm]}
+                  />
+                </div>
+                <div className="divider" />
+              </>
+            )}
 
-            <h2 className="h3">Use cases of {product.name}</h2>
-            <div className="rich-text text-start">
-              <Markdown
-                children={product.useCase}
-                remarkPlugins={[remarkGfm]}
-              />
-            </div>
-            <div className="divider" />
-            <h2 className="h3">FAQ of {product.name}</h2>
-            <div className="rich-text text-start">
-              <Markdown children={product.faq} remarkPlugins={[remarkGfm]} />
-            </div>
-            <div className="divider" />
+            {product.useCase && (
+              <>
+                <h2 className="h3">Use cases of {product.name}</h2>
+                <div className="rich-text text-start">
+                  <Markdown
+                    children={product.useCase}
+                    remarkPlugins={[remarkGfm]}
+                  />
+                </div>
+                <div className="divider" />
+              </>
+            )}
+
+            {product.faq && (
+              <>
+                <h2 className="h3">FAQ of {product.name}</h2>
+                <div className="rich-text text-start">
+                  <Markdown
+                    children={product.faq}
+                    remarkPlugins={[remarkGfm]}
+                  />
+                </div>
+                <div className="divider" />
+              </>
+            )}
           </div>
         </div>
-        <div className='md:col-span-4 flex flex-col gap-4'>
-        </div>
+        <div className="md:col-span-4 flex flex-col gap-4"></div>
       </div>
     </div>
   );

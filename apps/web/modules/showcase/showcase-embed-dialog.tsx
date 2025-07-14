@@ -10,12 +10,14 @@ import {
   DialogPortal,
 } from '@reviewsup/ui/dialog';
 import { BsGithub } from 'react-icons/bs';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@reviewsup/ui/tabs';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
 import { useState } from 'react';
-import { CodeBlock } from '@/components/code-block';
 import Link from 'next/link';
-import { VerifyWidgetEmbedding } from '@/components/verify-widget-embedding';
+import toast from 'react-hot-toast';
+import { useVerifyEmbed } from '@/hooks/use-verify-embed';
+
+const embedCodeTemplate = `
+<blockquote class="reviewsup-embed" cite="${process.env.NEXT_PUBLIC_APP_URL}/showcases/{{widgetId}}" data-widget-id="{{widgetId}}"><section><a target="_blank" title="ReviewsUp Widget" href="${process.env.NEXT_PUBLIC_APP_URL}/showcases/{{widgetId}}?refer=embed">Rating 4.9/5 from 1000+ reviews</a></section></blockquote><script type="module" src="https://unpkg.com/@reviewsup/embed-react/dist/embed/embed.es.js"></script>`;
 
 export function ShowcaseEmbedDialog(props: {
   url: string;
@@ -24,6 +26,11 @@ export function ShowcaseEmbedDialog(props: {
 }) {
   const { url, showcaseShortId, children } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const { loading, verify } = useVerifyEmbed(url, showcaseShortId);
+
+  const embedCode = embedCodeTemplate
+    .replace(/{{widgetId}}/g, showcaseShortId || 'your-widget-id')
+    .trim();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -37,100 +44,46 @@ export function ShowcaseEmbedDialog(props: {
           </DialogDescription>
         </DialogHeader>
         <div className="w-full md:max-w-3xl md:min-h-96 md:mx-0">
-          <Tabs defaultValue="account">
-            <TabsList>
-              <TabsTrigger value="javascript">Javascript</TabsTrigger>
-              <TabsTrigger value="react">React</TabsTrigger>
-              <TabsTrigger value="iframe">iframe</TabsTrigger>
-            </TabsList>
-            <TabsContent value="javascript">
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  1. Add the following code to your website to embed the widget.
-                </p>
-                <CodeBlock
-                  codes={[
-                    `<div id="reviewsup-showcase-${showcaseShortId}"></div>`,
-                    `<script id="revewsup-embed-js" type="text/javascript"`,
-                    `src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js" defer></script>`,
-                  ]}
-                  lang="js"
-                />
-                <p className="text-sm text-muted-foreground flex flex-row">
-                  2. Check the widget on your website, or click
-                  <VerifyWidgetEmbedding url={url} showcaseShortId={showcaseShortId}>
-                    Verify
-                  </VerifyWidgetEmbedding>
-                </p>
-                <Link
-                  target="_blank"
-                  href="https://github.com/allenyan513/reviewsup-embed-example"
-                  className="text-sm text-blue-500 hover:underline mt-2 flex flex-row items-center gap-2"
-                >
-                  <BsGithub className="text-black" /> View Full Code of Example
-                </Link>
-              </div>
-            </TabsContent>
-            <TabsContent value="iframe">
-              <div className="space-y-4">
-                <p>
-                  {/*或者分享此展示的链接*/}
-                  or share the link to this showcase
-                </p>
-                <CodeBlock
-                  lang="html"
-                  codes={[
-                    `${process.env.NEXT_PUBLIC_APP_URL}/showcases/${showcaseShortId}`,
-                  ]}
-                />
-              </div>
-            </TabsContent>
-            <TabsContent value="react">
-              <div className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  {/*1.安装@reviewsup/embed-react*/}
-                  1. Install @reviewsup/embed-react
-                </p>
-                <CodeBlock
-                  lang="bash"
-                  codes={[`npm install @reviewsup/embed-react`]}
-                />
-                <p className="text-sm text-muted-foreground">
-                  {/*2.在您的global.css中添加以下样式*/}
-                  2. Add the following styles to your global.css
-                </p>
-                <CodeBlock
-                  lang="css"
-                  codes={[`@import "@reviewsup/embed-react/styles.css";`]}
-                />
-                <p className="text-sm text-muted-foreground">
-                  {/*2.在您的React组件中使用Showcase组件*/}
-                  3. Use the Showcase component in your React component
-                </p>
-                <CodeBlock
-                  lang="js"
-                  codes={[
-                    `import { Showcase } from '@reviewsup/embed-react';`,
-                    ``,
-                    `<Showcase showcaseId="${showcaseShortId}" />`,
-                  ]}
-                />
-                <p className="text-sm text-muted-foreground flex flex-row">
-                  4. Check the widget on your website, or click
-                  <VerifyWidgetEmbedding url={url} showcaseShortId={showcaseShortId}>
-                    Verify
-                  </VerifyWidgetEmbedding>
-                </p>
-                <Link
-                  target="_blank"
-                  href="https://github.com/allenyan513/reviewsup-embed-example"
-                  className="text-sm text-blue-500 hover:underline mt-2 flex flex-row items-center gap-2"
-                >
-                  <BsGithub className="text-black" /> View Full Code of Example
-                </Link>
-              </div>
-            </TabsContent>
-          </Tabs>
+          <div className="space-y-4">
+            <p className="text-sm text-muted-foreground">
+              1. Copy the code to embed the widget on your website.
+            </p>
+            <textarea
+              className="w-full h-48 p-4 bg-gray-100 rounded-md border border-gray-300 text-sm"
+              readOnly
+              rows={10}
+              value={embedCode}
+            />
+            <Button
+              variant="default"
+              size="lg"
+              onClick={() => {
+                navigator.clipboard.writeText(embedCode);
+                toast.success('Embed code copied to clipboard!');
+              }}
+            >
+              Copy Code
+            </Button>
+
+            <p className="text-sm text-muted-foreground flex flex-row">
+              2. Check the widget on your website, or click
+            </p>
+            <Button
+              variant="default"
+              size="lg"
+              disabled={loading}
+              onClick={verify}
+            >
+              {loading ? 'Verifying...' : 'Verify'}
+            </Button>
+            <Link
+              target="_blank"
+              href="https://github.com/allenyan513/reviewsup-embed-example"
+              className="text-sm text-blue-500 hover:underline mt-2 flex flex-row items-center gap-2"
+            >
+              <BsGithub className="text-black" /> View Full Code of Example
+            </Link>
+          </div>
         </div>
         <DialogFooter className="">
           <DialogClose asChild>

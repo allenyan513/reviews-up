@@ -8,6 +8,7 @@ export async function ShowcaseContent(props: {
   options?: RequestOptions;
 }) {
   const { showcaseId, options } = props;
+  console.log('Showcase Content', showcaseId);
   if (!showcaseId) {
     return <div>No showcase ID provided.</div>;
   }
@@ -18,12 +19,11 @@ export async function ShowcaseContent(props: {
       console.error(err);
       error = err;
     });
-  if (!showcase) {
+  if (!showcase || error) {
     return (
       <div>Error loading showcase: {error?.message || 'Unknown error'}</div>
     );
   }
-
   return <ShowcasePageReviewClient showcase={showcase} />;
 }
 

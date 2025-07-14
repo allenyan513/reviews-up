@@ -28,9 +28,6 @@ export function FormDefaultPreviewView(props: {
   const { signIn } = useUserContext();
   const { user } = useSession({
     required: false,
-    onUnauthenticated: () => {
-      console.log('User is not authenticated');
-    },
   });
   if (
     !id ||

@@ -7,15 +7,16 @@
       "dependsOn": [
         "^build",
         "build:styles",
-        "build:components"
+        "build:components",
+        "build:embed"
       ]
     },
     "build:styles": {
       "dependsOn": [
-        "build:components"
+        "^build"
       ],
       "outputs": [
-        "dist/**"
+        "dist/styles/**"
       ]
     },
     "build:components": {
@@ -23,13 +24,22 @@
         "^build"
       ],
       "outputs": [
-        "dist/**"
+        "dist/components/**"
+      ]
+    },
+    "build:embed": {
+      "dependsOn": [
+        "^build"
+      ],
+      "outputs": [
+        "dist/embed/**"
       ]
     },
     "dev": {
       "with": [
         "dev:components",
-        "dev:styles"
+        "dev:styles",
+        "dev:embed"
       ]
     },
     "dev:styles": {
@@ -39,6 +49,9 @@
     "dev:components": {
       "cache": false,
       "persistent": true
+    },
+    "dev:embed": {
+      "cache": false
     }
   }
 }
