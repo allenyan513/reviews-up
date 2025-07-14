@@ -12,6 +12,7 @@ export function LoginForm(props: { redirect?: string; className?: string }) {
   const { className, redirect } = props;
   const { googleSignIn, githubSignIn, twitterSignIn, sendMagicLink } =
     useUserContext();
+  const [loadingSendEmail, setLoadingSendEmail] = useState(false);
   const [submitForm, setSubmitForm] = useState<{
     email: string;
   }>({
@@ -21,14 +22,18 @@ export function LoginForm(props: { redirect?: string; className?: string }) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!submitForm.email) return;
+
+    setLoadingSendEmail(true);
     sendMagicLink(submitForm.email, redirect)
       .then(() => {
         toast.success('Magic link sent to your email!');
         setSubmitForm({ email: '' });
+        setLoadingSendEmail(false);
       })
       .catch((error) => {
         console.error(error);
         toast.error('Failed to send magic link. Please try again.');
+        setLoadingSendEmail(false);
       });
   };
 
@@ -66,7 +71,12 @@ export function LoginForm(props: { redirect?: string; className?: string }) {
         {/*  </div>*/}
         {/*  <Input id="password" type="password" required />*/}
         {/*</div>*/}
-        <Button onClick={handleSubmit} type="submit" className="w-full">
+        <Button
+          onClick={handleSubmit}
+          type="submit"
+          className="w-full"
+          disabled={!submitForm.email || loadingSendEmail}
+        >
           Continue with Email
         </Button>
         <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">

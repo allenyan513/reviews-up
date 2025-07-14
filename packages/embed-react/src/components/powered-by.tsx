@@ -7,7 +7,7 @@ export function PoweredBy(props: { className?: string }) {
         'flex items-center justify-center text-xs text-gray-400',
         props.className,
       )}
-      href={`${process.env.NEXT_PUBLIC_WWW_URL}`}
+      href='https://reviewsup.io'
       target="_blank"
     >
       Powered by reviewsup.io

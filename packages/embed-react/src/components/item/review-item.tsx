@@ -1,9 +1,8 @@
 import { ReviewItemSource } from './review-item-source';
-import StarRating from '../star-rating';
+import { StarRating } from '../star-rating';
 import { ShowcaseConfig } from '@reviewsup/api/showcases';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { toLocalDateString } from '../../lib/utils';
-
 
 export function ReviewItem(props: {
   review: ReviewEntity;
@@ -151,9 +150,7 @@ export function ReviewItem(props: {
           )}
         </div>
       </div>
-      {isRatingEnabled && (
-        <StarRating value={review.rating || 5} onChange={() => {}} />
-      )}
+      {isRatingEnabled && <StarRating value={review.rating || 5} />}
       {isImageEnabled && renderImageMedias()}
       {isVideoEnabled && renderVideoMedias()}
       <p className="text-gray-700 overflow-x-auto whitespace-pre-wrap">

@@ -19,7 +19,7 @@ import {
   GooglePlaceReview,
 } from '@reviewsup/api/google';
 import { api } from '@/lib/api-client';
-import StarRating from '@reviewsup/ui/star-rating';
+import { StarRating } from '@reviewsup/embed-react';
 import { ReviewItemSource } from '@reviewsup/embed-react';
 import { ReviewsupAvatar } from '@reviewsup/ui/reviewsup-avatar';
 import toast from 'react-hot-toast';
@@ -129,11 +129,7 @@ export function ReviewImportGoogleMapDialog(props: {
                 {place.displayName?.text} - {place.formattedAddress}
               </p>
               <div className="flex flex-row items-center gap-2 mt-2">
-                <StarRating
-                  value={place.rating || 0}
-                  size={'sm'}
-                  onChange={() => {}}
-                />
+                <StarRating value={place.rating || 0} size={'sm'} />
                 <p>{place.rating}</p>
                 <p>({place.userRatingCount} reviews)</p>
               </div>

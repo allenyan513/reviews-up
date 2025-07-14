@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';
-import StarRating from '../star-rating';
+import { StarRating } from '../star-rating';
 import { toLocalDateString } from '../../lib/utils';
 import { ReviewItemSource } from '../item/review-item-source';
 
@@ -67,7 +67,7 @@ export function AvatarListLayout(props: {
 
           <div className="flex flex-col gap-2 items-center">
             {config.isRatingEnabled && (
-              <StarRating value={currentItem.rating || 5} onChange={null} size={'md'} />
+              <StarRating value={currentItem.rating || 5} size={'md'} />
             )}
             <div className="flex flex-row items-center gap-4">
               <a
@@ -82,7 +82,9 @@ export function AvatarListLayout(props: {
                     className="rounded-full object-cover shadow w-11 h-11 border border-gray-300 bg-white"
                   />
                   <div className="flex flex-col justify-center text-start">
-                    <p className="text-md line-clamp-1">{currentItem.reviewerName}</p>
+                    <p className="text-md line-clamp-1">
+                      {currentItem.reviewerName}
+                    </p>
                     <p className="text-sm text-gray-500 line-clamp-1">
                       {currentItem.reviewerTitle ||
                         toLocalDateString(currentItem.createdAt) ||

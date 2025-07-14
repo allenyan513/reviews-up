@@ -212,20 +212,20 @@ export class ProductsService {
     dto: CreateProductRequest,
   ): Promise<RRResponse<ProductEntity>> {
     //step1. verify if the widget is embedded in the url website
-    const verifyResult = await this.showcaseService.verifyWidgetEmbedding(uid, {
-      url: dto.url,
-      showcaseShortId: dto.widgetShortId,
-    });
-    if (verifyResult.code !== 200 || !verifyResult.data) {
-      this.logger.error(
-        `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
-      );
-      return {
-        code: 400,
-        message: 'Widget embedding verification failed',
-        data: null,
-      };
-    }
+    // const verifyResult = await this.showcaseService.verifyWidgetEmbedding(uid, {
+    //   url: dto.url,
+    //   showcaseShortId: dto.widgetShortId,
+    // });
+    // if (verifyResult.code !== 200 || !verifyResult.data) {
+    //   this.logger.error(
+    //     `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
+    //   );
+    //   return {
+    //     code: 400,
+    //     message: 'Widget embedding verification failed',
+    //     data: null,
+    //   };
+    // }
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;
     const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';

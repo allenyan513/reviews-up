@@ -17,6 +17,7 @@ interface NavProps {
   websiteName?: string;
   githubLink?: string;
   appLink?: string;
+  launchLink?: string;
   items?: {
     title: string;
     href: string;
@@ -111,12 +112,14 @@ export function Header(props: NavProps) {
             <BsGithub className="h-6 w-6" />
           </Link>
           <Link
-            href={props.appLink || ''}
+            href={
+              props.launchLink || (process.env.NEXT_PUBLIC_APP_URL as string)
+            }
             target="_blank"
             className={cn(
               buttonVariants({ size: 'lg' }),
               'rounded-full hidden md:inline-flex',
-              'text-black bg-white border '
+              'text-black bg-white border ',
             )}
           >
             Free Launch

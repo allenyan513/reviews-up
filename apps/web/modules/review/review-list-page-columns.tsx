@@ -4,11 +4,11 @@ import { ColumnDef, useReactTable } from '@tanstack/react-table';
 import { ReviewEntity, ReviewMediaEntity } from '@reviewsup/api/reviews';
 import React from 'react';
 import { BsCameraVideo, BsFilter, BsImage, BsSortDown } from 'react-icons/bs';
-import { BiSort, BiFilterAlt ,BiSortAlt2} from 'react-icons/bi';
+import { BiSort, BiFilterAlt, BiSortAlt2 } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import StarRating from '@reviewsup/ui/star-rating';
+import { StarRating } from '@reviewsup/embed-react';
 import { api } from '@/lib/api-client';
 import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
@@ -128,12 +128,6 @@ export function columns(setData: any): ColumnDef<any>[] {
                 <div className="text-sm text-gray-500">{reviewerEmail}</div>
               </div>
             </div>
-            {/*<StarRating*/}
-            {/*  size={'sm'}*/}
-            {/*  className="ml-1"*/}
-            {/*  value={rating || 5}*/}
-            {/*  onChange={() => {}}*/}
-            {/*/>*/}
           </div>
         );
       },
@@ -155,29 +149,19 @@ export function columns(setData: any): ColumnDef<any>[] {
                 <BiFilterAlt className="cursor-pointer text-lg" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="start">
-                <DropdownMenuItem
-                  onClick={() => column.setFilterValue(1)}
-                >
+                <DropdownMenuItem onClick={() => column.setFilterValue(1)}>
                   1/5
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => column.setFilterValue(2)}
-                >
+                <DropdownMenuItem onClick={() => column.setFilterValue(2)}>
                   2/5
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => column.setFilterValue(3)}
-                >
+                <DropdownMenuItem onClick={() => column.setFilterValue(3)}>
                   3/5
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => column.setFilterValue(4)}
-                >
+                <DropdownMenuItem onClick={() => column.setFilterValue(4)}>
                   4/5
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  onClick={() => column.setFilterValue(5)}
-                >
+                <DropdownMenuItem onClick={() => column.setFilterValue(5)}>
                   5/5
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -189,12 +173,7 @@ export function columns(setData: any): ColumnDef<any>[] {
         const rating = row.getValue('rating') as number | null;
         return (
           <div className="flex items-center">
-            <StarRating
-              size={'sm'}
-              value={rating || 5}
-              onChange={() => {}}
-              className="ml-1"
-            />
+            <StarRating size={'sm'} value={rating || 5} className="ml-1" />
           </div>
         );
       },

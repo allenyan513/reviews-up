@@ -1,3 +1,5 @@
+'use client'
+
 import { FlowLayoutServer } from './layout/flow-layout-server';
 import { ListLayoutServer } from './layout/list-layout-server';
 import { CarouselLayout } from './layout/carousel-layout';

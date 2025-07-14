@@ -1,5 +1,6 @@
+'use client'
 import React from 'react';
-import StarRating from './star-rating';
+import { StarRating } from './star-rating';
 
 export function RatingSummary(props: { ratings: number[] }) {
   const { ratings = [] } = props;
@@ -18,7 +19,7 @@ export function RatingSummary(props: { ratings: number[] }) {
           ({totalReviews} reviews)
         </span>
       </div>
-      <StarRating value={averageRating} onChange={null} size={'md'}/>
+      <StarRating value={averageRating} size={'md'} />
     </div>
   );
 }

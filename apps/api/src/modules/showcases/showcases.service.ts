@@ -236,10 +236,16 @@ export class ShowcasesService {
     return sortedReviews;
   }
 
+  /**
+   * <blockquote class="reviewsup-embed" cite="http://localhost:5510/showcases/187f7024e60" data-widget-id="6253dd1a86b">
+   * @param uid
+   * @param request
+   */
   async verifyWidgetEmbedding(
     uid: string,
     request: VerifyWidgetEmbeddingRequest,
   ): Promise<RRResponse<boolean>> {
+    const { url, showcaseShortId } = request;
     this.logger.debug('Verifying embended widget for showcase', request);
     const { content } = await this.browserlessService.extract(request.url, {
       contentEnable: true,
@@ -247,22 +253,19 @@ export class ShowcasesService {
       screenshotEnable: false,
     });
     const $ = cheerio.load(content);
-    //查询是否存在 <div id="reviewsup-showcase-1db8f570b48">
-    const widgetSelector = `#reviewsup-showcase-${request.showcaseShortId}`;
-    const widgetExists = $(widgetSelector).length > 0;
-    this.logger.debug(
-      `Widget exists for showcase ${request.showcaseShortId}: ${widgetExists}`,
-    );
-    //查询是否存在 <script id="revewsup-embed-js" type="text/javascript" src="https://reviewsup.com/js/embed.js" defer></script>
-    const scriptSelector = `script#revewsup-embed-js[src="${process.env.NEXT_PUBLIC_APP_URL}/js/embed.js"]`;
-    const scriptExists = $(scriptSelector).length > 0;
-    this.logger.debug(
-      `Script exists for showcase ${request.showcaseShortId}: ${scriptExists}`,
-    );
+    const classSelector = `blockquote.reviewsup-embed`;
+    const citeSelector = `blockquote.reviewsup-embed[cite="${process.env.NEXT_PUBLIC_APP_URL}/showcases/${showcaseShortId}"]`;
+    const dataWidgetIdSelector = `blockquote.reviewsup-embed[data-widget-id="${showcaseShortId}"]`;
+    const widgetExists =
+      $(classSelector).length > 0 &&
+      $(citeSelector).length > 0 &&
+      $(dataWidgetIdSelector).length > 0;
     return {
-      code: 200,
-      message: 'Widget verification successful',
-      data: widgetExists && scriptExists,
+      code: widgetExists ? 200 : 400,
+      message: widgetExists
+        ? 'Widget embedding verified successfully!'
+        : 'Widget embedding verification failed',
+      data: widgetExists,
     } as RRResponse<boolean>;
   }
 }

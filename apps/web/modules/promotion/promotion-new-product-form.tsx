@@ -49,6 +49,7 @@ import {
 import { ShowcaseEntity } from '@reviewsup/api/showcases';
 import { ShowcaseEmbedDialog } from '@/modules/showcase/showcase-embed-dialog';
 import { VerifyWidgetEmbedding } from '@/components/verify-widget-embedding';
+import { useVerifyEmbed } from '@/hooks/use-verify-embed';
 
 export function PromotionNewProductForm(props: {
   lang: string;
@@ -71,6 +72,10 @@ export function PromotionNewProductForm(props: {
   const [widgetsLoaded, setWidgetsLoaded] = useState(false); // New state to track if widgets are loaded
   const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
   const [taskReviewCount, setTaskReviewCount] = useState<number>(0);
+  const { loading: verifyLoading, verify } = useVerifyEmbed(
+    form.watch('url'),
+    form.watch('widgetShortId') || '',
+  );
 
   const handleCrawlProductInfo = async () => {
     try {
@@ -417,7 +422,7 @@ export function PromotionNewProductForm(props: {
                           props.mode === 'edit'
                         }
                       >
-                        {isCrawling ? 'Fetch...' : 'Auto fulfill'}
+                        {isCrawling ? 'Loading...' : 'Auto-fill'}
                       </Button>
                     </div>
                   </FormControl>
@@ -672,28 +677,9 @@ export function PromotionNewProductForm(props: {
             <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
               <h3 className="text-xl font-semibold">Free Submit</h3>
               <h4 className="text-sm text-gray-500 ml-2">
-                No cost, requires community engagement
+                No cost, requires following steps
               </h4>
               <ul className="text-start list-disc pl-4 mt-4">
-                <li className="">
-                  <div className="flex flex-row items-center gap-1">
-                    <ShowcaseEmbedDialog
-                      url={form.watch('url')}
-                      showcaseShortId={form.watch('widgetShortId') || ''}
-                    >
-                      <span className="text-blue-500 hover:underline cursor-pointer">
-                        Embed the widget{' '}
-                      </span>
-                    </ShowcaseEmbedDialog>
-                    on your website and
-                    <VerifyWidgetEmbedding
-                      url={form.watch('url')}
-                      showcaseShortId={form.watch('widgetShortId')}
-                    >
-                      Verify
-                    </VerifyWidgetEmbedding>
-                  </div>
-                </li>
                 <li>
                   Write at least
                   <span className="text-red-500 font-bold px-1">
@@ -713,6 +699,38 @@ export function PromotionNewProductForm(props: {
                   >
                     public
                   </Link>
+                </li>
+                <li className="">
+                  <span>(Optional) </span>
+                  <ShowcaseEmbedDialog
+                    url={form.watch('url')}
+                    showcaseShortId={form.watch('widgetShortId') || ''}
+                  >
+                    <span className="text-blue-500 hover:underline cursor-pointer">
+                      Embed reviewing widget{' '}
+                    </span>
+                  </ShowcaseEmbedDialog>
+                  on
+                  <Link
+                    href={form.watch('url')}
+                    target="_blank"
+                    className="text-blue-500 hover:underline px-1"
+                  >
+                    your website
+                  </Link>
+                  and
+                  <span
+                    className="text-blue-500 hover:underline cursor-pointer px-1"
+                    onClick={verify}
+                  >
+                    {verifyLoading ? 'Verifying...' : 'Verify'}
+                  </span>
+                  {/*<VerifyWidgetEmbedding*/}
+                  {/*  url={form.watch('url')}*/}
+                  {/*  showcaseShortId={form.watch('widgetShortId')}*/}
+                  {/*>*/}
+                  {/*  Verify*/}
+                  {/*</VerifyWidgetEmbedding>*/}
                 </li>
               </ul>
               <Button

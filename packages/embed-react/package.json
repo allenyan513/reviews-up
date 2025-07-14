@@ -1,29 +1,33 @@
 {
   "name": "@reviewsup/embed-react",
-  "version": "0.0.15",
+  "version": "0.0.19",
   "private": false,
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --watch",
+    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles/styles.css --watch",
     "dev:components": "tsup --watch",
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
+    "dev:embed": "NODE_ENV=production vite build",
+    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles/styles.css",
     "build:components": "tsup",
-    "publish:pkg": "npm run build:components && npm run build:styles && npm publish --access public"
+    "build:embed": "NODE_ENV=production vite build",
+    "build:all": "npm run build:components && npm run build:styles && npm run build:embed",
+    "publish:pkg": "npm run build:all && npm publish --access public"
   },
-  "main": "dist/index.js",
-  "module": "dist/index.cjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/components/index.js",
+  "module": "dist/components/index.cjs",
+  "types": "dist/components/index.d.ts",
   "files": [
     "dist"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.cjs",
-      "require": "./dist/index.js"
+      "types": "./dist/components/index.d.ts",
+      "import": "./dist/components/index.cjs",
+      "require": "./dist/components/index.js"
     },
-    "./styles.css": "./dist/styles.css"
+    "./styles.css": "./dist/styles/styles.css",
+    "./embed.es.js": "./dist/embed/embed.es.js"
   },
   "publishConfig": {
     "access": "public"

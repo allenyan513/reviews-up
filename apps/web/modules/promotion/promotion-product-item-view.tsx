@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import { UserEntity } from '@reviewsup/api/users';
-import StarRating from '@reviewsup/ui/star-rating';
+import { StarRating } from '@reviewsup/embed-react';
 
 export function ProductItemView(props: {
   product: ProductEntity;
@@ -76,7 +76,7 @@ export function ProductItemView(props: {
     if (!product.form) {
       return null;
     }
-    const reviews = product.form.Review as ReviewEntity[] || [];
+    const reviews = (product.form.Review as ReviewEntity[]) || [];
     console.log('reviews', reviews);
     const totalRating = reviews.reduce(
       (acc, review) => acc + (review?.rating || 0),
@@ -88,9 +88,10 @@ export function ProductItemView(props: {
       <div className="flex flex-row items-center gap-2 text-sm">
         <span className="text-yellow-500">{rating}</span>
         <StarRating
-          className='mt-[1px]'
+          className="mt-[1px]"
           size={'sm'}
-          value={parseFloat(rating)} onChange={() => {}} />
+          value={parseFloat(rating)}
+        />
         <span className="text-gray-500">({reviews.length} reviews)</span>
       </div>
     );

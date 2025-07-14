@@ -1,9 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
-import { buttonVariants } from '@reviewsup/ui/button';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import StarRating from '@reviewsup/ui/star-rating';
+import { StarRating } from '@reviewsup/embed-react';
 
 export function ProductItemView(props: { product: ProductEntity }) {
   const { product } = props;
@@ -37,7 +36,7 @@ export function ProductItemView(props: { product: ProductEntity }) {
       <Link
         href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.form?.shortId}`}
         target="_blank"
-        className='rounded-md  text-sm m-2 bg-red-400 text-white p-2 text-center hover:bg-red-500 '
+        className="rounded-md  text-sm m-2 bg-red-400 text-white p-2 text-center hover:bg-red-500 "
       >
         Leave a Review
       </Link>

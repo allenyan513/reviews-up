@@ -68,32 +68,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           workspace={defaultWorkspace}
           items={[
             {
-              title: 'Launch',
-              url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
-              icon: IconRocket,
-              active: false,
-              children: [
-                {
-                  title: 'My products',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
-                  icon: IconUser,
-                  active: path.includes('/promotion/my-products'),
-                },
-                {
-                  title: 'Pending',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/pending-listings`,
-                  icon: IconHourglassEmpty,
-                  active: path.includes('/promotion/pending-listings'),
-                },
-                {
-                  title: 'Public',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/public-listings`,
-                  icon: IconCheckbox,
-                  active: path.includes('/promotion/public-listings'),
-                },
-              ],
-            },
-            {
               title: 'Reviews',
               url: `/${lang}/${defaultWorkspace?.id}/reviews/all`,
               icon: IconStar,
@@ -137,6 +111,32 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               url: `/${lang}/${defaultWorkspace?.id}/forms`,
               icon: IconTable,
               active: path.includes('/forms'),
+            },
+            {
+              title: 'Launch',
+              url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
+              icon: IconRocket,
+              active: false,
+              children: [
+                {
+                  title: 'My products',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
+                  icon: IconUser,
+                  active: path.includes('/promotion/my-products'),
+                },
+                {
+                  title: 'Pending',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/pending-listings`,
+                  icon: IconHourglassEmpty,
+                  active: path.includes('/promotion/pending-listings'),
+                },
+                {
+                  title: 'Public',
+                  url: `/${lang}/${defaultWorkspace?.id}/promotion/public-listings`,
+                  icon: IconCheckbox,
+                  active: path.includes('/promotion/public-listings'),
+                },
+              ],
             },
 
             {
