@@ -29,7 +29,8 @@
     },
     "build:embed": {
       "dependsOn": [
-        "^build"
+        "^build",
+        "build:styles"
       ],
       "outputs": [
         "dist/embed/**"
