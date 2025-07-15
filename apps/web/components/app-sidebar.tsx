@@ -14,6 +14,7 @@ import {
   IconRocket,
   IconCheckbox,
   IconForbid2,
+  IconList,
   IconBuildingStore,
 } from '@tabler/icons-react';
 
@@ -76,7 +77,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {
                   title: 'All',
                   url: `/${lang}/${defaultWorkspace?.id}/reviews/all`,
-                  icon: IconUser,
+                  icon: IconList,
                   active: path.includes('/reviews/all'),
                 },
                 {

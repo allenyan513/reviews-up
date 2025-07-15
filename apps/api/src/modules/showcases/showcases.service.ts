@@ -97,8 +97,27 @@ export class ShowcasesService {
       skip: (paginateRequest.page - 1) * paginateRequest.pageSize,
       take: paginateRequest.pageSize,
     })) as ShowcaseEntity[];
+
+    const bindShowcases = await this.prismaService.product.findMany({
+      where: {
+        userId: uid,
+        workspaceId: workspaceId,
+      },
+      select: {
+        id: true,
+        showcaseId: true,
+      },
+    });
+
     return {
-      items: items,
+      items: items.map((item) => {
+        return {
+          ...item,
+          isBindProduct: bindShowcases.some(
+            (bindShowcase) => bindShowcase.showcaseId === item.id,
+          ),
+        } as ShowcaseEntity;
+      }),
       meta: {
         page: paginateRequest.page,
         pageSize: paginateRequest.pageSize,
@@ -195,13 +214,18 @@ export class ShowcasesService {
     let sortedReviews = this.sortReviewsBy(
       reviews as ReviewEntity[],
       sortBy as SortBy,
-      count,
     );
     if (count && count > 0) {
       sortedReviews = sortedReviews.slice(0, count);
     }
+    const reviewCount = sortedReviews.length;
+    const reviewRating =
+      sortedReviews.reduce((acc, review) => acc + (review.rating || 0), 0) /
+      (reviewCount || 1); // Avoid division by zero
     return {
       ...showcase,
+      reviewRating: reviewRating,
+      reviewCount: reviewCount,
       reviews: sortedReviews.map(
         (review) =>
           ({
@@ -212,7 +236,7 @@ export class ShowcasesService {
     } as ShowcaseEntity;
   }
 
-  sortReviewsBy(reviews: ReviewEntity[], sortBy: SortBy, count?: number) {
+  sortReviewsBy(reviews: ReviewEntity[], sortBy: SortBy) {
     let sortedReviews = [...reviews];
     if (sortBy === SortBy.newest) {
       sortedReviews = [...reviews].sort(

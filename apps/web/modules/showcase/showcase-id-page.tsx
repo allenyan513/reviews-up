@@ -68,9 +68,7 @@ export default function ShowcaseIdPage(props: {
             <BsBoxArrowUpRight className="text-2xl" />
             <span className="hidden md:flex">Open</span>
           </Button>
-          <ShowcaseEmbedDialog
-            url={''}
-            showcaseShortId={showcase.shortId || ''}>
+          <ShowcaseEmbedDialog showcaseShortId={showcase.shortId || ''}>
             <Button className="" variant="default" size={'lg'}>
               <BiCodeAlt className="text-2xl" />
               <span className="hidden md:flex">Add to your website</span>

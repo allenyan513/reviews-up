@@ -68,9 +68,21 @@ export class FormsService {
         },
       },
     });
+    // 查询所有已经和 uid, workspaceId下， 已经被product 绑定的formId
+    const bindForms = await this.prismaService.product.findMany({
+      where: {
+        userId: uid,
+        workspaceId: workspaceId,
+      },
+      select: {
+        id: true,
+        formId: true,
+      },
+    });
     return forms.map((form) => ({
       ...form,
       reviewCount: form.Review.length, // Add review count to each form
+      isBindProduct: bindForms.some((bindForm) => bindForm.formId === form.id),
     })) as FormEntity[];
   }
 
@@ -93,10 +105,7 @@ export class FormsService {
   async findOneByShortId(shortId: string) {
     return this.prismaService.form.findFirst({
       where: {
-        OR: [
-          { shortId: shortId },
-          { id: shortId },
-        ],
+        OR: [{ shortId: shortId }, { id: shortId }],
       },
     });
   }

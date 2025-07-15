@@ -11,7 +11,6 @@ import {
 } from '@reviewsup/ui/form';
 import { LoadingText } from '@reviewsup/ui/loading-text';
 import { CreateProductRequest, ProductCategory } from '@reviewsup/api/products';
-import slugify from 'slugify';
 import { Input } from '@reviewsup/ui/input';
 import { Textarea } from '@reviewsup/ui/textarea';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
@@ -28,7 +27,7 @@ import { useRouter } from 'next/navigation';
 import { api } from '@/lib/api-client';
 import { FormEntity } from '@reviewsup/api/forms';
 import { cn } from '@/lib/utils';
-import { BsCaretDownFill } from 'react-icons/bs';
+import { BsCaretDownFill, BsPlus } from 'react-icons/bs';
 import { UploadContainer } from '@/components/upload-container';
 import { BiCodeAlt, BiImage } from 'react-icons/bi';
 import toast from 'react-hot-toast';
@@ -149,8 +148,15 @@ export function PromotionNewProductForm(props: {
           return;
         }
         if (response && response.length > 0) {
-          form.setValue('formId', response?.[0]?.id || '');
-          form.setValue('formShortId', response?.[0]?.shortId || '');
+          //find first item.isBindProduct is false
+          const firstAvailableForm = response.find(
+            (item) => !item.isBindProduct,
+          );
+          if (!firstAvailableForm) {
+            return;
+          }
+          form.setValue('formId', firstAvailableForm.id || '');
+          form.setValue('formShortId', firstAvailableForm.shortId || '');
         }
       })
       .catch((error) => {
@@ -169,8 +175,14 @@ export function PromotionNewProductForm(props: {
           return;
         }
         if (widgets && widgets.length > 0) {
-          form.setValue('widgetId', widgets?.[0]?.id || '');
-          form.setValue('widgetShortId', widgets?.[0]?.shortId || '');
+          const firstAvailableWidget = widgets.find(
+            (item) => !item.isBindProduct,
+          );
+          if (!firstAvailableWidget) {
+            return;
+          }
+          form.setValue('widgetId', firstAvailableWidget.id || '');
+          form.setValue('widgetShortId', firstAvailableWidget.shortId || '');
         }
       })
       .catch((error) => {
@@ -203,192 +215,10 @@ export function PromotionNewProductForm(props: {
           }}
           className="space-y-4"
         >
-          <h2 className="text-lg font-semibold">Basic Information</h2>
+          <h2 className="text-lg font-semibold">
+            Basic Information <Required />
+          </h2>
           <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="formId"
-              render={({ field }) => (
-                <div>
-                  <FormLabel className="mb-2">
-                    Binding Form <Required />
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex flex-row items-center gap-2 mb-2">
-                      {formsLoaded ? (
-                        <Select
-                          disabled={props.mode === 'edit'}
-                          value={field.value}
-                          onValueChange={(selectedId) => {
-                            const selectedForm = forms.find(
-                              (item) => item.id === selectedId,
-                            );
-                            if (selectedForm) {
-                              form.setValue('formId', selectedForm.id || '');
-                              form.setValue(
-                                'formShortId',
-                                selectedForm.shortId || '',
-                              );
-                            }
-                          }}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a form" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {forms.map((item) => (
-                                <SelectItem key={item.id} value={item.id || ''}>
-                                  {item.name}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      ) : (
-                        <Input
-                          disabled
-                          placeholder="Loading forms..."
-                          className="w-full"
-                        />
-                      )}
-                      <Link
-                        href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}
-                        target="_blank"
-                        className={cn(
-                          buttonVariants({ variant: 'default' }),
-                          // 'disabled:opacity-50 disabled:pointer-events-none',
-                          form.watch('formId') === ''
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
-                        )}
-                      >
-                        Preview
-                      </Link>
-                      <Link
-                        href={`/${lang}/${workspaceId}/forms/${form.watch('formId')}/default`}
-                        target="_blank"
-                        className={cn(
-                          buttonVariants({ variant: 'default' }),
-                          // 'disabled:opacity-50 disabled:pointer-events-none',
-                          form.watch('formId') === ''
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
-                        )}
-                      >
-                        Edit
-                      </Link>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </div>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="widgetId"
-              render={({ field }) => (
-                <div>
-                  <FormLabel className="mb-2">
-                    Embedding Widget <Required />
-                  </FormLabel>
-                  <FormControl>
-                    <div className="flex flex-row items-center gap-2 mb-2">
-                      {widgetsLoaded ? (
-                        <Select
-                          disabled={props.mode === 'edit'}
-                          value={field.value}
-                          onValueChange={(selectedId) => {
-                            const selectedWidget = widgets.find(
-                              (item) => item.id === selectedId,
-                            );
-                            if (selectedWidget) {
-                              form.setValue(
-                                'widgetId',
-                                selectedWidget.id || '',
-                              );
-                              form.setValue(
-                                'widgetShortId',
-                                selectedWidget.shortId || '',
-                              );
-                            }
-                          }}
-                        >
-                          <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select a Widget" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              {widgets.map((item) => (
-                                <SelectItem key={item.id} value={item.id || ''}>
-                                  {item.name}
-                                </SelectItem>
-                              ))}
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
-                      ) : (
-                        <Input
-                          disabled
-                          placeholder="Loading widgets..."
-                          className="w-full"
-                        />
-                      )}
-                      <Link
-                        href={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
-                        target="_blank"
-                        className={cn(
-                          buttonVariants({ variant: 'default' }),
-                          form.watch('widgetId') === ''
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
-                        )}
-                      >
-                        Preview
-                      </Link>
-                      <Link
-                        href={`/${lang}/${workspaceId}/showcases/${form.watch('widgetId')}`}
-                        target="_blank"
-                        className={cn(
-                          buttonVariants({ variant: 'default' }),
-                          // 'disabled:opacity-50 disabled:pointer-events-none',
-                          form.watch('widgetId') === ''
-                            ? 'opacity-50 pointer-events-none'
-                            : '',
-                        )}
-                      >
-                        Edit
-                      </Link>
-                    </div>
-                  </FormControl>
-                  <FormMessage />
-                </div>
-              )}
-            />
-          </div>
-
-          <div className="grid grid-cols-2 gap-4">
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <div>
-                  <FormLabel className="mb-2">
-                    Product Name <Required />
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      disabled={props.mode === 'edit'}
-                      placeholder="Product Name"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-
-                </div>
-              )}
-            />
             <FormField
               control={form.control}
               name="url"
@@ -422,219 +252,401 @@ export function PromotionNewProductForm(props: {
                 </div>
               )}
             />
-          </div>
-
-          <div className="flex flex-col gap-4 ">
             <FormField
               control={form.control}
-              name="description"
+              name="name"
               render={({ field }) => (
                 <div>
                   <FormLabel className="mb-2">
-                    Product Description <Required />
+                    Product Name <Required />
                   </FormLabel>
                   <FormControl>
-                    <Textarea placeholder="Short description" {...field} />
+                    <Input
+                      disabled={props.mode === 'edit'}
+                      placeholder="Product Name"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </div>
               )}
             />
+          </div>
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <div>
+                <FormLabel className="mb-2">
+                  Product Description <Required />
+                </FormLabel>
+                <FormControl>
+                  <Textarea placeholder="Short description" {...field} />
+                </FormControl>
+                <FormMessage />
+              </div>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="category"
+            render={({ field }) => (
+              <div>
+                <FormLabel className="mb-2">
+                  Product Category
+                  <Required />
+                </FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder="Select a Product Category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {Object.entries(ProductCategory).map(([key, value]) => (
+                          <SelectItem key={key} value={value}>
+                            {/*capitalize the first letter of each word*/}
+                            {key
+                              .split(/(?=[A-Z])/)
+                              .map(
+                                (word) =>
+                                  word.charAt(0).toUpperCase() +
+                                  word.slice(1).toLowerCase(),
+                              )
+                              .join(' ')}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </div>
+            )}
+          />
+
+          <div className="grid grid-cols-2 gap-4">
             <FormField
               control={form.control}
-              name="category"
+              name="icon"
               render={({ field }) => (
                 <div>
                   <FormLabel className="mb-2">
-                    Product Category
+                    Product Icon
                     <Required />
                   </FormLabel>
                   <FormControl>
-                    <Select value={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Select a Product Category" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectGroup>
-                          {Object.entries(ProductCategory).map(
-                            ([key, value]) => (
-                              <SelectItem key={key} value={value}>
-                                {/*capitalize the first letter of each word*/}
-                                {key
-                                  .split(/(?=[A-Z])/)
-                                  .map(
-                                    (word) =>
-                                      word.charAt(0).toUpperCase() +
-                                      word.slice(1).toLowerCase(),
-                                  )
-                                  .join(' ')}
-                              </SelectItem>
-                            ),
-                          )}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
+                    {/*<Input placeholder="https://icon.url" {...field} />*/}
+                    <div className="flex flex-row items-center gap-2">
+                      {field.value && (
+                        <img
+                          src={field.value}
+                          alt="Product Icon"
+                          className="w-11 h-11 rounded border border-gray-300"
+                        />
+                      )}
+                      <UploadContainer
+                        accept={'image/*'}
+                        onUploadSuccess={(url) => {
+                          field.onChange(url);
+                        }}
+                      >
+                        <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+                      </UploadContainer>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="screenshot"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Product Screenshot
+                    <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row items-end gap-2">
+                      {field.value && (
+                        <img
+                          src={field.value}
+                          alt="Product Icon"
+                          className="w-96 h-auto rounded border border-gray-300"
+                        />
+                      )}
+                      <UploadContainer
+                        accept={'image/*'}
+                        onUploadSuccess={(url) => {
+                          field.onChange(url);
+                        }}
+                      >
+                        <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+                      </UploadContainer>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+          </div>
+
+          <h2 className="text-lg font-semibold mt-8">
+            Form and Widget Information <Required />
+          </h2>
+
+          <div className="grid grid-cols-2 gap-4">
+            <FormField
+              control={form.control}
+              name="formId"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Form <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row items-center gap-2 mb-2">
+                      {formsLoaded ? (
+                        <Select
+                          disabled={props.mode === 'edit'}
+                          value={field.value}
+                          onValueChange={(selectedId) => {
+                            const selectedForm = forms.find(
+                              (item) => item.id === selectedId,
+                            );
+                            if (selectedForm) {
+                              form.setValue('formId', selectedForm.id || '');
+                              form.setValue(
+                                'formShortId',
+                                selectedForm.shortId || '',
+                              );
+                            }
+                          }}
+                        >
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a form" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <Link
+                              target="_blank"
+                              href={`/${workspaceId}/forms`}
+                              className="flex flex-row items-center gap-1 text-sm h-8 cursor-pointer"
+                            >
+                              <BsPlus />
+                              Create a New Form
+                            </Link>
+                            <SelectGroup>
+                              {forms.map((item) => (
+                                <SelectItem
+                                  disabled={item.isBindProduct}
+                                  key={item.id}
+                                  value={item.id || ''}
+                                >
+                                  {item.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          disabled
+                          placeholder="Loading forms..."
+                          className="w-full"
+                        />
+                      )}
+                      <Link
+                        href={`/${lang}/${workspaceId}/forms/${form.watch('formId')}/default`}
+                        target="_blank"
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          // 'disabled:opacity-50 disabled:pointer-events-none',
+                          form.watch('formId') === ''
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
+                        )}
+                      >
+                        Edit
+                      </Link>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </div>
               )}
             />
 
-            <div className="grid grid-cols-2 gap-4">
-              <FormField
-                control={form.control}
-                name="icon"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">
-                      Product Icon
-                      <Required />
-                    </FormLabel>
-                    <FormControl>
-                      {/*<Input placeholder="https://icon.url" {...field} />*/}
-                      <div className="flex flex-row items-center gap-2">
-                        {field.value && (
-                          <img
-                            src={field.value}
-                            alt="Product Icon"
-                            className="w-11 h-11 rounded border border-gray-300"
-                          />
-                        )}
-                        <UploadContainer
-                          accept={'image/*'}
-                          onUploadSuccess={(url) => {
-                            field.onChange(url);
+            <FormField
+              control={form.control}
+              name="widgetId"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">
+                    Widget <Required />
+                  </FormLabel>
+                  <FormControl>
+                    <div className="flex flex-row items-center gap-2 mb-2">
+                      {widgetsLoaded ? (
+                        <Select
+                          disabled={props.mode === 'edit'}
+                          value={field.value}
+                          onValueChange={(selectedId) => {
+                            const selectedWidget = widgets.find(
+                              (item) => item.id === selectedId,
+                            );
+                            if (selectedWidget) {
+                              form.setValue(
+                                'widgetId',
+                                selectedWidget.id || '',
+                              );
+                              form.setValue(
+                                'widgetShortId',
+                                selectedWidget.shortId || '',
+                              );
+                            }
                           }}
                         >
-                          <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
-                        </UploadContainer>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="screenshot"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">
-                      Product Screenshot
-                      <Required />
-                    </FormLabel>
-                    <FormControl>
-                      <div className="flex flex-row items-end gap-2">
-                        {field.value && (
-                          <img
-                            src={field.value}
-                            alt="Product Icon"
-                            className="w-96 h-auto rounded border border-gray-300"
-                          />
+                          <SelectTrigger className="w-full">
+                            <SelectValue placeholder="Select a Widget" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <Link
+                                target="_blank"
+                                href={`/${workspaceId}/showcases`}
+                                className="flex flex-row items-center gap-1 text-sm h-8 cursor-pointer"
+                              >
+                                <BsPlus />
+                                Create a New Widget
+                              </Link>
+                              {widgets.map((item) => (
+                                <SelectItem
+                                  disabled={item.isBindProduct}
+                                  key={item.id}
+                                  value={item.id || ''}
+                                >
+                                  {item.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        <Input
+                          disabled
+                          placeholder="Loading widgets..."
+                          className="w-full"
+                        />
+                      )}
+                      <Link
+                        href={`/${lang}/${workspaceId}/showcases/${form.watch('widgetId')}`}
+                        target="_blank"
+                        className={cn(
+                          buttonVariants({ variant: 'default' }),
+                          // 'disabled:opacity-50 disabled:pointer-events-none',
+                          form.watch('widgetId') === ''
+                            ? 'opacity-50 pointer-events-none'
+                            : '',
                         )}
-                        <UploadContainer
-                          accept={'image/*'}
-                          onUploadSuccess={(url) => {
-                            field.onChange(url);
-                          }}
-                        >
-                          <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
-                        </UploadContainer>
-                      </div>
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-            </div>
-            <h2
-              className="text-lg font-semibold cursor-pointer mt-8"
-              onClick={() => setAdvance(!advance)}
-            >
-              Advance Information{' '}
-              <BsCaretDownFill className="inline-block ml-2" />
-            </h2>
-            <div className={cn('', advance ? 'flex flex-col gap-4' : 'hidden')}>
-              <FormField
-                control={form.control}
-                name="longDescription"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">What is it?</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Detailed description (optional)"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="howToUse"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">How to Use?</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Instructions (optional)"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="features"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">Features</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="Key features (optional)"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="useCase"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">Use Case</FormLabel>
-                    <FormControl>
-                      <Textarea placeholder="Use cases (optional)" {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
+                      >
+                        Edit
+                      </Link>
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+          </div>
 
-              <FormField
-                control={form.control}
-                name="faq"
-                render={({ field }) => (
-                  <div>
-                    <FormLabel className="mb-2">FAQ</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        rows={6}
-                        placeholder="Frequently asked questions (optional)"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </div>
-                )}
-              />
-            </div>
+          <h2
+            className="text-lg font-semibold cursor-pointer mt-8"
+            onClick={() => setAdvance(!advance)}
+          >
+            Advance Information (optional)
+            <BsCaretDownFill className="inline-block ml-2" />
+          </h2>
+          <div className={cn('', advance ? 'flex flex-col gap-4' : 'hidden')}>
+            <FormField
+              control={form.control}
+              name="longDescription"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">What is it?</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Detailed description (optional)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="howToUse"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">How to Use?</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Instructions (optional)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="features"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">Features</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="Key features (optional)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="useCase"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">Use Case</FormLabel>
+                  <FormControl>
+                    <Textarea placeholder="Use cases (optional)" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="faq"
+              render={({ field }) => (
+                <div>
+                  <FormLabel className="mb-2">FAQ</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      rows={6}
+                      placeholder="Frequently asked questions (optional)"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </div>
+              )}
+            />
           </div>
           <div
             className={cn(
@@ -695,7 +707,6 @@ export function PromotionNewProductForm(props: {
                 <li className="">
                   <span>(Optional) </span>
                   <ShowcaseEmbedDialog
-                    url={form.watch('url')}
                     showcaseShortId={form.watch('widgetShortId') || ''}
                   >
                     <span className="text-blue-500 hover:underline cursor-pointer">

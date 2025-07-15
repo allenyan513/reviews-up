@@ -7,24 +7,20 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogPortal,
 } from '@reviewsup/ui/dialog';
 import { BsGithub } from 'react-icons/bs';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
 import { useState } from 'react';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
-import { useVerifyEmbed } from '@/hooks/use-verify-embed';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@reviewsup/ui/tabs';
 import { CodeBlock } from '@/components/code-block';
 
 const embedCodeTemplate = `
 <blockquote class="reviewsup-embed" cite="${process.env.NEXT_PUBLIC_APP_URL}/showcases/{{widgetId}}" data-widget-id="{{widgetId}}"><section><a target="_blank" title="ReviewsUp Widget" href="${process.env.NEXT_PUBLIC_APP_URL}/showcases/{{widgetId}}?refer=embed">Rating 4.9/5 from 1000+ reviews</a></section></blockquote><script type="module" src="https://unpkg.com/@reviewsup/embed-react/dist/embed/embed.es.js"></script>`;
 
-function ReactTab(props: { url: string; showcaseShortId: string }) {
-  const { url, showcaseShortId } = props;
-  const { loading, verify } = useVerifyEmbed(url, showcaseShortId);
-
+function ReactTab(props: { showcaseShortId: string }) {
+  const { showcaseShortId } = props;
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
@@ -55,21 +51,8 @@ function ReactTab(props: { url: string; showcaseShortId: string }) {
         ]}
       />
       <p className="text-sm text-muted-foreground">
-        4. Add the <strong>ReviewsUpWrapper</strong> component on{' '}
-        <Link
-          target="_blank"
-          href={url}
-          className="text-blue-500 hover:underline"
-        >
-          {url}
-        </Link>{' '} page.
+        4. Add the <strong>ReviewsUpWrapper</strong> component on your page
       </p>
-      <p className="text-sm text-muted-foreground">
-        5. Deploy your app and verify.
-      </p>
-      <Button variant="default" size="lg" disabled={loading} onClick={verify}>
-        {loading ? 'Verifying...' : 'Verify'}
-      </Button>
       <Link
         target="_blank"
         href="https://github.com/allenyan513/reviewsup-embed-example"
@@ -81,9 +64,8 @@ function ReactTab(props: { url: string; showcaseShortId: string }) {
   );
 }
 
-function EmbedCodeTab(props: { url: string; showcaseShortId: string }) {
-  const { url, showcaseShortId } = props;
-  const { loading, verify } = useVerifyEmbed(url, showcaseShortId);
+function EmbedCodeTab(props: { showcaseShortId: string }) {
+  const { showcaseShortId } = props;
   const embedCode = embedCodeTemplate
     .replace(/{{widgetId}}/g, showcaseShortId || 'your-widget-id')
     .trim();
@@ -91,14 +73,7 @@ function EmbedCodeTab(props: { url: string; showcaseShortId: string }) {
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted-foreground">
-        1. Copy the code to embed the widget on{' '}
-        <Link
-          target="_blank"
-          href={url}
-          className="text-blue-500 hover:underline"
-        >
-          {url}
-        </Link>
+        Copy the code to embed the widget on your website
       </p>
       <textarea
         className="w-full h-40 p-4 bg-gray-100 rounded-md border border-gray-300 text-sm"
@@ -116,20 +91,6 @@ function EmbedCodeTab(props: { url: string; showcaseShortId: string }) {
         Copy Code
       </Button>
 
-      <p className="text-sm text-muted-foreground">
-        2. Deploy{' '}
-        <Link
-          target="_blank"
-          href={url}
-          className="text-blue-500 hover:underline"
-        >
-          {url}
-        </Link>{' '}
-        with the embed code and verify.
-      </p>
-      <Button variant="default" size="lg" disabled={loading} onClick={verify}>
-        {loading ? 'Verifying...' : 'Verify'}
-      </Button>
       <Link
         target="_blank"
         href="https://github.com/allenyan513/reviewsup-embed-example"
@@ -142,11 +103,10 @@ function EmbedCodeTab(props: { url: string; showcaseShortId: string }) {
 }
 
 export function ShowcaseEmbedDialog(props: {
-  url: string;
   showcaseShortId: string;
   children: React.ReactNode;
 }) {
-  const { url, showcaseShortId, children } = props;
+  const { showcaseShortId, children } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
 
   return (
@@ -167,10 +127,10 @@ export function ShowcaseEmbedDialog(props: {
               <TabsTrigger value="react">React</TabsTrigger>
             </TabsList>
             <TabsContent value="javascript">
-              <EmbedCodeTab url={url} showcaseShortId={showcaseShortId} />
+              <EmbedCodeTab showcaseShortId={showcaseShortId} />
             </TabsContent>
             <TabsContent value="react">
-              <ReactTab url={url} showcaseShortId={showcaseShortId} />
+              <ReactTab showcaseShortId={showcaseShortId} />
             </TabsContent>
           </Tabs>
         </div>

@@ -19,6 +19,9 @@ export const showcaseEntitySchema = z.object({
   user: z.any().optional(),
   workspace: z.any().optional(),
   reviews: z.array(z.lazy(() => reviewEntitySchema)).optional(),
+  reviewRating: z.number().min(0).max(5).default(0),
+  reviewCount: z.number().min(0).default(0),
+  isBindProduct: z.boolean().optional().default(false),
   createdAt: z.date(),
   updatedAt: z.date(),
 });
