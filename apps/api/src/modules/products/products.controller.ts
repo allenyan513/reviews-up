@@ -23,6 +23,16 @@ import { RRResponse } from '@reviewsup/api/common';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+
+  @UseGuards(JwtAuthGuard)
+  @Post("setup")
+  async setup(
+    @Jwt() jwt: JwtPayload,
+    @Body() request: CreateProductRequest,
+  ) {
+    return this.productsService.setup(jwt.userId, request);
+  }
+
   @UseGuards(JwtAuthGuard)
   @Get('taskReviewCount')
   async getTaskReviewCount(uid: string): Promise<RRResponse<number>> {

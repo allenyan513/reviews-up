@@ -19,14 +19,14 @@ import { useSession } from '@/context/UserProvider';
  */
 export function FormDefaultSubmitView(props: {
   id: string;
-  workspaceId: string;
+  productId: string;
   lang: string;
   shortId: string;
   mode: 'edit' | 'public';
 }) {
   const router = useRouter();
   const { user } = useSession();
-  const { id, workspaceId, lang, shortId, mode } = props;
+  const { id, productId, lang, shortId, mode } = props;
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isAddReviewManually, setIsAddReviewManually] =
     useState<boolean>(false);
@@ -47,7 +47,7 @@ export function FormDefaultSubmitView(props: {
     api.review
       .createReview(
         {
-          workspaceId: workspaceId,
+          productId: productId,
           formId: id,
           ...submitForm,
         },
@@ -71,7 +71,7 @@ export function FormDefaultSubmitView(props: {
         </label>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           <ReviewImportXDialog
-            workspaceId={workspaceId}
+            productId={productId}
             formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
@@ -87,7 +87,7 @@ export function FormDefaultSubmitView(props: {
             }}
           />
           <ReviewImportTiktokDialog
-            workspaceId={workspaceId}
+            productId={productId}
             formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
@@ -103,7 +103,7 @@ export function FormDefaultSubmitView(props: {
             }}
           />
           <ReviewImportGoogleMapDialog
-            workspaceId={workspaceId}
+            productId={productId}
             formId={id}
             onImportStart={() => {
               setIsSubmitting(true);
@@ -119,7 +119,7 @@ export function FormDefaultSubmitView(props: {
             }}
           />
           <ImportLinkedInDialog
-            workspaceId={workspaceId}
+            productId={productId}
             formId={id}
             onImportStart={() => {
               setIsSubmitting(true);

@@ -19,7 +19,7 @@ import toast from 'react-hot-toast';
 import { useFormContext } from './context/FormProvider';
 
 export default function CreateFormDialog(props: {}) {
-  const { defaultWorkspace } = useUserContext();
+  const { defaultProduct } = useUserContext();
   const { createForm } = useFormContext();
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [formName, setFormName] = useState<string>('');
@@ -58,11 +58,11 @@ export default function CreateFormDialog(props: {}) {
           <Button
             type="submit"
             onClick={async () => {
-              if (!defaultWorkspace || !defaultWorkspace.id) {
+              if (!defaultProduct || !defaultProduct.id) {
                 toast.error('Please select a workspace first.');
                 return;
               }
-              await createForm(defaultWorkspace.id, formName);
+              await createForm(defaultProduct.id, formName);
               setFormName('');
               setIsOpen(false);
             }}

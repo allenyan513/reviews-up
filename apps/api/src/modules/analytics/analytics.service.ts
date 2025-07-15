@@ -22,8 +22,8 @@ export class AnalyticsService {
       const totalUsers = await this.prismaService.user.count();
       const totalAccount = await this.prismaService.account.count();
       const totalForms = await this.prismaService.form.count();
-      const totalShowcase = await this.prismaService.showcase.count();
-      const totalWorkspace = await this.prismaService.workspace.count();
+      const totalWidgets = await this.prismaService.widget.count();
+      const totalProducts = await this.prismaService.product.count();
       const totalReview = await this.prismaService.review.count();
       const totalReviewMedia = await this.prismaService.reviewMedia.count();
       const totalCampaign = await this.prismaService.campaign.count();
@@ -31,8 +31,8 @@ export class AnalyticsService {
         totalUsers,
         totalAccount,
         totalForms,
-        totalShowcase,
-        totalWorkspace,
+        totalWidgets,
+        totalProducts,
         totalReview,
         totalReviewMedia,
         totalCampaign,

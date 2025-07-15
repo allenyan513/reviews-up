@@ -44,45 +44,35 @@ export class FormsService {
       data: {
         shortId: generateShortId(),
         userId: uid,
-        workspaceId: createFormDto.workspaceId,
+        productId: createFormDto.productId,
         name: createFormDto.name,
         config: config,
       },
     });
   }
 
-  async findAll(uid: string, workspaceId: string) {
+  async findAll(uid: string, productId: string) {
     const forms = await this.prismaService.form.findMany({
       where: {
         userId: uid,
-        workspaceId: workspaceId, // Filter by workspace if provided
+        productId: productId,
       },
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },
       include: {
-        Review: {
+        reviews: {
           select: {
             id: true,
           },
         },
       },
     });
-    // 查询所有已经和 uid, workspaceId下， 已经被product 绑定的formId
-    const bindForms = await this.prismaService.product.findMany({
-      where: {
-        userId: uid,
-        workspaceId: workspaceId,
-      },
-      select: {
-        id: true,
-        formId: true,
-      },
-    });
     return forms.map((form) => ({
       ...form,
-      reviewCount: form.Review.length, // Add review count to each form
-      isBindProduct: bindForms.some((bindForm) => bindForm.formId === form.id),
+      //todo
+      reviewCount: 0,
+      isBindProduct: false,
     })) as FormEntity[];
   }
 

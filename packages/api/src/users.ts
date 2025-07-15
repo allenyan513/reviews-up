@@ -1,7 +1,7 @@
-import { workspaceEntitySchema } from './workspace';
 import { reviewEntitySchema } from './reviews';
 import { z } from 'zod';
 import { Decimal } from '@prisma/client/runtime/library';
+import { productSchema } from './products';
 
 export const SubscriptionTier = {
   free: 'free',
@@ -22,7 +22,7 @@ export const userEntitySchema = z.object({
       message: 'Balance must be a valid number',
     })
     .transform((val) => new Decimal(val)),
-  Workspace: z.lazy(() => z.array(workspaceEntitySchema)).optional(),
+  products: z.lazy(() => z.array(productSchema)).optional(),
   ownerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
   reviewerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
   createdAt: z.date(),

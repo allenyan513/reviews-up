@@ -53,7 +53,7 @@ export class NotificationsService {
         form: {
           select: {
             userId: true,
-            workspaceId: true,
+            productId: true,
           },
         },
       },
@@ -93,8 +93,8 @@ export class NotificationsService {
     totalUsers: number;
     totalAccount: number;
     totalForms: number;
-    totalShowcase: number;
-    totalWorkspace: number;
+    totalWidgets: number;
+    totalProducts: number;
     totalReview: number;
     totalReviewMedia: number;
     totalCampaign: number;
@@ -105,8 +105,8 @@ export class NotificationsService {
         totalUsers: result.totalUsers,
         totalAccount: result.totalAccount,
         totalForms: result.totalForms,
-        totalShowcase: result.totalShowcase,
-        totalWorkspace: result.totalWorkspace,
+        totalWidgets: result.totalWidgets,
+        totalProducts: result.totalProducts,
         totalReview: result.totalReview,
         totalReviewMedia: result.totalReviewMedia,
         totalCampaign: result.totalCampaign,

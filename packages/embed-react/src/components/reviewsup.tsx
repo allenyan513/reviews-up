@@ -1,25 +1,25 @@
 'use client';
 
 import { RequestOptions } from '../api/request-options';
-import { useShowcase } from '../hooks/use-showcase';
-import { ShowcasePageReviewClient } from './showcase-page-review-client';
+import { useWidget } from '../hooks/use-widget';
+import { WidgetPageReviewClient } from './widget-page-review-client';
 
 export interface ReviewsUpProps {
-  showcaseId: string;
+  widgetId: string;
   formId?: string;
   options?: RequestOptions;
 }
 
 export function ReviewsUp(props: ReviewsUpProps) {
-  const { showcaseId, formId, options } = props;
-  const { showcase, error } = useShowcase(showcaseId, options);
+  const { widgetId, formId, options } = props;
+  const { widget, error } = useWidget(widgetId, options);
 
-  if (!showcase) {
+  if (!widget) {
     return (
       <blockquote
         className="reviewsup-embed"
-        cite={`https://app.reviewsup.io/showcases/${showcaseId}`}
-        data-widget-id={showcaseId}
+        cite={`https://app.reviewsup.io/widgets/${widgetId}`}
+        data-widget-id={widgetId}
       >
         <a
           href="https://reviewsup.io"
@@ -34,10 +34,10 @@ export function ReviewsUp(props: ReviewsUpProps) {
   return (
     <blockquote
       className="reviewsup-embed"
-      cite={`https://app.reviewsup.io/showcases/${showcaseId}`}
-      data-widget-id={showcaseId}
+      cite={`https://app.reviewsup.io/widgets/${widgetId}`}
+      data-widget-id={widgetId}
     >
-      <ShowcasePageReviewClient showcase={showcase} />;
+      <WidgetPageReviewClient widget={widget} />;
     </blockquote>
   );
 }

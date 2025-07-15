@@ -1,15 +1,15 @@
 import { api } from '@/lib/api-client';
 import { createContext, useContext, useEffect, useState } from 'react';
-import { WorkspaceEntity } from '@reviewsup/api/workspace';
+import { ProductEntity } from '@reviewsup/api/products';
 import { UserEntity } from '@reviewsup/api/users';
 import useLocalStorageState from 'use-local-storage-state';
 import { redirect, useRouter } from 'next/navigation';
 
 interface UserContextProps {
-  user: UserEntity | null;
-  defaultWorkspace: WorkspaceEntity | null | undefined;
-  setDefaultWorkspace: (workspace: WorkspaceEntity | null) => void;
-  switchDefaultWorkspace: (workspace: WorkspaceEntity | null) => void;
+  user: UserEntity | null | undefined;
+  defaultProduct: ProductEntity | null | undefined;
+  setDefaultProduct: (product: ProductEntity | null) => void;
+  switchDefaultProduct: (product: ProductEntity | null) => void;
   googleSignIn: (redirect?: string) => void;
   githubSignIn: (redirect?: string) => void;
   twitterSignIn: (redirect?: string) => void;
@@ -29,20 +29,18 @@ export function UserProvider(props: { children: React.ReactNode }) {
    * not null indicates that the user is logged in.
    */
   const [user, setUser] = useState<UserEntity | null | undefined>(undefined);
-  const [defaultWorkspace, setDefaultWorkspace] = useLocalStorageState<
-    WorkspaceEntity | null | undefined
-  >(`${user?.id}_workspace`, {
+  const [defaultProduct, setDefaultProduct] = useLocalStorageState<
+    ProductEntity | null | undefined
+  >(`${user?.id}_product`, {
     defaultValue: null,
   });
   const router = useRouter();
 
-  const switchDefaultWorkspace = (workspace: WorkspaceEntity | null) => {
-    if (!workspace) {
-      console.error('Cannot switch to null workspace');
+  const switchDefaultProduct = (product: ProductEntity | null) => {
+    if (!product) {
       return;
     }
-    console.log('Switching default workspace to:', workspace);
-    setDefaultWorkspace(workspace);
+    setDefaultProduct(product);
   };
 
   const signIn = (redirectUrl?: string) => {
@@ -85,7 +83,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
   const signOut = () => {
     localStorage.removeItem('access_token');
     setUser(null);
-    setDefaultWorkspace(null);
+    setDefaultProduct(null);
     redirect('/auth/signin');
   };
 
@@ -98,7 +96,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
       await api.user.deleteAccount();
       localStorage.removeItem('access_token');
       setUser(null);
-      setDefaultWorkspace(null);
+      setDefaultProduct(null);
       redirect('/auth/signin');
     } catch (error) {
       console.error('Failed to delete account:', error);
@@ -119,11 +117,17 @@ export function UserProvider(props: { children: React.ReactNode }) {
       // User state is still being fetched
     } else if (user === null) {
       // User is not logged in
-      setDefaultWorkspace(null);
+      setDefaultProduct(null);
     } else {
-      if (!defaultWorkspace) {
-        const firstWorkspace = user.Workspace ? user.Workspace[0] : null;
-        setDefaultWorkspace(firstWorkspace);
+      if (!defaultProduct) {
+        // If no default product is set, use the first product from the user
+        const firstProduct = user.products ? user.products[0] : null;
+        setDefaultProduct(firstProduct);
+      } else {
+        // If default product is set, ensure it is part of the user's products
+        if (!user.products?.some((p) => p.id === defaultProduct?.id)) {
+          setDefaultProduct(user.products?.[0] || null);
+        }
       }
     }
   }, [user]);
@@ -132,9 +136,9 @@ export function UserProvider(props: { children: React.ReactNode }) {
     <UserContext.Provider
       value={{
         user,
-        defaultWorkspace,
-        setDefaultWorkspace,
-        switchDefaultWorkspace,
+        defaultProduct,
+        setDefaultProduct,
+        switchDefaultProduct,
         googleSignIn,
         githubSignIn,
         twitterSignIn,
@@ -159,7 +163,7 @@ export function useUserContext() {
 
 interface UseSessionOptions {
   required?: boolean;
-  onUnauthenticated?: (user: UserEntity) => void;
+  onUnauthenticated?: (user: UserEntity | null | undefined) => void;
 }
 
 export function useSession(options?: UseSessionOptions) {

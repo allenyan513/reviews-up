@@ -1,5 +1,9 @@
 import { z } from 'zod';
 import { formEntitySchema } from './forms';
+import { userEntitySchema } from './users';
+import { reviewEntitySchema } from './reviews';
+import { widgetEntitySchema } from './widgets';
+import { campaignEntitySchema } from './campaign';
 
 export const ProductCategory = {
   ai: 'ai',
@@ -30,11 +34,7 @@ export const ProductStatus = {
 };
 
 export const createProductSchema = z.object({
-  workspaceId: z.string().min(1, 'Workspace ID is required'),
-  formId: z.string().min(1, 'Form ID is required'),
-  formShortId: z.string().min(1, 'Form Short ID is required'),
-  widgetId: z.string().min(1, 'Widget ID is required'),
-  widgetShortId: z.string().min(1, 'Widget Short ID is required'),
+  id: z.string().optional(),
   name: z
     .string()
     .min(1, 'Name is required')
@@ -43,20 +43,18 @@ export const createProductSchema = z.object({
   description: z
     .string()
     .min(1, 'Description is required')
-    .max(160, 'Description must be less than 160 characters')
-    .optional(),
+    .max(160, 'Description must be less than 160 characters'),
   icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
   screenshot: z
     .string()
     .url('Invalid URL')
-    .min(1, 'Screenshot URL is required'),
+    .optional(),
   category: z.nativeEnum(ProductCategory).default(ProductCategory.ai),
   longDescription: z.string().optional(),
   features: z.string().optional(),
   useCase: z.string().optional(),
   howToUse: z.string().optional(),
   faq: z.string().optional(),
-
   submitOption: z
     .enum(['free-submit', 'paid-submit', 'save-draft', 'crawl-product-info'])
     .optional(),
@@ -68,13 +66,6 @@ export type UpdateProductRequest = Partial<CreateProductRequest>;
 export const productSchema = z.object({
   id: z.string().min(1, 'Product ID is required'),
   userId: z.string().min(1, 'User ID is required'),
-  workspaceId: z.string().min(1, 'Workspace ID is required'),
-  formId: z.string().min(1, 'Form ID is required'),
-  formShortId: z.string().min(1, 'Form Short ID is required'),
-  showcaseId: z.string().min(1, 'Showcase ID is required'),
-  showcaseShortId: z.string().min(1, 'Showcase Short ID is required'),
-  reviewRating: z.number().min(0).max(5).default(0),
-  reviewCount: z.number().min(0).default(0),
   name: z
     .string()
     .min(1, 'Name is required')
@@ -108,15 +99,30 @@ export const productSchema = z.object({
   useCase: z.string().optional(),
   howToUse: z.string().optional(),
   faq: z.string().optional(),
-
   createdAt: z.date(),
   updatedAt: z.date(),
-  form: z.lazy(() => formEntitySchema).optional(),
+  //todo fix me
+  // user: z.any(),
+  // forms: z.array(z.any()),
+  // reviews: z.array(z.any()),
+  // widgets: z.array(z.any()),
+  // campaigns: z.array(z.any()),
+  // user: z.lazy(() => userEntitySchema).optional(),
+
+  // user: userEntitySchema.optional(),
+  // forms: z.array(formEntitySchema).optional(),
+  // reviews: z.array(reviewEntitySchema).optional(),
+  // widgets: z.array(widgetEntitySchema).optional(),
+  // campaigns: z.array(campaignEntitySchema).optional(),
+
+  // forms: z.lazy(() => z.array(formEntitySchema)).optional(),
+  // reviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
+  // widgets: z.lazy(() => z.array(widgetEntitySchema)).optional(),
+  // campaigns: z.lazy(() => z.array(campaignEntitySchema)).optional(),
 });
 export type ProductEntity = z.infer<typeof productSchema>;
 
 export const findAllRequestSchema = z.object({
-  workspaceId: z.string().nullable().optional(),
   status: z.array(z.nativeEnum(ProductStatus)).optional(),
   page: z.coerce.number().int().min(1).default(1).optional(),
   pageSize: z.coerce.number().int().min(1).max(100).default(10).optional(),

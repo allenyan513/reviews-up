@@ -59,15 +59,15 @@ export class ReviewsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('workspaceId/:workspaceId')
+  @Get('productId/:productId')
   async findAll(
     @Jwt() jwt: JwtPayload,
-    @Param('workspaceId') workspaceId: string,
+    @Param('productId') productId: string,
     @Query() query: any,
   ) {
     const input = findAllReviewRequestSchema.parse({
       userId: jwt.userId,
-      workspaceId,
+      productId,
       ...query,
     }) as FindAllReviewRequest;
     return this.reviewsService.findAll(input);

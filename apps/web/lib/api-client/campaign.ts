@@ -11,7 +11,7 @@ export const campaign = {
   findAll: (
     request: FindAllCampaignsRequest,
   ): Promise<PaginateResponse<CampaignEntity>> =>
-    authFetch(`/campaigns/workspaceId/${request.workspaceId}`, 'GET', {
+    authFetch(`/campaigns/productId/${request.productId}`, 'GET', {
       page: request.page,
       pageSize: request.pageSize,
       sortBy: request.sortBy,

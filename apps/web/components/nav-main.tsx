@@ -1,6 +1,6 @@
 'use client';
 
-import { IconCirclePlusFilled, IconMail, type Icon } from '@tabler/icons-react';
+import { type Icon } from '@tabler/icons-react';
 
 import {
   SidebarGroup,
@@ -8,9 +8,9 @@ import {
   SidebarMenu,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { WorkspaceEntity } from '@reviewsup/api/workspace';
-import { WorkspaceSwitchButton } from '@/modules/workspace/workspace-switch-button';
+import { ProductSwitchButton } from '@/modules/product/product-switch-button';
 import { cn } from '@/lib/utils';
+import { ProductEntity } from '@reviewsup/api/products';
 
 interface NavMainItem {
   title: string;
@@ -21,14 +21,19 @@ interface NavMainItem {
 }
 
 export function NavMain(props: {
-  workspace: WorkspaceEntity | null | undefined;
+  product: ProductEntity | null | undefined;
   items: NavMainItem[];
 }) {
+  const { product, items } = props;
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <WorkspaceSwitchButton />
-        <SidebarMenu>
+        <ProductSwitchButton
+          product={product}
+        />
+        <SidebarMenu
+          className={product === null || product === undefined ? 'pointer-events-none' : ''}
+        >
           {props.items.map((item) => (
             <div key={item.title} className="w-full">
               <Link

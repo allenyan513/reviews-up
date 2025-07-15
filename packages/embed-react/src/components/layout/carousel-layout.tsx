@@ -2,7 +2,7 @@
 
 import { useRef, useEffect } from 'react';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';
 import { renderItem } from '../item';
@@ -14,7 +14,7 @@ function CarouselRow({
   speed,
 }: {
   items: ReviewEntity[];
-  config: ShowcaseConfig;
+  config: WidgetConfig;
   reverse: boolean;
   speed: number;
 }) {
@@ -82,7 +82,7 @@ function CarouselRow({
 
 export function CarouselLayout(props: {
   items: ReviewEntity[];
-  config: ShowcaseConfig;
+  config: WidgetConfig;
 }) {
   const { items, config } = props;
   const { rows = 1, speed = 40 } = config;

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
-import { ShowcaseClient } from './components/showcase.client';
+import { WidgetClient } from './components/widget.client';
 //todo if dist is not available, use the source files directly
 import '../dist/styles/styles.css';
 
@@ -11,8 +11,8 @@ mountPoints.forEach((mountPoint) => {
   if (widgetId) {
     const reactRoot = ReactDOMClient.createRoot(mountPoint);
     reactRoot.render(
-      React.createElement(ShowcaseClient, {
-        showcaseId: widgetId,
+      React.createElement(WidgetClient, {
+        widgetId: widgetId,
       }),
     );
   }

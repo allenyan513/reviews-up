@@ -1,5 +1,5 @@
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import { TikTokEmbed } from '../embed/tiktok-embed';
 import { ReviewItem } from './review-item';
 import React from 'react';
@@ -9,7 +9,7 @@ import { LinkedinEmbed } from '../embed/linkedin-embed';
 export function renderItem(
   review: ReviewEntity,
   itemStyle: 'style' | 'style-1',
-  config?: ShowcaseConfig,
+  config?: WidgetConfig,
   width?: string,
   height?: string,
 ) {

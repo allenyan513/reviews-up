@@ -10,10 +10,10 @@ import { columns } from '@/modules/campaign/columens';
 export default function CampaignListPage(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
+    productId: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
+  const { lang, productId } = use(props.params);
   const { findAll } = useCampaignContext();
 
   return (
@@ -27,7 +27,7 @@ export default function CampaignListPage(props: {
           </p>
         </div>
         <Link
-          href={`/${lang}/${workspaceId}/campaigns/create`}
+          href={`/${lang}/${productId}/campaigns/create`}
           className={buttonVariants({
             size: 'lg',
           })}

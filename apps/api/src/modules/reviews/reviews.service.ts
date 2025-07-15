@@ -37,9 +37,9 @@ export class ReviewsService {
   async create(uid: string, dto: CreateReviewDto) {
     this.logger.debug(`Creating review for user ${uid}`, dto);
     // find out ownerId
-    const owner = await this.prismaService.workspace.findUnique({
+    const owner = await this.prismaService.product.findUnique({
       where: {
-        id: dto.workspaceId,
+        id: dto.productId,
       },
       select: {
         userId: true,
@@ -47,13 +47,13 @@ export class ReviewsService {
     });
     if (!owner) {
       throw new HttpException(
-        `Workspace with ID ${dto.workspaceId} not found`,
+        `Product with ID ${dto.productId} not found`,
         HttpStatus.NOT_FOUND,
       );
     }
     const review = await this.prismaService.review.create({
       data: {
-        workspaceId: dto.workspaceId,
+        productId: dto.productId,
         formId: dto.formId,
         ownerId: owner.userId,
         reviewerId: dto.reviewerId || uid,
@@ -114,17 +114,17 @@ export class ReviewsService {
 
   async findAll(request: FindAllReviewRequest) {
     this.logger.debug('Fetching reviews with pagination', request);
-    if (!request.workspaceId) {
+    if (!request.productId) {
       throw new Error('Workspace ID is required to fetch reviews');
     }
     const total = await this.prismaService.review.count({
       where: {
-        workspaceId: request.workspaceId, // Filter by workspace if provided
+        productId: request.productId, // Filter by product if provided
       },
     });
     const items = await this.prismaService.review.findMany({
       where: {
-        workspaceId: request.workspaceId, // Filter by workspace if provided
+        productId: request.productId, // Filter by product if provided
       },
       orderBy: {
         createdAt: 'desc', // Order by creation date
@@ -178,8 +178,6 @@ export class ReviewsService {
       },
     });
   }
-
-  async notifyFormCreator(reviewId: string, dto: UpdateReviewDto) {}
 
   async parseTiktok(
     request: TiktokOembedRequest,

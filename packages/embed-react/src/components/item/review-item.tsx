@@ -1,12 +1,12 @@
 import { ReviewItemSource } from './review-item-source';
 import { StarRating } from '../star-rating';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { toLocalDateString } from '../../lib/utils';
 
 export function ReviewItem(props: {
   review: ReviewEntity;
-  config?: ShowcaseConfig;
+  config?: WidgetConfig;
   className?: string;
 }) {
   const { review, config, className } = props;
@@ -16,7 +16,7 @@ export function ReviewItem(props: {
     isImageEnabled,
     isRatingEnabled,
     isDoFollowEnabled,
-  } = (config as ShowcaseConfig) || {
+  } = (config as WidgetConfig) || {
     isSourceEnabled: true,
     isVideoEnabled: true,
     isImageEnabled: true,

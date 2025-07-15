@@ -31,15 +31,15 @@ export class CampaignsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/workspaceId/:workspaceId')
-  findAllWithWorkspaceId(
+  @Get('/productId/:productId')
+  findAllWithproductId(
     @Jwt() jwt: JwtPayload,
-    @Param('workspaceId') workspaceId: string,
+    @Param('productId') productId: string,
     @Query() query: any,
   ) {
     const req = findAllCampaignsRequestSchema.parse({
       userId: jwt.userId,
-      workspaceId,
+      productId,
       ...query,
     }) as FindAllCampaignsRequest;
     return this.campaignsService.findAll(req);

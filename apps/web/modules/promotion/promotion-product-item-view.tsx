@@ -3,16 +3,9 @@
 import React from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
-import { ReviewEntity } from '@reviewsup/api/reviews';
-import { UserEntity } from '@reviewsup/api/users';
-import { StarRating } from '@reviewsup/embed-react';
 
-export function ProductItemView(props: {
-  product: ProductEntity;
-  user?: UserEntity;
-  submittedReviews?: ReviewEntity[];
-}) {
-  const { product, user, submittedReviews } = props;
+export function ProductItemView(props: { product: ProductEntity }) {
+  const { product } = props;
 
   return (
     <div
@@ -53,15 +46,15 @@ export function ProductItemView(props: {
             ? product.description
             : 'YOUR PRODUCT DESCRIPTION'}
         </p>
-        <div className="flex flex-row items-center gap-2 text-sm">
-          <span className="text-yellow-500">{product.reviewRating}</span>
-          <StarRating
-            className="mt-[1px]"
-            size={'sm'}
-            value={parseFloat(product?.reviewRating?.toString() || '0')}
-          />
-          <span className="text-gray-500">({product.reviewCount} reviews)</span>
-        </div>
+        {/*<div className="flex flex-row items-center gap-2 text-sm">*/}
+        {/*  <span className="text-yellow-500">{product.reviewRating}</span>*/}
+        {/*  <StarRating*/}
+        {/*    className="mt-[1px]"*/}
+        {/*    size={'sm'}*/}
+        {/*    value={parseFloat(product?.reviewRating?.toString() || '0')}*/}
+        {/*  />*/}
+        {/*  <span className="text-gray-500">({product.reviewCount} reviews)</span>*/}
+        {/*</div>*/}
       </Link>
     </div>
   );

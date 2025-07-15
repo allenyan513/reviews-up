@@ -131,16 +131,16 @@ export function columns(setData: any): ColumnDef<any>[] {
       header: 'Actions',
       accessorFn: (row) => ({
         id: row.id,
-        workspaceId: row.workspaceId,
+        productId: row.productId,
       }),
       cell: ({ row, getValue }) => {
-        const { id, workspaceId } = getValue<{
+        const { id, productId } = getValue<{
           id: string;
-          workspaceId: string;
+          productId: string;
         }>();
         return (
           <div className="flex items-center space-x-2">
-            <Link href={`/${workspaceId}/campaigns/${id}`}>
+            <Link href={`/${productId}/campaigns/${id}`}>
               <BiShow className={'text-2xl cursor-pointer'} />
             </Link>
             <AlertDialog>

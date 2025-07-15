@@ -2,9 +2,9 @@ import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 
 export const defaultUserData = {
-  workspace: 'Default Workspace',
+  product: 'Default Product',
   form: 'Default Form',
-  showcase: 'Default Showcase',
+  widget: 'Default Widget',
   reviews: [
     {
       reviewerName: 'Amanda K.',

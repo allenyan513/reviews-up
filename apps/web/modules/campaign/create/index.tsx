@@ -9,13 +9,13 @@ import { CampaignCreatePreviewPage } from './preview';
 export function CampaignCreatePage(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
+    productId: string;
   }>;
   searchParams: Promise<{
     formId?: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
+  const { lang, productId } = use(props.params);
   const { formId } = use(props.searchParams);
 
   return (
@@ -23,7 +23,7 @@ export function CampaignCreatePage(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${workspaceId}/campaigns`}
+            href={`/${lang}/${productId}/campaigns`}
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl" />

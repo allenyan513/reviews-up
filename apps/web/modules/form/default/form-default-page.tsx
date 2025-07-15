@@ -4,16 +4,15 @@ import { use } from 'react';
 import { FormDefaultPreviewView } from '@/modules/form/default/form-default-preview-view';
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { FormPageConfig } from '@/modules/form/default/form-page-config';
-import { useUserContext } from '@/context/UserProvider';
 
 export default function FormDefaultPage(props: {
   params: Promise<{
     id: string;
     lang: string;
-    workspaceId: string;
+    productId: string;
   }>;
 }) {
-  const { id, lang, workspaceId } = use(props.params);
+  const { id, lang, productId } = use(props.params);
   const { form, formConfig } = useFormContext();
   if (!form || !formConfig) return null;
   return (
@@ -26,7 +25,7 @@ export default function FormDefaultPage(props: {
           id={id}
           lang={lang}
           shortId={form.shortId || ''}
-          workspaceId={workspaceId}
+          productId={productId}
           mode={'edit'}
         />
       </div>

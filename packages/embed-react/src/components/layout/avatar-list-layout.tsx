@@ -1,6 +1,6 @@
 'use client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import React, { useState } from 'react';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 import { RatingSummary } from '../rating-summary';
@@ -15,7 +15,7 @@ import { ReviewItemSource } from '../item/review-item-source';
  */
 export function AvatarListLayout(props: {
   items: ReviewEntity[];
-  config: ShowcaseConfig;
+  config: WidgetConfig;
 }) {
   const { items, config } = props;
   const [currentItem, setCurrentItem] = useState<ReviewEntity | null>(

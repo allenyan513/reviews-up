@@ -18,10 +18,10 @@ import { ProductItemView } from '@/modules/promotion/promotion-product-item-view
 
 export function PromotionProductListings(props: {
   lang: string;
-  workspaceId: string;
+  productId: string;
   status: 'pendingForReceive' | 'listing';
 }) {
-  const { lang, workspaceId, status } = props;
+  const { lang, productId, status } = props;
   const { user } = useSession();
   const [products, setProducts] = useState<ProductEntity[]>([]);
   const [originalProducts, setOriginalProducts] = useState<ProductEntity[]>([]);
@@ -33,7 +33,7 @@ export function PromotionProductListings(props: {
   const [categories, setCategories] = useState<string[]>([]);
 
   const fetchData = () => {
-    if (!workspaceId) {
+    if (!productId) {
       return null;
     }
     const validatedRequest = findAllRequestSchema.parse({
@@ -59,7 +59,7 @@ export function PromotionProductListings(props: {
 
     if (user) {
       api.review
-        .findAllByReviewerId(user.id)
+        .findAllByReviewerId(user?.id || '')
         .then((response) => {
           setSubmittedReviews(response);
           console.log('Submitted reviews:', response);
@@ -68,7 +68,7 @@ export function PromotionProductListings(props: {
           console.error('Error fetching reviews:', error);
         });
     }
-  }, [workspaceId, user]);
+  }, [productId, user]);
 
   useEffect(() => {
     fetchData();
@@ -91,7 +91,7 @@ export function PromotionProductListings(props: {
       <div className="flex flex-row justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${workspaceId}/forms`}
+            href={`/${lang}/${productId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
@@ -167,8 +167,6 @@ export function PromotionProductListings(props: {
               <ProductItemView
                 key={product.id}
                 product={product}
-                user={user}
-                submittedReviews={submittedReviews}
               />
             ))}
         </div>

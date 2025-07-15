@@ -11,11 +11,11 @@ import { CampaignEntity } from '@reviewsup/api/campaign';
 export function CampaignIdPage(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
+    productId: string;
     id: string;
   }>;
 }) {
-  const { lang, workspaceId, id } = use(props.params);
+  const { lang, productId, id } = use(props.params);
   const { findOne } = useCampaignContext();
   const [campaign, setCampaign] = useState<CampaignEntity | null>(null);
 
@@ -39,7 +39,7 @@ export function CampaignIdPage(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${workspaceId}/campaigns`}
+            href={`/${lang}/${productId}/campaigns`}
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl" />

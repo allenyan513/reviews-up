@@ -18,7 +18,7 @@ export const review = {
   getReviews: (
     request: FindAllReviewRequest,
   ): Promise<PaginateResponse<ReviewEntity>> =>
-    authFetch(`/reviews/workspaceId/${request.workspaceId}`, 'GET', {
+    authFetch(`/reviews/productId/${request.productId}`, 'GET', {
       page: request.page,
       pageSize: request.pageSize,
       sortBy: request.sortBy,
@@ -33,7 +33,7 @@ export const review = {
    */
   createReview: (
     dto: CreateReviewDto,
-    user?: UserEntity,
+    user?: UserEntity | undefined | null,
   ): Promise<ReviewEntity> => {
     if (!user) {
       return authFetch('/reviews/submit', 'POST', dto);

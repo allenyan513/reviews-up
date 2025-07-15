@@ -18,10 +18,10 @@ import { toLocalDateString } from '@/lib/utils';
 
 export function FormListItem(props: {
   lang: string;
-  workspaceId: string;
+  productId: string;
   item: FormEntity;
 }) {
-  const { lang, workspaceId, item } = props;
+  const { lang, productId, item } = props;
   const { deleteForm } = useFormContext();
   if (!item) {
     return null;
@@ -30,7 +30,7 @@ export function FormListItem(props: {
   return (
     <div className="flex flex-row justify-between items-center mb-4 w-full bg-white rounded-lg shadow-sm p-4 border border-gray-200 hover:shadow-md transition-shadow duration-200">
       <Link
-        href={`/${lang}/${workspaceId}/forms/${item.id}`}
+        href={`/${lang}/${productId}/forms/${item.id}`}
         key={item.id}
         className="flex items-center cursor-pointer flex-1"
       >

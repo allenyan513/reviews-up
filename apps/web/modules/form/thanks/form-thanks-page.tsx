@@ -9,11 +9,11 @@ import { FormThanksConfigView } from '@/modules/form/thanks/form-thanks-config-v
 export default function FormThanksPage(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
+    productId: string;
     id: string;
   }>;
 }) {
-  const { lang, id, workspaceId } = use(props.params);
+  const { lang, id, productId } = use(props.params);
   const { form, formConfig, setFormConfig, updateFormConfig } =
     useFormContext();
   if (!form || !formConfig) return null;

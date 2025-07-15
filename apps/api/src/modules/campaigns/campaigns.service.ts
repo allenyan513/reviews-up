@@ -70,7 +70,7 @@ export class CampaignsService {
     return this.prismaService.campaign.create({
       data: {
         userId: uid,
-        workspaceId: validatedDto.workspaceId,
+        productId: validatedDto.productId,
         formId: validatedDto.formId,
         name: validatedDto.name,
         fromName: validatedDto.fromName,
@@ -87,17 +87,17 @@ export class CampaignsService {
 
   async findAll(request: FindAllCampaignsRequest) {
     this.logger.debug('Fetching campaigns with pagination', request);
-    if (!request.workspaceId) {
+    if (!request.productId) {
       throw new Error('Workspace ID is required to fetch reviews');
     }
     const total = await this.prismaService.campaign.count({
       where: {
-        workspaceId: request.workspaceId,
+        productId: request.productId,
       },
     });
     const items = await this.prismaService.campaign.findMany({
       where: {
-        workspaceId: request.workspaceId,
+        productId: request.productId,
       },
       orderBy: {
         createdAt: 'desc',

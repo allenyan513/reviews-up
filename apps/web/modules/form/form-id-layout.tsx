@@ -34,12 +34,12 @@ const pageItems = [
 export default function FormIdLayout(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
+    productId: string;
     id: string;
   }>;
   children: React.ReactNode;
 }) {
-  const { lang, workspaceId, id } = use(props.params);
+  const { lang, productId, id } = use(props.params);
   const path = usePathname();
   const { fetchForm, form } = useFormContext();
   const router = useRouter();
@@ -57,7 +57,7 @@ export default function FormIdLayout(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${workspaceId}/forms`}
+            href={`/${lang}/${productId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl" />
@@ -73,7 +73,7 @@ export default function FormIdLayout(props: {
           {/*<Button*/}
           {/*  onClick={() => {*/}
           {/*    router.push(*/}
-          {/*      `/${lang}/${workspaceId}/campaigns/create?formId=${form.id}`,*/}
+          {/*      `/${lang}/${productId}/campaigns/create?formId=${form.id}`,*/}
           {/*    );*/}
           {/*  }}*/}
           {/*  variant="outline"*/}
@@ -114,7 +114,7 @@ export default function FormIdLayout(props: {
           {pageItems.map((item) => (
             <Link
               key={item.title}
-              href={`/${lang}/${workspaceId}/forms/${id}/${item.url}`}
+              href={`/${lang}/${productId}/forms/${id}/${item.url}`}
               className={cn(
                 'cursor-pointer flex flex-row gap-2 w-full items-center justify-start h-12 rounded px-4 font-semibold',
                 path.includes(item.url)

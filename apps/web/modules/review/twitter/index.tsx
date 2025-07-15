@@ -20,14 +20,14 @@ import Link from 'next/link';
 import { useSession } from '@/context/UserProvider';
 
 export function ReviewImportXDialog(props: {
-  workspaceId: string;
+  productId: string;
   formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
   onImportFailed?: (error: Error) => void;
 }) {
   const { user } = useSession();
-  const { workspaceId,formId, onImportSuccess, onImportFailed, onImportStart } = props;
+  const { productId,formId, onImportSuccess, onImportFailed, onImportStart } = props;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [tweetId, setTweetId] = useState<string>('');
   const [inputValue, setInputValue] = useState<string>('');
@@ -47,7 +47,7 @@ export function ReviewImportXDialog(props: {
 
   const submitReviews = async () => {
     try {
-      if (!workspaceId || !data) {
+      if (!productId || !data) {
         throw new Error('Workspace ID or tweet data is missing');
       }
       if (onImportStart) {
@@ -56,7 +56,7 @@ export function ReviewImportXDialog(props: {
       const parseData = parseTweet(data);
       await api.review.createReview(
         {
-          workspaceId: workspaceId,
+          productId: productId,
           formId: formId,
           rating: 5,
           message: parseData?.message,

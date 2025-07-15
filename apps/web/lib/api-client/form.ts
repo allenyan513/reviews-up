@@ -3,8 +3,8 @@ import { Form } from '@reviewsup/database/generated/client/client';
 import { authFetch } from './auth-fetch';
 
 export const form = {
-  getForms: (workspaceId: string): Promise<FormEntity[]> =>
-    authFetch(`/forms/workspaceId/${workspaceId}`, 'GET', {}),
+  getForms: (productId: string): Promise<FormEntity[]> =>
+    authFetch(`/forms/productId/${productId}`, 'GET', {}),
 
   getForm: (id: string): Promise<FormEntity> =>
     authFetch(`/forms/${id}`, 'GET', {}),

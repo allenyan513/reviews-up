@@ -2,11 +2,11 @@
 
 import { ReviewItem } from '../item/review-item';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 
 interface ListLayoutClientProps {
   items: ReviewEntity[];
-  config: ShowcaseConfig;
+  config: WidgetConfig;
 }
 
 export function ListLayoutClient(props: ListLayoutClientProps) {

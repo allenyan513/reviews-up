@@ -40,19 +40,20 @@ export function ProductItemView(props: { product: ProductEntity }) {
             ? product.description
             : 'YOUR PRODUCT DESCRIPTION'}
         </p>
-        <div className="flex flex-row items-center gap-2 text-sm">
-          <span className="text-yellow-500 font-bold">
-            {product.reviewRating}
-          </span>
-          <StarRating
-            className="mt-[1px]"
-            size={'sm'}
-            value={parseFloat(product?.reviewRating?.toString() || '0')}
-          />
-          <span className="text-black text-md">
-            ({product.reviewCount} reviews)
-          </span>
-        </div>
+        {/*todo*/}
+        {/*<div className="flex flex-row items-center gap-2 text-sm">*/}
+        {/*  <span className="text-yellow-500 font-bold">*/}
+        {/*    {product.reviewRating}*/}
+        {/*  </span>*/}
+        {/*  <StarRating*/}
+        {/*    className="mt-[1px]"*/}
+        {/*    size={'sm'}*/}
+        {/*    value={parseFloat(product?.reviewRating?.toString() || '0')}*/}
+        {/*  />*/}
+        {/*  <span className="text-black text-md">*/}
+        {/*    ({product.reviewCount} reviews)*/}
+        {/*  </span>*/}
+        {/*</div>*/}
       </Link>
     </div>
   );

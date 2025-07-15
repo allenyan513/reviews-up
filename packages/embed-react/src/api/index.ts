@@ -1,5 +1,5 @@
-import { showcase } from './showcase';
+import { widget } from './widget';
 
 export const api = {
-  showcase: showcase,
+  widget: widget,
 };

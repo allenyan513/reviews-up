@@ -29,10 +29,10 @@ import { useRouter } from 'next/navigation';
 function MyProductItem(props: {
   product: ProductEntity;
   lang: string;
-  workspaceId: string;
+  productId: string;
   onClickDelete: (productId: string) => void;
 }) {
-  const { product, lang, workspaceId, onClickDelete } = props;
+  const { product, lang, productId, onClickDelete } = props;
 
   return (
     <div
@@ -46,7 +46,7 @@ function MyProductItem(props: {
         </div>
         <div className="flex flex-row items-center gap-2 text-lg">
           <Link
-            href={`/${lang}/${workspaceId}/promotion/my-products/edit/${product.id}`}
+            href={`/${lang}/${productId}/promotion/my-products/edit/${product.id}`}
           >
             <FiEdit />
           </Link>
@@ -123,10 +123,10 @@ function MyProductItem(props: {
 export function PromotionMyProducts(props: {
   params: Promise<{
     lang: string;
-    workspaceId: string;
+    productId: string;
   }>;
 }) {
-  const { lang, workspaceId } = use(props.params);
+  const { lang, productId } = use(props.params);
   const [products, setProducts] = useState<ProductEntity[] | undefined>(
     undefined,
   );
@@ -153,12 +153,11 @@ export function PromotionMyProducts(props: {
   };
 
   const fetchData = async () => {
-    if (!workspaceId) {
+    if (!productId) {
       return;
     }
     api.product
       .findAll({
-        workspaceId: workspaceId,
         status: [
           // ProductStatus.draft,
           ProductStatus.waitingForAdminReview,
@@ -177,14 +176,14 @@ export function PromotionMyProducts(props: {
 
   useEffect(() => {
     fetchData();
-  }, [workspaceId]);
+  }, [productId]);
 
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${workspaceId}/forms`}
+            href={`/${lang}/${productId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
@@ -201,7 +200,7 @@ export function PromotionMyProducts(props: {
               variant: 'default',
               size: 'lg',
             })}
-            href={`/${lang}/${workspaceId}/promotion/my-products/new`}
+            href={`/${lang}/${productId}/promotion/my-products/new`}
           >
             <BiPlus className="text-2xl" />
             Submit Product
@@ -221,7 +220,7 @@ export function PromotionMyProducts(props: {
               product={product}
               key={product.id}
               lang={lang}
-              workspaceId={workspaceId}
+              productId={productId}
               onClickDelete={onClickDelete}
             />
           ))}
@@ -229,7 +228,7 @@ export function PromotionMyProducts(props: {
           <div className="col-span-2 text-center text-gray-500">
             <p>Submit your first product to start collecting reviews!</p>
             <Link
-              href={`/${lang}/${workspaceId}/promotion/my-products/new`}
+              href={`/${lang}/${productId}/promotion/my-products/new`}
               className={buttonVariants({
                 variant: 'default',
                 size: 'lg',

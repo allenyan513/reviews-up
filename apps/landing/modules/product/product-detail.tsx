@@ -56,7 +56,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             <div className="flex flex-row items-center gap-4">
               <Link
                 className="rounded-full bg-red-400 text-white px-3 py-2 inline-flex items-center gap-2 hover:bg-red-500 transition-colors duration-300"
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.formShortId}`}
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms`}
                 target="_blank"
               >
                 <BsPencil />
@@ -73,15 +73,15 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             </div>
             <div className="flex flex-row items-center gap-2 text-lg">
               <span className="text-yellow-500 font-bold">
-                {product.reviewRating}
+                {}
               </span>
               <StarRatingServer
                 className="mt-[1px]"
                 size={'md'}
-                value={parseFloat(product?.reviewRating?.toString() || '0')}
+                value={parseFloat('0')}
               />
               <span className="text-black text-md">
-                ({product.reviewCount} reviews)
+                (0 reviews)
               </span>
             </div>
 
@@ -102,12 +102,13 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
       <div className="flex flex-col md:grid-cols-12 md:grid gap-8 px-4 md:px-48 py-8 w-full">
         <div className="md:col-span-8 flex flex-col gap-4">
           <h2 className="h2">{product.name} Reviews</h2>
-          <ProductDetailReviews
-            showcaseShortId={product.showcaseShortId || ''}
-            options={{
-              url: process.env.NEXT_PUBLIC_API_URL as string,
-            }}
-          />
+          {/*todo*/}
+          {/*<ProductDetailReviews*/}
+          {/*  widgetShortId={product.widgetShortId || ''}*/}
+          {/*  options={{*/}
+          {/*    url: process.env.NEXT_PUBLIC_API_URL as string,*/}
+          {/*  }}*/}
+          {/*/>*/}
           <p className="h2">{product.name} Product Information</p>
           <div className="flex flex-col rounded border border-gray-300 px-5 py-4 gap-2 bg-white">
             {product.longDescription && (

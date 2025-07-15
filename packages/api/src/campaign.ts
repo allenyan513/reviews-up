@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 export const createCampaignSchema = z.object({
-  workspaceId: z.string().min(1, 'Workspace is required'),
+  productId: z.string().min(1, 'ProductId is required'),
   formId: z.string().min(1, 'Form ID is required'),
   formShortId: z.string().min(1, 'Form short ID is required'),
   name: z.string().min(1, 'Campaign name is required'),
@@ -26,7 +26,7 @@ export type UpdateCampaignDto = Partial<CreateCampaignDto>;
 export const campaignEntitySchema = z.object({
   id: z.string().min(1, 'Campaign ID is required'),
   userId: z.string().min(1, 'Campaign ID is required'),
-  workspaceId: z.string(),
+  productId: z.string(),
   formId: z.string(),
   formShortId: z.string(),
   name: z.string(),
@@ -45,7 +45,7 @@ export type CampaignEntity = z.infer<typeof campaignEntitySchema>;
 
 export const findAllCampaignsRequestSchema = z.object({
   userId: z.string().min(1, 'User ID is required'),
-  workspaceId: z.string().min(1, 'Workspace is required'),
+  productId: z.string().min(1, 'Product ID is required'),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(10),
   sortBy: z.string().default('createdAt'),

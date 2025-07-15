@@ -1,17 +1,17 @@
 'use client';
 import React, { Suspense } from 'react';
-import { ShowcaseClient } from '@reviewsup/embed-react';
+import { WidgetClient } from '@reviewsup/embed-react';
 
 export function ProductDetailReviews(props: {
-  showcaseShortId: string;
+  widgetShortId: string;
   options?: {
     url?: string;
   };
 }) {
-  const { showcaseShortId, options } = props;
+  const { widgetShortId, options } = props;
   return (
-    <ShowcaseClient
-      showcaseId={showcaseShortId}
+    <WidgetClient
+      widgetId={widgetShortId}
       options={{
         url: options?.url || process.env.NEXT_PUBLIC_API_URL || '',
       }}
