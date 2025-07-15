@@ -143,6 +143,12 @@ export class ProductsService {
         },
       });
       // Create the product directly
+      // calculate reviewRating and reviewCount to product when create
+      const showcaseEntity = await this.showcaseService.findOne(
+        uid,
+        dto.widgetId,
+      );
+
       const product = await this.prismaService.product.create({
         data: {
           workspaceId: dto.workspaceId,
@@ -150,6 +156,8 @@ export class ProductsService {
           formShortId: dto.formShortId,
           showcaseId: dto.widgetId,
           showcaseShortId: dto.widgetShortId,
+          reviewCount: showcaseEntity?.reviewCount || 0,
+          reviewRating: showcaseEntity?.reviewRating || 0,
           name: dto.name,
           url: dto.url,
           status: 'listing', // Set status to 'listing' for paid submissions
@@ -188,7 +196,7 @@ export class ProductsService {
     const pendingTasks = await this.prismaService.product.count({
       where: {
         status: {
-          in: ['pendingForReceive', 'pendingForSubmit', 'listing'], // Only count products that are pending or under review
+          in: ['pendingForReceive', 'listing'], // Only count products that are pending or under review
         },
         userId: {
           not: uid,
@@ -229,6 +237,10 @@ export class ProductsService {
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;
     const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';
+    const showcaseEntity = await this.showcaseService.findOne(
+      uid,
+      dto.widgetId,
+    );
     const product = await this.prismaService.product.create({
       data: {
         workspaceId: dto.workspaceId,
@@ -236,6 +248,8 @@ export class ProductsService {
         formShortId: dto.formShortId,
         showcaseId: dto.widgetId,
         showcaseShortId: dto.widgetShortId,
+        reviewCount: showcaseEntity?.reviewCount || 0,
+        reviewRating: showcaseEntity?.reviewRating || 0,
         name: dto.name,
         url: dto.url,
         status: status,
@@ -300,9 +314,6 @@ export class ProductsService {
       },
       take: request.pageSize || 10,
       skip: (request.page - 1) * (request.pageSize || 10),
-      // include:{
-      //   form: true, // Include the form relation
-      // }
       select: {
         id: true,
         name: true,
@@ -311,13 +322,11 @@ export class ProductsService {
         description: true,
         featured: true,
         formId: true,
-        form: {
-          select: {
-            id: true,
-            name: true,
-            Review: true,
-          },
-        },
+        formShortId: true,
+        showcaseId: true,
+        showcaseShortId: true,
+        reviewRating: true,
+        reviewCount: true,
         icon: true,
         screenshot: true,
         taskReviewCount: true,

@@ -17,6 +17,7 @@ export const formEntitySchema = z.object({
   workspaceId: z.string(),
   name: z.string().min(1, 'Form name is required'),
   reviewCount: z.number().optional(),
+  isBindProduct: z.boolean().optional().default(false),
   config: z.optional(z.lazy(() => formConfigSchema)),
   createdAt: z.date(),
   updatedAt: z.date(),

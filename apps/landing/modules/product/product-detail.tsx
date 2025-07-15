@@ -24,30 +24,6 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
   const { lang, slug } = props;
   const product = await fetchProductDetail(slug);
 
-  const renderRating = (product: ProductEntity) => {
-    if (!product.form) {
-      return null;
-    }
-    const reviews = (product.form.Review as ReviewEntity[]) || [];
-    const totalRating = reviews.reduce(
-      (acc, review) => acc + (review?.rating || 0),
-      0,
-    );
-    const rating = (totalRating / reviews.length).toFixed(1);
-
-    return (
-      <div className="flex flex-row items-center gap-2 text-lg">
-        <span className="text-yellow-500 font-bold">{rating}</span>
-        <StarRatingServer
-          className="mt-[1px]"
-          size={'md'}
-          value={parseFloat(rating)}
-        />
-        <span className="text-black text-md">({reviews.length} reviews)</span>
-      </div>
-    );
-  };
-
   return (
     <div>
       <div className="flex flex-col gap-8 pt-24 pb-8 px-4 md:px-48 bg-linear">
@@ -95,7 +71,19 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
                 <span>Visit {product.name}</span>
               </Link>
             </div>
-            {renderRating(product)}
+            <div className="flex flex-row items-center gap-2 text-lg">
+              <span className="text-yellow-500 font-bold">
+                {product.reviewRating}
+              </span>
+              <StarRatingServer
+                className="mt-[1px]"
+                size={'md'}
+                value={parseFloat(product?.reviewRating?.toString() || '0')}
+              />
+              <span className="text-black text-md">
+                ({product.reviewCount} reviews)
+              </span>
+            </div>
 
             <div className="flex flex-row items-center gap-4">
               <p className="font-semibold">Added On:</p>

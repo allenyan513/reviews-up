@@ -138,13 +138,13 @@ export function PromotionNewProduct(props: {
               <Link
                 target="_blank"
                 className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
-                href={`https://reviewsup.io/products/${slugify(
+                href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${slugify(
                   form.watch('name') || '',
                   { lower: true, strict: true },
                 )}`}
               >
                 <span>
-                  https://reviewsup.io/products/
+                  {process.env.NEXT_PUBLIC_WWW_URL}/products/
                   {slugify(form.watch('name') || '', {
                     lower: true,
                     strict: true,
@@ -160,13 +160,35 @@ export function PromotionNewProduct(props: {
                 className="w-full h-96 border rounded-md"
                 title="Form Preview"
               />
+              <Link
+                target="_blank"
+                className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}
+              >
+                <span>
+                  {process.env.NEXT_PUBLIC_APP_URL}/forms/
+                  {form.watch('formShortId')}
+                </span>
+                <BsBoxArrowUpRight />
+              </Link>
             </TabsContent>
             <TabsContent value="widget">
               <iframe
                 src={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
-                className="w-full h-96 border rounded-md"
+                className="w-full h-96 border rounded-md p-4"
                 title="Widget Preview"
               />
+              <Link
+                target="_blank"
+                className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
+              >
+                <span>
+                  {process.env.NEXT_PUBLIC_APP_URL}/showcases/
+                  {form.watch('widgetShortId')}
+                </span>
+                <BsBoxArrowUpRight />
+              </Link>
             </TabsContent>
           </Tabs>
         </div>

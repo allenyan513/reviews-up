@@ -50,9 +50,7 @@ export const createProductSchema = z.object({
     .string()
     .url('Invalid URL')
     .min(1, 'Screenshot URL is required'),
-  category: z
-    .nativeEnum(ProductCategory)
-    .default(ProductCategory.ai),
+  category: z.nativeEnum(ProductCategory).default(ProductCategory.ai),
   longDescription: z.string().optional(),
   features: z.string().optional(),
   useCase: z.string().optional(),
@@ -75,6 +73,8 @@ export const productSchema = z.object({
   formShortId: z.string().min(1, 'Form Short ID is required'),
   showcaseId: z.string().min(1, 'Showcase ID is required'),
   showcaseShortId: z.string().min(1, 'Showcase Short ID is required'),
+  reviewRating: z.number().min(0).max(5).default(0),
+  reviewCount: z.number().min(0).default(0),
   name: z
     .string()
     .min(1, 'Name is required')
@@ -102,9 +102,7 @@ export const productSchema = z.object({
     .string()
     .url('Invalid URL')
     .min(1, 'Screenshot URL is required'),
-  category: z
-    .nativeEnum(ProductCategory)
-    .default(ProductCategory.ai),
+  category: z.nativeEnum(ProductCategory).default(ProductCategory.ai),
   longDescription: z.string().optional(),
   features: z.string().optional(),
   useCase: z.string().optional(),

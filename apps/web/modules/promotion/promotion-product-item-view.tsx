@@ -1,16 +1,9 @@
 'use client';
 
-import React, { use, useEffect, useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
-import { buttonVariants } from '@reviewsup/ui/button';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
-import { cn } from '@/lib/utils';
 import { UserEntity } from '@reviewsup/api/users';
 import { StarRating } from '@reviewsup/embed-react';
 
@@ -20,81 +13,6 @@ export function ProductItemView(props: {
   submittedReviews?: ReviewEntity[];
 }) {
   const { product, user, submittedReviews } = props;
-
-  const renderButton = (product: ProductEntity) => {
-    let message = '';
-    if (product.userId === user?.id) {
-      message = "You can't review your own product.";
-    }
-
-    const formId = product.formId;
-    const hasSubmittedReview = submittedReviews?.some(
-      (review) => review.formId === formId,
-    );
-    if (hasSubmittedReview) {
-      // return <p>You have already submitted a review for this product.</p>;
-      message = 'You have already submitted a review for this product.';
-    }
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          {message ? (
-            <span
-              className={cn(
-                buttonVariants({
-                  variant: 'default',
-                  size: 'sm',
-                }),
-                'cursor-not-allowed opacity-50 mb-2 mx-2 text-sm',
-              )}
-            >
-              Leave a Review
-            </span>
-          ) : (
-            <Link
-              href={`/forms/${product.form?.shortId}`}
-              target={'_blank'}
-              className={cn(
-                buttonVariants({ variant: 'default', size: 'sm' }),
-                'mb-2 mx-2 text-sm',
-              )}
-            >
-              Leave a Review
-            </Link>
-          )}
-        </TooltipTrigger>
-        {message && (
-          <TooltipContent>
-            <p>{message}</p>
-          </TooltipContent>
-        )}
-      </Tooltip>
-    );
-  };
-
-  const renderRating = (product: ProductEntity) => {
-    if (!product.form) {
-      return null;
-    }
-    const reviews = (product.form.Review as ReviewEntity[]) || [];
-    const totalRating = reviews.reduce(
-      (acc, review) => acc + (review?.rating || 0),
-      0,
-    );
-    const rating = (totalRating / reviews.length).toFixed(1);
-
-    return (
-      <div className="flex flex-row items-center gap-2 text-sm">
-        <span className="text-yellow-500">{rating}</span>
-        <StarRating
-          className="mt-[1px]"
-          size={'sm'}
-          value={parseFloat(rating)}
-        />
-        <span className="text-gray-500">({reviews.length} reviews)</span>
-      </div>
-    );
-  };
 
   return (
     <div
@@ -135,12 +53,16 @@ export function ProductItemView(props: {
             ? product.description
             : 'YOUR PRODUCT DESCRIPTION'}
         </p>
-        {/*<div className="text-sm text-gray-500">*/}
-        {/*  <span>#{product.category}</span>*/}
-        {/*</div>*/}
-        {renderRating(product)}
+        <div className="flex flex-row items-center gap-2 text-sm">
+          <span className="text-yellow-500">{product.reviewRating}</span>
+          <StarRating
+            className="mt-[1px]"
+            size={'sm'}
+            value={parseFloat(product?.reviewRating?.toString() || '0')}
+          />
+          <span className="text-gray-500">({product.reviewCount} reviews)</span>
+        </div>
       </Link>
-      {/*{renderButton(product)}*/}
     </div>
   );
 }
