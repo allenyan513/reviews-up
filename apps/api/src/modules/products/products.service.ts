@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CrawlProductResponse,
@@ -19,7 +19,9 @@ import { S3Service } from '@src/modules/s3/s3.service';
 import * as fs from 'fs';
 import * as mime from 'mime-types';
 import { hash } from '@src/libs/utils';
-import { ShowcasesService } from '@src/modules/showcases/showcases.service';
+import { defaultUserData } from '@src/modules/users/default-data';
+import { FormsService } from '../forms/forms.service';
+import { WidgetsService } from '../widgets/widgets.service';
 
 @Injectable()
 export class ProductsService {
@@ -28,10 +30,84 @@ export class ProductsService {
   constructor(
     private prismaService: PrismaService,
     private orderService: OrdersService,
-    private showcaseService: ShowcasesService,
     private browserlessService: BrowserlessService,
     private s3Service: S3Service,
+    private formsService: FormsService,
+    private widgetsService: WidgetsService,
   ) {}
+
+  /**
+   * @param uid
+   * @param dto
+   */
+  async setup(uid: string, dto: CreateProductRequest) {
+    const slug = slugify(dto.name, {
+      lower: true,
+      strict: true,
+    });
+    //check if the product with the same slug already exists
+    const existingProduct = await this.prismaService.product.findUnique({
+      where: {
+        slug: slug,
+      },
+    });
+    if (existingProduct) {
+      this.logger.error(
+        `Product with slug ${slug} already exists for user ${uid}`,
+      );
+      throw new BadRequestException(`Product with slug ${slug} already exists`);
+    }
+    const newProduct = await this.prismaService.product.create({
+      data: {
+        userId: uid,
+        name: dto.name,
+        slug: slug,
+        url: dto.url,
+        status: 'waitingForAdminReview',
+        icon: dto.icon,
+        screenshot: dto.screenshot,
+        description: dto.description,
+        category: dto.category as ProductCategory,
+        longDescription: dto.longDescription,
+        features: dto.features,
+        useCase: dto.useCase,
+        howToUse: dto.howToUse,
+        faq: dto.faq,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
+    });
+
+    const defaultForm = await this.formsService.create(uid, {
+      name: defaultUserData.form,
+      productId: newProduct.id,
+    });
+    if (!defaultForm) {
+      throw new Error('Unable to create default workspace');
+    }
+    for (const review of defaultUserData.reviews) {
+      await this.prismaService.review.create({
+        data: {
+          productId: newProduct.id,
+          formId: defaultForm.id,
+          reviewerName: review.reviewerName,
+          reviewerImage: review.reviewerImage,
+          reviewerTitle: review.reviewerTitle,
+          rating: review.rating,
+          text: review.text,
+          status: review.status,
+        },
+      });
+    }
+    const defaultShowcase = await this.widgetsService.create(uid, {
+      productId: newProduct.id,
+      name: defaultUserData.widget,
+    });
+    if (!defaultShowcase) {
+      throw new Error('Unable to create default showcase');
+    }
+    return newProduct as ProductEntity;
+  }
 
   async crawlProductInfo(userId: string, url: string) {
     this.logger.debug(
@@ -79,7 +155,7 @@ export class ProductsService {
    */
   async create(
     uid: string,
-    dto: CreateProductRequest,
+    dto: UpdateProductRequest,
   ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
     this.logger.debug(`Creating review for user ${uid}`, dto);
     if (dto.submitOption === 'paid-submit') {
@@ -103,7 +179,7 @@ export class ProductsService {
    */
   async createPaidSubmit(
     uid: string,
-    dto: CreateProductRequest,
+    dto: UpdateProductRequest,
   ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
     // Check if the user has enough balance for paid submission
     const user = await this.prismaService.user.findUnique({
@@ -123,9 +199,6 @@ export class ProductsService {
       const session = await this.orderService.createOneTimePayment(uid, {
         productId: stripeProductId,
       });
-      // save product as a draft
-      // await this.save(uid, dto);
-      // Return the session for payment
       return {
         code: 600,
         message: 'Insufficient balance for paid submission',
@@ -142,45 +215,16 @@ export class ProductsService {
           },
         },
       });
-      // Create the product directly
-      // calculate reviewRating and reviewCount to product when create
-      const showcaseEntity = await this.showcaseService.findOne(
-        uid,
-        dto.widgetId,
-      );
-
-      const product = await this.prismaService.product.create({
+      const product = await this.prismaService.product.update({
+        where: {
+          id: dto.id,
+        },
         data: {
-          workspaceId: dto.workspaceId,
-          formId: dto.formId,
-          formShortId: dto.formShortId,
-          showcaseId: dto.widgetId,
-          showcaseShortId: dto.widgetShortId,
-          reviewCount: showcaseEntity?.reviewCount || 0,
-          reviewRating: showcaseEntity?.reviewRating || 0,
-          name: dto.name,
-          url: dto.url,
-          status: 'listing', // Set status to 'listing' for paid submissions
-          featured: true, // Mark as featured, because it's a paid submission
-          icon: dto.icon,
-          screenshot: dto.screenshot,
-          category: dto.category as ProductCategory,
-          description: dto.description,
-          longDescription: dto.longDescription,
-          features: dto.features,
-          useCase: dto.useCase,
-          howToUse: dto.howToUse,
-          faq: dto.faq,
-          //-----------//
-          userId: uid,
-          slug: slugify(dto.name, {
-            lower: true,
-            strict: true,
-          }),
+          status: 'listing',
+          featured: true,
           taskReviewCount: 0,
           submitReviewCount: 0,
           receiveReviewCount: 0,
-          createdAt: new Date(),
           updatedAt: new Date(),
         },
       });
@@ -217,7 +261,7 @@ export class ProductsService {
    */
   async createFreeSubmit(
     uid: string,
-    dto: CreateProductRequest,
+    dto: UpdateProductRequest,
   ): Promise<RRResponse<ProductEntity>> {
     //step1. verify if the widget is embedded in the url website
     // const verifyResult = await this.showcaseService.verifyWidgetEmbedding(uid, {
@@ -237,41 +281,15 @@ export class ProductsService {
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;
     const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';
-    const showcaseEntity = await this.showcaseService.findOne(
-      uid,
-      dto.widgetId,
-    );
-    const product = await this.prismaService.product.create({
+    const product = await this.prismaService.product.update({
+      where: {
+        id: dto.id,
+      },
       data: {
-        workspaceId: dto.workspaceId,
-        formId: dto.formId,
-        formShortId: dto.formShortId,
-        showcaseId: dto.widgetId,
-        showcaseShortId: dto.widgetShortId,
-        reviewCount: showcaseEntity?.reviewCount || 0,
-        reviewRating: showcaseEntity?.reviewRating || 0,
-        name: dto.name,
-        url: dto.url,
         status: status,
-        icon: dto.icon,
-        screenshot: dto.screenshot,
-        category: dto.category as ProductCategory,
-        description: dto.description,
-        longDescription: dto.longDescription,
-        features: dto.features,
-        useCase: dto.useCase,
-        howToUse: dto.howToUse,
-        faq: dto.faq,
-        //-----------//
-        userId: uid,
-        slug: slugify(dto.name, {
-          lower: true,
-          strict: true,
-        }),
         taskReviewCount: taskReviewCount,
         submitReviewCount: 0,
         receiveReviewCount: 0,
-        createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
@@ -287,10 +305,9 @@ export class ProductsService {
     request: FindAllRequest,
   ): Promise<ProductEntity[]> {
     this.logger.debug('request to findAll products', request);
-    const { workspaceId, status } = request;
+    const { status } = request;
     const items = (await this.prismaService.product.findMany({
       where: {
-        ...(workspaceId && { workspaceId: workspaceId }),
         ...(status && {
           status: {
             in: status as ProductStatus[], // Filter by status if provided
@@ -314,25 +331,26 @@ export class ProductsService {
       },
       take: request.pageSize || 10,
       skip: (request.page - 1) * (request.pageSize || 10),
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        status: true,
-        description: true,
-        featured: true,
-        formId: true,
-        formShortId: true,
-        showcaseId: true,
-        showcaseShortId: true,
-        reviewRating: true,
-        reviewCount: true,
-        icon: true,
-        screenshot: true,
-        taskReviewCount: true,
-        submitReviewCount: true,
-        receiveReviewCount: true,
-      },
+      //todo
+      // select: {
+      //   id: true,
+      //   name: true,
+      //   slug: true,
+      //   status: true,
+      //   description: true,
+      //   featured: true,
+      //   formId: true,
+      //   formShortId: true,
+      //   showcaseId: true,
+      //   showcaseShortId: true,
+      //   reviewRating: true,
+      //   reviewCount: true,
+      //   icon: true,
+      //   screenshot: true,
+      //   taskReviewCount: true,
+      //   submitReviewCount: true,
+      //   receiveReviewCount: true,
+      // },
     })) as ProductEntity[];
     return items;
   }
@@ -489,20 +507,21 @@ export class ProductsService {
 
   async findBySlug(slug: string) {
     this.logger.debug(`Finding product by slug: ${slug}`);
-    const product = await this.prismaService.product.findUnique({
+    const product = (await this.prismaService.product.findUnique({
       where: {
         slug: slug,
       },
-      include: {
-        form: {
-          select: {
-            id: true,
-            name: true,
-            Review: true, // Include reviews related to the form
-          },
-        },
-      },
-    });
+      //todo
+      // include: {
+      //   form: {
+      //     select: {
+      //       id: true,
+      //       name: true,
+      //       Review: true, // Include reviews related to the form
+      //     },
+      //   },
+      // },
+    })) as ProductEntity;
     if (!product) {
       this.logger.warn(`Product with slug ${slug} not found`);
       return null;

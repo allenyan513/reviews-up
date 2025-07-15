@@ -17,8 +17,8 @@ export const DailyAnalyticsEmail = (props: {
   totalUsers: number;
   totalAccount: number;
   totalForms: number;
-  totalShowcase: number;
-  totalWorkspace: number;
+  totalWidgets: number;
+  totalProducts: number;
   totalReview: number;
   totalReviewMedia: number;
   totalCampaign: number;
@@ -28,8 +28,8 @@ export const DailyAnalyticsEmail = (props: {
     totalUsers,
     totalAccount,
     totalForms,
-    totalShowcase,
-    totalWorkspace,
+    totalWidgets,
+    totalProducts,
     totalReview,
     totalReviewMedia,
     totalCampaign,
@@ -72,12 +72,12 @@ export const DailyAnalyticsEmail = (props: {
                 <td style={tdValue}>{totalForms}</td>
               </tr>
               <tr>
-                <td style={tdLabel}>Total Showcases</td>
-                <td style={tdValue}>{totalShowcase}</td>
+                <td style={tdLabel}>Total Widgets</td>
+                <td style={tdValue}>{totalWidgets}</td>
               </tr>
               <tr>
-                <td style={tdLabel}>Total Workspaces</td>
-                <td style={tdValue}>{totalWorkspace}</td>
+                <td style={tdLabel}>Total Products</td>
+                <td style={tdValue}>{totalProducts  }</td>
               </tr>
               <tr>
                 <td style={tdLabel}>Total Reviews</td>

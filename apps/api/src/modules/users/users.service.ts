@@ -1,20 +1,12 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { UserEntity } from '@reviewsup/api/users';
-import { generateShortId } from '@src/libs/shortId';
-import { FormsService } from '../forms/forms.service';
-import { ShowcasesService } from '../showcases/showcases.service';
-import { defaultUserData } from './default-data';
 
 @Injectable()
 export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
-  constructor(
-    private prismaService: PrismaService,
-    private formService: FormsService,
-    private showcasesService: ShowcasesService,
-  ) {}
+  constructor(private prismaService: PrismaService) {}
 
   async getProfile(userId: string): Promise<UserEntity> {
     if (!userId) {
@@ -30,11 +22,10 @@ export class UsersService {
         balance: true,
         avatarUrl: true,
         subscriptionTier: true,
-        Workspace: {
+        products: {
           select: {
             id: true,
             name: true,
-            shortId: true,
           },
         },
       },
@@ -58,7 +49,7 @@ export class UsersService {
     return this.prismaService.user.findUnique({
       where: { id: slug },
       include: {
-        Workspace: true,
+        products: true,
         reviewerReviews: true,
         ownerReviews: true,
       },
@@ -73,47 +64,48 @@ export class UsersService {
    * form下创建一个默认的widget
    */
   async addDefaultUserData(user: UserEntity) {
-    if (!user) {
-      throw new Error('User is required to create default workspace and form');
-    }
-    const defaultWorkspace = await this.prismaService.workspace.create({
-      data: {
-        shortId: generateShortId(),
-        name: defaultUserData.workspace,
-        userId: user.id,
-      },
-    });
-    if (!defaultWorkspace) {
-      throw new Error('Unable to create default workspace');
-    }
-    const defaultForm = await this.formService.create(user.id, {
-      name: defaultUserData.form,
-      workspaceId: defaultWorkspace.id,
-    });
-    if (!defaultForm) {
-      throw new Error('Unable to create default workspace');
-    }
-    for (const review of defaultUserData.reviews) {
-      await this.prismaService.review.create({
-        data: {
-          workspaceId: defaultWorkspace.id,
-          formId: defaultForm.id,
-          reviewerName: review.reviewerName,
-          reviewerImage: review.reviewerImage,
-          reviewerTitle: review.reviewerTitle,
-          rating: review.rating,
-          text: review.text,
-          status: review.status,
-        },
-      });
-    }
-    const defaultShowcase = await this.showcasesService.create(user.id, {
-      workspaceId: defaultWorkspace.id,
-      name: defaultUserData.showcase,
-    });
-    if (!defaultShowcase) {
-      throw new Error('Unable to create default showcase');
-    }
+    //todo no more default user data
+    // if (!user) {
+    //   throw new Error('User is required to create default workspace and form');
+    // }
+    // const defaultWorkspace = await this.prismaService.workspace.create({
+    //   data: {
+    //     shortId: generateShortId(),
+    //     name: defaultUserData.workspace,
+    //     userId: user.id,
+    //   },
+    // });
+    // if (!defaultWorkspace) {
+    //   throw new Error('Unable to create default workspace');
+    // }
+    // const defaultForm = await this.formService.create(user.id, {
+    //   name: defaultUserData.form,
+    //   productId: defaultWorkspace.id,
+    // });
+    // if (!defaultForm) {
+    //   throw new Error('Unable to create default workspace');
+    // }
+    // for (const review of defaultUserData.reviews) {
+    //   await this.prismaService.review.create({
+    //     data: {
+    //       productId: defaultWorkspace.id,
+    //       formId: defaultForm.id,
+    //       reviewerName: review.reviewerName,
+    //       reviewerImage: review.reviewerImage,
+    //       reviewerTitle: review.reviewerTitle,
+    //       rating: review.rating,
+    //       text: review.text,
+    //       status: review.status,
+    //     },
+    //   });
+    // }
+    // const defaultShowcase = await this.showcasesService.create(user.id, {
+    //   productId: defaultWorkspace.id,
+    //   name: defaultUserData.showcase,
+    // });
+    // if (!defaultShowcase) {
+    //   throw new Error('Unable to create default showcase');
+    // }
   }
 
   async deleteUser(userId: string) {

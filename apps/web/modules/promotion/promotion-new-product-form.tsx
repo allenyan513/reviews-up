@@ -45,19 +45,18 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { ShowcaseEntity } from '@reviewsup/api/showcases';
-import { ShowcaseEmbedDialog } from '@/modules/showcase/showcase-embed-dialog';
+import { WidgetEntity } from '@reviewsup/api/widgets';
+import { WidgetEmbedDialog } from '@/modules/widget/widget-embed-dialog';
 import { useVerifyEmbed } from '@/hooks/use-verify-embed';
 
 export function PromotionNewProductForm(props: {
   lang: string;
-  workspaceId: string;
+  productId: string;
   form: UseFormReturn;
   mode: 'new' | 'edit';
   id?: string;
 }) {
-  const { lang, workspaceId, form, mode, id } = props;
-  const productId = id || '';
+  const { lang, productId, form, mode, id } = props;
   const router = useRouter();
 
   const { user } = useUserContext();
@@ -65,7 +64,7 @@ export function PromotionNewProductForm(props: {
   const [loading, setLoading] = useState<boolean>(false);
   const [isCrawling, setIsCrawling] = useState<boolean>(false);
   const [forms, setForms] = useState<FormEntity[]>([]);
-  const [widgets, setWidgets] = useState<ShowcaseEntity[]>([]);
+  const [widgets, setWidgets] = useState<WidgetEntity[]>([]);
   const [formsLoaded, setFormsLoaded] = useState(false); // New state to track if forms are loaded
   const [widgetsLoaded, setWidgetsLoaded] = useState(false); // New state to track if widgets are loaded
   const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
@@ -125,7 +124,7 @@ export function PromotionNewProductForm(props: {
       } else {
         setLoading(false);
         toast.success('Product Submitted Successfully!');
-        router.push(`/${lang}/${workspaceId}/promotion/my-products`);
+        router.push(`/${lang}/${productId}/promotion/my-products`);
       }
     } catch (error) {
       setLoading(false);
@@ -134,11 +133,11 @@ export function PromotionNewProductForm(props: {
   };
 
   useEffect(() => {
-    if (!workspaceId) {
+    if (!productId) {
       return;
     }
     api.form
-      .getForms(workspaceId)
+      .getForms(productId)
       .then((response) => {
         setForms(response);
         setFormsLoaded(true);
@@ -163,8 +162,8 @@ export function PromotionNewProductForm(props: {
         console.error('Error fetching forms:', error);
         setFormsLoaded(true);
       });
-    api.showcase
-      .getShowcases(workspaceId)
+    api.widget
+      .getWidgets(productId)
       .then((response) => {
         const widgets = response.items;
         setWidgets(widgets);
@@ -186,7 +185,7 @@ export function PromotionNewProductForm(props: {
         }
       })
       .catch((error) => {
-        console.error('Error fetching showcases:', error);
+        console.error('Error fetching widgets:', error);
       });
 
     api.product
@@ -197,7 +196,7 @@ export function PromotionNewProductForm(props: {
       .catch((error) => {
         setTaskReviewCount(10);
       });
-  }, [workspaceId, form, mode]);
+  }, [productId, form, mode]);
 
   return (
     <div className="md:col-span-8 flex flex-col">
@@ -431,7 +430,7 @@ export function PromotionNewProductForm(props: {
                           <SelectContent>
                             <Link
                               target="_blank"
-                              href={`/${workspaceId}/forms`}
+                              href={`/${productId}/forms`}
                               className="flex flex-row items-center gap-1 text-sm h-8 cursor-pointer"
                             >
                               <BsPlus />
@@ -458,7 +457,7 @@ export function PromotionNewProductForm(props: {
                         />
                       )}
                       <Link
-                        href={`/${lang}/${workspaceId}/forms/${form.watch('formId')}/default`}
+                        href={`/${lang}/${productId}/forms/${form.watch('formId')}/default`}
                         target="_blank"
                         className={cn(
                           buttonVariants({ variant: 'default' }),
@@ -514,7 +513,7 @@ export function PromotionNewProductForm(props: {
                             <SelectGroup>
                               <Link
                                 target="_blank"
-                                href={`/${workspaceId}/showcases`}
+                                href={`/${productId}/widgets`}
                                 className="flex flex-row items-center gap-1 text-sm h-8 cursor-pointer"
                               >
                                 <BsPlus />
@@ -540,7 +539,7 @@ export function PromotionNewProductForm(props: {
                         />
                       )}
                       <Link
-                        href={`/${lang}/${workspaceId}/showcases/${form.watch('widgetId')}`}
+                        href={`/${lang}/${productId}/widgets/${form.watch('widgetId')}`}
                         target="_blank"
                         className={cn(
                           buttonVariants({ variant: 'default' }),
@@ -691,14 +690,14 @@ export function PromotionNewProductForm(props: {
                   </span>
                   reviews or testimonials for other products which listing in
                   <Link
-                    href={`/${lang}/${workspaceId}/promotion/pending-listings`}
+                    href={`/${lang}/${productId}/promotion/pending-listings`}
                     className="text-blue-500 hover:underline px-1"
                   >
                     pending
                   </Link>
                   or
                   <Link
-                    href={`/${lang}/${workspaceId}/promotion/public-listings`}
+                    href={`/${lang}/${productId}/promotion/public-listings`}
                     className="text-blue-500 hover:underline px-1"
                   >
                     public
@@ -706,13 +705,13 @@ export function PromotionNewProductForm(props: {
                 </li>
                 <li className="">
                   <span>(Optional) </span>
-                  <ShowcaseEmbedDialog
-                    showcaseShortId={form.watch('widgetShortId') || ''}
+                  <WidgetEmbedDialog
+                    widgetShortId={form.watch('widgetShortId') || ''}
                   >
                     <span className="text-blue-500 hover:underline cursor-pointer">
                       Embed reviewing widget{' '}
                     </span>
-                  </ShowcaseEmbedDialog>
+                  </WidgetEmbedDialog>
                   on
                   <Link
                     href={form.watch('url')}
@@ -730,7 +729,7 @@ export function PromotionNewProductForm(props: {
                   </span>
                   {/*<VerifyWidgetEmbedding*/}
                   {/*  url={form.watch('url')}*/}
-                  {/*  showcaseShortId={form.watch('widgetShortId')}*/}
+                  {/*  widgetShortId={form.watch('widgetShortId')}*/}
                   {/*>*/}
                   {/*  Verify*/}
                   {/*</VerifyWidgetEmbedding>*/}
@@ -830,7 +829,7 @@ export function PromotionNewProductForm(props: {
                 </AlertDialogContent>
               </AlertDialog>
               <p className="text-sm text-gray-500 mt-2">
-                Current Balance: ${user?.balance || 0}
+                Current Balance: ${user?.balance?.toString() || 0}
               </p>
             </div>
           </div>

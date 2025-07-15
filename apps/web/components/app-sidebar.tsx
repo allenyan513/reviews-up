@@ -42,7 +42,7 @@ const data = {
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const lang = props.lang;
-  const { user, defaultWorkspace, signOut, deleteAccount } = useUserContext();
+  const { user, defaultProduct, signOut, deleteAccount } = useUserContext();
   const path = usePathname();
   return (
     <Sidebar collapsible="offcanvas" {...props}>
@@ -66,35 +66,35 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain
-          workspace={defaultWorkspace}
+          product={defaultProduct}
           items={[
             {
               title: 'Reviews',
-              url: `/${lang}/${defaultWorkspace?.id}/reviews/all`,
+              url: `/${lang}/${defaultProduct?.id}/reviews/all`,
               icon: IconStar,
               active: false,
               children: [
                 {
                   title: 'All',
-                  url: `/${lang}/${defaultWorkspace?.id}/reviews/all`,
+                  url: `/${lang}/${defaultProduct?.id}/reviews/all`,
                   icon: IconList,
                   active: path.includes('/reviews/all'),
                 },
                 {
                   title: 'Pending',
-                  url: `/${lang}/${defaultWorkspace?.id}/reviews/pending`,
+                  url: `/${lang}/${defaultProduct?.id}/reviews/pending`,
                   icon: IconHourglassEmpty,
                   active: path.includes('/reviews/pending'),
                 },
                 {
                   title: 'Public',
-                  url: `/${lang}/${defaultWorkspace?.id}/reviews/public`,
+                  url: `/${lang}/${defaultProduct?.id}/reviews/public`,
                   icon: IconCheckbox,
                   active: path.includes('/reviews/public'),
                 },
                 {
                   title: 'Hidden',
-                  url: `/${lang}/${defaultWorkspace?.id}/reviews/hidden`,
+                  url: `/${lang}/${defaultProduct?.id}/reviews/hidden`,
                   icon: IconForbid2,
                   active: path.includes('/reviews/hidden'),
                 },
@@ -103,37 +103,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             {
               title: 'Widgets',
-              url: `/${lang}/${defaultWorkspace?.id}/showcases`,
+              url: `/${lang}/${defaultProduct?.id}/widgets`,
               icon: IconCode,
-              active: path.includes('/showcases'),
+              active: path.includes('/widgets'),
             },
             {
               title: 'Forms',
-              url: `/${lang}/${defaultWorkspace?.id}/forms`,
+              url: `/${lang}/${defaultProduct?.id}/forms`,
               icon: IconTable,
               active: path.includes('/forms'),
             },
             {
               title: 'Launch',
-              url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
+              url: `/${lang}/${defaultProduct?.id}/promotion/my-products`,
               icon: IconRocket,
               active: false,
               children: [
                 {
                   title: 'My products',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/my-products`,
+                  url: `/${lang}/${defaultProduct?.id}/promotion/my-products`,
                   icon: IconUser,
                   active: path.includes('/promotion/my-products'),
                 },
                 {
                   title: 'Pending',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/pending-listings`,
+                  url: `/${lang}/${defaultProduct?.id}/promotion/pending-listings`,
                   icon: IconHourglassEmpty,
                   active: path.includes('/promotion/pending-listings'),
                 },
                 {
                   title: 'Public',
-                  url: `/${lang}/${defaultWorkspace?.id}/promotion/public-listings`,
+                  url: `/${lang}/${defaultProduct?.id}/promotion/public-listings`,
                   icon: IconCheckbox,
                   active: path.includes('/promotion/public-listings'),
                 },
@@ -142,7 +142,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             {
               title: 'Settings',
-              url: `/${lang}/settings`,
+              url: `/${lang}/${defaultProduct?.id}/settings`,
               icon: IconSettings,
               active: path.includes('/settings'),
             },

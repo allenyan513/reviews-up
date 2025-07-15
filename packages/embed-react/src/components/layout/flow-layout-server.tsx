@@ -1,10 +1,10 @@
 import { FlowLayoutClient } from './flow-layout-client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 
 interface FlowLayoutServerProps {
   items: ReviewEntity[];
-  config?: ShowcaseConfig;
+  config?: WidgetConfig;
 }
 
 export function FlowLayoutServer({ items, config }: FlowLayoutServerProps) {

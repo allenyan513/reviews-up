@@ -6,10 +6,10 @@ import { Metadata } from 'next';
 import { HowItWorks } from '@/components/landing/how-it-works';
 import FAQ from '@/components/landing/faq';
 import { hero3 } from '@/data/hero';
-import { ShowcaseWrapper } from '@/components/landing/showcase';
+import { WidgetWrapper } from '@/components/landing/widget';
 import { Badge } from '@/components/badge';
 import { useTranslate } from '@/locales/dictionaries';
-import { getShowcaseData } from '@/data/showcases';
+import { getWidgetData } from '@/data/widgets';
 import { featureData } from '@/data/features';
 import { pricingData } from '@/data/pricings';
 import { faqData } from '@/data/faqs';
@@ -49,7 +49,7 @@ export default async function LandingPage(props: {
 }) {
   const { lang } = await props.params;
   const t = await useTranslate(lang);
-  const showcaseData = getShowcaseData();
+  const widgetData = getWidgetData();
 
   return (
     <div className="flex flex-col w-full items-center gap-8 md:gap-12">
@@ -66,10 +66,10 @@ export default async function LandingPage(props: {
       />
 
       <div id="widget" />
-      <ShowcaseWrapper
-        title={t(showcaseData.title)}
-        subtitle={showcaseData.subtitle}
-        items={showcaseData.items}
+      <WidgetWrapper
+        title={t(widgetData.title)}
+        subtitle={widgetData.subtitle}
+        items={widgetData.items}
       />
 
       <div id="form" />

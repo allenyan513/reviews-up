@@ -1,14 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { PoweredBy } from '@reviewsup/embed-react';
 import { useFormContext } from '@/modules/form/context/FormProvider';
-import { Divider } from '@/components/divider';
 import { FormDefaultSubmitView } from '@/modules/form/default/form-default-submit-view';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { useSession, useUserContext } from '@/context/UserProvider';
-import { ReviewsupAvatar } from '@reviewsup/ui/reviewsup-avatar';
-import Link from 'next/link';
 
 /**
  *
@@ -17,13 +12,13 @@ import Link from 'next/link';
  */
 export function FormDefaultPreviewView(props: {
   id: string;
-  workspaceId: string;
+  productId: string;
   lang: string;
   shortId: string;
   mode: 'edit' | 'public';
   className?: string;
 }) {
-  const { id, workspaceId, lang, shortId, mode, className } = props;
+  const { id, productId, lang, shortId, mode, className } = props;
   const { formConfig } = useFormContext();
   const { signIn } = useUserContext();
   const { user } = useSession({
@@ -31,7 +26,7 @@ export function FormDefaultPreviewView(props: {
   });
   if (
     !id ||
-    !workspaceId ||
+    !productId ||
     !shortId ||
     !formConfig ||
     !formConfig.brand ||
@@ -97,7 +92,7 @@ export function FormDefaultPreviewView(props: {
         </div>
         <FormDefaultSubmitView
           id={id}
-          workspaceId={workspaceId}
+          productId={productId}
           lang={lang}
           shortId={shortId}
           mode={mode}

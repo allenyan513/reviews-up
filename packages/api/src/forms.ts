@@ -1,8 +1,7 @@
 import { z } from 'zod';
-import { reviewEntitySchema } from './reviews';
 
 export const createFormSchema = z.object({
-  workspaceId: z.string().min(1, 'Workspace is required'),
+  productId: z.string().min(1, 'Product is required'),
   name: z.string().min(1, 'Form name is required'),
   config: z.lazy(() => formConfigSchema).optional(),
 });
@@ -14,7 +13,7 @@ export const formEntitySchema = z.object({
   id: z.string(),
   shortId: z.string().min(1, 'Short ID is required'),
   userId: z.string(),
-  workspaceId: z.string(),
+  productId: z.string(),
   name: z.string().min(1, 'Form name is required'),
   reviewCount: z.number().optional(),
   isBindProduct: z.boolean().optional().default(false),

@@ -18,7 +18,7 @@ import { ImportLinkedInDialog } from './linkedin';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultWorkspace, user } = useUserContext();
+  const { defaultProduct, user } = useUserContext();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -36,7 +36,7 @@ export default function ReviewImportDialog() {
           <label>Import Reviews from Third Platform</label>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <ReviewImportXDialog
-              workspaceId={defaultWorkspace?.id || ''}
+              productId={defaultProduct?.id || ''}
               formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
@@ -48,7 +48,7 @@ export default function ReviewImportDialog() {
               }}
             />
             <ReviewImportTiktokDialog
-              workspaceId={defaultWorkspace?.id || ''}
+              productId={defaultProduct?.id || ''}
               formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
@@ -60,7 +60,7 @@ export default function ReviewImportDialog() {
               }}
             ></ReviewImportTiktokDialog>
             <ReviewImportGoogleMapDialog
-              workspaceId={defaultWorkspace?.id || ''}
+              productId={defaultProduct?.id || ''}
               formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {
@@ -72,7 +72,7 @@ export default function ReviewImportDialog() {
               }}
             />
             <ImportLinkedInDialog
-              workspaceId={defaultWorkspace?.id || ''}
+              productId={defaultProduct?.id || ''}
               formId={undefined}
               onImportStart={() => {}}
               onImportSuccess={() => {

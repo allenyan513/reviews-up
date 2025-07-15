@@ -19,19 +19,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@reviewsup/ui/tabs';
 export function PromotionNewProduct(props: {
   mode: 'new' | 'edit';
   lang: string;
-  workspaceId: string;
+  productId: string;
   id?: string;
 }) {
-  const { lang, workspaceId, id, mode } = props;
-  const productId = id || '';
+  const { lang, productId, id, mode } = props;
   const form = useForm<CreateProductRequest>({
     resolver: zodResolver(createProductSchema),
     defaultValues: {
-      workspaceId: workspaceId,
-      formId: '',
-      formShortId: '',
-      widgetId: '',
-      widgetShortId: '',
       name: '',
       description: '',
       url: '',
@@ -56,11 +50,6 @@ export function PromotionNewProduct(props: {
       .then((product) => {
         if (product) {
           form.reset({
-            workspaceId: product.workspaceId,
-            formId: product.formId,
-            formShortId: product.formShortId || '',
-            widgetId: product.showcaseId,
-            widgetShortId: product.showcaseShortId || '',
             name: product.name,
             description: product.description || '',
             url: product.url,
@@ -87,7 +76,7 @@ export function PromotionNewProduct(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${workspaceId}/forms`}
+            href={`/${lang}/${productId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
@@ -104,7 +93,7 @@ export function PromotionNewProduct(props: {
       <div className="flex flex-col md:grid md:grid-cols-12 gap-8">
         <PromotionNewProductForm
           lang={lang}
-          workspaceId={workspaceId}
+          productId={productId}
           form={form}
           mode={mode}
           id={productId || ''}
@@ -113,8 +102,8 @@ export function PromotionNewProduct(props: {
           <Tabs defaultValue="product">
             <TabsList>
               <TabsTrigger value="product">Product</TabsTrigger>
-              <TabsTrigger value="form">Form</TabsTrigger>
-              <TabsTrigger value="widget">Widget</TabsTrigger>
+              {/*<TabsTrigger value="form">Form</TabsTrigger>*/}
+              {/*<TabsTrigger value="widget">Widget</TabsTrigger>*/}
             </TabsList>
             <TabsContent value="product">
               <ProductItemView
@@ -154,42 +143,42 @@ export function PromotionNewProduct(props: {
               </Link>
             </TabsContent>
 
-            <TabsContent value="form">
-              <iframe
-                src={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}
-                className="w-full h-96 border rounded-md"
-                title="Form Preview"
-              />
-              <Link
-                target="_blank"
-                className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}
-              >
-                <span>
-                  {process.env.NEXT_PUBLIC_APP_URL}/forms/
-                  {form.watch('formShortId')}
-                </span>
-                <BsBoxArrowUpRight />
-              </Link>
-            </TabsContent>
-            <TabsContent value="widget">
-              <iframe
-                src={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
-                className="w-full h-96 border rounded-md p-4"
-                title="Widget Preview"
-              />
-              <Link
-                target="_blank"
-                className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/showcases/${form.watch('widgetShortId')}`}
-              >
-                <span>
-                  {process.env.NEXT_PUBLIC_APP_URL}/showcases/
-                  {form.watch('widgetShortId')}
-                </span>
-                <BsBoxArrowUpRight />
-              </Link>
-            </TabsContent>
+            {/*<TabsContent value="form">*/}
+            {/*  <iframe*/}
+            {/*    src={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}*/}
+            {/*    className="w-full h-96 border rounded-md"*/}
+            {/*    title="Form Preview"*/}
+            {/*  />*/}
+            {/*  <Link*/}
+            {/*    target="_blank"*/}
+            {/*    className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"*/}
+            {/*    href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${form.watch('formShortId')}`}*/}
+            {/*  >*/}
+            {/*    <span>*/}
+            {/*      {process.env.NEXT_PUBLIC_APP_URL}/forms/*/}
+            {/*      {form.watch('formShortId')}*/}
+            {/*    </span>*/}
+            {/*    <BsBoxArrowUpRight />*/}
+            {/*  </Link>*/}
+            {/*</TabsContent>*/}
+            {/*<TabsContent value="widget">*/}
+            {/*  <iframe*/}
+            {/*    src={`${process.env.NEXT_PUBLIC_APP_URL}/widgets/${form.watch('widgetShortId')}`}*/}
+            {/*    className="w-full h-96 border rounded-md p-4"*/}
+            {/*    title="Widget Preview"*/}
+            {/*  />*/}
+            {/*  <Link*/}
+            {/*    target="_blank"*/}
+            {/*    className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"*/}
+            {/*    href={`${process.env.NEXT_PUBLIC_APP_URL}/widgets/${form.watch('widgetShortId')}`}*/}
+            {/*  >*/}
+            {/*    <span>*/}
+            {/*      {process.env.NEXT_PUBLIC_APP_URL}/widgets/*/}
+            {/*      {form.watch('widgetShortId')}*/}
+            {/*    </span>*/}
+            {/*    <BsBoxArrowUpRight />*/}
+            {/*  </Link>*/}
+            {/*</TabsContent>*/}
           </Tabs>
         </div>
       </div>

@@ -3,7 +3,7 @@
 import React from 'react';
 import type { ReactNode } from 'react';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import { RatingSummary } from '../rating-summary';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
 import { PoweredBy } from '../powered-by';
@@ -11,7 +11,7 @@ import { renderItem } from '../item';
 
 interface FlowLayoutClientProps {
   items: ReviewEntity[];
-  config: ShowcaseConfig;
+  config: WidgetConfig;
   breakpoints?: { [key: string]: number }; // e.g., { sm: 1, md: 2, lg: 3 }
   defaultColumns?: number;
 }

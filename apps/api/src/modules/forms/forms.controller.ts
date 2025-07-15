@@ -31,12 +31,12 @@ export class FormsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('/workspaceId/:workspaceId')
-  findAllWithWorkspaceId(
+  @Get('/productId/:productId')
+  findAllByProductId(
     @Jwt() jwt: JwtPayload,
-    @Param('workspaceId') workspaceId: string,
+    @Param('productId') productId: string,
   ) {
-    return this.formsService.findAll(jwt.userId, workspaceId);
+    return this.formsService.findAll(jwt.userId, productId);
   }
 
   @UseGuards(JwtAuthGuard)

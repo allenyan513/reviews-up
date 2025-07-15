@@ -1,14 +1,14 @@
 'use client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import { StarRating } from '../star-rating';
 import { ReviewItemSource } from './review-item-source';
 import { toLocalDateString } from '../../lib/utils';
 
 export function ReviewItem1(props: {
   review: ReviewEntity;
-  config: ShowcaseConfig;
+  config: WidgetConfig;
   className?: string;
   style?: React.CSSProperties;
 }) {

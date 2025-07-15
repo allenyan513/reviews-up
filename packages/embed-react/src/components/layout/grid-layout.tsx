@@ -1,6 +1,6 @@
 'use client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
-import { ShowcaseConfig } from '@reviewsup/api/showcases';
+import { WidgetConfig } from '@reviewsup/api/widgets';
 import { RatingSummary } from '../rating-summary';
 import React from 'react';
 import { useBreakpoints } from '../../hooks/use-breakpoints';
@@ -9,7 +9,7 @@ import { renderItem } from '../item';
 
 export function GridLayout(props: {
   items: ReviewEntity[];
-  config: ShowcaseConfig;
+  config: WidgetConfig;
 }) {
   const { items, config } = props;
   const columns = useBreakpoints(config.breakpoints);

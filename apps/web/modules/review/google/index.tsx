@@ -26,14 +26,14 @@ import toast from 'react-hot-toast';
 import { useSession } from '@/context/UserProvider';
 
 export function ReviewImportGoogleMapDialog(props: {
-  workspaceId: string;
+  productId: string;
   formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
   onImportFailed?: (error: Error) => void;
 }) {
   const {
-    workspaceId,
+    productId,
     formId,
     onImportStart,
     onImportSuccess,
@@ -51,7 +51,7 @@ export function ReviewImportGoogleMapDialog(props: {
 
   const submitReview = async () => {
     try {
-      if (!workspaceId || !currentPlace || !currentPlace.reviews) {
+      if (!productId || !currentPlace || !currentPlace.reviews) {
         throw new Error('No google map found');
       }
       if (onImportStart) {
@@ -61,7 +61,7 @@ export function ReviewImportGoogleMapDialog(props: {
         currentPlace.reviews.map((review) => {
           return api.review.createReview(
             {
-              workspaceId: workspaceId,
+              productId: productId,
               formId: formId,
               rating: review.rating,
               message: review.text?.text,

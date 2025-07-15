@@ -32,7 +32,7 @@ export const ReviewSource = {
 
 export const createReviewSchema = z.object({
   userId: z.string().optional(),
-  workspaceId: z.string().min(1, 'Workspace is required'),
+  productId: z.string().min(1, 'ProductId is required'),
   formId: z.string().optional(),
   rating: z.number().min(1).max(5).optional(),
   message: z.string().optional(),
@@ -54,7 +54,7 @@ export const createReviewSchema = z.object({
 export type CreateReviewDto = z.infer<typeof createReviewSchema>;
 
 export const findAllReviewRequestSchema = z.object({
-  workspaceId: z.string().min(1, 'Workspace is required'),
+  productId: z.string().min(1, 'ProductId is required'),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(10),
   sortBy: z.string().default('createdAt'),
@@ -67,7 +67,7 @@ export type UpdateReviewDto = Partial<CreateReviewDto>;
 
 export const reviewEntitySchema = z.object({
   id: z.string().min(1, 'Review ID is required'),
-  workspaceId: z.string().min(1, 'Workspace ID is required'),
+  productId: z.string().min(1, 'Product ID is required'),
   formId: z.string().optional(),
   ownerId: z.string().optional(),
   reviewerId: z.string().optional(),

@@ -27,7 +27,7 @@ export default function PublicFormRoute(props: {
       }
       id={form.id || ''}
       lang={lang}
-      workspaceId={form.workspaceId || ''}
+      productId={form.productId || ''}
       shortId={form.shortId || ''}
       mode={'public'}
     />

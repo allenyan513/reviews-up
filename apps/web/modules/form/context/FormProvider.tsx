@@ -5,7 +5,7 @@ import { FormEntity, FormConfig } from '@reviewsup/api/forms';
 
 const FormContext = createContext<{
   forms: FormEntity[] | undefined;
-  fetchForms: (workspaceId: string) => void;
+  fetchForms: (productId: string) => void;
 
   form: FormEntity | undefined;
   fetchForm: (formId: string) => void;
@@ -16,7 +16,7 @@ const FormContext = createContext<{
 
   updateFormConfig: () => Promise<void>;
   deleteForm: (formId: string) => Promise<void>;
-  createForm: (workspaceId: string, formName: string) => Promise<void>;
+  createForm: (productId: string, formName: string) => Promise<void>;
 } | null>(null);
 
 export function FormProvider(props: { children: React.ReactNode }) {
@@ -25,9 +25,9 @@ export function FormProvider(props: { children: React.ReactNode }) {
   const [form, setForm] = useState<FormEntity | undefined>();
   const [formConfig, setFormConfig] = useState<FormConfig | undefined>();
 
-  const fetchForms = (workspaceId: string) => {
+  const fetchForms = (productId: string) => {
     api.form
-      .getForms(workspaceId)
+      .getForms(productId)
       .then((response) => {
         setForms(response);
       })
@@ -81,14 +81,14 @@ export function FormProvider(props: { children: React.ReactNode }) {
       toast.error('Failed to delete form');
     }
   };
-  const createForm = async (workspaceId: string, formName: string) => {
-    if (!workspaceId || !formName) {
+  const createForm = async (productId: string, formName: string) => {
+    if (!productId || !formName) {
       toast.error('Please select a workspace first.');
       return;
     }
     try {
       const response = await api.form.createForm({
-        workspaceId: workspaceId,
+        productId: productId,
         name: formName,
       });
       setForms((prevForms: any[]) => {

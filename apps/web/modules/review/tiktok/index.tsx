@@ -19,7 +19,7 @@ import Link from 'next/link';
 import { useSession } from '@/context/UserProvider';
 
 export function ReviewImportTiktokDialog(props: {
-  workspaceId: string;
+  productId: string;
   formId: string | undefined;
   onImportStart?: () => void;
   onImportSuccess?: () => void;
@@ -27,7 +27,7 @@ export function ReviewImportTiktokDialog(props: {
 }) {
   const { user } = useSession();
   const {
-    workspaceId,
+    productId,
     formId,
     onImportStart,
     onImportSuccess,
@@ -41,7 +41,7 @@ export function ReviewImportTiktokDialog(props: {
 
   const submitReview = async () => {
     try {
-      if (!workspaceId || !tiktokResponse) {
+      if (!productId || !tiktokResponse) {
         throw new Error('No tiktok url provided');
       }
       if (onImportStart) {
@@ -49,7 +49,7 @@ export function ReviewImportTiktokDialog(props: {
       }
       await api.review.createReview(
         {
-          workspaceId: workspaceId,
+          productId: productId,
           formId: formId,
           rating: 5,
           message: tiktokResponse.title,

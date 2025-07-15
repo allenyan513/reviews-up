@@ -10,6 +10,8 @@ import { RRResponse } from '@reviewsup/api/common';
 import { CreateOneTimePaymentResponse } from '@reviewsup/api/orders';
 
 export const product = {
+  setup: (dto: CreateProductRequest): Promise<ProductEntity> =>
+    authFetch('/products/setup', 'POST', dto),
   findAll: (request: FindAllRequest): Promise<ProductEntity[]> =>
     authFetch(`/products/findAll`, 'POST', request),
   crawlOne: (url: string): Promise<CrawlProductResponse> =>

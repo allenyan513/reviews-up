@@ -10,22 +10,21 @@ import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 export default function ReviewsPage(props: {
   lang: string;
-  workspaceId: string;
+  productId: string;
   status: string | undefined;
 }) {
-  const { lang, workspaceId, status } = props;
-  const { defaultWorkspace } = useUserContext();
+  const { lang, productId, status } = props;
   const fetchReviews = async (
     pageIndex: number,
     pageSize: number,
     sorting: SortingState,
     filters: ColumnFiltersState,
   ) => {
-    if (!defaultWorkspace) {
-      return null;
+    if (!productId) {
+      throw new Error('Product ID is required to fetch reviews');
     }
     const res = await api.review.getReviews({
-      workspaceId: defaultWorkspace?.id || '',
+      productId: productId,
       page: pageIndex + 1,
       pageSize: pageSize,
       sortBy: 'createdAt',

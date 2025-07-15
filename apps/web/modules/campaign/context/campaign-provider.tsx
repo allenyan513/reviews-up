@@ -26,14 +26,14 @@ const CampaignContext = createContext<{
 } | null>(null);
 
 export function CampaignProvider(props: { children: React.ReactNode }) {
-  const { defaultWorkspace, user } = useUserContext();
+  const { defaultProduct, user } = useUserContext();
   const [forms, setForms] = useState<FormEntity[]>();
 
   const [submitForm, setSubmitForm] = useState<CreateCampaignDto>();
 
-  const findAllFormsByWorkspaceId = (workspaceId: string) => {
+  const findAllFormsByProductId = (productId: string) => {
     api.form
-      .getForms(workspaceId)
+      .getForms(productId)
       .then((response) => {
         setForms(response);
       })
@@ -43,11 +43,11 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
   };
 
   const findAll = async (pageIndex: number, pageSize: number) => {
-    if (!defaultWorkspace) {
+    if (!defaultProduct) {
       return null;
     }
     const res = await api.campaign.findAll({
-      workspaceId: defaultWorkspace?.id || '',
+      productId: defaultProduct?.id || '',
       page: pageIndex + 1,
       pageSize: pageSize,
       sortBy: 'createdAt',
@@ -122,19 +122,18 @@ export function CampaignProvider(props: { children: React.ReactNode }) {
   };
 
   useEffect(() => {
-    if (!user || !defaultWorkspace) {
+    if (!user || !defaultProduct) {
       return;
     }
-    // findAll(0, 10)
-    findAllFormsByWorkspaceId(defaultWorkspace.id);
-  }, [user, defaultWorkspace]);
+    findAllFormsByProductId(defaultProduct?.id || '');
+  }, [user, defaultProduct]);
 
   useEffect(() => {
-    if (!user || !defaultWorkspace || !forms) {
+    if (!user || !defaultProduct || !forms) {
       return;
     }
     setSubmitForm({
-      workspaceId: defaultWorkspace.id || '',
+      productId: defaultProduct.id || '',
       formId: forms?.[0]?.id || '',
       formShortId: forms?.[0]?.shortId || '',
       name: 'New Campaign',
@@ -155,7 +154,7 @@ ${user.name}
       isTest: false,
       buttonText: 'Leave a review',
     });
-  }, [user, defaultWorkspace, forms]);
+  }, [user, defaultProduct, forms]);
 
   return (
     <CampaignContext.Provider
