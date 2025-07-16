@@ -60,6 +60,7 @@ export type WidgetConfig = z.infer<typeof widgetConfigSchema>;
 
 export const verifyWidgetEmbeddingSchema = z.object({
   url: z.string().url().min(1, 'URL is required'),
-  widgetShortId: z.string().min(1, 'widgetShortId is required'),
 });
-export type VerifyWidgetEmbeddingRequest = z.infer<typeof verifyWidgetEmbeddingSchema>;
+export type VerifyWidgetEmbeddingRequest = z.infer<
+  typeof verifyWidgetEmbeddingSchema
+>;

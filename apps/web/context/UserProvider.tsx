@@ -2,14 +2,12 @@ import { api } from '@/lib/api-client';
 import { createContext, useContext, useEffect, useState } from 'react';
 import { ProductEntity } from '@reviewsup/api/products';
 import { UserEntity } from '@reviewsup/api/users';
-import useLocalStorageState from 'use-local-storage-state';
 import { redirect, useRouter } from 'next/navigation';
 
 interface UserContextProps {
   user: UserEntity | null | undefined;
   defaultProduct: ProductEntity | null | undefined;
-  setDefaultProduct: (product: ProductEntity | null) => void;
-  switchDefaultProduct: (product: ProductEntity | null) => void;
+  saveDefaultProduct: (product: ProductEntity | null) => void;
   googleSignIn: (redirect?: string) => void;
   githubSignIn: (redirect?: string) => void;
   twitterSignIn: (redirect?: string) => void;
@@ -17,6 +15,7 @@ interface UserContextProps {
   signIn: (callbackUrl?: string) => void;
   signOut: () => void;
   deleteAccount: () => void;
+  syncSession: () => Promise<void>;
 }
 
 const UserContext = createContext<UserContextProps | null>(null);
@@ -29,17 +28,18 @@ export function UserProvider(props: { children: React.ReactNode }) {
    * not null indicates that the user is logged in.
    */
   const [user, setUser] = useState<UserEntity | null | undefined>(undefined);
-  const [defaultProduct, setDefaultProduct] = useLocalStorageState<
+  const [defaultProduct, setDefaultProduct] = useState<
     ProductEntity | null | undefined
-  >(`${user?.id}_product`, {
-    defaultValue: null,
-  });
+  >(undefined);
   const router = useRouter();
 
-  const switchDefaultProduct = (product: ProductEntity | null) => {
-    if (!product) {
-      return;
-    }
+  /**
+   *
+   * @param product
+   */
+  const saveDefaultProduct = (product: ProductEntity | null) => {
+    const productId = product ? product.id : null;
+    localStorage.setItem(`default_product_id`, productId || '');
     setDefaultProduct(product);
   };
 
@@ -83,7 +83,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
   const signOut = () => {
     localStorage.removeItem('access_token');
     setUser(null);
-    setDefaultProduct(null);
+    saveDefaultProduct(null);
     redirect('/auth/signin');
   };
 
@@ -96,49 +96,38 @@ export function UserProvider(props: { children: React.ReactNode }) {
       await api.user.deleteAccount();
       localStorage.removeItem('access_token');
       setUser(null);
-      setDefaultProduct(null);
+      saveDefaultProduct(null);
       redirect('/auth/signin');
     } catch (error) {
       console.error('Failed to delete account:', error);
     }
   };
 
-  useEffect(() => {
-    api.auth
-      .getSession()
-      .then((user) => setUser(user))
-      .catch((error) => {
-        setUser(null);
-      });
-  }, []);
+  const syncSession = async () => {
+    try {
+      const user = await api.auth.getSession();
+      setUser(user);
+      const defaultProductId = localStorage.getItem('default_product_id');
+      const defaultProduct =
+        user?.products?.find((product) => product.id === defaultProductId) ||
+        user?.products?.[0] ||
+        null;
+      setDefaultProduct(defaultProduct);
+    } catch (error) {
+      setUser(null);
+    }
+  };
 
   useEffect(() => {
-    if (user === undefined) {
-      // User state is still being fetched
-    } else if (user === null) {
-      // User is not logged in
-      setDefaultProduct(null);
-    } else {
-      if (!defaultProduct) {
-        // If no default product is set, use the first product from the user
-        const firstProduct = user.products ? user.products[0] : null;
-        setDefaultProduct(firstProduct);
-      } else {
-        // If default product is set, ensure it is part of the user's products
-        if (!user.products?.some((p) => p.id === defaultProduct?.id)) {
-          setDefaultProduct(user.products?.[0] || null);
-        }
-      }
-    }
-  }, [user]);
+    syncSession();
+  }, []);
 
   return (
     <UserContext.Provider
       value={{
         user,
         defaultProduct,
-        setDefaultProduct,
-        switchDefaultProduct,
+        saveDefaultProduct,
         googleSignIn,
         githubSignIn,
         twitterSignIn,
@@ -146,6 +135,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
         signIn,
         signOut,
         deleteAccount,
+        syncSession,
       }}
     >
       {props.children}

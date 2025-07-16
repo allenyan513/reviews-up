@@ -4,6 +4,9 @@ import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import { cn } from '@reviewsup/ui/lib/utils';
 import { GoogleAnalytics } from '@next/third-parties/google';
+import { IconCirclesRelation } from '@tabler/icons-react';
+import { BiShare } from 'react-icons/bi';
+import { BsLink } from 'react-icons/bs';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -33,8 +36,14 @@ export default async function RootLayout(props: {
           launchLink={`${process.env.NEXT_PUBLIC_APP_URL}/launch`}
           items={[
             { title: 'Home', href: '/' },
+            {
+              title: 'Community',
+              href: `/products`,
+              external: false,
+            },
+            { title: 'Widget', href: '/#widget' },
+            { title: 'Form', href: '/#form' },
             { title: 'Features', href: '/#features' },
-            // { title: 'Pricing', href: '/#pricing' },
             { title: 'FAQ', href: '/#faq' },
             {
               title: 'Documents',
@@ -45,11 +54,6 @@ export default async function RootLayout(props: {
               title: 'Blog',
               href: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
               external: true,
-            },
-            {
-              title: 'Products',
-              href: `/products`,
-              external: false,
             },
           ]}
         />

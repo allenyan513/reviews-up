@@ -1,12 +1,18 @@
-import { findAllRequestSchema, ProductStatus } from '@reviewsup/api/products';
+import {
+  findAllRequestSchema,
+  ProductEntity,
+  ProductStatus,
+} from '@reviewsup/api/products';
+import { PaginateResponse } from '@reviewsup/api/common';
 
 export async function fetchProductList(
+  status: string,
   page: number = 1,
   pageSize: number = 10,
   categories: string[] = [],
-) {
+): Promise<PaginateResponse<ProductEntity>> {
   const validatedRequest = findAllRequestSchema.parse({
-    status: [ProductStatus.listing],
+    status: [status],
     page: page,
     pageSize: pageSize,
     search: undefined,

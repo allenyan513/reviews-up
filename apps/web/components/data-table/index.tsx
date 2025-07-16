@@ -52,9 +52,8 @@ export function DataTable<TData, TValue>({
   defaultColumnFilters = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  console.log('defaultColumnFilters', defaultColumnFilters);
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>(defaultColumnFilters);
-  console.log('columnFilters', columnFilters);
+  const [columnFilters, setColumnFilters] =
+    useState<ColumnFiltersState>(defaultColumnFilters);
   const [pagination, setPagination] = useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,

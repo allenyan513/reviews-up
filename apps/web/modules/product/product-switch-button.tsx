@@ -8,17 +8,15 @@ import {
 } from '@/components/ui/dialog';
 import { BiSortAlt2 } from 'react-icons/bi';
 import { useUserContext } from '@/context/UserProvider';
-import { ProductAddButton } from '@/modules/product/product-add-button';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { ProductEntity } from '@reviewsup/api/products';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 export function ProductSwitchButton(props: {
   product: ProductEntity | null | undefined;
 }) {
-  const { user, defaultProduct, switchDefaultProduct } = useUserContext();
+  const { user, defaultProduct, saveDefaultProduct } = useUserContext();
   const router = useRouter();
   const [open, setOpen] = useState(false);
   return (
@@ -47,9 +45,10 @@ export function ProductSwitchButton(props: {
                   key={product.id}
                   className="flex flex-row w-full justify-between items-center p-6 border border-gray-300 rounded-lg hover:border-gray-500 cursor-pointer"
                   onClick={() => {
-                    switchDefaultProduct(product);
+                    saveDefaultProduct(product);
                     setOpen(false);
                     toast.success(`Switch Product to ${product.name}`);
+                    redirect(`/${product.id}/reviews/all`);
                   }}
                 >
                   <span>{product.name}</span>
@@ -65,11 +64,12 @@ export function ProductSwitchButton(props: {
             </div>
           )}
           <span
-            onClick={()=>{
+            onClick={() => {
               setOpen(false);
               router.push('/setup');
             }}
-            className="text-sm mt-4 cursor-pointer">
+            className="text-sm mt-4 cursor-pointer"
+          >
             + <span className="underline">Creat a new Product</span>
           </span>
           {/*<ProductAddButton />*/}

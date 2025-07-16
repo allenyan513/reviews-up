@@ -10,6 +10,9 @@ export async function generateMetadata(props: {
 }): Promise<Metadata | null> {
   const { lang, slug } = await props.params;
   const product = await fetchProductDetail(slug);
+  if (!product) {
+    return null;
+  }
   return {
     title: `${product.name}: ${product.description}`.substring(0, 60),
     description: `${product.name}: ${product.longDescription}.`.substring(

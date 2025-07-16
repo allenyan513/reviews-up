@@ -3,6 +3,7 @@ import { StarRating } from '../star-rating';
 import { WidgetConfig } from '@reviewsup/api/widgets';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { toLocalDateString } from '../../lib/utils';
+import { StarRatingServer } from '../star-rating.server';
 
 export function ReviewItem(props: {
   review: ReviewEntity;
@@ -150,7 +151,7 @@ export function ReviewItem(props: {
           )}
         </div>
       </div>
-      {isRatingEnabled && <StarRating value={review.rating || 5} />}
+      {isRatingEnabled && <StarRatingServer value={review.rating || 5} />}
       {isImageEnabled && renderImageMedias()}
       {isVideoEnabled && renderVideoMedias()}
       <p className="text-gray-700 overflow-x-auto whitespace-pre-wrap">

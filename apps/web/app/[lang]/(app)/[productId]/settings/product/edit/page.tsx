@@ -1,7 +1,7 @@
 'use client';
 
 import React, { use } from 'react';
-import { PromotionNewProduct } from '@/modules/promotion/promotion-new-product';
+import ProductNewEditPage from '@/modules/product/product-new-edit-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -10,7 +10,5 @@ export default function Page(props: {
   }>;
 }) {
   const { lang, productId } = use(props.params);
-  return (
-    <PromotionNewProduct mode="new" lang={lang} productId={productId} />
-  );
+  return <ProductNewEditPage mode="edit" lang={lang} productId={productId} />;
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { use } from 'react';
-import { PromotionProductListings } from '@/modules/promotion/promotion-product-listings';
+import { LaunchSubmitOrEditPage } from '@/modules/community/launch-submit-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -11,10 +11,6 @@ export default function Page(props: {
 }) {
   const { lang, productId } = use(props.params);
   return (
-    <PromotionProductListings
-      lang={lang}
-      productId={productId}
-      status={'pendingForReceive'}
-    />
+    <LaunchSubmitOrEditPage lang={lang} productId={productId} mode={'new'} />
   );
 }

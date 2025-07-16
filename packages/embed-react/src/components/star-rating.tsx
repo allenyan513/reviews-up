@@ -13,6 +13,11 @@ export function StarRating(props: {
       {[...Array(5)].map((_, i) => (
         <svg
           key={i}
+          onClick={() => {
+            if (props.onChange) {
+              props.onChange(i + 1);
+            }
+          }}
           className={cn(
             'cursor-pointer',
             props.size === 'sm'

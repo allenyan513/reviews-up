@@ -11,7 +11,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata | null> {
   const { lang } = await props.params;
   return {
-    title: `Product List`,
+    title: `Pending List`,
     description:
       'View all products here, you can filter products by categories and search.',
     alternates: {
@@ -26,5 +26,5 @@ export default async function Page(props: {
   }>;
 }) {
   const { lang } = await props.params;
-  return <ProductList status={ProductStatus.listing} lang={lang} />;
+  return <ProductList status={ProductStatus.pendingForReceive} lang={lang} />;
 }

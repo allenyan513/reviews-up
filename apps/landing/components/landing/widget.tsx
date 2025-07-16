@@ -27,7 +27,7 @@ export function WidgetWrapper(props: {
   return (
     <section
       id="widget"
-      className="px-4 w-full md:max-w-5xl flex flex-col gap-4"
+      className="px-4 py-6 w-full md:max-w-5xl flex flex-col gap-4"
     >
       <h2 className="w-full text-center text-4xl font-semibold">{title}</h2>
       <h3 className="text-muted-foreground sm:text-lg text-center mb-4">
