@@ -13,6 +13,7 @@ import {
   IconCheckbox,
   IconForbid2,
   IconList,
+  IconUser,
   IconRocket,
 } from '@tabler/icons-react';
 
@@ -118,9 +119,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: false,
               children: [
                 {
-                  title: 'Launch',
+                  title: 'My Product',
                   url: `/${lang}/${defaultProduct?.id}/community/launch`,
-                  icon: IconRocket,
+                  icon: IconUser,
                   active: path.includes('/community/launch'),
                 },
                 {
