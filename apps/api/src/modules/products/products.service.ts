@@ -110,6 +110,12 @@ export class ProductsService {
     if (!defaultShowcase) {
       throw new Error('Unable to create default showcase');
     }
+    //automatically free submit the product
+    await this.submit(uid,{
+      id: newProduct.id,
+      bindingFormId: defaultForm.id,
+      submitOption: 'free-submit',
+    })
     return newProduct as ProductEntity;
   }
 

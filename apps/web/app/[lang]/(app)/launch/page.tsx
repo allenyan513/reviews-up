@@ -13,7 +13,7 @@ export default function Page(props: { params: Promise<{ lang: string }> }) {
         if (!user.products || user.products.length === 0) {
           return redirect(`/setup`);
         }
-        return redirect(`/${user?.products?.[0]?.id}/community/launch`);
+        return redirect(`/${user?.products?.[0]?.id}/community/myproduct`);
       }
     });
   }, []);

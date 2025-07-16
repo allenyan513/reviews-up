@@ -6,14 +6,10 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from '@reviewsup/ui/dropdown-menu';
 import Link from 'next/link';
-import { BiPlus, BiShareAlt } from 'react-icons/bi';
-import { buttonVariants } from '@reviewsup/ui/button';
 import { ProductEntity, ProductStatus } from '@reviewsup/api/products';
-import { api } from '@/lib/api-client';
 import ProductStatusFlow, {
   StatusStep,
 } from '@/components/product-status-flow';
@@ -29,9 +25,11 @@ import {
   BsThreeDotsVertical,
   BsTrash,
   BsBoxArrowUpRight,
+  BsRocket,
 } from 'react-icons/bs';
 import { redirect, useRouter } from 'next/navigation';
 import { useUserContext } from '@/context/UserProvider';
+import { buttonVariants } from '@reviewsup/ui/button';
 
 function MyProductItem(props: { lang: string; product: ProductEntity }) {
   const { product, lang } = props;
@@ -53,6 +51,17 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           </Link>
         </div>
         <div className="flex flex-row items-center gap-2 text-lg">
+          <Link
+            href={`/${lang}/${product.id}/community/myproduct/edit`}
+            className={buttonVariants({
+              variant: 'outline',
+              size: 'sm',
+            })}
+          >
+            <BsRocket />
+            Upgrade
+          </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <BsThreeDotsVertical />
@@ -111,17 +120,26 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           <ProductStatusFlow
             status={product.status as StatusStep}
             labels={{
-              // 任务重
-              pendingForSubmit: 'Submitting',
+              pendingForSubmit: 'Submitting Reviews',
             }}
           />
 
-          <div className='flex flex-col mt-4'>
-            <p>Task:</p>
-            <ul className="list-decimal pl-4">
-              <li>Write {product.taskReviewCount} reviews for Public Products or Pending Products</li>
-            </ul>
-          </div>
+          {product.status === ProductStatus.pendingForSubmit && (
+            <div className="flex flex-col mt-4">
+              <p>Task:</p>
+              <ul className="list-decimal pl-4">
+                <li className='text-sm'>
+                  Write at least <strong>{product.taskReviewCount}</strong> reviews for other
+                  products.
+                  <Link
+                    className="text-blue-500 hover:underline ml-2"
+                    href={`/${product.id}/community/explore`}>
+                    Explore Products
+                  </Link>
+                </li>
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="text-gray-600 col-span-3">
@@ -149,16 +167,12 @@ export function LaunchPage(props: { lang: string; productId: string }) {
   const { lang, productId } = props;
   const { defaultProduct } = useUserContext();
 
-  if (defaultProduct && defaultProduct.status === 'waitingForAdminReview') {
-    redirect(`/${lang}/${productId}/launch/submit`);
-  }
-
   return (
     <div className="min-h-screen p-4 md:p-8">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-            Launch Your Product
+            My Product
           </h1>
           <p className="mt-1 text-gray-600 hidden md:flex">
             {/*加入这个产品评测社区，体验并为其他产品提交review或者推荐词*/}

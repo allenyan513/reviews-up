@@ -47,6 +47,226 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@reviewsup/ui/tabs';
 import { ProductItemView } from '@/modules/product/product-item-view';
 import slugify from 'slugify';
 
+function PaidSubmitOption(props: {
+  form: any;
+  loading: boolean;
+  onSubmit: (data: CreateProductRequest) => void;
+  isCheckDialogOpen: boolean;
+  setIsCheckDialogOpen: (open: boolean) => void;
+  currentBalance: string;
+}) {
+  const {
+    form,
+    loading,
+    onSubmit,
+    isCheckDialogOpen,
+    setIsCheckDialogOpen,
+    currentBalance,
+  } = props;
+  return (
+    <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
+      <h3 className="text-xl font-semibold">Paid Upgrade</h3>
+      <h4 className="text-sm text-gray-500 ml-2">
+        Instant listing with premium perks
+      </h4>
+      <ul className={'text-start list-disc pl-4 mt-4'}>
+        <li>Get listed immediately—no reviews required</li>
+        <li>Your product appears at the top of the listing page</li>
+        <li>Receive a “Featured” badge</li>
+      </ul>
+      <AlertDialog>
+        <AlertDialogTrigger asChild>
+          <Button disabled={loading} size="lg" className="w-full mt-4">
+            Upgrade for $9.9
+          </Button>
+        </AlertDialogTrigger>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              You are about to submit your product for a one-time fee of
+              <span className="text-red-500"> $9.9</span>. This will allow your
+              product to be listed immediately without the need for reviews.
+              <br />
+              <br />
+              Please ensure that all information is correct before proceeding.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              type="submit"
+              onClick={() => {
+                form.setValue('submitOption', 'paid-submit');
+                form.handleSubmit(onSubmit)();
+              }}
+            >
+              Confirm
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <AlertDialog open={isCheckDialogOpen} onOpenChange={setIsCheckDialogOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {/*支付成功了吗？*/}
+              Do you have a successful payment?
+            </AlertDialogTitle>
+
+            <AlertDialogDescription>
+              {/*充值成功后，点击“继续”按钮以完成产品提交。*/}
+              After successful payment, click the "Continue" button to complete
+              the product submission.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              type="submit"
+              onClick={() => {
+                form.setValue('submitOption', 'paid-submit');
+                form.handleSubmit(onSubmit)();
+              }}
+            >
+              Continue
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <p className="text-sm text-gray-500 mt-2">
+        {/*Current Balance: ${user?.balance?.toString() || 0}*/}
+        Current Balance: ${currentBalance}
+      </p>
+    </div>
+  );
+}
+
+function VerifySubmitOption(props: { form: any; loading: boolean }) {
+  const { form, loading } = props;
+  const { loading: verifyLoading, verify } = useVerifyEmbed(
+    form.watch('url') || '',
+  );
+  return (
+    <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
+      <h3 className="text-xl font-semibold">Verify and Upgrade</h3>
+      <h4 className="text-sm text-gray-500 ml-2">
+        No cost, but requires widget embedding
+      </h4>
+      <ul className="text-start list-disc pl-4 mt-4">
+        <li>
+          <WidgetEmbedDialog widgetShortId={''}>
+            <span className="text-blue-500 hover:underline cursor-pointer">
+              Embed{' '}
+            </span>
+          </WidgetEmbedDialog>
+          any widget on
+          <Link
+            href={form.watch('url') || '#'}
+            target="_blank"
+            className="text-blue-500 hover:underline"
+          >
+            {' '}
+            your website{' '}
+          </Link>
+          . It just costs a few minutes to set up.
+        </li>
+        <li>
+          <Button variant={'outline'} size={'sm'} onClick={verify}>
+            {verifyLoading ? 'Verifying...' : 'Verify'}
+          </Button>{' '}
+          and submit it, your product will be{' '}
+          <Link
+            target="_blank"
+            href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
+            className="text-blue-500 hover:underline"
+          >
+            Public
+          </Link>
+        </li>
+      </ul>
+      <Button
+        disabled={loading}
+        variant="outline"
+        size="lg"
+        type="submit"
+        className="w-full mt-4"
+        onClick={() => {
+          form.setValue('submitOption', 'verify-submit');
+        }}
+      >
+        {loading ? (
+          <LoadingText>Submitting...</LoadingText>
+        ) : (
+          'Verify and Upgrade'
+        )}
+      </Button>
+    </div>
+  );
+}
+
+function FreeSubmitOption(props: {
+  form: any;
+  loading: boolean;
+  taskReviewCount: number;
+}) {
+  const { form, loading, taskReviewCount } = props;
+  return (
+    <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
+      <h3 className="text-xl font-semibold">Free Submit</h3>
+      <h4 className="text-sm text-gray-500 ml-2">
+        No cost, complete tasks to get listed
+      </h4>
+      <ul className="text-start list-disc pl-4 mt-4">
+        <li>
+          Write at least
+          <span className="text-red-500 font-bold px-1">{taskReviewCount}</span>
+          reviews or testimonials for other products which listing in
+          <Link
+            target="_blank"
+            href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/pending`}
+            className="text-blue-500 hover:underline px-1"
+          >
+            Pending
+          </Link>
+          or
+          <Link
+            target="_blank"
+            href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
+            className="text-blue-500 hover:underline px-1"
+          >
+            Public
+          </Link>
+          after you submit your product.
+        </li>
+        <li>
+          After completing the tasks, your product will be{' '}
+          <Link
+            target="_blank"
+            href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
+            className="text-blue-500 hover:underline"
+          >
+            Public
+          </Link>
+        </li>
+      </ul>
+      <Button
+        disabled={loading}
+        variant="outline"
+        size="lg"
+        type="submit"
+        className="w-full mt-4"
+        onClick={() => {
+          form.setValue('submitOption', 'free-submit');
+        }}
+      >
+        {loading ? <LoadingText>Submitting...</LoadingText> : 'Submit for Free'}
+      </Button>
+    </div>
+  );
+}
+
 function LaunchSubmitOrEditPreview(props: {
   product: ProductEntity;
   bindingFormId: string;
@@ -110,7 +330,7 @@ export function LaunchSubmitOrEditPage(props: {
       url: defaultProduct?.url || '',
       icon: defaultProduct?.icon || '',
       screenshot: defaultProduct?.screenshot || '',
-      bindingFormId: '',
+      bindingFormId: defaultProduct?.bindingFormId || '',
       submitOption: 'free-submit',
     },
   });
@@ -122,10 +342,6 @@ export function LaunchSubmitOrEditPage(props: {
   const [formsLoaded, setFormsLoaded] = useState(false); // New state to track if forms are loaded
   const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
   const [taskReviewCount, setTaskReviewCount] = useState<number>(0);
-
-  const { loading: verifyLoading, verify } = useVerifyEmbed(
-    form.watch('url') || '',
-  );
 
   const handleUpdate = async () => {
     try {
@@ -184,6 +400,7 @@ export function LaunchSubmitOrEditPage(props: {
             url: product.url,
             icon: product.icon || '',
             screenshot: product.screenshot || '',
+            bindingFormId: product.bindingFormId || '',
             submitOption: 'free-submit', // Default value, can be changed later
           });
         }
@@ -228,7 +445,7 @@ export function LaunchSubmitOrEditPage(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-            Launch to Community
+            Upgrade My Product
           </h1>
           <p className="mt-1 text-gray-600 hidden md:flex">
             {/*绑定一个表单，并且从提交选择中选择一个，可以是免费提交，验证提交，或者付费提交，*/}
@@ -263,14 +480,10 @@ export function LaunchSubmitOrEditPage(props: {
                 name="bindingFormId"
                 render={({ field }) => (
                   <div>
-                    {/*<FormLabel className="mb-2">*/}
-                    {/*  Binding Form <Required />*/}
-                    {/*</FormLabel>*/}
                     <FormControl>
                       <div className="flex flex-row items-center gap-2 mb-2">
                         {formsLoaded ? (
                           <Select
-                            disabled={props.mode === 'edit'}
                             value={field.value}
                             onValueChange={(selectedId) => {
                               const selectedForm = forms.find(
@@ -325,227 +538,20 @@ export function LaunchSubmitOrEditPage(props: {
                   </div>
                 )}
               />
-
               <div>
-                <div
-                  className={cn(
-                    'flex flex-row items-center justify-between mb-4 mt-8',
-                    mode === 'edit' ? 'hidden' : '',
-                  )}
-                >
-                  <h2 className="text-lg font-semibold">Submit Options</h2>
+                <div className="flex flex-row items-center justify-between mb-4 mt-8">
+                  <h2 className="text-lg font-semibold">Upgrade Options</h2>
                 </div>
-                <div
-                  className={cn(
-                    'grid grid-cols-1 md:grid-cols-3 gap-4',
-                    mode === 'edit' ? 'hidden' : '',
-                  )}
-                >
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
-                    <h3 className="text-xl font-semibold">Free Submit</h3>
-                    <h4 className="text-sm text-gray-500 ml-2">
-                      No cost, complete tasks to get listed
-                    </h4>
-                    <ul className="text-start list-disc pl-4 mt-4">
-                      <li>
-                        Write at least
-                        <span className="text-red-500 font-bold px-1">
-                          {taskReviewCount}
-                        </span>
-                        reviews or testimonials for other products which listing
-                        in
-                        <Link
-                          target="_blank"
-                          href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/pending`}
-                          className="text-blue-500 hover:underline px-1"
-                        >
-                          Pending
-                        </Link>
-                        or
-                        <Link
-                          target="_blank"
-                          href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
-                          className="text-blue-500 hover:underline px-1"
-                        >
-                          Public
-                        </Link>
-                        after you submit your product.
-                      </li>
-                      <li>
-                        After completing the tasks, your product will be{' '}
-                        <Link
-                          target="_blank"
-                          href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
-                          className="text-blue-500 hover:underline"
-                        >
-                          Public
-                        </Link>
-                      </li>
-                    </ul>
-                    <Button
-                      disabled={loading}
-                      variant="outline"
-                      size="lg"
-                      type="submit"
-                      className="w-full mt-4"
-                      onClick={() => {
-                        form.setValue('submitOption', 'free-submit');
-                      }}
-                    >
-                      {loading ? (
-                        <LoadingText>Submitting...</LoadingText>
-                      ) : (
-                        'Submit for Free'
-                      )}
-                    </Button>
-                  </div>
-
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
-                    <h3 className="text-xl font-semibold">Verify Submit</h3>
-                    <h4 className="text-sm text-gray-500 ml-2">
-                      No cost, but requires widget embedding
-                    </h4>
-                    <ul className="text-start list-disc pl-4 mt-4">
-                      <li>
-                        <WidgetEmbedDialog widgetShortId={''}>
-                          <span className="text-blue-500 hover:underline cursor-pointer">
-                            Embed{' '}
-                          </span>
-                        </WidgetEmbedDialog>
-                        any widget on
-                        <Link
-                          href={form.watch('url') || '#'}
-                          target="_blank"
-                          className="text-blue-500 hover:underline"
-                        >
-                          {' '}
-                          your website{' '}
-                        </Link>
-                        . It just costs a few minutes to set up.
-                      </li>
-                      <li>
-                        <Button
-                          variant={'default'}
-                          size={'sm'}
-                          onClick={verify}
-                        >
-                          {verifyLoading ? 'Verifying...' : 'Verify'}
-                        </Button>{' '}
-                        and submit it, your product will be{' '}
-                        <Link
-                          target="_blank"
-                          href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
-                          className="text-blue-500 hover:underline"
-                        >
-                          Public
-                        </Link>
-                      </li>
-                    </ul>
-                    <Button
-                      disabled={loading}
-                      variant="default"
-                      size="lg"
-                      type="submit"
-                      className="w-full mt-4"
-                      onClick={() => {
-                        form.setValue('submitOption', 'verify-submit');
-                      }}
-                    >
-                      {loading ? (
-                        <LoadingText>Submitting...</LoadingText>
-                      ) : (
-                        'Verify and Submit'
-                      )}
-                    </Button>
-                  </div>
-
-                  <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
-                    <h3 className="text-xl font-semibold">Paid Submit</h3>
-                    <h4 className="text-sm text-gray-500 ml-2">
-                      Instant listing with premium perks
-                    </h4>
-                    <ul className={'text-start list-disc pl-4 mt-4'}>
-                      <li>Get listed immediately—no reviews required</li>
-                      <li>
-                        Your product appears at the top of the listing page
-                      </li>
-                      <li>Receive a “Featured” badge</li>
-                    </ul>
-                    <AlertDialog>
-                      <AlertDialogTrigger asChild>
-                        <Button
-                          disabled={loading}
-                          size="lg"
-                          className="w-full mt-4"
-                        >
-                          Submit for $9.9
-                        </Button>
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            You are about to submit your product for a one-time
-                            fee of
-                            <span className="text-red-500"> $9.9</span>. This
-                            will allow your product to be listed immediately
-                            without the need for reviews.
-                            <br />
-                            <br />
-                            Please ensure that all information is correct before
-                            proceeding.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            type="submit"
-                            onClick={() => {
-                              form.setValue('submitOption', 'paid-submit');
-                              form.handleSubmit(onSubmit)();
-                            }}
-                          >
-                            Confirm
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-
-                    <AlertDialog
-                      open={isCheckDialogOpen}
-                      onOpenChange={setIsCheckDialogOpen}
-                    >
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>
-                            {/*支付成功了吗？*/}
-                            Do you have a successful payment?
-                          </AlertDialogTitle>
-
-                          <AlertDialogDescription>
-                            {/*充值成功后，点击“继续”按钮以完成产品提交。*/}
-                            After successful payment, click the "Continue"
-                            button to complete the product submission.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Cancel</AlertDialogCancel>
-                          <AlertDialogAction
-                            type="submit"
-                            onClick={() => {
-                              form.setValue('submitOption', 'paid-submit');
-                              form.handleSubmit(onSubmit)();
-                            }}
-                          >
-                            Continue
-                          </AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                    <p className="text-sm text-gray-500 mt-2">
-                      Current Balance: ${user?.balance?.toString() || 0}
-                    </p>
-                  </div>
+                <div className={'grid grid-cols-1 md:grid-cols-2 gap-4'}>
+                  <VerifySubmitOption form={form} loading={loading} />
+                  <PaidSubmitOption
+                    form={form}
+                    loading={loading}
+                    onSubmit={onSubmit}
+                    isCheckDialogOpen={isCheckDialogOpen}
+                    setIsCheckDialogOpen={setIsCheckDialogOpen}
+                    currentBalance={user?.balance?.toString() || '0'}
+                  />
                 </div>
               </div>
             </div>
