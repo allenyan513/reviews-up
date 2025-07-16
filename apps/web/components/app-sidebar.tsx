@@ -2,20 +2,18 @@
 
 import * as React from 'react';
 import {
-  IconInnerShadowTop,
   IconSettings,
   IconStar,
   IconCode,
   IconTable,
-  IconUser,
+  IconCirclesRelation,
   IconHourglassEmpty,
   IconMail,
   IconClipboardText,
-  IconRocket,
   IconCheckbox,
   IconForbid2,
   IconList,
-  IconBuildingStore,
+  IconRocket,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
@@ -114,32 +112,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: path.includes('/forms'),
             },
             {
-              title: 'Launch',
-              url: `/${lang}/${defaultProduct?.id}/promotion/my-products`,
-              icon: IconRocket,
+              title: 'Community',
+              url: `/${lang}/${defaultProduct?.id}/community/launch`,
+              icon: IconCirclesRelation,
               active: false,
               children: [
                 {
-                  title: 'My products',
-                  url: `/${lang}/${defaultProduct?.id}/promotion/my-products`,
-                  icon: IconUser,
-                  active: path.includes('/promotion/my-products'),
+                  title: 'Launch',
+                  url: `/${lang}/${defaultProduct?.id}/community/launch`,
+                  icon: IconRocket,
+                  active: path.includes('/community/launch'),
                 },
                 {
-                  title: 'Pending',
-                  url: `/${lang}/${defaultProduct?.id}/promotion/pending-listings`,
-                  icon: IconHourglassEmpty,
-                  active: path.includes('/promotion/pending-listings'),
-                },
-                {
-                  title: 'Public',
-                  url: `/${lang}/${defaultProduct?.id}/promotion/public-listings`,
-                  icon: IconCheckbox,
-                  active: path.includes('/promotion/public-listings'),
-                },
-              ],
+                  title: 'Explore',
+                  url: `/${lang}/${defaultProduct?.id}/community/explore`,
+                  icon: IconList,
+                  active: path.includes('/community/explore'),
+                }]
             },
-
             {
               title: 'Settings',
               url: `/${lang}/${defaultProduct?.id}/settings`,

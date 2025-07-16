@@ -144,14 +144,14 @@ export class WidgetsService {
 
   async findOneByShortId(shortId: string) {
     this.logger.debug(`Finding widget by shortId: ${shortId}`);
-    const widget = await this.prismaService.widget.findFirst({
+    const widget = (await this.prismaService.widget.findFirst({
       where: {
         OR: [
           { shortId: shortId },
           { id: shortId }, // Allow searching by ID as well
         ],
       },
-    }) as WidgetEntity;
+    })) as WidgetEntity;
     if (!widget) {
       throw new Error('Widget not found');
     }
@@ -165,11 +165,11 @@ export class WidgetsService {
    * @param id
    */
   async findOne(uid: string, id: string): Promise<WidgetEntity> {
-    const widget = await this.prismaService.widget.findUnique({
+    const widget = (await this.prismaService.widget.findUnique({
       where: {
         id: id,
       },
-    }) as WidgetEntity
+    })) as WidgetEntity;
     if (!widget || widget.userId !== uid) {
       throw new Error('widget not found or access denied');
     }
@@ -255,27 +255,64 @@ export class WidgetsService {
     uid: string,
     request: VerifyWidgetEmbeddingRequest,
   ): Promise<RRResponse<boolean>> {
-    const { url, widgetShortId } = request;
+    const { url } = request;
+    const widgets = await this.prismaService.widget.findMany({
+      where: {
+        userId: uid,
+      },
+      select: {
+        shortId: true,
+      },
+    });
+    if (!widgets || widgets.length === 0) {
+      this.logger.warn('No widgets found for user', uid);
+      return {
+        code: 400,
+        message: 'No widgets found for user',
+        data: false,
+      } as RRResponse<boolean>;
+    }
+
+    const widgetShortIds = widgets.map((widget) => widget.shortId);
     this.logger.debug('Verifying embended widget for widget', request);
-    const { content } = await this.browserlessService.extract(request.url, {
+    const { content } = await this.browserlessService.extract(url, {
       contentEnable: true,
       faviconEnable: false,
       screenshotEnable: false,
     });
+    if (!content) {
+      this.logger.error('No content found for URL', url);
+      return {
+        code: 400,
+        message: 'No content found for URL',
+        data: false,
+      } as RRResponse<boolean>;
+    }
+
     const $ = cheerio.load(content);
-    const classSelector = `blockquote.reviewsup-embed`;
-    const citeSelector = `blockquote.reviewsup-embed[cite="${process.env.NEXT_PUBLIC_APP_URL}/widgets/${widgetShortId}"]`;
-    const dataWidgetIdSelector = `blockquote.reviewsup-embed[data-widget-id="${widgetShortId}"]`;
-    const widgetExists =
-      $(classSelector).length > 0 &&
-      $(citeSelector).length > 0 &&
-      $(dataWidgetIdSelector).length > 0;
+    let verified = false;
+    for (const widgetShortId of widgetShortIds) {
+      const classSelector = `blockquote.reviewsup-embed`;
+      const citeSelector = `blockquote.reviewsup-embed[cite="${process.env.NEXT_PUBLIC_APP_URL}/widgets/${widgetShortId}"]`;
+      const dataWidgetIdSelector = `blockquote.reviewsup-embed[data-widget-id="${widgetShortId}"]`;
+      const widgetExists =
+        $(classSelector).length > 0 &&
+        $(citeSelector).length > 0 &&
+        $(dataWidgetIdSelector).length > 0;
+      if (widgetExists) {
+        verified = true;
+        this.logger.debug(
+          `Widget embedding verified for widgetShortId: ${widgetShortId}`,
+        );
+        break;
+      }
+    }
     return {
-      code: widgetExists ? 200 : 400,
-      message: widgetExists
+      code: verified ? 200 : 400,
+      message: verified
         ? 'Widget embedding verified successfully!'
         : 'Widget embedding verification failed',
-      data: widgetExists,
+      data: verified,
     } as RRResponse<boolean>;
   }
 }

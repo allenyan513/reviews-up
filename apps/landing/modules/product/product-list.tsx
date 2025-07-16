@@ -12,12 +12,8 @@ import { Label } from '@reviewsup/ui/label';
 import { ProductItemView } from './product-item';
 import { fetchProductList } from '@/actions/fetch-product-list';
 
-export function ProductList(props: {
-  params: Promise<{
-    lang: string;
-  }>;
-}) {
-  const { lang } = use(props.params);
+export function ProductList(props: { status: string; lang: string }) {
+  const { lang, status } = props;
   const [products, setProducts] = useState<ProductEntity[]>([]);
   const [originalProducts, setOriginalProducts] = useState<ProductEntity[]>([]);
   const [page, setPage] = useState<number>(1);
@@ -26,10 +22,10 @@ export function ProductList(props: {
   const [categories, setCategories] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchProductList(page, pageSize, categories)
+    fetchProductList(status, page, pageSize, categories)
       .then((response) => {
-        setProducts(response);
-        setOriginalProducts(response);
+        setProducts(response.items);
+        setOriginalProducts(response.items);
       })
       .catch((error) => {
         console.error('Error fetching products:', error);
@@ -56,7 +52,8 @@ export function ProductList(props: {
           Join the Feedback Community
         </h1>
         <h2 className="text-xl text-gray-600 max-w-5xl mx-auto">
-          Support developers by trying out apps and sharing your reviews. Together, we build better products.
+          Support developers by trying out apps and sharing your reviews.
+          Together, we build better products.
         </h2>
       </div>
       <div className="grid grid-cols-12 gap-16">

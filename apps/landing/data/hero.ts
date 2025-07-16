@@ -25,7 +25,7 @@ export const hero2 = {
 export const hero3 = {
   capsuleText: '100% Open-Source',
   capsuleLink: 'https://github.com/allenyan513/reviewsup.io',
-  title: 'All-in-One \nReviews & Testimonials Platform',
+  title: 'Collect and Embed Reviews \non Your Website',
   subtitle: 'A powerful Trustpilot alternative—take full control of your reviews and embed customizable widgets in minutes.',
   primaryCtaText: "Get Started - it's Free  🚀 ",
   primaryCtaLink: `${process.env.NEXT_PUBLIC_APP_URL}`,

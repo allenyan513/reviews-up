@@ -162,6 +162,7 @@ model Product {
   taskReviewCount    Int?            @default(0)
   submitReviewCount  Int?            @default(0)
   receiveReviewCount Int?            @default(0)
+  bindingFormId      String?
   longDescription    String?
   features           String?
   useCase            String?

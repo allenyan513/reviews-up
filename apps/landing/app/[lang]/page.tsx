@@ -80,8 +80,8 @@ export default async function LandingPage(props: {
         buttonText={collectingFormData.buttonText}
       />
 
-      <div id="how-it-works" />
-      <HowItWorks />
+      {/*<div id="how-it-works" />*/}
+      {/*<HowItWorks />*/}
 
       <div id="features" />
       <FeatureGrid

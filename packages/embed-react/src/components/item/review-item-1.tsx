@@ -1,10 +1,9 @@
-'use client';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { BiSolidQuoteLeft } from 'react-icons/bi';
 import { WidgetConfig } from '@reviewsup/api/widgets';
-import { StarRating } from '../star-rating';
 import { ReviewItemSource } from './review-item-source';
 import { toLocalDateString } from '../../lib/utils';
+import { StarRatingServer } from '../star-rating.server';
 
 export function ReviewItem1(props: {
   review: ReviewEntity;
@@ -16,7 +15,7 @@ export function ReviewItem1(props: {
   const {
     isSourceEnabled = true,
     isRatingEnabled = true,
-    isDoFollowEnabled = true,
+    isDoFollowEnabled = true
   } = config;
 
   if (!review) {
@@ -36,7 +35,7 @@ export function ReviewItem1(props: {
       </div>
       <div className="flex flex-col">
         {isRatingEnabled && (
-          <StarRating value={review.rating || 5} onChange={null} size={'md'} />
+          <StarRatingServer value={review.rating} size={'md'} />
         )}
         <div className="flex flex-row justify-between items-center">
           <a

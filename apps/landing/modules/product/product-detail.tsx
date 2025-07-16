@@ -3,11 +3,9 @@ import Link from 'next/link';
 import { BsBoxArrowUp, BsPencil } from 'react-icons/bs';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { ProductEntity } from '@reviewsup/api/products';
-import { ReviewEntity } from '@reviewsup/api/reviews';
-import { StarRatingServer } from '@reviewsup/embed-react';
-import React, { Suspense } from 'react';
-import { ProductDetailReviews } from './product-detail-reviews';
+import { ReviewItem, StarRatingServer } from '@reviewsup/embed-react';
+import React from 'react';
+import { ProductStatus } from '@reviewsup/api/products';
 
 export function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
@@ -23,6 +21,23 @@ export function toLocalDateString(date: Date | string): string {
 export async function ProductDetail(props: { lang: string; slug: string }) {
   const { lang, slug } = props;
   const product = await fetchProductDetail(slug);
+  if (
+    !product ||
+    product.status === ProductStatus.waitingForAdminReview ||
+    product.status === ProductStatus.rejected ||
+    product.status === ProductStatus.draft ||
+    product.status === ProductStatus.pendingForSubmit
+  ) {
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-2xl font-bold mb-4">Product Not Found</h1>
+        <p className="text-gray-500 mb-4">
+          The product you are looking for is not available or has not been
+          approved yet.
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -56,7 +71,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             <div className="flex flex-row items-center gap-4">
               <Link
                 className="rounded-full bg-red-400 text-white px-3 py-2 inline-flex items-center gap-2 hover:bg-red-500 transition-colors duration-300"
-                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms`}
+                href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.bindingFormId}`}
                 target="_blank"
               >
                 <BsPencil />
@@ -73,15 +88,15 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             </div>
             <div className="flex flex-row items-center gap-2 text-lg">
               <span className="text-yellow-500 font-bold">
-                {}
+                {product.reviewRatingStr}
               </span>
               <StarRatingServer
                 className="mt-[1px]"
                 size={'md'}
-                value={parseFloat('0')}
+                value={parseFloat(product.reviewRatingStr || '0')}
               />
               <span className="text-black text-md">
-                (0 reviews)
+                ({product.reviewCount} reviews)
               </span>
             </div>
 
@@ -102,15 +117,26 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
       <div className="flex flex-col md:grid-cols-12 md:grid gap-8 px-4 md:px-48 py-8 w-full">
         <div className="md:col-span-8 flex flex-col gap-4">
           <h2 className="h2">{product.name} Reviews</h2>
-          {/*todo*/}
-          {/*<ProductDetailReviews*/}
-          {/*  widgetShortId={product.widgetShortId || ''}*/}
-          {/*  options={{*/}
-          {/*    url: process.env.NEXT_PUBLIC_API_URL as string,*/}
-          {/*  }}*/}
-          {/*/>*/}
+          {/*<GridLayout items={product.reviews as ReviewEntity[]} config={{}} />*/}
+          {product.reviews && product.reviews.length > 0 && (
+            <div className="grid grid-cols-3 gap-4">
+              {product.reviews.map((review) => (
+                <ReviewItem
+                  key={review.id}
+                  review={review}
+                  className="bg-white p-4 border border-gray-200 rounded-lg shadow-sm"
+                />
+              ))}
+            </div>
+          )}
+          {(!product.reviews || product.reviews.length === 0) && (
+            <p className="text-gray-500">
+              No reviews available for this product.
+            </p>
+          )}
+
           <p className="h2">{product.name} Product Information</p>
-          <div className="flex flex-col rounded border border-gray-300 px-5 py-4 gap-2 bg-white">
+          <div className="flex flex-col gap-2">
             {product.longDescription && (
               <>
                 <h2 className="h3">What is {product.name}?</h2>

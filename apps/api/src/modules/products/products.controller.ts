@@ -46,9 +46,9 @@ export class ProductsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Post('create')
-  async create(@Jwt() jwt: JwtPayload, @Body() request: CreateProductRequest) {
-    return this.productsService.create(jwt.userId, request);
+  @Post('submit')
+  async submit(@Jwt() jwt: JwtPayload, @Body() request: UpdateProductRequest) {
+    return this.productsService.submit(jwt.userId, request);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -62,6 +62,7 @@ export class ProductsController {
   async findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }
+
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
@@ -87,6 +88,7 @@ export class ProductsController {
 
   @Get('public/slug/:slug')
   async publicSlug(@Param('slug') slug: string) {
-    return this.productsService.findBySlug(slug);
+    return this.productsService.findOne(slug);
   }
+
 }

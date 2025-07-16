@@ -22,12 +22,7 @@ export class UsersService {
         balance: true,
         avatarUrl: true,
         subscriptionTier: true,
-        products: {
-          select: {
-            id: true,
-            name: true,
-          },
-        },
+        products: true,
       },
     });
     return user;

@@ -12,7 +12,11 @@ import { $Enums } from '@reviewsup/database/generated/client';
 import ProductStatus = $Enums.ProductStatus;
 import ProductCategory = $Enums.ProductCategory;
 import { OrdersService } from '../orders/orders.service';
-import { RRResponse } from '@reviewsup/api/common';
+import {
+  PaginateRequest,
+  PaginateResponse,
+  RRResponse,
+} from '@reviewsup/api/common';
 import { CreateOneTimePaymentResponse } from '@reviewsup/api/orders';
 import { BrowserlessService } from '@src/modules/browserless/browserless.service';
 import { S3Service } from '@src/modules/s3/s3.service';
@@ -153,15 +157,16 @@ export class ProductsService {
    * @param uid
    * @param dto
    */
-  async create(
+  async submit(
     uid: string,
     dto: UpdateProductRequest,
   ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
-    this.logger.debug(`Creating review for user ${uid}`, dto);
     if (dto.submitOption === 'paid-submit') {
       return this.createPaidSubmit(uid, dto);
     } else if (dto.submitOption === 'free-submit') {
       return this.createFreeSubmit(uid, dto);
+    } else if (dto.submitOption === 'verify-submit') {
+      return this.createVerifySubmit(uid, dto);
     } else {
       this.logger.error(`Unknown submit option: ${dto.submitOption}`);
       return {
@@ -221,6 +226,7 @@ export class ProductsService {
         },
         data: {
           status: 'listing',
+          bindingFormId: dto.bindingFormId,
           featured: true,
           taskReviewCount: 0,
           submitReviewCount: 0,
@@ -263,21 +269,6 @@ export class ProductsService {
     uid: string,
     dto: UpdateProductRequest,
   ): Promise<RRResponse<ProductEntity>> {
-    //step1. verify if the widget is embedded in the url website
-    // const verifyResult = await this.showcaseService.verifyWidgetEmbedding(uid, {
-    //   url: dto.url,
-    //   showcaseShortId: dto.widgetShortId,
-    // });
-    // if (verifyResult.code !== 200 || !verifyResult.data) {
-    //   this.logger.error(
-    //     `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
-    //   );
-    //   return {
-    //     code: 400,
-    //     message: 'Widget embedding verification failed',
-    //     data: null,
-    //   };
-    // }
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;
     const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';
@@ -287,7 +278,52 @@ export class ProductsService {
       },
       data: {
         status: status,
+        bindingFormId: dto.bindingFormId,
         taskReviewCount: taskReviewCount,
+        submitReviewCount: 0,
+        receiveReviewCount: 0,
+        updatedAt: new Date(),
+      },
+    });
+    return {
+      code: 200,
+      message: 'Product created successfully',
+      data: product,
+    };
+  }
+
+  /**
+   * 创建一个验证提交的产品
+   * @param uid
+   * @param dto
+   */
+  async createVerifySubmit(
+    uid: string,
+    dto: UpdateProductRequest,
+  ): Promise<RRResponse<ProductEntity>> {
+    // step1. verify if the widget is embedded in the url website
+    const verifyResult = await this.widgetsService.verifyWidgetEmbedding(uid, {
+      url: dto.url,
+    });
+    if (verifyResult.code !== 200 || !verifyResult.data) {
+      this.logger.error(
+        `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
+      );
+      return {
+        code: 400,
+        message: 'Widget embedding verification failed',
+        data: null,
+      };
+    }
+    const product = await this.prismaService.product.update({
+      where: {
+        id: dto.id,
+      },
+      data: {
+        status: 'listing',
+        bindingFormId: dto.bindingFormId,
+        featured: true,
+        taskReviewCount: 0,
         submitReviewCount: 0,
         receiveReviewCount: 0,
         updatedAt: new Date(),
@@ -303,65 +339,150 @@ export class ProductsService {
   async findAll(
     userId: string,
     request: FindAllRequest,
-  ): Promise<ProductEntity[]> {
+  ): Promise<PaginateResponse<ProductEntity>> {
     this.logger.debug('request to findAll products', request);
     const { status } = request;
-    const items = (await this.prismaService.product.findMany({
-      where: {
-        ...(status && {
-          status: {
-            in: status as ProductStatus[], // Filter by status if provided
+    const whereCondition: any = {
+      ...(status && {
+        status: {
+          in: status as ProductStatus[], // Filter by status if provided
+        },
+      }),
+      ...(request.search && {
+        OR: [
+          { name: { contains: request.search, mode: 'insensitive' } },
+          { description: { contains: request.search, mode: 'insensitive' } },
+        ],
+      }),
+      ...(request.categories &&
+        request.categories.length > 0 && {
+          category: {
+            in: request.categories as ProductCategory[], // Filter by categories if provided
           },
         }),
-        ...(request.search && {
-          OR: [
-            { name: { contains: request.search, mode: 'insensitive' } },
-            { description: { contains: request.search, mode: 'insensitive' } },
-          ],
-        }),
-        ...(request.categories &&
-          request.categories.length > 0 && {
-            category: {
-              in: request.categories as ProductCategory[], // Filter by categories if provided
-            },
-          }),
+    };
+    const total = await this.prismaService.product.count({
+      where: {
+        ...whereCondition,
+      },
+    });
+    const items = await this.prismaService.product.findMany({
+      where: {
+        ...whereCondition,
       },
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },
       take: request.pageSize || 10,
       skip: (request.page - 1) * (request.pageSize || 10),
-      //todo
-      // select: {
-      //   id: true,
-      //   name: true,
-      //   slug: true,
-      //   status: true,
-      //   description: true,
-      //   featured: true,
-      //   formId: true,
-      //   formShortId: true,
-      //   showcaseId: true,
-      //   showcaseShortId: true,
-      //   reviewRating: true,
-      //   reviewCount: true,
-      //   icon: true,
-      //   screenshot: true,
-      //   taskReviewCount: true,
-      //   submitReviewCount: true,
-      //   receiveReviewCount: true,
-      // },
-    })) as ProductEntity[];
-    return items;
+      include: {
+        user: true,
+        reviews: true,
+      },
+    });
+    const map = {};
+    for (const item of items) {
+      //所有status=public 的review
+      const publicReviews = item.reviews.filter(
+        (review) => review.status === 'public',
+      );
+      const reviewCount = publicReviews.length;
+      const reviewRating =
+        publicReviews.reduce((sum, review) => sum + review.rating, 0) /
+        (reviewCount || 1);
+      map[item.id] = {
+        reviewCount: reviewCount,
+        reviewRating: reviewRating,
+        reviewRatingStr: reviewRating.toFixed(1),
+      }
+    }
+
+    return {
+      items: items.map((item) => {
+        const finalItem = {
+          ...item,
+          reviewCount: map[item.id]?.reviewCount || 0,
+          reviewRating: map[item.id]?.reviewRating || 0,
+          reviewRatingStr: map[item.id]?.reviewRatingStr || '0.0',
+        }
+        delete finalItem.reviews; // Remove reviews from the response
+        return finalItem
+      }),
+      meta: {
+        page: request.page,
+        pageSize: request.pageSize || 10,
+        total: total,
+        pageCount: Math.ceil(total / (request.pageSize || 10)),
+      },
+    };
   }
 
+  /**
+   *
+   * @param id or slug
+   */
   async findOne(id: string): Promise<ProductEntity> {
-    return this.prismaService.product.findFirst({
+    const product = await this.prismaService.product.findFirst({
       where: {
-        id: id,
+        OR: [{ id: id }, { slug: id }],
       },
-    }) as ProductEntity;
+      include: {
+        reviews: true,
+      },
+    });
+    if (!product) {
+      throw new BadRequestException(`Product with ID ${id} not found`);
+    }
+    //所有status=public 的review
+    const publicReviews = product.reviews.filter(
+      (review) => review.status === 'public',
+    );
+    const reviewCount = publicReviews.length;
+    const reviewRating =
+      publicReviews.reduce((sum, review) => sum + review.rating, 0) /
+      (reviewCount || 1);
+    return {
+      ...product,
+      reviews: publicReviews,
+      reviewCount: reviewCount,
+      reviewRating: reviewRating,
+      reviewRatingStr: reviewRating.toFixed(1),
+    } as ProductEntity;
   }
+
+  /**
+   * 根据productId 查询返回 reviewCount,reviewRating,reviewRatingStr
+   */
+  // async findOneWithReviewInfo(productId: string): Promise<{
+  //   reviewCount: number;
+  //   reviewRating: number;
+  //   reviewRatingStr: string;
+  // }> {
+  //   const product = await this.prismaService.product.findUnique({
+  //     where: {
+  //       id: productId,
+  //     },
+  //     include: {
+  //       reviews: true,
+  //     },
+  //   });
+  //   if (!product) {
+  //     throw new BadRequestException(`Product with ID ${productId} not found`);
+  //   }
+  //   //所有status=public 的review
+  //   const publicReviews = product.reviews.filter(
+  //     (review) => review.status === 'public',
+  //   );
+  //   const reviewCount = publicReviews.length;
+  //   const reviewRating =
+  //     publicReviews.reduce((sum, review) => sum + review.rating, 0) /
+  //     (reviewCount || 1);
+  //   return {
+  //     reviewCount: reviewCount,
+  //     reviewRating: reviewRating,
+  //     reviewRatingStr: reviewRating.toFixed(1),
+  //   };
+  // }
 
   async update(uid: string, id: string, dto: UpdateProductRequest) {
     return this.prismaService.product.update({
@@ -503,29 +624,5 @@ export class ProductsService {
       });
     }
     this.logger.debug(`onReviewSubmitted completed for reviewId: ${reviewId}`);
-  }
-
-  async findBySlug(slug: string) {
-    this.logger.debug(`Finding product by slug: ${slug}`);
-    const product = (await this.prismaService.product.findUnique({
-      where: {
-        slug: slug,
-      },
-      //todo
-      // include: {
-      //   form: {
-      //     select: {
-      //       id: true,
-      //       name: true,
-      //       Review: true, // Include reviews related to the form
-      //     },
-      //   },
-      // },
-    })) as ProductEntity;
-    if (!product) {
-      this.logger.warn(`Product with slug ${slug} not found`);
-      return null;
-    }
-    return product;
   }
 }

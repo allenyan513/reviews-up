@@ -14,7 +14,7 @@ export function CollectingForm(props: {
   return (
     <section
       id="form"
-      className="max-w-5xl px-4 flex flex-col items-center w-full"
+      className="max-w-5xl py-6 px-4 flex flex-col items-center w-full"
     >
       <h2 className="w-full text-center text-4xl pb-4 font-semibold">
         {title}

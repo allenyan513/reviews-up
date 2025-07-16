@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { formEntitySchema } from './forms';
 import { userEntitySchema } from './users';
-import { reviewEntitySchema } from './reviews';
+import { reviewEntitySchema , ReviewEntity} from './reviews';
 import { widgetEntitySchema } from './widgets';
 import { campaignEntitySchema } from './campaign';
 
@@ -39,24 +39,30 @@ export const createProductSchema = z.object({
     .string()
     .min(1, 'Name is required')
     .max(24, 'Name must be less than 24 characters'),
+  slug: z.string().optional(),
   url: z.string().url('Invalid URL').min(1, 'URL is required'),
   description: z
     .string()
     .min(1, 'Description is required')
     .max(160, 'Description must be less than 160 characters'),
   icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
-  screenshot: z
-    .string()
-    .url('Invalid URL')
-    .optional(),
+  screenshot: z.string().url('Invalid URL').optional(),
   category: z.nativeEnum(ProductCategory).default(ProductCategory.ai),
   longDescription: z.string().optional(),
   features: z.string().optional(),
   useCase: z.string().optional(),
   howToUse: z.string().optional(),
   faq: z.string().optional(),
+  bindingFormId: z.string().optional(),
   submitOption: z
-    .enum(['free-submit', 'paid-submit', 'save-draft', 'crawl-product-info'])
+    .enum([
+      'free-submit',
+      'verify-submit',
+      'paid-submit',
+      'save-draft',
+      'crawl-product-info',
+      'update',
+    ])
     .optional(),
 });
 
@@ -101,24 +107,11 @@ export const productSchema = z.object({
   faq: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
-  //todo fix me
-  // user: z.any(),
-  // forms: z.array(z.any()),
-  // reviews: z.array(z.any()),
-  // widgets: z.array(z.any()),
-  // campaigns: z.array(z.any()),
-  // user: z.lazy(() => userEntitySchema).optional(),
-
-  // user: userEntitySchema.optional(),
-  // forms: z.array(formEntitySchema).optional(),
-  // reviews: z.array(reviewEntitySchema).optional(),
-  // widgets: z.array(widgetEntitySchema).optional(),
-  // campaigns: z.array(campaignEntitySchema).optional(),
-
-  // forms: z.lazy(() => z.array(formEntitySchema)).optional(),
-  // reviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
-  // widgets: z.lazy(() => z.array(widgetEntitySchema)).optional(),
-  // campaigns: z.lazy(() => z.array(campaignEntitySchema)).optional(),
+  bindingFormId: z.string().optional(),
+  reviews: z.array(z.any()).optional(),
+  reviewCount: z.number().int().default(0).optional(),
+  reviewRating: z.number().min(0).max(5).default(0).optional(),
+  reviewRatingStr: z.string().optional(),
 });
 export type ProductEntity = z.infer<typeof productSchema>;
 
