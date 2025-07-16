@@ -52,7 +52,7 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
         </div>
         <div className="flex flex-row items-center gap-2 text-lg">
           <Link
-            href={`/${lang}/${product.id}/community/launch/edit`}
+            href={`/${lang}/${product.id}/community/myproduct/edit`}
             className={buttonVariants({
               variant: 'outline',
               size: 'sm',
@@ -166,10 +166,6 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
 export function LaunchPage(props: { lang: string; productId: string }) {
   const { lang, productId } = props;
   const { defaultProduct } = useUserContext();
-
-  if (defaultProduct && defaultProduct.status === 'waitingForAdminReview') {
-    redirect(`/${lang}/${productId}/launch/submit`);
-  }
 
   return (
     <div className="min-h-screen p-4 md:p-8">
