@@ -49,7 +49,7 @@ export default function ExplorePage(props: {
         </div>
         <div className="flex items-center space-x-4"></div>
       </div>
-      <DataTable fetchData={fetchData} columns={columns} />
+      <DataTable fetchData={fetchData} columns={columns} config={{}} />
     </div>
   );
 }

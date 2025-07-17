@@ -4,18 +4,13 @@ import toast from 'react-hot-toast';
 import { api } from '@/lib/api-client';
 import { BiPlus } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
-import {
-  CreateReviewDto,
-  ReviewSource,
-  ReviewStatus,
-} from '@reviewsup/api/reviews';
+import { CreateReviewDto } from '@reviewsup/api/reviews';
 import { ReviewImportTiktokDialog } from '@/modules/review/tiktok';
 import { ReviewImportXDialog } from '@/modules/review/twitter';
 import { ReviewImportGoogleMapDialog } from '@/modules/review/google';
 import { ImportLinkedInDialog } from '@/modules/review/linkedin';
 import { ManualImportView } from '@/modules/review/manual/manual-import-view';
 import { useSession } from '@/context/UserProvider';
-import { z } from 'zod/index';
 
 /**
  * 从 /forms/[shortId] 提交的表单
@@ -74,7 +69,7 @@ export function FormDefaultSubmitView(props: {
       });
   };
   useEffect(() => {
-    if(!user) {
+    if (!user) {
       return;
     }
     // 初始化表单数据
@@ -87,7 +82,6 @@ export function FormDefaultSubmitView(props: {
       email: user.email || '',
       avatarUrl: user.avatarUrl || '',
     });
-
   }, [user]);
 
   return (
