@@ -35,7 +35,7 @@ export default function CampaignListPage(props: {
           Create Campaign
         </Link>
       </div>
-      <DataTable fetchData={findAll} columns={columns} />
+      <DataTable fetchData={findAll} columns={columns} config={{}} />
     </div>
   );
 }
