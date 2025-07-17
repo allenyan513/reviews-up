@@ -12,6 +12,7 @@ export default function ReviewsPage(props: {
   lang: string;
   productId: string;
   status: string | undefined;
+  mode: 'productId' | 'reviewerId';
 }) {
   const { lang, productId, status } = props;
   const fetchReviews = async (
@@ -24,12 +25,15 @@ export default function ReviewsPage(props: {
       throw new Error('Product ID is required to fetch reviews');
     }
     const res = await api.review.getReviews({
-      productId: productId,
       page: pageIndex + 1,
       pageSize: pageSize,
       sortBy: 'createdAt',
       sortOrder: 'desc',
+      ...(props.mode === 'productId' && {
+        productId: productId,
+      }),
     });
+    console.log(res);
     return {
       data: res.items,
       pageCount: res.meta.pageCount,
@@ -53,6 +57,9 @@ export default function ReviewsPage(props: {
       <DataTable
         fetchData={fetchReviews}
         columns={columns}
+        config={{
+          mode: props.mode,
+        }}
         defaultColumnFilters={
           status === 'all' ? [] : [{ id: 'status', value: status }]
         }

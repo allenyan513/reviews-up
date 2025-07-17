@@ -54,11 +54,11 @@ export const createReviewSchema = z.object({
 export type CreateReviewDto = z.infer<typeof createReviewSchema>;
 
 export const findAllReviewRequestSchema = z.object({
-  productId: z.string().min(1, 'ProductId is required'),
   page: z.coerce.number().int().min(1).default(1),
   pageSize: z.coerce.number().int().min(1).max(100).default(10),
   sortBy: z.string().default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
+  productId: z.string().optional()
 });
 
 export type FindAllReviewRequest = z.infer<typeof findAllReviewRequestSchema>;

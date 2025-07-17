@@ -5,7 +5,7 @@ export default function FAQ(props: {
   }[];
 }) {
   return (
-    <section id="faq" className="w-full p-4">
+    <section id="faq" className="w-full md:max-w-5xl p-4">
       <div className="">
         <h2 className="mb-10 text-center text-3xl font-bold text-gray-900">
           FAQ

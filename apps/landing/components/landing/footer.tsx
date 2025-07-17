@@ -4,6 +4,29 @@ import Link from 'next/link';
 import { BsGithub, BsLinkedin, BsTwitterX } from 'react-icons/bs';
 import { I18nEntries } from '@/components/i18n-entries';
 
+const sources = [
+  {
+    title: 'Blog',
+    url: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
+    external: true,
+  },
+  {
+    title: 'Documents',
+    url: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
+    external: true,
+  },
+  {
+    title: 'Launch',
+    url: '/launch',
+    external: false,
+  },
+  {
+    title: 'Products',
+    url: '/products',
+    external: false,
+  },
+];
+
 export function Footer(props: {
   builtBy: string;
   builtByLink: string;
@@ -12,9 +35,28 @@ export function Footer(props: {
   linkedinLink: string;
 }) {
   return (
-    <footer className="border-t">
-      <I18nEntries className="pt-8" />
-      <div className="container flex flex-col items-center justify-between gap-4 py-10 md:h-24 md:flex-row md:py-0">
+    <footer className="px-4 flex flex-col gap-4 py-8  w-full md:max-w-5xl">
+      <div className="flex flex-row gap-4 pt-8">
+        <div className="flex flex-col ">
+          <h2 className="text-lg font-semibold mb-2">Reviewsup</h2>
+          <ul className="text-sm space-y-1">
+            {sources.map((source, index) => (
+              <li key={index}>
+                <Link
+                  href={source.url}
+                  className="text-gray-500 hover:text-gray-900"
+                  target={source.external ? '_blank' : '_self'}
+                  {...(source.external ? { rel: 'noopener noreferrer' } : {})}
+                >
+                  {source.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <I18nEntries className="" />
+      <div className="container flex flex-col items-center justify-between gap-4 md:flex-row md:py-0">
         <div className="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
           <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
             Built by{' '}

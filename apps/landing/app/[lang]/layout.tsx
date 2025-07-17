@@ -36,11 +36,6 @@ export default async function RootLayout(props: {
           launchLink={`${process.env.NEXT_PUBLIC_APP_URL}/launch`}
           items={[
             { title: 'Home', href: '/' },
-            {
-              title: 'Community',
-              href: `/products`,
-              external: false,
-            },
             { title: 'Widget', href: '/#widget' },
             { title: 'Form', href: '/#form' },
             { title: 'Features', href: '/#features' },
@@ -54,6 +49,16 @@ export default async function RootLayout(props: {
               title: 'Blog',
               href: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
               external: true,
+            },
+            {
+              title: 'Launch',
+              href: `/launch`,
+              external: false,
+            },
+            {
+              title: 'Products',
+              href: `/products`,
+              external: false,
             },
           ]}
         />

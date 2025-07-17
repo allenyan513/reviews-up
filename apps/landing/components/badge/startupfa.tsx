@@ -6,9 +6,11 @@ export function Startupfa() {
     >
       <img
         style={{
-          height: '44px',
           width: 'auto',
+          height: '44px',
+
         }}
+        className='object-contain'
         src="https://startupfa.me/badges/featured-badge.webp"
         alt="Featured on Startup Fame"
       />

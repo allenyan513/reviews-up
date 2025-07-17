@@ -112,20 +112,25 @@ export class ReviewsService {
     return review;
   }
 
-  async findAll(request: FindAllReviewRequest) {
-    this.logger.debug('Fetching reviews with pagination', request);
-    if (!request.productId) {
-      throw new Error('Workspace ID is required to fetch reviews');
-    }
+  async findAll(uid: string, request: FindAllReviewRequest) {
+    this.logger.debug(
+      `Finding all reviews with request: ${JSON.stringify(request)}`,
+    );
+    const whereConditions: any = {
+      ...(request.productId
+        ? {
+            productId: request.productId,
+          }
+        : {
+            reviewerId: uid,
+          }),
+    };
+    console.log('Where conditions:', whereConditions);
     const total = await this.prismaService.review.count({
-      where: {
-        productId: request.productId, // Filter by product if provided
-      },
+      where: whereConditions,
     });
     const items = await this.prismaService.review.findMany({
-      where: {
-        productId: request.productId, // Filter by product if provided
-      },
+      where: whereConditions,
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },

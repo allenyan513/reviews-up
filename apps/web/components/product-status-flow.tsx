@@ -1,26 +1,24 @@
 import React from 'react';
 import clsx from 'clsx';
-import { BsCheckCircle, BsClock ,
-  BsXCircle, BsBan,
-} from 'react-icons/bs';
+import { BsCheckCircle, BsClock, BsXCircle, BsBan } from 'react-icons/bs';
 
 // 可扩展状态顺序
 const statusSteps = [
   // 'waitingForAdminReview',
-  'pendingForSubmit',
+  // 'pendingForSubmit',
   'pendingForReceive',
   'listing',
 ] as const;
 
-export type StatusStep = (typeof statusSteps)[number] | 'rejected';
+export type StatusStep = (typeof statusSteps)[number];
 
 // 状态标签映射（可自定义为中文或其他语言）
 const statusLabels: Record<StatusStep, string> = {
   // waitingForAdminReview: 'Pending for Admin Review',
-  pendingForSubmit: 'Writing Reviews',
+  // pendingForSubmit: 'Writing Reviews',
+  // rejected: 'Rejected',
   pendingForReceive: 'Pending',
   listing: 'Public',
-  rejected: 'Rejected',
 };
 
 interface ProductStatusFlowProps {
@@ -33,15 +31,15 @@ const ProductStatusFlow: React.FC<ProductStatusFlowProps> = ({
   labels = {},
 }) => {
   const mergedLabels = { ...statusLabels, ...labels };
-  const isRejected = status === 'rejected';
+  // const isRejected = status === 'rejected';
 
   const getStepState = (
     step: StatusStep,
   ): 'success' | 'fail' | 'hidden' | 'current' => {
-    if (isRejected) {
-      // if (step === 'waitingForAdminReview') return 'success';
-      return 'hidden';
-    }
+    // if (isRejected) {
+    //   // if (step === 'waitingForAdminReview') return 'success';
+    //   return 'hidden';
+    // }
 
     // @ts-ignore
     const currentIndex = statusSteps.indexOf(status as StatusStep);
@@ -50,7 +48,7 @@ const ProductStatusFlow: React.FC<ProductStatusFlowProps> = ({
 
     //如果currentIndex是最后一个状态，则全部都是 success
     if (currentIndex === statusSteps.length - 1) {
-      return 'success'
+      return 'success';
     }
 
     if (stepIndex === -1) return 'hidden';
@@ -85,10 +83,10 @@ const ProductStatusFlow: React.FC<ProductStatusFlowProps> = ({
                 stepState === 'success'
                   ? 'text-green-600'
                   : stepState === 'fail'
-                  ? 'text-gray-500'
-                  : stepState === 'current'
-                  ? 'text-amber-500'
-                  : 'text-gray-400',
+                    ? 'text-gray-500'
+                    : stepState === 'current'
+                      ? 'text-amber-500'
+                      : 'text-gray-400',
               )}
             >
               {mergedLabels[step]}
@@ -97,12 +95,12 @@ const ProductStatusFlow: React.FC<ProductStatusFlowProps> = ({
         );
       })}
 
-      {isRejected && (
-        <div className="flex items-center gap-1">
-          <BsXCircle className="w-5 h-5 text-red-500" />
-          <span className="text-sm text-red-600">{mergedLabels.rejected}</span>
-        </div>
-      )}
+      {/*{isRejected && (*/}
+      {/*  <div className="flex items-center gap-1">*/}
+      {/*    <BsXCircle className="w-5 h-5 text-red-500" />*/}
+      {/*    <span className="text-sm text-red-600">{mergedLabels.rejected}</span>*/}
+      {/*  </div>*/}
+      {/*)}*/}
     </div>
   );
 };

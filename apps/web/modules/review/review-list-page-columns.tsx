@@ -42,7 +42,10 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 
-export function columns(setData: any): ColumnDef<any>[] {
+export function columns(
+  setData: any,
+  config: Record<string, string>,
+): ColumnDef<any>[] {
   const deleteReview = async (reviewId: string) => {
     try {
       await api.review.deleteReview(reviewId);
@@ -263,8 +266,10 @@ export function columns(setData: any): ColumnDef<any>[] {
       cell: ({ row, table }) => {
         const reviewId = row.original.id;
         const status = row.getValue('status') as string;
+        const mode = config.mode || '';
         return (
           <Button
+            disabled={mode === 'reviewerId'}
             onClick={() => {
               updateReviewStatus(reviewId, status as ReviewStatus);
             }}

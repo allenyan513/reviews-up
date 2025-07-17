@@ -26,7 +26,8 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
     product.status === ProductStatus.waitingForAdminReview ||
     product.status === ProductStatus.rejected ||
     product.status === ProductStatus.draft ||
-    product.status === ProductStatus.pendingForSubmit
+    product.status === ProductStatus.pendingForSubmit||
+    product.status === ProductStatus.pendingForReceive
   ) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">

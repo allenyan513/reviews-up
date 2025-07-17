@@ -18,11 +18,14 @@ export const review = {
   getReviews: (
     request: FindAllReviewRequest,
   ): Promise<PaginateResponse<ReviewEntity>> =>
-    authFetch(`/reviews/productId/${request.productId}`, 'GET', {
+    authFetch(`/reviews`, 'GET', {
       page: request.page,
       pageSize: request.pageSize,
       sortBy: request.sortBy,
       sortOrder: request.sortOrder,
+      ...(request.productId && {
+        productId: request.productId,
+      }),
     }),
   getReview: (id: string) => authFetch(`/reviews/${id}`, 'GET', {}),
 
