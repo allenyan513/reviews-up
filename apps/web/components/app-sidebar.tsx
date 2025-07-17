@@ -97,6 +97,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   icon: IconForbid2,
                   active: path.includes('/reviews/hidden'),
                 },
+                {
+                  title: 'My Submitted',
+                  url: `/${lang}/${defaultProduct?.id}/reviews/my`,
+                  icon: IconUser,
+                  active: path.includes('/reviews/my'),
+                },
               ],
             },
 

@@ -67,7 +67,7 @@ export class ProductsService {
         name: dto.name,
         slug: slug,
         url: dto.url,
-        status: 'waitingForAdminReview',
+        status: 'pendingForReceive',
         icon: dto.icon,
         screenshot: dto.screenshot,
         description: dto.description,
@@ -111,11 +111,11 @@ export class ProductsService {
       throw new Error('Unable to create default showcase');
     }
     //automatically free submit the product
-    await this.submit(uid,{
+    await this.submit(uid, {
       id: newProduct.id,
       bindingFormId: defaultForm.id,
       submitOption: 'free-submit',
-    })
+    });
     return newProduct as ProductEntity;
   }
 
@@ -277,7 +277,7 @@ export class ProductsService {
   ): Promise<RRResponse<ProductEntity>> {
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;
-    const status = taskReviewCount > 0 ? 'pendingForSubmit' : 'listing';
+    const status = taskReviewCount > 0 ? 'pendingForReceive' : 'listing';
     const product = await this.prismaService.product.update({
       where: {
         id: dto.id,
@@ -400,7 +400,7 @@ export class ProductsService {
         reviewCount: reviewCount,
         reviewRating: reviewRating,
         reviewRatingStr: reviewRating.toFixed(1),
-      }
+      };
     }
 
     return {
@@ -410,9 +410,9 @@ export class ProductsService {
           reviewCount: map[item.id]?.reviewCount || 0,
           reviewRating: map[item.id]?.reviewRating || 0,
           reviewRatingStr: map[item.id]?.reviewRatingStr || '0.0',
-        }
+        };
         delete finalItem.reviews; // Remove reviews from the response
-        return finalItem
+        return finalItem;
       }),
       meta: {
         page: request.page,
@@ -529,7 +529,7 @@ export class ProductsService {
    * 2. 如果 product.receiveReviewCount >=submitReviewCount 说明， 额度用完了，切换到 pendingForSubmit状态， 这样子在 列表中就不会被现实
    * @param reviewId
    */
-  async onReviewSubmitted(reviewId: any) {
+  async onReviewSubmitted(reviewId: string) {
     this.logger.debug(`onReviewSubmitted: ${reviewId}`);
     const review = await this.prismaService.review.findUnique({
       where: {
@@ -543,13 +543,19 @@ export class ProductsService {
     if (!review) {
       throw new Error(`Review with ID ${reviewId} not found`);
     }
+    if (review.reviewerId === review.ownerId) {
+      this.logger.debug(
+        `Reviewer and owner are the same for reviewId: ${reviewId}`,
+      );
+      return;
+    }
     if (review.reviewerId) {
       //提交评价用户
       const product = await this.prismaService.product.findFirst({
         where: {
           userId: review.reviewerId,
           status: {
-            in: ['pendingForReceive', 'pendingForSubmit', 'listing'], // Only count products that are pending or under review
+            in: ['pendingForReceive', 'listing'], // Only count products that are pending or under review
           },
         },
         select: {
@@ -570,9 +576,10 @@ export class ProductsService {
       let newStatus = product.status;
       if (newSubmitReviewCount >= product.taskReviewCount) {
         newStatus = 'listing'; // 达到提交评价计数，切换到 listing 状态
-      } else if (newSubmitReviewCount > product.receiveReviewCount) {
-        newStatus = 'pendingForReceive'; // 提交评价计数超过接收评价计数，切换到 pendingForReceive 状态
       }
+      // else if (newSubmitReviewCount > product.receiveReviewCount) {
+      //   newStatus = 'pendingForReceive'; // 提交评价计数超过接收评价计数，切换到 pendingForReceive 状态
+      // }
       // 更新提交人产品的提交评价计数
       await this.prismaService.product.update({
         where: {
@@ -585,50 +592,49 @@ export class ProductsService {
         },
       });
     }
-    if (review.ownerId) {
-      //update review owner
-      const product = await this.prismaService.product.findFirst({
-        where: {
-          userId: review.ownerId,
-          status: {
-            in: ['pendingForReceive', 'pendingForSubmit', 'listing'], // Only count products that are pending or under review
-          },
-        },
-        select: {
-          id: true,
-          status: true,
-          submitReviewCount: true,
-          receiveReviewCount: true,
-        },
-      });
-      if (!product) {
-        this.logger.debug(
-          `No product found for user ${review.ownerId} with status pendingForReceive, pendingFroSubmit or listing`,
-        );
-        return;
-      }
-      //如果 status 是 listing, 则不需要更新status
-
-      const newReceiveReviewCount = product.receiveReviewCount + 1;
-      let newStatus = product.status;
-      if (
-        newStatus !== 'listing' && // 如果当前状态不是 listing
-        newReceiveReviewCount >= product.submitReviewCount
-      ) {
-        newStatus = 'pendingForSubmit'; // 达到接收评价计数，切换到 pendingFroSubmit 状态
-      }
-      // 更新被提交人产品的接收评价计数
-      await this.prismaService.product.update({
-        where: {
-          id: product.id,
-        },
-        data: {
-          receiveReviewCount: newReceiveReviewCount,
-          status: newStatus,
-          updatedAt: new Date(),
-        },
-      });
-    }
+    // if (review.ownerId) {
+    //   //update review owner
+    //   const product = await this.prismaService.product.findFirst({
+    //     where: {
+    //       userId: review.ownerId,
+    //       status: {
+    //         in: ['pendingForReceive', 'listing'], // Only count products that are pending or under review
+    //       },
+    //     },
+    //     select: {
+    //       id: true,
+    //       status: true,
+    //       submitReviewCount: true,
+    //       receiveReviewCount: true,
+    //     },
+    //   });
+    //   if (!product) {
+    //     this.logger.debug(
+    //       `No product found for user ${review.ownerId} with status pendingForReceive, pendingFroSubmit or listing`,
+    //     );
+    //     return;
+    //   }
+    //   //如果 status 是 listing, 则不需要更新status
+    //   const newReceiveReviewCount = product.receiveReviewCount + 1;
+    //   let newStatus = product.status;
+    //   if (
+    //     newStatus !== 'listing' && // 如果当前状态不是 listing
+    //     newReceiveReviewCount >= product.submitReviewCount
+    //   ) {
+    //     newStatus = 'pendingForSubmit'; // 达到接收评价计数，切换到 pendingFroSubmit 状态
+    //   }
+    //   // 更新被提交人产品的接收评价计数
+    //   await this.prismaService.product.update({
+    //     where: {
+    //       id: product.id,
+    //     },
+    //     data: {
+    //       receiveReviewCount: newReceiveReviewCount,
+    //       status: newStatus,
+    //       updatedAt: new Date(),
+    //     },
+    //   });
+    // }
     this.logger.debug(`onReviewSubmitted completed for reviewId: ${reviewId}`);
   }
 }

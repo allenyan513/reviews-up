@@ -100,7 +100,7 @@ export default async function LandingPage(props: {
       <div id={'faqs'} />
       <FAQ data={faqData} />
 
-      <div id="badges" className="py-8">
+      <div id="badges">
         <Badge />
       </div>
     </div>

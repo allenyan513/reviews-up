@@ -83,7 +83,7 @@ export const productSchema = z.object({
   url: z.string().url('Invalid URL').min(1, 'URL is required'),
   status: z
     .nativeEnum(ProductStatus)
-    .default(ProductStatus.waitingForAdminReview)
+    .default(ProductStatus.pendingForReceive)
     .optional(),
   taskReviewCount: z.number().int().default(0),
   submitReviewCount: z.number().int().default(0),

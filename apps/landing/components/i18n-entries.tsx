@@ -13,7 +13,12 @@ export function I18nEntries(props: { className?: string }) {
   }
 
   return (
-    <div className={cn('flex flex-col lg:flex-row gap-4', props.className)}>
+    <div
+      className={cn(
+        'md:flex md:flex-row grid grid-cols-4 gap-1 md:gap-4',
+        props.className,
+      )}
+    >
       {i18nLanguages.map((item) => {
         const href = getLocalizedPath(item.code);
         return (

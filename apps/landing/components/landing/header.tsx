@@ -205,17 +205,17 @@ export function Header(props: NavProps) {
           <Link href={props.githubLink || ''} target="_blank">
             <BsGithub className="h-6 w-6" />
           </Link>
-          <Link
-            href={props.launchLink || ''}
-            target="_blank"
-            className={cn(
-              buttonVariants({ size: 'lg' }),
-              'rounded-full hidden md:inline-flex',
-              'text-black bg-white border ',
-            )}
-          >
-            Free Launch
-          </Link>
+          {/*<Link*/}
+          {/*  href={props.launchLink || ''}*/}
+          {/*  target="_blank"*/}
+          {/*  className={cn(*/}
+          {/*    buttonVariants({ size: 'lg' }),*/}
+          {/*    'rounded-full hidden md:inline-flex',*/}
+          {/*    'text-black bg-white border ',*/}
+          {/*  )}*/}
+          {/*>*/}
+          {/*  Free Launch*/}
+          {/*</Link>*/}
           <Link
             href={props.appLink || ''}
             target="_blank"

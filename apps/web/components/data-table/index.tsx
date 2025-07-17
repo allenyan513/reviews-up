@@ -42,13 +42,16 @@ interface DataTableProps<TData, TValue> {
   } | null>;
   columns: (
     setData: React.Dispatch<React.SetStateAction<TData[]>>,
+    config: Record<string, any>,
   ) => ColumnDef<TData, TValue>[];
+  config: Record<string, any>;
   defaultColumnFilters?: ColumnFiltersState;
 }
 
 export function DataTable<TData, TValue>({
   fetchData,
   columns,
+  config,
   defaultColumnFilters = [],
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -62,7 +65,7 @@ export function DataTable<TData, TValue>({
   const [pageCount, setPageCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const _columns = useMemo(() => {
-    return columns(setData);
+    return columns(setData, config);
   }, []);
 
   const table = useReactTable({

@@ -119,12 +119,8 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           </p>
           <ProductStatusFlow
             status={product.status as StatusStep}
-            labels={{
-              pendingForSubmit: 'Submitting Reviews',
-            }}
           />
-
-          {product.status === ProductStatus.pendingForSubmit && (
+          {product.status === ProductStatus.pendingForReceive && (
             <div className="flex flex-col mt-4">
               <p>Task:</p>
               <ul className="list-decimal pl-4">
@@ -142,15 +138,15 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           )}
         </div>
 
-        <div className="text-gray-600 col-span-3">
-          <p className="">Received:</p>
-          <p className="text-5xl mt-4">
-            {product.receiveReviewCount}
-            {product.status === 'listing'
-              ? ''
-              : `/${product.submitReviewCount}`}
-          </p>
-        </div>
+        {/*<div className="text-gray-600 col-span-3">*/}
+        {/*  <p className="">Received:</p>*/}
+        {/*  <p className="text-5xl mt-4">*/}
+        {/*    {product.receiveReviewCount}*/}
+        {/*    {product.status === 'listing'*/}
+        {/*      ? ''*/}
+        {/*      : `/${product.submitReviewCount}`}*/}
+        {/*  </p>*/}
+        {/*</div>*/}
         <div className="text-gray-600 col-span-3">
           <p className="">Submitted:</p>
           <p className="text-5xl mt-4">

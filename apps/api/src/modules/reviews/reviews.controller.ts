@@ -58,21 +58,6 @@ export class ReviewsController {
     return this.reviewsService.findAllByReviewerId(jwt.userId);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('productId/:productId')
-  async findAll(
-    @Jwt() jwt: JwtPayload,
-    @Param('productId') productId: string,
-    @Query() query: any,
-  ) {
-    const input = findAllReviewRequestSchema.parse({
-      userId: jwt.userId,
-      productId,
-      ...query,
-    }) as FindAllReviewRequest;
-    return this.reviewsService.findAll(input);
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.reviewsService.findOne(id);
@@ -119,5 +104,14 @@ export class ReviewsController {
     @Body() request: GoogleMapRequest,
   ) {
     return await this.reviewsService.searchPlaces(request);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  async findAll(@Jwt() jwt: JwtPayload, @Query() query: any) {
+    const input = findAllReviewRequestSchema.parse({
+      ...query,
+    }) as FindAllReviewRequest;
+    return this.reviewsService.findAll(jwt.userId, input);
   }
 }

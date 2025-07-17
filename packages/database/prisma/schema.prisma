@@ -153,7 +153,7 @@ model Product {
   name               String
   slug               String          @unique
   url                String
-  status             ProductStatus   @default(waitingForAdminReview)
+  status             ProductStatus   @default(pendingForReceive)
   icon               String          @default("")
   screenshot         String?         @default("")
   description        String          @default("")

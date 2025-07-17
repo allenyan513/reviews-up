@@ -6,7 +6,7 @@ import { Twelve } from '@/components/badge/twelve';
 
 export function Badge() {
   return (
-    <div className="flex flex-row gap-2">
+    <div className="flex flex-row gap-2 px-4 w-full md:max-w-5xl">
       <ProductHunt />
       <Startupfa />
       <Turbo0 />

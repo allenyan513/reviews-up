@@ -1,16 +1,21 @@
 import { useRouter } from 'next/navigation';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { api } from '@/lib/api-client';
 import { BiPlus } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
-import { CreateReviewDto } from '@reviewsup/api/reviews';
+import {
+  CreateReviewDto,
+  ReviewSource,
+  ReviewStatus,
+} from '@reviewsup/api/reviews';
 import { ReviewImportTiktokDialog } from '@/modules/review/tiktok';
 import { ReviewImportXDialog } from '@/modules/review/twitter';
 import { ReviewImportGoogleMapDialog } from '@/modules/review/google';
 import { ImportLinkedInDialog } from '@/modules/review/linkedin';
 import { ManualImportView } from '@/modules/review/manual/manual-import-view';
 import { useSession } from '@/context/UserProvider';
+import { z } from 'zod/index';
 
 /**
  * 从 /forms/[shortId] 提交的表单
@@ -30,9 +35,15 @@ export function FormDefaultSubmitView(props: {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [isAddReviewManually, setIsAddReviewManually] =
     useState<boolean>(false);
-  const [submitForm, setSubmitForm] = useState<CreateReviewDto | undefined>(
-    undefined,
-  );
+  const [submitForm, setSubmitForm] = useState<CreateReviewDto | undefined>({
+    productId: productId,
+    formId: id,
+    userId: user?.id || '',
+    reviewerId: user?.id || '',
+    fullName: user?.name || '',
+    email: user?.email || '',
+    avatarUrl: user?.avatarUrl || '',
+  });
 
   const handleSubmit = () => {
     if (mode === 'edit') {
@@ -62,6 +73,22 @@ export function FormDefaultSubmitView(props: {
         toast.error(error.message);
       });
   };
+  useEffect(() => {
+    if(!user) {
+      return;
+    }
+    // 初始化表单数据
+    setSubmitForm({
+      productId: productId,
+      formId: id,
+      userId: user.id,
+      reviewerId: user.id,
+      fullName: user.name || '',
+      email: user.email || '',
+      avatarUrl: user.avatarUrl || '',
+    });
+
+  }, [user]);
 
   return (
     <div className="flex flex-col gap-4 w-full items-center">
