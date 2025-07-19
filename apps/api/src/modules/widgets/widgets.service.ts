@@ -59,7 +59,9 @@ export class WidgetsService {
         name: dto.name,
         config: {
           ...this.defaultConfig, // Merge with any provided config
+          ...dto.config,
         },
+        isProtected: dto.isProtected || false,
         createdAt: new Date(),
         updatedAt: new Date(),
       },

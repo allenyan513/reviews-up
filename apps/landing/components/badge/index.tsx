@@ -3,6 +3,7 @@ import { Startupfa } from '@/components/badge/startupfa';
 import { ProductHunt } from '@/components/badge/product-hunt';
 import { Frogdr } from '@/components/badge/frogdr';
 import { Twelve } from '@/components/badge/twelve';
+import { WidgetWrapper } from '@/components/badge/widget-wrapper';
 
 export function Badge() {
   return (
@@ -12,6 +13,7 @@ export function Badge() {
       <Turbo0 />
       <Frogdr />
       <Twelve />
+      <WidgetWrapper/>
     </div>
   );
 }

@@ -5,7 +5,7 @@ import { BiArrowBack, BiCodeAlt, BiPlus, BiSave, BiShow } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
-import { WidgetPageReviewClient } from '@reviewsup/embed-react';
+import { WidgetContent } from '@reviewsup/embed-react';
 import { BsBoxArrowUpRight, BsShare } from 'react-icons/bs';
 import { WidgetPageConfig } from '@/modules/widget/widget-page-config';
 import { useWidgetContext } from '@/modules/widget/context/widget-context';
@@ -82,7 +82,7 @@ export default function WidgetIdPage(props: {
           <WidgetPageConfig />
         </div>
         <div className="md:col-span-3 bg-gray-50 p-8 border rounded shadow h-[750px] overflow-y-auto items-center justify-center">
-          <WidgetPageReviewClient
+          <WidgetContent
             widget={widget}
             widgetConfig={widgetConfig}
           />

@@ -15,7 +15,7 @@ export async function generateMetadata(props: {
   }
   return {
     title: `${product.name}: ${product.description}`.substring(0, 60),
-    description: `${product.name}: ${product.longDescription}.`.substring(
+    description: `${product.name}: ${product.description}.`.substring(
       0,
       160,
     ),

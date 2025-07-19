@@ -26,16 +26,26 @@ export function ReviewItemSource(props: {
           }
         >
           <img
-            className="w-6 h-6 rounded"
             src={iconUrl[source] || ''}
             alt={`${source} icon`}
+            style={{
+              width: '1.5rem',
+              height: '1.5rem',
+              borderRadius: '0.25rem',
+              objectFit: 'cover',
+            }}
           />
         </a>
       ) : (
         <img
-          className="w-6 h-6 rounded"
           src={iconUrl[source] || ''}
           alt={`${source} icon`}
+          style={{
+            width: '1.5rem',
+            height: '1.5rem',
+            borderRadius: '0.25rem',
+            objectFit: 'cover',
+          }}
         />
       )}
     </div>

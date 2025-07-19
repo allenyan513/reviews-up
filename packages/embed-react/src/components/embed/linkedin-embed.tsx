@@ -48,17 +48,24 @@ export function LinkedinEmbed(props: {
   }, [linkedinEmbedCode.width, linkedinEmbedCode.height]);
 
   return (
-    <div ref={containerRef} className="w-full">
+    <div
+      ref={containerRef}
+      // className="w-full"
+      style={{
+        width: '100%',
+      }}
+    >
       <iframe
         src={linkedinEmbedCode.src}
         title="LinkedIn Post"
         allowFullScreen
+        // className="rounded-md"
         style={{
           width: iframeWidth,
           height: iframeHeight,
           border: 'none',
+          borderRadius: '0.375rem', // Tailwind's rounded-md
         }}
-        className="rounded-md"
       />
     </div>
   );

@@ -5,6 +5,7 @@ export const createWidgetSchema = z.object({
   productId: z.string().min(1, 'ProductId is required'),
   name: z.string().min(1, 'Widget name is required'),
   config: z.lazy(() => widgetConfigSchema).optional(),
+  isProtected: z.boolean().optional().default(false),
 });
 export type CreateWidgetDto = z.infer<typeof createWidgetSchema>;
 export type UpdateWidgetDto = Partial<CreateWidgetDto>;

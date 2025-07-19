@@ -176,7 +176,7 @@ export function columns(
         const rating = row.getValue('rating') as number | null;
         return (
           <div className="flex items-center">
-            <StarRating size={'sm'} value={rating || 5} className="ml-1" />
+            <StarRating size={'sm'} value={rating || 5}/>
           </div>
         );
       },

@@ -2,40 +2,92 @@ import { ReviewEntity } from '@reviewsup/api/reviews';
 import { WidgetConfig } from '@reviewsup/api/widgets';
 import React from 'react';
 import { StarServer } from '../star.server';
+import styled from 'styled-components';
 
 interface BadgeProps {
   items: ReviewEntity[];
   config?: WidgetConfig;
+  url?: string;
 }
 
-export function Badge({ items, config }: BadgeProps) {
+const MainSpan = styled.span`
+  font-size: 1rem;
+  color: black;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+`;
+const SubSpan = styled.span`
+  font-size: 0.5rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+`;
+
+export function Badge({ items, config, url }: BadgeProps) {
   const ratings = items.map((item) => item.rating || 0);
   const averageRating =
     ratings.reduce((acc, rating) => acc + rating, 0) / (ratings.length || 1);
   const averageRatingFixed = averageRating.toFixed(1);
   const totalReviews = ratings.length;
   return (
-    <div className="inline-flex flex-row items-center justify-start gap-3 py-2 px-3 border rounded-md bg-white">
+    <a
+      href={url}
+      target="_blank"
+      style={{
+        display: 'inline-flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'start',
+        gap: '0.5rem',
+        padding: '0.2rem 0.5rem',
+        border: '1px solid #e5e7eb',
+        borderRadius: '0.375rem',
+        backgroundColor: '#ffffff',
+        color: 'black',
+      }}
+    >
       <img
         src="https://reviewsup.io/favicon.ico"
         alt="ReviewsUp Logo"
-        className="w-7 h-7"
+        style={{ width: '1.5rem', height: '1.5rem' }}
       />
-      <div className="flex flex-col items-start justify-center ">
-        <p className="text-[0.5rem] uppercase">Featured on</p>
-        <p className="font-bold">ReviewsUp.io</p>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+        }}
+      >
+        <MainSpan>reviewsup.io</MainSpan>
+        <SubSpan> Featured on</SubSpan>
       </div>
-      <div className="flex flex-col items-center justify-center px-1">
-        <div className="flex flex-row items-center gap-0">
-          <span className="font-semibold text-[1.0rem]">
-            {averageRatingFixed}
-          </span>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'flex-start',
+          justifyContent: 'center',
+        }}
+      >
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: '0.1rem',
+          }}
+        >
+          <MainSpan>{averageRatingFixed}</MainSpan>
           <StarServer isActive={true} size={'sm'} />
         </div>
-        <span className="cursor-pointer hover:cursor-pointer hover:underline text-[0.6rem] text-gray-600">
-          {totalReviews} reviews
-        </span>
+
+        <SubSpan>{totalReviews} reviews</SubSpan>
       </div>
-    </div>
+    </a>
   );
 }

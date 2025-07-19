@@ -1,11 +1,3 @@
-import { clsx, type ClassValue } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-
 export function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
   const locale =
@@ -16,7 +8,6 @@ export function toLocalDateString(date: Date | string): string {
     day: 'numeric',
   }).format(_date);
 }
-
 
 const embedCodeTemplate2 = `
 <div id="reviewsup-embed-{{widgetId}}"></div>

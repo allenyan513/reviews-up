@@ -15,9 +15,7 @@ import Link from 'next/link';
 import toast from 'react-hot-toast';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@reviewsup/ui/tabs';
 import { CodeBlock } from '@/components/code-block';
-
-const embedCodeTemplate = `
-<blockquote class="reviewsup-embed" cite="${process.env.NEXT_PUBLIC_APP_URL}/widgets/{{widgetId}}" data-widget-id="{{widgetId}}"><section><a target="_blank" title="ReviewsUp Widget" href="${process.env.NEXT_PUBLIC_APP_URL}/widgets/{{widgetId}}?refer=embed">Rating 4.9/5 from 1000+ reviews</a></section></blockquote><script type="module" src="https://unpkg.com/@reviewsup/embed-react/dist/embed/embed.es.js"></script>`;
+import { getEmbedCode } from '@reviewsup/embed-react';
 
 function ReactTab(props: { widgetShortId: string }) {
   const { widgetShortId } = props;
@@ -66,9 +64,7 @@ function ReactTab(props: { widgetShortId: string }) {
 
 function EmbedCodeTab(props: { widgetShortId: string }) {
   const { widgetShortId } = props;
-  const embedCode = embedCodeTemplate
-    .replace(/{{widgetId}}/g, widgetShortId || 'your-widget-id')
-    .trim();
+  const embedCode = getEmbedCode(widgetShortId);
 
   return (
     <div className="space-y-4">

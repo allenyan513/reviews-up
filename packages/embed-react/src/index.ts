@@ -1,5 +1,5 @@
-export * from './components/widget.server';
-export * from './components/widget.client';
+export * from './components/widget';
+export * from './components/widget-content';
 export * from './components/item/review-item';
 export * from './components/item/review-item-source';
 export * from './components/item/review-item-source-2';
@@ -12,13 +12,11 @@ export * from './components/layout/carousel-layout';
 export * from './components/layout/carousel-layout';
 export * from './components/layout/avatar-list-layout';
 export * from './components/powered-by';
-export * from './components/widget-page-review-client';
 export * from './components/embed/tiktok-embed';
 export * from './components/embed/linkedin-embed';
 export * from './components/item/index';
 export * from './components/star-rating';
 export * from './components/star-rating.server';
-export * from './components/reviewsup';
 
 export * from './hooks/use-widget';
 export * from './lib/utils';

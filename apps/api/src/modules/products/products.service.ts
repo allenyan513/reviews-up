@@ -99,11 +99,20 @@ export class ProductsService {
         },
       });
     }
-    const defaultShowcase = await this.widgetsService.create(uid, {
+    //创建两个默认的widget，一个是badge类型，一个是
+    const protectedBadgeWidget = await this.widgetsService.create(uid, {
+      productId: newProduct.id,
+      name: defaultUserData.widget,
+      isProtected: true,
+      config: {
+        type: 'badge',
+      },
+    });
+    const defaultWidget = await this.widgetsService.create(uid, {
       productId: newProduct.id,
       name: defaultUserData.widget,
     });
-    if (!defaultShowcase) {
+    if (!defaultWidget || !protectedBadgeWidget) {
       throw new Error('Unable to create default showcase');
     }
     return newProduct as ProductEntity;
@@ -128,7 +137,7 @@ export class ProductsService {
     });
 
     let faviconUrl = '';
-    if (!faviconFilePath && fs.existsSync(faviconFilePath)) {
+    if (fs.existsSync(faviconFilePath)) {
       const faviconKey = `${hash(Date.now().toString())}${mime.lookup(faviconFilePath)}`;
       await this.s3Service.uploadFile(
         faviconKey,
@@ -139,7 +148,7 @@ export class ProductsService {
     }
 
     let screenshotUrl = '';
-    if (!screenshotFilePath && fs.existsSync(screenshotFilePath)) {
+    if (fs.existsSync(screenshotFilePath)) {
       const screenshotKey = `${hash(Date.now().toString())}${mime.lookup(screenshotFilePath)}`;
       await this.s3Service.uploadFile(
         screenshotKey,

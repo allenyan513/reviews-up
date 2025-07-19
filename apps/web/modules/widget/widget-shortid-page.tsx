@@ -6,7 +6,7 @@ import {
   WidgetEntity,
 } from '@reviewsup/api/widgets';
 import toast from 'react-hot-toast';
-import { WidgetPageReviewClient } from '@reviewsup/embed-react';
+import {WidgetContent  } from '@reviewsup/embed-react';
 
 export default function WidgetShortidPage(props: {
   params: Promise<{
@@ -31,7 +31,7 @@ export default function WidgetShortidPage(props: {
   if (!widget || !widget.reviews) return null;
 
   return (
-    <WidgetPageReviewClient
+    <WidgetContent
       widget={widget}
       widgetConfig={widget.config as WidgetConfig}
     />

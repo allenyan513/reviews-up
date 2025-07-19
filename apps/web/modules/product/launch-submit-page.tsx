@@ -1,17 +1,14 @@
 'use client';
 
-import React, { use, useEffect, useState } from 'react';
+import React, { use, useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
 import {
   CreateProductRequest,
-  createProductSchema,
   SubmitProductRequest,
   submitProductSchema,
-  UpdateProductRequest,
 } from '@reviewsup/api/products';
 import { api } from '@/lib/api-client';
-import { BsBoxArrowUpRight } from 'react-icons/bs';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -42,7 +39,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { WidgetClient, getEmbedCode } from '@reviewsup/embed-react';
+import { Widget, getEmbedCode } from '@reviewsup/embed-react';
 
 function PaidSubmitOption(props: {
   form: any;
@@ -147,6 +144,7 @@ function FreeSubmitOption(props: {
   taskReviewCount: number;
 }) {
   const { form, loading, taskReviewCount, widgetId } = props;
+
   return (
     <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
       <h3 className="text-xl font-semibold">Free Submit</h3>
@@ -158,8 +156,8 @@ function FreeSubmitOption(props: {
         <h4>1. Embed a widget on your website:</h4>
         {widgetId && (
           <div className="flex flex-col items-start gap-1 px-3 py-3">
-            <WidgetClient
-              widgetId={props.widgetId || ''}
+            <Widget
+              id={props.widgetId || ''}
               options={{
                 url: process.env.NEXT_PUBLIC_API_URL as string,
               }}

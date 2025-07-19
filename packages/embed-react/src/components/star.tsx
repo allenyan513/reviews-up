@@ -1,4 +1,3 @@
-import { cn } from '../lib/utils';
 import React from 'react';
 
 export function Star(props: {
@@ -10,17 +9,12 @@ export function Star(props: {
   return (
     <svg
       onClick={onClick}
-      className={cn(
-        'cursor-pointer',
-        size === 'sm'
-          ? 'w-4 h-4'
-          : size === 'md'
-            ? 'w-6 h-6'
-            : size === 'lg'
-              ? 'w-16 h-16'
-              : 'w-6 h-6',
-        isActive ? 'text-yellow-400' : 'text-gray-300',
-      )}
+      style={{
+        cursor: onClick ? 'pointer' : 'default',
+        width: size === 'sm' ? '1rem' : size === 'md' ? '1.5rem' : '4rem',
+        height: size === 'sm' ? '1rem' : size === 'md' ? '1.5rem' : '4rem',
+        color: isActive ? '#fbbf24' : '#d1d5db', // yellow-400 and gray-300
+      }}
       fill="currentColor"
       viewBox="0 0 20 20"
       xmlns="http://www.w3.org/2000/svg"
