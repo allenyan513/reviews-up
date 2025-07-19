@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { formEntitySchema } from './forms';
 import { userEntitySchema } from './users';
-import { reviewEntitySchema , ReviewEntity} from './reviews';
+import { reviewEntitySchema, ReviewEntity } from './reviews';
 import { widgetEntitySchema } from './widgets';
 import { campaignEntitySchema } from './campaign';
 
@@ -38,36 +38,36 @@ export const createProductSchema = z.object({
   name: z
     .string()
     .min(1, 'Name is required')
-    .max(24, 'Name must be less than 24 characters'),
+    .max(32, 'Name must be less than 32 characters'),
   slug: z.string().optional(),
   url: z.string().url('Invalid URL').min(1, 'URL is required'),
+  tagline: z
+    .string()
+    .min(1, 'Tagline is required')
+    .max(64, 'Tagline must be less than 64 characters'),
   description: z
     .string()
     .min(1, 'Description is required')
-    .max(160, 'Description must be less than 160 characters'),
+    .max(260, 'Description must be less than 260 characters'),
   icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
-  screenshot: z.string().url('Invalid URL').optional(),
-  category: z.nativeEnum(ProductCategory).default(ProductCategory.ai),
-  longDescription: z.string().optional(),
-  features: z.string().optional(),
-  useCase: z.string().optional(),
-  howToUse: z.string().optional(),
-  faq: z.string().optional(),
-  bindingFormId: z.string().optional(),
+  screenshots: z.array(z.string().url('Invalid URL')).optional(),
+  tags: z.array(z.string()).optional(),
   submitOption: z
-    .enum([
-      'free-submit',
-      'verify-submit',
-      'paid-submit',
-      'save-draft',
-      'crawl-product-info',
-      'update',
-    ])
+    .enum(['free-submit', 'paid-submit', 'crawl-product-info', 'update'])
     .optional(),
 });
 
 export type CreateProductRequest = z.infer<typeof createProductSchema>;
 export type UpdateProductRequest = Partial<CreateProductRequest>;
+
+export const submitProductSchema = z.object({
+  id: z.string().optional(),
+  bindingFormId: z.string().optional(),
+  submitOption: z
+    .enum(['free-submit', 'paid-submit', 'crawl-product-info', 'update'])
+    .optional(),
+});
+export type SubmitProductRequest = z.infer<typeof submitProductSchema>;
 
 export const productSchema = z.object({
   id: z.string().min(1, 'Product ID is required'),
@@ -76,6 +76,7 @@ export const productSchema = z.object({
     .string()
     .min(1, 'Name is required')
     .max(24, 'Name must be less than 24 characters'),
+  tagline: z.string().min(1, 'Tagline is required'),
   slug: z
     .string()
     .min(1, 'Slug is required')
@@ -95,16 +96,8 @@ export const productSchema = z.object({
     .max(160, 'Description must be less than 160 characters')
     .optional(),
   icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
-  screenshot: z
-    .string()
-    .url('Invalid URL')
-    .min(1, 'Screenshot URL is required'),
-  category: z.nativeEnum(ProductCategory).default(ProductCategory.ai),
-  longDescription: z.string().optional(),
-  features: z.string().optional(),
-  useCase: z.string().optional(),
-  howToUse: z.string().optional(),
-  faq: z.string().optional(),
+  screenshots: z.array(z.string().url('Invalid URL')).optional(),
+  tags: z.array(z.string()).optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
   bindingFormId: z.string().optional(),

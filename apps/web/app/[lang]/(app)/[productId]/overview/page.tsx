@@ -1,7 +1,7 @@
 'use client';
 
 import React, { use } from 'react';
-import { LaunchSubmitOrEditPage } from '@/modules/community/launch-submit-page';
+import { LaunchPage } from '@/modules/product/launch-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -10,7 +10,5 @@ export default function Page(props: {
   }>;
 }) {
   const { lang, productId } = use(props.params);
-  return (
-    <LaunchSubmitOrEditPage lang={lang} productId={productId} mode={'edit'} />
-  );
+  return <LaunchPage lang={lang} productId={productId} />;
 }

@@ -66,7 +66,7 @@ export function ProductSwitchButton(props: {
           <span
             onClick={() => {
               setOpen(false);
-              router.push('/setup');
+              router.push('/products/new');
             }}
             className="text-sm mt-4 cursor-pointer"
           >

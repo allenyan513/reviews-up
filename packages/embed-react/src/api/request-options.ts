@@ -3,5 +3,6 @@ export interface RequestOptions {
 }
 
 export const defaultRequestOptions: RequestOptions = {
-  url: 'https://api.reviewsup.io',
+  // url: 'https://api.reviewsup.io',
+  url: 'http://localhost:5500'
 };

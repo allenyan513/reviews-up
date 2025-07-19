@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import { FlowLayoutServer } from './layout/flow-layout-server';
 import { ListLayoutServer } from './layout/list-layout-server';
@@ -6,6 +6,7 @@ import { CarouselLayout } from './layout/carousel-layout';
 import { AvatarListLayout } from './layout/avatar-list-layout';
 import { WidgetConfig, WidgetEntity } from '@reviewsup/api/widgets';
 import { GridLayout } from './layout/grid-layout';
+import { Badge } from './layout/badge.server';
 
 export function WidgetPageReviewClient(props: {
   widget: WidgetEntity;
@@ -37,6 +38,7 @@ export function WidgetPageReviewClient(props: {
       {type === 'list' && (
         <ListLayoutServer items={reviews} config={defaultConfig} />
       )}
+      {type === 'badge' && <Badge items={reviews} config={defaultConfig} />}
     </div>
   );
 }

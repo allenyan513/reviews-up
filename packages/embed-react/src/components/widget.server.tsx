@@ -8,7 +8,6 @@ export async function WidgetContent(props: {
   options?: RequestOptions;
 }) {
   const { widgetId, options } = props;
-  console.log('Widget Content', widgetId);
   if (!widgetId) {
     return <div>No widget ID provided.</div>;
   }

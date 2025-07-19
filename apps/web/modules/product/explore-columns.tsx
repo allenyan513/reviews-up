@@ -1,46 +1,15 @@
 'use client';
 
 import { ColumnDef, useReactTable } from '@tanstack/react-table';
-import { ReviewEntity, ReviewMediaEntity } from '@reviewsup/api/reviews';
 import React from 'react';
-import { BsCameraVideo, BsFilter, BsImage, BsSortDown } from 'react-icons/bs';
-import { BiSort, BiFilterAlt, BiSortAlt2 } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { StarRating, StarRatingServer } from '@reviewsup/embed-react';
-import { api } from '@/lib/api-client';
+import { StarRatingServer } from '@reviewsup/embed-react';
 import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
-import toast from 'react-hot-toast';
-import {
-  BiHide,
-  BiInfoCircle,
-  BiListCheck,
-  BiShow,
-  BiTrash,
-} from 'react-icons/bi';
-import ReviewLookupDialog from '@/modules/review/review-lookup-dialog';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import { toLocalDateString } from '@/lib/utils';
 import { cn } from '@reviewsup/ui/lib/utils';
-import { ReviewItemSource2 } from '@reviewsup/embed-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { ProductEntity, ProductStatus } from '@reviewsup/api/products';
 import Link from 'next/link';
 import { Separator } from '@/components/ui/separator';
@@ -187,9 +156,7 @@ export function columns(setData: any): ColumnDef<any>[] {
             >
               View
             </Link>
-            <Separator
-              orientation={'vertical'}
-            />
+            <Separator orientation={'vertical'} />
             <Link
               target="_blank"
               href={`/forms/${bindingFormId}`}

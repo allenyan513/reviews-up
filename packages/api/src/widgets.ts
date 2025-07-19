@@ -28,7 +28,7 @@ export type WidgetEntity = z.infer<typeof widgetEntitySchema>;
 
 export const widgetConfigSchema = z.object({
   type: z
-    .enum(['flow', 'grid', 'list', 'carousel', 'avatar-list'])
+    .enum(['flow', 'grid', 'list', 'carousel', 'avatar-list', 'badge'])
     .default('flow'),
   isRatingSummaryEnabled: z.boolean().default(true),
   isRatingEnabled: z.boolean().default(true),

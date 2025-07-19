@@ -71,7 +71,7 @@ export default function WidgetIdPage(props: {
           <WidgetEmbedDialog widgetShortId={widget.shortId || ''}>
             <Button className="" variant="default" size={'lg'}>
               <BiCodeAlt className="text-2xl" />
-              <span className="hidden md:flex">Add to your website</span>
+              <span className="hidden md:flex">Embed</span>
             </Button>
           </WidgetEmbedDialog>
         </div>

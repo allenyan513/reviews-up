@@ -68,6 +68,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           product={defaultProduct}
           items={[
             {
+              title: 'Overview',
+              url: `/${lang}/${defaultProduct?.id}/overview`,
+              icon: IconUser,
+              active: path.includes('/overview'),
+            },
+            {
               title: 'Reviews',
               url: `/${lang}/${defaultProduct?.id}/reviews/all`,
               icon: IconStar,
@@ -117,25 +123,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               url: `/${lang}/${defaultProduct?.id}/forms`,
               icon: IconTable,
               active: path.includes('/forms'),
-            },
-            {
-              title: 'Community',
-              url: `/${lang}/${defaultProduct?.id}/community/myproduct`,
-              icon: IconCirclesRelation,
-              active: false,
-              children: [
-                {
-                  title: 'My Product',
-                  url: `/${lang}/${defaultProduct?.id}/community/myproduct`,
-                  icon: IconUser,
-                  active: path.includes('/community/myproduct'),
-                },
-                {
-                  title: 'Explore',
-                  url: `/${lang}/${defaultProduct?.id}/community/explore`,
-                  icon: IconList,
-                  active: path.includes('/community/explore'),
-                }]
             },
             {
               title: 'Settings',

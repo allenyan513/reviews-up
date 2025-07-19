@@ -26,13 +26,63 @@ import {
   BsTrash,
   BsBoxArrowUpRight,
   BsRocket,
+  BsClock,
+  BsCheckCircle,
 } from 'react-icons/bs';
-import { redirect, useRouter } from 'next/navigation';
 import { useUserContext } from '@/context/UserProvider';
-import { buttonVariants } from '@reviewsup/ui/button';
+import { Button, buttonVariants } from '@reviewsup/ui/button';
+import { useRouter } from 'next/navigation';
 
 function MyProductItem(props: { lang: string; product: ProductEntity }) {
   const { product, lang } = props;
+  const router = useRouter();
+
+  const renderProductStatus = (status: string) => {
+    if (status === ProductStatus.pendingForSubmit) {
+      return (
+        <div className="flex flex-row items-center gap-2">
+          <BsClock className="w-5 h-5 text-amber-500" />
+          <span className="text-amber-500">Waiting for Your Submit</span>
+          <Button
+            variant="outline"
+            size="sm"
+            className=""
+            onClick={() => {
+              router.push(`/products/new/${product.id}`);
+            }}
+          >
+            Submit
+          </Button>
+        </div>
+      );
+    } else if (status === ProductStatus.pendingForReceive) {
+      return (
+        <div className="flex flex-row items-center gap-2">
+          <BsClock className="w-5 h-5 text-amber-500" />
+          <span className="text-amber-500">Writing reviews</span>
+          <Button
+            variant="outline"
+            size="sm"
+            className=""
+            onClick={() => {
+              router.push(`${process.env.NEXT_PUBLIC_WWW_URL}/products`);
+            }}
+          >
+            Explore Products
+          </Button>
+        </div>
+      );
+    } else if (status === ProductStatus.listing) {
+      return (
+        <div className="flex flex-row items-center gap-2">
+          <BsCheckCircle className="w-5 h-5 text-green-500" />
+          <span className="text-green-500">Published</span>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
 
   return (
     <div
@@ -51,16 +101,16 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           </Link>
         </div>
         <div className="flex flex-row items-center gap-2 text-lg">
-          <Link
-            href={`/${lang}/${product.id}/community/myproduct/edit`}
-            className={buttonVariants({
-              variant: 'outline',
-              size: 'sm',
-            })}
-          >
-            <BsRocket />
-            Upgrade
-          </Link>
+          {/*<Link*/}
+          {/*  href={`/${lang}/${product.id}/community/myproduct/edit`}*/}
+          {/*  className={buttonVariants({*/}
+          {/*    variant: 'outline',*/}
+          {/*    size: 'sm',*/}
+          {/*  })}*/}
+          {/*>*/}
+          {/*  <BsRocket />*/}
+          {/*  Upgrade*/}
+          {/*</Link>*/}
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -79,7 +129,12 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
                 >
                   <BsEye /> View
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={(e) => {}}>
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.preventDefault();
+                    router.push(`/${lang}/${product.id}/overview/edit`);
+                  }}
+                >
                   <BsPencil /> Edit
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={(e) => {}}>
@@ -117,19 +172,19 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
               </TooltipContent>
             </Tooltip>
           </p>
-          <ProductStatusFlow
-            status={product.status as StatusStep}
-          />
+          {renderProductStatus(product.status || '')}
+          {/*<ProductStatusFlow status={product.status as StatusStep} />*/}
           {product.status === ProductStatus.pendingForReceive && (
             <div className="flex flex-col mt-4">
               <p>Task:</p>
               <ul className="list-decimal pl-4">
-                <li className='text-sm'>
-                  Write at least <strong>{product.taskReviewCount}</strong> reviews for other
-                  products.
+                <li className="text-sm">
+                  Write at least <strong>{product.taskReviewCount}</strong>{' '}
+                  reviews for other products.
                   <Link
                     className="text-blue-500 hover:underline ml-2"
-                    href={`/${product.id}/community/explore`}>
+                    href={`/${product.id}/community/explore`}
+                  >
                     Explore Products
                   </Link>
                 </li>
@@ -138,15 +193,10 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           )}
         </div>
 
-        {/*<div className="text-gray-600 col-span-3">*/}
-        {/*  <p className="">Received:</p>*/}
-        {/*  <p className="text-5xl mt-4">*/}
-        {/*    {product.receiveReviewCount}*/}
-        {/*    {product.status === 'listing'*/}
-        {/*      ? ''*/}
-        {/*      : `/${product.submitReviewCount}`}*/}
-        {/*  </p>*/}
-        {/*</div>*/}
+        <div className="text-gray-600 col-span-3">
+          <p className="">Received:</p>
+          <p className="text-5xl mt-4">{product.receiveReviewCount}</p>
+        </div>
         <div className="text-gray-600 col-span-3">
           <p className="">Submitted:</p>
           <p className="text-5xl mt-4">

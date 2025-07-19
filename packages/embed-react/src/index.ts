@@ -21,3 +21,4 @@ export * from './components/star-rating.server';
 export * from './components/reviewsup';
 
 export * from './hooks/use-widget';
+export * from './lib/utils';

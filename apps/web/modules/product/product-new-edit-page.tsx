@@ -21,23 +21,12 @@ import { Required } from '@reviewsup/ui/required';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@reviewsup/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@reviewsup/ui/select';
 import { UploadContainer } from '@/components/upload-container';
 import { BiImage } from 'react-icons/bi';
-import { BsBoxArrowUpRight, BsCaretDownFill } from 'react-icons/bs';
-import { cn } from '@/lib/utils';
-import { ProductItemView } from '@/modules/product/product-item-view';
-import Link from 'next/link';
 import slugify from 'slugify';
 import { useUserContext } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
+import { TagSelectorFormField } from '@/modules/product/product-tag-selector-form-field';
 
 export default function ProductNewEditPage(props: {
   mode: 'new' | 'edit';
@@ -45,11 +34,10 @@ export default function ProductNewEditPage(props: {
   productId?: string;
 }) {
   const { mode, productId } = props;
-  const { syncSession } = useUserContext();
+  const { syncSession , saveDefaultProduct} = useUserContext();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [isCrawling, setIsCrawling] = useState<boolean>(false);
-  const [advance, setAdvance] = useState<boolean>(false);
 
   const form = useForm<CreateProductRequest>({
     resolver: zodResolver(createProductSchema),
@@ -59,13 +47,9 @@ export default function ProductNewEditPage(props: {
       description: '',
       url: '',
       icon: '',
-      screenshot: '',
-      category: 'ai',
-      longDescription: '',
-      features: '',
-      useCase: '',
-      howToUse: '',
-      faq: '',
+      tagline: '',
+      tags: [],
+      screenshots: [],
     },
   });
 
@@ -83,14 +67,9 @@ export default function ProductNewEditPage(props: {
             description: product.description || '',
             url: product.url,
             icon: product.icon || '',
-            screenshot: product.screenshot || '',
-            longDescription: product.longDescription || '',
-            features: product.features || '',
-            useCase: product.useCase || '',
-            howToUse: product.howToUse || '',
-            faq: product.faq || '',
-            category: product.category || 'ai',
-            submitOption: 'free-submit', // Default value, can be changed later
+            tagline: product.tagline || '',
+            screenshots: product.screenshots || [],
+            tags: product.tags || [],
           });
         }
       })
@@ -127,7 +106,7 @@ export default function ProductNewEditPage(props: {
       form.setValue('name', title);
       form.setValue('description', description);
       form.setValue('icon', faviconUrl);
-      form.setValue('screenshot', screenshotUrl);
+      form.setValue('screenshots', [screenshotUrl || '']);
       setIsCrawling(false);
     } catch (error) {
       setIsCrawling(false);
@@ -137,34 +116,40 @@ export default function ProductNewEditPage(props: {
 
   const onSubmit = async (data: CreateProductRequest) => {
     try {
-      console.log('Submitting product data:', data);
       setLoading(true);
-      const newProduct = await api.product.setup(data);
-      await syncSession()
+      const newProduct = await api.product.create(data);
+      await syncSession();
+      saveDefaultProduct(newProduct);
+
       setLoading(false);
-      toast.success('Product Submitted Successfully!');
-      router.push(`${newProduct.id}/reviews/all`);
+      router.push(`/products/new/${newProduct.id}`);
     } catch (error) {
       setLoading(false);
       toast.error('Failed to submit product. Please try again.');
     }
   };
+
+  const onError = (error: any) => {
+    console.error(error);
+  };
+
   return (
     <div className="min-h-screen p-6 md:p-8 w-full">
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900">
-            {mode === 'new' ? 'Create New Product' : 'Edit Product'}
+            {mode === 'new' ? 'Submit a product' : 'Edit Product'}
           </h1>
           <p className="mt-1 text-gray-600">
-            Fill out the form below to create your first product. You can also
-            auto-fill the product information by providing a product URL.
+            {mode === 'new'
+              ? 'Have you created an exciting product? Submit it and share it with others.'
+              : 'Edit the details of your product to keep it up-to-date.'}
           </p>
         </div>
       </div>
 
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-8">
+        <div className="col-span-5">
           <Form {...form}>
             <form
               onSubmit={(e) => {
@@ -174,78 +159,102 @@ export default function ProductNewEditPage(props: {
                 } else if (form.getValues('submitOption') === 'update') {
                   handleUpdate();
                 } else {
-                  form.handleSubmit(onSubmit)();
+                  form.handleSubmit(onSubmit, onError)();
                 }
               }}
-              className="space-y-4"
+              className="flex flex-col gap-6"
             >
               <h2 className="text-lg font-semibold">
-                Basic Information <Required />
+                Main Info <Required />
               </h2>
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="url"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">
-                        Product URL <Required />
-                      </FormLabel>
-                      <FormControl>
-                        <div className="flex flex-row gap-2 items-center">
-                          <Input
-                            disabled={mode === 'edit'}
-                            placeholder="https://yourproduct.com"
-                            {...field}
-                          />
-                          <Button
-                            onClick={() => {
-                              form.setValue(
-                                'submitOption',
-                                'crawl-product-info',
-                              );
-                            }}
-                            disabled={
-                              field.value === '' ||
-                              isCrawling ||
-                              mode === 'edit'
-                            }
-                          >
-                            {isCrawling ? 'Loading...' : 'Auto-fill'}
-                          </Button>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="name"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">
-                        Product Name <Required />
-                      </FormLabel>
-                      <FormControl>
+              <FormField
+                control={form.control}
+                name="url"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2 text-md">
+                      Link to the Product
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-row gap-2 items-center">
                         <Input
                           disabled={mode === 'edit'}
-                          placeholder="Product Name"
+                          placeholder="https://reviewsup.io"
                           {...field}
                         />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-              </div>
+                        <Button
+                          onClick={() => {
+                            form.setValue('submitOption', 'crawl-product-info');
+                          }}
+                          disabled={
+                            field.value === '' || isCrawling || mode === 'edit'
+                          }
+                        >
+                          {isCrawling ? 'Loading...' : 'Auto-fill'}
+                        </Button>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2 text-md justify-between items-center">
+                      <p>Name of the Product</p>
+                      <p className="text-sm text-gray-400">
+                        {field.value ? field.value.length : 0}/32
+                      </p>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={mode === 'edit'}
+                        placeholder="ReviewsUp"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                    <p className="text-sm text-gray-500 mt-2 mx-2">
+                      {process.env.NEXT_PUBLIC_WWW_URL}/products/
+                      {slugify(form.watch('name') || '', {
+                        lower: true,
+                        strict: true,
+                      })}
+                    </p>
+                  </div>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="tagline"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2 text-md justify-between items-center">
+                      <p>Tagline</p>
+                      <p className="text-sm text-gray-400">
+                        {field.value ? field.value.length : 0}/64
+                      </p>
+                    </FormLabel>
+                    <FormControl>
+                      <Input placeholder="" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
                   <div>
-                    <FormLabel className="mb-2">
-                      Product Description <Required />
+                    <FormLabel className="mb-2 text-md flex flex-row justify-between items-center">
+                      <p>Description of the Product</p>
+                      <p className="text-sm text-gray-400">
+                        {field.value ? field.value.length : 0}/260
+                      </p>
                     </FormLabel>
                     <FormControl>
                       <Textarea placeholder="Short description" {...field} />
@@ -254,215 +263,111 @@ export default function ProductNewEditPage(props: {
                   </div>
                 )}
               />
+              <TagSelectorFormField form={form} />
+
               <FormField
                 control={form.control}
-                name="category"
+                name="icon"
                 render={({ field }) => (
                   <div>
-                    <FormLabel className="mb-2">
-                      Product Category
-                      <Required />
-                    </FormLabel>
+                    <FormLabel className="mb-2 text-md">Icon</FormLabel>
                     <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder="Select a Product Category" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {Object.entries(ProductCategory).map(
-                              ([key, value]) => (
-                                <SelectItem key={key} value={value}>
-                                  {/*capitalize the first letter of each word*/}
-                                  {key
-                                    .split(/(?=[A-Z])/)
-                                    .map(
-                                      (word) =>
-                                        word.charAt(0).toUpperCase() +
-                                        word.slice(1).toLowerCase(),
-                                    )
-                                    .join(' ')}
-                                </SelectItem>
-                              ),
-                            )}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
+                      {/*<Input placeholder="https://icon.url" {...field} />*/}
+                      <div className="flex flex-row items-center gap-2">
+                        {field.value && (
+                          <img
+                            src={field.value}
+                            alt="Product Icon"
+                            className="w-11 h-11 rounded border border-gray-300"
+                          />
+                        )}
+                        <UploadContainer
+                          accept={'image/*'}
+                          onUploadSuccess={(url) => {
+                            field.onChange(url);
+                          }}
+                        >
+                          <BiImage className="w-11 h-11 text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+                        </UploadContainer>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </div>
                 )}
               />
 
-              <div className="grid grid-cols-2 gap-4">
-                <FormField
-                  control={form.control}
-                  name="icon"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">
-                        Product Icon
-                        <Required />
-                      </FormLabel>
-                      <FormControl>
-                        {/*<Input placeholder="https://icon.url" {...field} />*/}
-                        <div className="flex flex-row items-center gap-2">
-                          {field.value && (
-                            <img
-                              src={field.value}
-                              alt="Product Icon"
-                              className="w-11 h-11 rounded border border-gray-300"
-                            />
+              <FormField
+                control={form.control}
+                name="screenshots"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2 text-md flex flex-col items-start">
+                      <p>Gallery</p>
+                      <p className="text-sm text-gray-400">
+                        The first image will be used as the social preview when
+                        your link is shared online. We recommend at least 3 or
+                        more images.
+                      </p>
+                    </FormLabel>
+                    <FormControl>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex flex-row gap-2 w-full overflow-x-auto">
+                          {(field.value || []).map(
+                            (url: string, index: number) => (
+                              <div
+                                key={index}
+                                className="relative group w-48 h-auto aspect-video"
+                              >
+                                <img
+                                  src={url}
+                                  alt={`Screenshot ${index + 1}`}
+                                  className="rounded border border-gray-300 w-48 h-auto aspect-video object-cover"
+                                />
+                                <Button
+                                  type="button"
+                                  size={'sm'}
+                                  onClick={() => {
+                                    const updated = field?.value?.filter(
+                                      (_, i) => i !== index,
+                                    );
+                                    field.onChange(updated);
+                                  }}
+                                  className="absolute h-8 top-1 right-1 bg-white/80 hover:bg-white text-red-500 p-1 shadow-md opacity-0 group-hover:opacity-100 transition"
+                                >
+                                  ✕
+                                </Button>
+                              </div>
+                            ),
                           )}
-                          <UploadContainer
-                            accept={'image/*'}
-                            onUploadSuccess={(url) => {
-                              field.onChange(url);
-                            }}
-                          >
-                            <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
-                          </UploadContainer>
                         </div>
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="screenshot"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">
-                        Product Screenshot
-                        <Required />
-                      </FormLabel>
-                      <FormControl>
-                        <div className="flex flex-row items-end gap-2">
-                          {field.value && (
-                            <img
-                              src={field.value}
-                              alt="Product Icon"
-                              className="w-96 h-auto rounded border border-gray-300"
-                            />
-                          )}
-                          <UploadContainer
-                            accept={'image/*'}
-                            onUploadSuccess={(url) => {
-                              field.onChange(url);
-                            }}
-                          >
-                            <BiImage className="text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
-                          </UploadContainer>
-                        </div>
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-              </div>
-              <h2
-                className="text-lg font-semibold cursor-pointer mt-8"
-                onClick={() => setAdvance(!advance)}
-              >
-                Advance Information (optional)
-                <BsCaretDownFill className="inline-block ml-2" />
-              </h2>
-              <div
-                className={cn('', advance ? 'flex flex-col gap-4' : 'hidden')}
-              >
-                <FormField
-                  control={form.control}
-                  name="longDescription"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">What is it?</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Detailed description (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="howToUse"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">How to Use?</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Instructions (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="features"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">Features</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Key features (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="useCase"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">Use Case</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Use cases (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="faq"
-                  render={({ field }) => (
-                    <div>
-                      <FormLabel className="mb-2">FAQ</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          rows={6}
-                          placeholder="Frequently asked questions (optional)"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </div>
-                  )}
-                />
-              </div>
+                        <UploadContainer
+                          accept={'image/*'}
+                          onUploadSuccess={(url) => {
+                            // field.onChange(url);
+                            const newUrls = [url];
+                            field.onChange([
+                              ...(field.value || []),
+                              ...newUrls,
+                            ]);
+                          }}
+                        >
+                          <BiImage className="w-11 h-11 text-5xl border p-2 rounded cursor-pointer hover:bg-gray-100 transition-colors" />
+                        </UploadContainer>
+                      </div>
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
               {mode === 'new' && (
                 <Button
                   disabled={loading}
-                  onClick={form.handleSubmit(onSubmit)}
+                  onClick={() => {
+                    form.setValue('submitOption', 'free-submit');
+                  }}
                   type="submit"
                   size={'lg'}
+                  className="w-full"
                 >
                   Create Product
                 </Button>
@@ -483,44 +388,7 @@ export default function ProductNewEditPage(props: {
             </form>
           </Form>
         </div>
-        <div className="col-span-4 space-y-4">
-          <h2 className="text-sm text-gray-500">Preview</h2>
-          <ProductItemView
-            product={
-              {
-                id: form.watch('id'),
-                name: form.watch('name'),
-                description: form.watch('description'),
-                url: form.watch('url'),
-                icon: form.watch('icon'),
-                screenshot: form.watch('screenshot'),
-                longDescription: form.watch('longDescription'),
-                features: form.watch('features'),
-                useCase: form.watch('useCase'),
-                howToUse: form.watch('howToUse'),
-                faq: form.watch('faq'),
-                category: form.watch('category'),
-              } as ProductEntity
-            }
-          />
-          <Link
-            target="_blank"
-            className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
-            href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${slugify(
-              form.watch('name') || '',
-              { lower: true, strict: true },
-            )}`}
-          >
-            <span>
-              {process.env.NEXT_PUBLIC_WWW_URL}/products/
-              {slugify(form.watch('name') || '', {
-                lower: true,
-                strict: true,
-              })}
-            </span>
-            <BsBoxArrowUpRight />
-          </Link>
-        </div>
+        <div className="col-span-4 space-y-4"></div>
       </div>
     </div>
   );

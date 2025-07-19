@@ -22,7 +22,7 @@ import * as cheerio from 'cheerio';
 export class WidgetsService {
   private logger = new Logger('WidgetsService');
   private defaultConfig: WidgetConfig = {
-    type: 'flow',
+    type: 'badge',
     isRatingSummaryEnabled: true,
     isRatingEnabled: true,
     isSourceEnabled: true,
@@ -30,6 +30,7 @@ export class WidgetsService {
     isImageEnabled: true,
     isVideoEnabled: true,
     isPoweredByEnabled: true,
+    isDoFollowEnabled:  true,
     sortBy: 'newest',
     count: 20,
     flow: {
@@ -247,7 +248,7 @@ export class WidgetsService {
   }
 
   /**
-   * <blockquote class="reviewsup-embed" cite="http://localhost:5510/widgets/187f7024e60" data-widget-id="6253dd1a86b">
+   * <div id="reviewsup-embed-6253dd1a86b">
    * @param uid
    * @param request
    */
@@ -292,13 +293,9 @@ export class WidgetsService {
     const $ = cheerio.load(content);
     let verified = false;
     for (const widgetShortId of widgetShortIds) {
-      const classSelector = `blockquote.reviewsup-embed`;
-      const citeSelector = `blockquote.reviewsup-embed[cite="${process.env.NEXT_PUBLIC_APP_URL}/widgets/${widgetShortId}"]`;
-      const dataWidgetIdSelector = `blockquote.reviewsup-embed[data-widget-id="${widgetShortId}"]`;
-      const widgetExists =
-        $(classSelector).length > 0 &&
-        $(citeSelector).length > 0 &&
-        $(dataWidgetIdSelector).length > 0;
+      const widgetId = `reviewsup-embed-${widgetShortId}`;
+      const idSelector = `#${widgetId}`;
+      const widgetExists = $(idSelector).length > 0;
       if (widgetExists) {
         verified = true;
         this.logger.debug(
@@ -306,6 +303,21 @@ export class WidgetsService {
         );
         break;
       }
+
+      // const classSelector = `blockquote.reviewsup-embed`;
+      // const citeSelector = `blockquote.reviewsup-embed[cite="${process.env.NEXT_PUBLIC_APP_URL}/widgets/${widgetShortId}"]`;
+      // const dataWidgetIdSelector = `blockquote.reviewsup-embed[data-widget-id="${widgetShortId}"]`;
+      // const widgetExists =
+      //   $(classSelector).length > 0 &&
+      //   $(citeSelector).length > 0 &&
+      //   $(dataWidgetIdSelector).length > 0;
+      // if (widgetExists) {
+      //   verified = true;
+      //   this.logger.debug(
+      //     `Widget embedding verified for widgetShortId: ${widgetShortId}`,
+      //   );
+      //   break;
+      // }
     }
     return {
       code: verified ? 200 : 400,

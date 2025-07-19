@@ -11,9 +11,9 @@ export default function Page(props: { params: Promise<{ lang: string }> }) {
         return redirect(`/auth/signin`);
       } else {
         if (!user.products || user.products.length === 0) {
-          return redirect(`/setup`);
+          return redirect(`/products/new`);
         }
-        return redirect(`/${user?.products?.[0]?.id}/reviews/all`);
+        return redirect(`/${user?.products?.[0]?.id}/overview`);
       }
     });
   }, []);
