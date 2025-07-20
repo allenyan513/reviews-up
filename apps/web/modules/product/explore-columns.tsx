@@ -115,7 +115,6 @@ export function columns(setData: any): ColumnDef<any>[] {
             <StarRatingServer
               value={reviewRating}
               size="sm"
-              className="text-yellow-500"
             />
           </div>
         );

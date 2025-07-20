@@ -45,7 +45,6 @@ export function ProductItemView(props: { product: ProductEntity }) {
             {product.reviewRatingStr}
           </span>
           <StarRatingServer
-            className="mt-[2px]"
             size={'sm'}
             value={product?.reviewRating || 0}
           />

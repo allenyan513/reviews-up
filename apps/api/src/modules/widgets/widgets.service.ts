@@ -71,6 +71,7 @@ export class WidgetsService {
   async findAll(
     uid: string,
     productId: string,
+
     paginateRequest: PaginateRequest,
   ) {
     this.logger.debug(
