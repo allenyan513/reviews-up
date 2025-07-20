@@ -36,25 +36,25 @@ export default async function RootLayout(props: {
           launchLink={`${process.env.NEXT_PUBLIC_APP_URL}/launch`}
           items={[
             { title: 'Home', href: '/' },
-            { title: 'Widget', href: '/#widget' },
-            { title: 'Form', href: '/#form' },
-            { title: 'Features', href: '/#features' },
-            { title: 'FAQ', href: '/#faq' },
+            // { title: 'Widget', href: '/#widget' },
+            // { title: 'Form', href: '/#form' },
+            // { title: 'Features', href: '/#features' },
+            // { title: 'FAQ', href: '/#faq' },
             {
               title: 'Documents',
               href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
               external: true,
             },
-            {
-              title: 'Blog',
-              href: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
-              external: true,
-            },
-            {
-              title: 'Launch',
-              href: `/launch`,
-              external: false,
-            },
+            // {
+            //   title: 'Blog',
+            //   href: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
+            //   external: true,
+            // },
+            // {
+            //   title: 'Launch',
+            //   href: `/launch`,
+            //   external: false,
+            // },
             {
               title: 'Products',
               href: `/products`,

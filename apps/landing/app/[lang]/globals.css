@@ -183,13 +183,14 @@
 .product-category {
     border-radius: 50px;
     border: 1px solid #D1D5DB; /* gray-300 */
-    padding: 0.5rem 1rem;
+    padding: 0.25rem 0.75rem;
     display: inline-block;
 }
 
 .product-category:hover {
     cursor: pointer;
-    background-color: #E0F2FE; /* blue-100 */
+    /* gray-400*/
+    background-color: #D1D5DB;
 }
 
 
