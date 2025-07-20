@@ -512,8 +512,8 @@ importers:
   packages/embed-react:
     dependencies:
       '@reviewsup/api':
-        specifier: ^0.0.5
-        version: 0.0.5
+        specifier: workspace:*
+        version: link:../api
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -2720,9 +2720,6 @@ packages:
     resolution: {integrity: sha512-COIazDAx1ncDg046cTJ8SFYsX8aS3lB/08LDnbkH/SkdYrFPWDlXMrO/sUam8j1WWM+PJ+4d1mj7tODIKNiFog==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
-
-  '@reviewsup/api@0.0.5':
-    resolution: {integrity: sha512-gJpZcnm9RFZpncLbM4RKrQw23Yt47I50E5vNQCaj0auu44cVR8Wvu/KrbWLhcGGM3ecclq73/wKldO0yBEXbNg==}
 
   '@rolldown/pluginutils@1.0.0-beta.19':
     resolution: {integrity: sha512-3FL3mnMbPu0muGOCaKAhhFEYmqv9eTfPSJRJmANrCwtgK8VuxpsZDGK+m0LYAGoyO8+0j5uRe4PeyPDK1yA/hA==}
@@ -10936,10 +10933,6 @@ snapshots:
   '@react-types/shared@3.30.0(react@19.1.0)':
     dependencies:
       react: 19.1.0
-
-  '@reviewsup/api@0.0.5':
-    dependencies:
-      zod: 3.25.71
 
   '@rolldown/pluginutils@1.0.0-beta.19': {}
 
