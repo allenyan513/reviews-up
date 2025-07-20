@@ -1,5 +1,4 @@
-import { Star } from './star';
-import React from 'react';
+import { StarServer } from './star.server';
 
 export function StarRatingServer(props: {
   value: number;
@@ -8,7 +7,7 @@ export function StarRatingServer(props: {
   return (
     <div style={{ display: 'flex', gap: '0.25rem' }}>
       {[...Array(5)].map((_, i) => (
-        <Star key={i} isActive={props.value > i} size={props.size} />
+        <StarServer key={i} isActive={props.value > i} size={props.size} />
       ))}
     </div>
   );

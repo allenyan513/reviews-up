@@ -1,5 +1,3 @@
-import React from 'react';
-
 export function StarServer(props: {
   isActive?: boolean;
   size?: 'sm' | 'md' | 'lg';

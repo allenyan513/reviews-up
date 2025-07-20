@@ -122,50 +122,6 @@ function DesktopItems(props: NavProps) {
             {item.title}
           </Link>
         );
-
-        // return (
-        //   <Link
-        //     key={index}
-        //     href={item.disabled ? '#' : item.href}
-        //     className={cn(
-        //       'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
-        //       item.href.startsWith(`/${segment}`)
-        //         ? 'text-foreground'
-        //         : 'text-foreground/60',
-        //       item.disabled && 'cursor-not-allowed opacity-80',
-        //     )}
-        //     target={item.external ? '_blank' : undefined}
-        //     rel={item.external ? 'noreferrer' : undefined}
-        //   >
-        //     {item.icon && <span className="mr-2">{item.icon}</span>}
-        //     {item.title}
-        //
-        //     {item.children && item.children.length > 0 && (
-        //       <span className="ml-2 text-xs text-gray-500">▼</span>
-        //     )}
-        //     {item.children && item.children.length > 0 && (
-        //       <div className="absolute left-0 top-full mt-2 w-48 bg-white shadow-lg rounded-md">
-        //         <ul className="p-2">
-        //           {item.children.map((child, childIndex) => (
-        //             <li key={childIndex}>
-        //               <Link
-        //                 href={child.disabled ? '#' : child.href}
-        //                 className={cn(
-        //                   'block px-4 py-2 text-sm hover:bg-gray-100',
-        //                   child.disabled && 'cursor-not-allowed opacity-60',
-        //                 )}
-        //                 target={child.external ? '_blank' : undefined}
-        //                 rel={child.external ? 'noreferrer' : undefined}
-        //               >
-        //                 {child.title}
-        //               </Link>
-        //             </li>
-        //           ))}
-        //         </ul>
-        //       </div>
-        //     )}
-        //   </Link>
-        // );
       })}
     </nav>
   );
