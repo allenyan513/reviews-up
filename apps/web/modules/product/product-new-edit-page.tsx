@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 import {
   CreateProductRequest,
   createProductSchema,
-  ProductCategory,
-  ProductEntity,
 } from '@reviewsup/api/products';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { api } from '@/lib/api-client';

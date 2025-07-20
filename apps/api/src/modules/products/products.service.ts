@@ -397,12 +397,11 @@ export class ProductsService {
           { description: { contains: request.search, mode: 'insensitive' } },
         ],
       }),
-      ...(request.categories &&
-        request.categories.length > 0 && {
-          category: {
-            in: request.categories as ProductCategory[], // Filter by categories if provided
-          },
-        }),
+      ...(request.tags && request.tags.length > 0 && {
+        tags: {
+          hasSome: request.tags, // Filter by tags if provided
+        },
+      })
     };
     const total = await this.prismaService.product.count({
       where: {
@@ -536,6 +535,8 @@ export class ProductsService {
         icon: dto.icon,
         screenshots: dto.screenshots || [],
         description: dto.description,
+        tagline: dto.tagline,
+        tags: dto.tags || [],
         updatedAt: new Date(), // Update the timestamp
       },
     });

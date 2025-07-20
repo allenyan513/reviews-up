@@ -2,7 +2,7 @@ import { fetchProductDetail } from '@/actions/fetch-product-detail';
 import Link from 'next/link';
 import { BsBoxArrowUp, BsPencil } from 'react-icons/bs';
 import { StarRatingServer } from '@reviewsup/embed-react';
-import { ProductStatus } from '@reviewsup/api/products';
+import { ProductCategory, ProductStatus } from '@reviewsup/api/products';
 import { StarRatingServerWrapper } from '@/modules/product/star-rating-server-wrapper';
 import { ReviewItemsWrapper } from './review-item-wrapper';
 
@@ -101,7 +101,10 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
                 href={`/categories/${tag}`}
                 className="product-category"
               >
-                {tag}
+                {/*{tag}*/}
+                {
+                  ProductCategory[tag as keyof typeof ProductCategory]
+                }
               </Link>
             ))
           ) : (

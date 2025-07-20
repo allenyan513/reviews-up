@@ -1,27 +1,20 @@
 import { z } from 'zod';
-import { formEntitySchema } from './forms';
-import { userEntitySchema } from './users';
-import { reviewEntitySchema, ReviewEntity } from './reviews';
-import { widgetEntitySchema } from './widgets';
-import { campaignEntitySchema } from './campaign';
 
 export const ProductCategory = {
-  ai: 'ai',
-  analytics: 'analytics',
-  automation: 'automation',
-  crm: 'crm',
-  design: 'design',
-  development: 'development',
-  eCommerce: 'eCommerce',
-  education: 'education',
-  finance: 'finance',
-  health: 'health',
-  marketing: 'marketing',
-  productivity: 'productivity',
-  projectManagement: 'projectManagement',
-  security: 'security',
-  socialMedia: 'socialMedia',
-  tools: 'tools',
+  workProductivity: 'Work & Productivity',
+  engineeringDevelopment: 'Engineering & Development',
+  designCreative: 'Design & Creative',
+  finance: 'Finance',
+  socialCommunity: 'Social & Community',
+  marketing_features: 'Marketing Features',
+  ai: 'AI',
+  healthFitness: 'Health & Fitness',
+  travel: 'Travel',
+  platforms: 'Platforms',
+  productAddOns: 'Product Add-ons',
+  web3: 'Web3',
+  physicalProducts: 'Physical Products',
+  ecommerce: 'Ecommerce',
 };
 
 export const ProductStatus = {
@@ -113,7 +106,7 @@ export const findAllRequestSchema = z.object({
   page: z.coerce.number().int().min(1).default(1).optional(),
   pageSize: z.coerce.number().int().min(1).max(100).default(10).optional(),
   search: z.string().optional(),
-  categories: z.array(z.nativeEnum(ProductCategory)).optional().default([]),
+  tags: z.array(z.string()).optional().default([]),
 });
 
 export type FindAllRequest = z.infer<typeof findAllRequestSchema>;
