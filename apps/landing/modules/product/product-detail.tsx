@@ -1,9 +1,7 @@
 import { fetchProductDetail } from '@/actions/fetch-product-detail';
 import Link from 'next/link';
 import { BsBoxArrowUp, BsPencil } from 'react-icons/bs';
-import Markdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { ReviewItem, StarRatingServer } from '@reviewsup/embed-react';
+// import { ReviewItem, StarRatingServer } from '@reviewsup/embed-react';
 import React from 'react';
 import { ProductStatus } from '@reviewsup/api/products';
 
@@ -26,7 +24,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
     product.status === ProductStatus.waitingForAdminReview ||
     product.status === ProductStatus.rejected ||
     product.status === ProductStatus.draft ||
-    product.status === ProductStatus.pendingForSubmit||
+    product.status === ProductStatus.pendingForSubmit ||
     product.status === ProductStatus.pendingForReceive
   ) {
     return (
@@ -63,7 +61,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             <Link href={product.url || ''} target="_blank">
               <img
                 className="rounded object-cover aspect-video shadow-sm hover:shadow-lg transition-shadow duration-300"
-                src={product.screenshot}
+                src={product?.screenshots?.[0] || ''}
                 alt={product.name}
               />
             </Link>
@@ -91,11 +89,10 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
               <span className="text-yellow-500 font-bold">
                 {product.reviewRatingStr}
               </span>
-              <StarRatingServer
-                className="mt-[1px]"
-                size={'md'}
-                value={parseFloat(product.reviewRatingStr || '0')}
-              />
+              {/*<StarRatingServer*/}
+              {/*  size={'md'}*/}
+              {/*  value={parseFloat(product.reviewRatingStr || '0')}*/}
+              {/*/>*/}
               <span className="text-black text-md">
                 ({product.reviewCount} reviews)
               </span>
@@ -108,7 +105,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             <p className="font-semibold">Categories:</p>
             <div className="flex flex-row flex-wrap gap-2">
               <Link href={``} className="product-category">
-                {product.category}
+                {product.tags}
               </Link>
             </div>
           </div>
@@ -119,90 +116,86 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
         <div className="md:col-span-8 flex flex-col gap-4">
           <h2 className="h2">{product.name} Reviews</h2>
           {/*<GridLayout items={product.reviews as ReviewEntity[]} config={{}} />*/}
-          {product.reviews && product.reviews.length > 0 && (
-            <div className="grid grid-cols-3 gap-4">
-              {product.reviews.map((review) => (
-                <ReviewItem
-                  key={review.id}
-                  review={review}
-                  className="bg-white p-4 border border-gray-200 rounded-lg shadow-sm"
-                />
-              ))}
-            </div>
-          )}
+          {/*{product.reviews && product.reviews.length > 0 && (*/}
+          {/*  <div className="grid grid-cols-3 gap-4">*/}
+          {/*    {product.reviews.map((review) => (*/}
+          {/*      <ReviewItem key={review.id} review={review} />*/}
+          {/*    ))}*/}
+          {/*  </div>*/}
+          {/*)}*/}
           {(!product.reviews || product.reviews.length === 0) && (
             <p className="text-gray-500">
               No reviews available for this product.
             </p>
           )}
 
-          <p className="h2">{product.name} Product Information</p>
-          <div className="flex flex-col gap-2">
-            {product.longDescription && (
-              <>
-                <h2 className="h3">What is {product.name}?</h2>
-                <div className="rich-text text-start">
-                  <Markdown
-                    children={product.longDescription}
-                    remarkPlugins={[remarkGfm]}
-                  />
-                </div>
-                <div className="divider" />
-              </>
-            )}
+          {/*  <p className="h2">{product.name} Product Information</p>*/}
+          {/*  <div className="flex flex-col gap-2">*/}
+          {/*    {product.longDescription && (*/}
+          {/*      <>*/}
+          {/*        <h2 className="h3">What is {product.name}?</h2>*/}
+          {/*        <div className="rich-text text-start">*/}
+          {/*          <Markdown*/}
+          {/*            children={product.longDescription}*/}
+          {/*            remarkPlugins={[remarkGfm]}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*        <div className="divider" />*/}
+          {/*      </>*/}
+          {/*    )}*/}
 
-            {product.howToUse && (
-              <>
-                <h2 className="h3">How to use {product.name}?</h2>
-                <div className="rich-text text-start">
-                  <Markdown
-                    children={product.howToUse}
-                    remarkPlugins={[remarkGfm]}
-                  />
-                </div>
-                <div className="divider" />
-              </>
-            )}
+          {/*    {product.howToUse && (*/}
+          {/*      <>*/}
+          {/*        <h2 className="h3">How to use {product.name}?</h2>*/}
+          {/*        <div className="rich-text text-start">*/}
+          {/*          <Markdown*/}
+          {/*            children={product.howToUse}*/}
+          {/*            remarkPlugins={[remarkGfm]}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*        <div className="divider" />*/}
+          {/*      </>*/}
+          {/*    )}*/}
 
-            {product.features && (
-              <>
-                <h2 className="h3">Core features of {product.name}</h2>
-                <div className="rich-text text-start">
-                  <Markdown
-                    children={product.features}
-                    remarkPlugins={[remarkGfm]}
-                  />
-                </div>
-                <div className="divider" />
-              </>
-            )}
+          {/*    {product.features && (*/}
+          {/*      <>*/}
+          {/*        <h2 className="h3">Core features of {product.name}</h2>*/}
+          {/*        <div className="rich-text text-start">*/}
+          {/*          <Markdown*/}
+          {/*            children={product.features}*/}
+          {/*            remarkPlugins={[remarkGfm]}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*        <div className="divider" />*/}
+          {/*      </>*/}
+          {/*    )}*/}
 
-            {product.useCase && (
-              <>
-                <h2 className="h3">Use cases of {product.name}</h2>
-                <div className="rich-text text-start">
-                  <Markdown
-                    children={product.useCase}
-                    remarkPlugins={[remarkGfm]}
-                  />
-                </div>
-                <div className="divider" />
-              </>
-            )}
+          {/*    {product.useCase && (*/}
+          {/*      <>*/}
+          {/*        <h2 className="h3">Use cases of {product.name}</h2>*/}
+          {/*        <div className="rich-text text-start">*/}
+          {/*          <Markdown*/}
+          {/*            children={product.useCase}*/}
+          {/*            remarkPlugins={[remarkGfm]}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*        <div className="divider" />*/}
+          {/*      </>*/}
+          {/*    )}*/}
 
-            {product.faq && (
-              <>
-                <h2 className="h3">FAQ of {product.name}</h2>
-                <div className="rich-text text-start">
-                  <Markdown
-                    children={product.faq}
-                    remarkPlugins={[remarkGfm]}
-                  />
-                </div>
-                <div className="divider" />
-              </>
-            )}
-          </div>
+          {/*    {product.faq && (*/}
+          {/*      <>*/}
+          {/*        <h2 className="h3">FAQ of {product.name}</h2>*/}
+          {/*        <div className="rich-text text-start">*/}
+          {/*          <Markdown*/}
+          {/*            children={product.faq}*/}
+          {/*            remarkPlugins={[remarkGfm]}*/}
+          {/*          />*/}
+          {/*        </div>*/}
+          {/*        <div className="divider" />*/}
+          {/*      </>*/}
+          {/*    )}*/}
+          {/*  </div>*/}
         </div>
         <div className="md:col-span-4 flex flex-col gap-4"></div>
       </div>

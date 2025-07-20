@@ -112,7 +112,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
         user?.products?.find((product) => product.id === defaultProductId) ||
         user?.products?.[0] ||
         null;
-      setDefaultProduct(defaultProduct);
+      saveDefaultProduct(defaultProduct);
     } catch (error) {
       setUser(null);
     }

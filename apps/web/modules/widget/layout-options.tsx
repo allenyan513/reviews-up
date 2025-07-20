@@ -2,6 +2,11 @@ import { BsLayers } from 'react-icons/bs';
 
 export const layoutOptions = [
   {
+    value: 'badge',
+    label: 'Badge',
+    icon: <BsLayers className="h-4 w-4" />,
+  },
+  {
     value: 'flow',
     label: 'Flow',
     icon: <BsLayers className="h-4 w-4" />,

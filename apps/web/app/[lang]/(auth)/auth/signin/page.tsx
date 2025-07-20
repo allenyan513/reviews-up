@@ -2,7 +2,7 @@
 
 import { LoginForm } from '@/components/login-form';
 import { use } from 'react';
-import { WidgetClient } from '@reviewsup/embed-react';
+import { Widget } from '@reviewsup/embed-react';
 
 export default function LoginPage(props: {
   params: Promise<{
@@ -33,8 +33,12 @@ export default function LoginPage(props: {
         {/*<h2 className="text-2xl font-semibold mb-4 text-center">*/}
         {/*  ReviewsUp.io Widget*/}
         {/*</h2>*/}
-        <WidgetClient
-          widgetId={process.env.NODE_ENV === 'development' ? '25db6a933d3' : '2c337712ccd'}
+        <Widget
+          id={
+            process.env.NODE_ENV === 'development'
+              ? '25db6a933d3'
+              : '2c337712ccd'
+          }
         />
       </div>
     </div>

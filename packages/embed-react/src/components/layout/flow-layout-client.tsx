@@ -28,12 +28,35 @@ export function FlowLayoutClient({ items, config }: FlowLayoutClientProps) {
   });
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-4">
-      <div className="flex flex-row gap-4">
+    <div
+      // className="w-full flex flex-col justify-center items-center gap-4"
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '1rem',
+      }}
+    >
+      <div
+        // className="flex flex-row gap-4"
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1rem',
+        }}
+      >
         {renderedColumns.map((colItems, colIdx) => (
           <div key={colIdx} style={{ flex: 1 }}>
             {colItems.map((child, i) => (
-              <div key={i} className="mb-4">
+              <div
+                key={i}
+                // className="mb-4"
+                style={{
+                  marginBottom: '1rem',
+                }}
+              >
                 {child}
               </div>
             ))}

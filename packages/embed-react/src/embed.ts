@@ -1,18 +1,25 @@
 import React from 'react';
 import ReactDOMClient from 'react-dom/client';
-import { WidgetClient } from './components/widget.client';
-//todo if dist is not available, use the source files directly
-import '../dist/styles/styles.css';
+import { Widget } from './components/widget';
 
-const mountPoints = document.querySelectorAll('[data-widget-id]');
+/**
+ * <div id="reviewsup-embed-7980448d249" data-api="http://localhost:3000/api" ></div>
+ * <script type="module" src="https://unpkg.com/@reviewsup/embed-react/dist/embed/embed.es.js"></script>
+ */
+const mountPoints = document.querySelectorAll('[id^="reviewsup-embed-"]');
 mountPoints.forEach((mountPoint) => {
-  const widgetId = mountPoint.getAttribute('data-widget-id');
-
-  if (widgetId) {
-    const reactRoot = ReactDOMClient.createRoot(mountPoint);
-    reactRoot.render(
-      React.createElement(WidgetClient, {
-        widgetId: widgetId,
+  const id = mountPoint.id;
+  const match = id.match(/^reviewsup-embed-(.+)$/);
+  const api = mountPoint.getAttribute('data-api');
+  if (match) {
+    const widgetId = match[1];
+    const root = ReactDOMClient.createRoot(mountPoint);
+    root.render(
+      React.createElement(Widget, {
+        id: widgetId,
+        options: {
+          url: api,
+        },
       }),
     );
   }

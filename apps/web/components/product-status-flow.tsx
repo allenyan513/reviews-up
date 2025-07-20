@@ -5,7 +5,7 @@ import { BsCheckCircle, BsClock, BsXCircle, BsBan } from 'react-icons/bs';
 // 可扩展状态顺序
 const statusSteps = [
   // 'waitingForAdminReview',
-  // 'pendingForSubmit',
+  'pendingForSubmit',
   'pendingForReceive',
   'listing',
 ] as const;
@@ -15,10 +15,10 @@ export type StatusStep = (typeof statusSteps)[number];
 // 状态标签映射（可自定义为中文或其他语言）
 const statusLabels: Record<StatusStep, string> = {
   // waitingForAdminReview: 'Pending for Admin Review',
-  // pendingForSubmit: 'Writing Reviews',
   // rejected: 'Rejected',
-  pendingForReceive: 'Pending',
-  listing: 'Public',
+  pendingForSubmit: 'Pending for Submit',
+  pendingForReceive: 'Pending for ',
+  listing: 'Published',
 };
 
 interface ProductStatusFlowProps {

@@ -1,5 +1,5 @@
 'use client';
-import { WidgetClient } from '@reviewsup/embed-react';
+import { Widget } from '@reviewsup/embed-react';
 import { useState } from 'react';
 import { cn } from '@reviewsup/ui/lib/utils';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
@@ -117,8 +117,8 @@ export function WidgetWrapper(props: {
             mode === 'desktop' && 'w-full',
           )}
         >
-          <WidgetClient
-            widgetId={currentItem?.widgetId || ''}
+          <Widget
+            id={currentItem?.widgetId || ''}
             options={{
               url: process.env.NEXT_PUBLIC_API_URL as string,
             }}
@@ -126,7 +126,7 @@ export function WidgetWrapper(props: {
         </div>
       )}
       {view === 'code' && (
-        <div className='flex flex-col gap-8 items-center'>
+        <div className="flex flex-col gap-8 items-center">
           <CodeViewer
             rawFileTree={currentItem.rawFileTree}
             codeMap={currentItem.codeMap}
@@ -137,7 +137,8 @@ export function WidgetWrapper(props: {
             className={cn(
               buttonVariants({ size: 'lg' }),
               'bg-red-400 hover:bg-red-500 rounded-full h-14 text-white font-semibold max-w-md ',
-            )}>
+            )}
+          >
             View Full Code of Example
           </Link>
         </div>

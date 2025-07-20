@@ -1,17 +1,15 @@
 {
   "name": "@reviewsup/embed-react",
-  "version": "0.0.21",
+  "version": "0.0.29",
   "private": false,
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "dev:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles/styles.css --watch",
     "dev:components": "tsup --watch",
     "dev:embed": "NODE_ENV=production vite build",
-    "build:styles": "tailwindcss -i ./src/styles.css -o ./dist/styles/styles.css",
     "build:components": "tsup",
     "build:embed": "NODE_ENV=production vite build",
-    "build:all": "npm run build:components && npm run build:styles && npm run build:embed",
+    "build:all": "npm run build:components && npm run build:embed",
     "publish:pkg": "npm run build:all && npm publish --access public"
   },
   "main": "dist/components/index.js",
@@ -26,7 +24,6 @@
       "import": "./dist/components/index.cjs",
       "require": "./dist/components/index.js"
     },
-    "./styles.css": "./dist/styles/styles.css",
     "./embed.es.js": "./dist/embed/embed.es.js"
   },
   "publishConfig": {
@@ -44,13 +41,7 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "dependencies": {
-    "@reviewsup/api": "workspace:*",
-    "clsx": "^2.1.1",
-    "tailwind-merge": "^3.3.0",
-    "tailwindcss": "^4.1.10",
-    "react-icons": "^5.5.0"
-  },
-  "devDependencies": {
-    "@tailwindcss/cli": "^4.1.10"
+    "@reviewsup/api": "^0.0.5",
+    "clsx": "^2.1.1"
   }
 }

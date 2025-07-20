@@ -15,12 +15,24 @@ export function GridLayout(props: {
   const columns = useBreakpoints(config.breakpoints);
 
   return (
-    <div className="w-full flex flex-col justify-center items-center gap-4">
+    <div
+      // className="w-full flex flex-col justify-center items-center gap-4"
+      style={{
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: '1rem',
+      }}
+    >
       <div
         style={{
           gridTemplateColumns: `repeat(${columns}, 1fr)`,
+          display: 'grid',
+          gap: '1rem',
+          width: '100%',
         }}
-        className="w-full grid gap-4"
       >
         {items.map((item, idx) => {
           return renderItem(item, 'style-1', config, '100%', '300px');

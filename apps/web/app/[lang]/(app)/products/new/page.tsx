@@ -8,5 +8,5 @@ export default function Page(props: {
   }>;
 }) {
   const { lang } = use(props.params);
-  return <ProductNewEditPage mode="new" lang={lang} />;
+  return <ProductNewEditPage lang={lang} mode={'new'} />;
 }

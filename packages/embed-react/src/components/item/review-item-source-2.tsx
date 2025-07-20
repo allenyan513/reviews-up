@@ -15,9 +15,13 @@ export function ReviewItemSource2(props: {
   return (
     <div className={className}>
       <img
-        className="w-6 h-6"
         src={iconUrl[source] || ''}
         alt={`${source} icon`}
+        // className="w-6 h-6"
+        style={{
+          width: '1.5rem',
+          height: '1.5rem',
+        }}
       />
     </div>
   );

@@ -14,8 +14,8 @@ export const product = {
    * create a new product
    * @param dto
    */
-  setup: (dto: CreateProductRequest): Promise<ProductEntity> =>
-    authFetch('/products/setup', 'POST', dto),
+  create: (dto: CreateProductRequest): Promise<ProductEntity> =>
+    authFetch('/products', 'POST', dto),
   findAll: (
     request: FindAllRequest,
   ): Promise<PaginateResponse<ProductEntity>> =>

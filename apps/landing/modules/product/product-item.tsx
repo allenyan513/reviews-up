@@ -1,7 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
-import { StarRating, StarRatingServer } from '@reviewsup/embed-react';
+import { StarRatingServer } from '@reviewsup/embed-react';
 
 export function ProductItemView(props: { product: ProductEntity }) {
   const { product } = props;
@@ -10,11 +10,11 @@ export function ProductItemView(props: { product: ProductEntity }) {
       key={product.id}
       className="border border-gray-200 rounded-md bg-white shadow-md flex flex-col flex-grow"
     >
-      {product.screenshot ? (
+      {product.screenshots ? (
         <Link href={`/products/${product.slug}`}>
           <img
             className="w-full rounded-t-md border-b aspect-video object-cover"
-            src={product.screenshot}
+            src={product.screenshots[0]}
             alt={product.name}
           />
         </Link>
@@ -45,7 +45,6 @@ export function ProductItemView(props: { product: ProductEntity }) {
             {product.reviewRatingStr}
           </span>
           <StarRatingServer
-            className="mt-[2px]"
             size={'sm'}
             value={product?.reviewRating || 0}
           />

@@ -1,7 +1,6 @@
 'use client';
-
 import React, { use } from 'react';
-import { LaunchPage } from '@/modules/community/launch-page';
+import ProductNewEditPage from '@/modules/product/product-new-edit-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -10,5 +9,5 @@ export default function Page(props: {
   }>;
 }) {
   const { lang, productId } = use(props.params);
-  return <LaunchPage lang={lang} productId={productId} />;
+  return <ProductNewEditPage lang={lang} mode={'edit'} productId={productId} />;
 }

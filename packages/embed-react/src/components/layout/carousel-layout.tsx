@@ -6,6 +6,29 @@ import { WidgetConfig } from '@reviewsup/api/widgets';
 import { RatingSummary } from '../rating-summary';
 import { PoweredBy } from '../powered-by';
 import { renderItem } from '../item';
+import styled from 'styled-components'
+
+// <div className="absolute top-0 left-0 w-[100px] h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
+
+const RightGradientStyles = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(to right, white, transparent);
+  pointer-events: none;
+`;
+
+const LeftGradientStyles = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  height: 100%;
+  background: linear-gradient(to left, white, transparent);
+  pointer-events: none;
+`;
 
 function CarouselRow({
   items,
@@ -62,11 +85,23 @@ function CarouselRow({
   const duplicatedItems = items.length > 0 ? [...items, ...items] : [];
 
   return (
-    <div className="w-full relative overflow-x-hidden">
+    <div
+      // className="w-full relative overflow-x-hidden"
+      style={{
+        width: '100%',
+        position: 'relative',
+        overflowX: 'hidden',
+      }}
+    >
       <div
         ref={ref}
-        className="flex flex-row gap-4 p-4"
-        style={{ willChange: 'transform' }}
+        style={{
+          display: 'flex',
+          flexDirection: 'row',
+          gap: '1rem',
+          padding: '1rem',
+          willChange: 'transform'
+        }}
       >
         {duplicatedItems.map((item, idx) => (
           <div key={idx}>
@@ -74,8 +109,8 @@ function CarouselRow({
           </div>
         ))}
       </div>
-      <div className="absolute top-0 left-0 w-[100px] h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
-      <div className="absolute top-0 right-0 w-[100px] h-full bg-gradient-to-l from-white to-transparent pointer-events-none" />
+      <RightGradientStyles />
+      <LeftGradientStyles />
     </div>
   );
 }
@@ -102,8 +137,24 @@ export function CarouselLayout(props: {
   const rowsOfItems = distributeItemsIntoRows(items, rows);
 
   return (
-    <div className="hidden md:flex md:flex-col gap-4 w-full">
-      <div className="w-full flex flex-col">
+    <div
+      // className="hidden md:flex md:flex-col gap-4 w-full"
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        width: '100%',
+      }}
+    >
+      <div
+        // className="w-full flex flex-col"
+        style={{
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+        }}
+      >
         {rowsOfItems.map((rowItems, rowIndex) => {
           const rowReverse = rowIndex % 2 !== 0;
           return (

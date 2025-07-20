@@ -5,6 +5,7 @@ import {
   CreateProductRequest,
   FindAllRequest,
   ProductEntity,
+  SubmitProductRequest,
   UpdateProductRequest,
 } from '@reviewsup/api/products';
 import slugify from 'slugify';
@@ -44,7 +45,7 @@ export class ProductsService {
    * @param uid
    * @param dto
    */
-  async setup(uid: string, dto: CreateProductRequest) {
+  async create(uid: string, dto: CreateProductRequest) {
     const slug = slugify(dto.name, {
       lower: true,
       strict: true,
@@ -66,22 +67,17 @@ export class ProductsService {
         userId: uid,
         name: dto.name,
         slug: slug,
+        tagline: dto.tagline,
         url: dto.url,
-        status: 'pendingForReceive',
+        status: 'pendingForSubmit',
         icon: dto.icon,
-        screenshot: dto.screenshot,
+        screenshots: dto.screenshots || [],
         description: dto.description,
-        category: dto.category as ProductCategory,
-        longDescription: dto.longDescription,
-        features: dto.features,
-        useCase: dto.useCase,
-        howToUse: dto.howToUse,
-        faq: dto.faq,
+        tags: dto.tags || [],
         createdAt: new Date(),
         updatedAt: new Date(),
       },
     });
-
     const defaultForm = await this.formsService.create(uid, {
       name: defaultUserData.form,
       productId: newProduct.id,
@@ -103,19 +99,22 @@ export class ProductsService {
         },
       });
     }
-    const defaultShowcase = await this.widgetsService.create(uid, {
+    //创建两个默认的widget，一个是badge类型，一个是
+    const protectedBadgeWidget = await this.widgetsService.create(uid, {
+      productId: newProduct.id,
+      name: defaultUserData.widget,
+      isProtected: true,
+      config: {
+        type: 'badge',
+      },
+    });
+    const defaultWidget = await this.widgetsService.create(uid, {
       productId: newProduct.id,
       name: defaultUserData.widget,
     });
-    if (!defaultShowcase) {
+    if (!defaultWidget || !protectedBadgeWidget) {
       throw new Error('Unable to create default showcase');
     }
-    //automatically free submit the product
-    await this.submit(uid, {
-      id: newProduct.id,
-      bindingFormId: defaultForm.id,
-      submitOption: 'free-submit',
-    });
     return newProduct as ProductEntity;
   }
 
@@ -136,23 +135,33 @@ export class ProductsService {
       faviconFilePath,
       screenshotFilePath,
     });
-    const faviconKey = `${hash(Date.now().toString())}${mime.lookup(faviconFilePath)}`;
-    await this.s3Service.uploadFile(
-      faviconKey,
-      fs.readFileSync(faviconFilePath),
-      mime.lookup(faviconFilePath) || 'image/png',
-    );
-    const screenshotKey = `${hash(Date.now().toString())}${mime.lookup(screenshotFilePath)}`;
-    await this.s3Service.uploadFile(
-      screenshotKey,
-      fs.readFileSync(screenshotFilePath),
-      mime.lookup(screenshotFilePath) || 'image/png',
-    );
+
+    let faviconUrl = '';
+    if (fs.existsSync(faviconFilePath)) {
+      const faviconKey = `${hash(Date.now().toString())}${mime.lookup(faviconFilePath)}`;
+      await this.s3Service.uploadFile(
+        faviconKey,
+        fs.readFileSync(faviconFilePath),
+        mime.lookup(faviconFilePath) || 'image/png',
+      );
+      faviconUrl = this.s3Service.getUrl(faviconKey);
+    }
+
+    let screenshotUrl = '';
+    if (fs.existsSync(screenshotFilePath)) {
+      const screenshotKey = `${hash(Date.now().toString())}${mime.lookup(screenshotFilePath)}`;
+      await this.s3Service.uploadFile(
+        screenshotKey,
+        fs.readFileSync(screenshotFilePath),
+        mime.lookup(screenshotFilePath) || 'image/png',
+      );
+      screenshotUrl = this.s3Service.getUrl(screenshotKey);
+    }
     return {
       title: title,
       description: description,
-      faviconUrl: this.s3Service.getUrl(faviconKey),
-      screenshotUrl: this.s3Service.getUrl(screenshotKey),
+      faviconUrl: faviconUrl,
+      screenshotUrl: screenshotUrl,
     } as CrawlProductResponse;
   }
 
@@ -165,15 +174,17 @@ export class ProductsService {
    */
   async submit(
     uid: string,
-    dto: UpdateProductRequest,
+    dto: SubmitProductRequest,
   ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
     if (dto.submitOption === 'paid-submit') {
       return this.createPaidSubmit(uid, dto);
     } else if (dto.submitOption === 'free-submit') {
       return this.createFreeSubmit(uid, dto);
-    } else if (dto.submitOption === 'verify-submit') {
-      return this.createVerifySubmit(uid, dto);
-    } else {
+    }
+    // else if (dto.submitOption === 'verify-submit') {
+    //   return this.createVerifySubmit(uid, dto);
+    // }
+    else {
       this.logger.error(`Unknown submit option: ${dto.submitOption}`);
       return {
         code: 400,
@@ -190,7 +201,7 @@ export class ProductsService {
    */
   async createPaidSubmit(
     uid: string,
-    dto: UpdateProductRequest,
+    dto: SubmitProductRequest,
   ): Promise<RRResponse<ProductEntity | CreateOneTimePaymentResponse>> {
     // Check if the user has enough balance for paid submission
     const user = await this.prismaService.user.findUnique({
@@ -262,7 +273,7 @@ export class ProductsService {
     return {
       code: 200,
       message: 'Task review count retrieved successfully',
-      data: Math.min(10, pendingTasks), // Limit to a maximum of 10
+      data: Math.min(3, pendingTasks), // Limit to a maximum of 10
     };
   }
 
@@ -273,8 +284,34 @@ export class ProductsService {
    */
   async createFreeSubmit(
     uid: string,
-    dto: UpdateProductRequest,
+    dto: SubmitProductRequest,
   ): Promise<RRResponse<ProductEntity>> {
+    const existingProduct = await this.prismaService.product.findUnique({
+      where: {
+        id: dto.id,
+      },
+    });
+    if (!existingProduct) {
+      this.logger.error(`Product with ID ${dto.id} not found for user ${uid}`);
+      return {
+        code: 404,
+        message: `Product with ID ${dto.id} not found`,
+        data: null,
+      };
+    }
+    const verifyResult = await this.widgetsService.verifyWidgetEmbedding(uid, {
+      url: existingProduct.url,
+    });
+    if (verifyResult.code !== 200 || !verifyResult.data) {
+      this.logger.error(
+        `Widget embedding verification failed for user ${uid} with URL: ${existingProduct.url}`,
+      );
+      return {
+        code: 400,
+        message: 'Widget embedding verification failed',
+        data: null,
+      };
+    }
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;
     const status = taskReviewCount > 0 ? 'pendingForReceive' : 'listing';
@@ -298,49 +335,49 @@ export class ProductsService {
     };
   }
 
-  /**
-   * 创建一个验证提交的产品
-   * @param uid
-   * @param dto
-   */
-  async createVerifySubmit(
-    uid: string,
-    dto: UpdateProductRequest,
-  ): Promise<RRResponse<ProductEntity>> {
-    // step1. verify if the widget is embedded in the url website
-    const verifyResult = await this.widgetsService.verifyWidgetEmbedding(uid, {
-      url: dto.url,
-    });
-    if (verifyResult.code !== 200 || !verifyResult.data) {
-      this.logger.error(
-        `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
-      );
-      return {
-        code: 400,
-        message: 'Widget embedding verification failed',
-        data: null,
-      };
-    }
-    const product = await this.prismaService.product.update({
-      where: {
-        id: dto.id,
-      },
-      data: {
-        status: 'listing',
-        bindingFormId: dto.bindingFormId,
-        featured: true,
-        taskReviewCount: 0,
-        submitReviewCount: 0,
-        receiveReviewCount: 0,
-        updatedAt: new Date(),
-      },
-    });
-    return {
-      code: 200,
-      message: 'Product created successfully',
-      data: product,
-    };
-  }
+  // /**
+  //  * 创建一个验证提交的产品
+  //  * @param uid
+  //  * @param dto
+  //  */
+  // async createVerifySubmit(
+  //   uid: string,
+  //   dto: UpdateProductRequest,
+  // ): Promise<RRResponse<ProductEntity>> {
+  //   // step1. verify if the widget is embedded in the url website
+  //   const verifyResult = await this.widgetsService.verifyWidgetEmbedding(uid, {
+  //     url: dto.url,
+  //   });
+  //   if (verifyResult.code !== 200 || !verifyResult.data) {
+  //     this.logger.error(
+  //       `Widget embedding verification failed for user ${uid} with URL: ${dto.url}`,
+  //     );
+  //     return {
+  //       code: 400,
+  //       message: 'Widget embedding verification failed',
+  //       data: null,
+  //     };
+  //   }
+  //   const product = await this.prismaService.product.update({
+  //     where: {
+  //       id: dto.id,
+  //     },
+  //     data: {
+  //       status: 'listing',
+  //       bindingFormId: dto.bindingFormId,
+  //       featured: true,
+  //       taskReviewCount: 0,
+  //       submitReviewCount: 0,
+  //       receiveReviewCount: 0,
+  //       updatedAt: new Date(),
+  //     },
+  //   });
+  //   return {
+  //     code: 200,
+  //     message: 'Product created successfully',
+  //     data: product,
+  //   };
+  // }
 
   async findAll(
     userId: string,
@@ -497,14 +534,8 @@ export class ProductsService {
       },
       data: {
         icon: dto.icon,
-        screenshot: dto.screenshot,
-        category: dto.category as ProductCategory,
+        screenshots: dto.screenshots || [],
         description: dto.description,
-        longDescription: dto.longDescription,
-        features: dto.features,
-        useCase: dto.useCase,
-        howToUse: dto.howToUse,
-        faq: dto.faq,
         updatedAt: new Date(), // Update the timestamp
       },
     });

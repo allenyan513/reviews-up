@@ -17,10 +17,9 @@ export function ManualImportView(props: {
   return (
     <div className="w-full flex flex-col gap-4 justify-center items-center ">
       <StarRating
-        className=""
         size={'lg'}
         value={formData?.rating || 0}
-        onChange={(value) => {
+        onChange={(value: number) => {
           setFormData({ ...formData, rating: value });
         }}
       />

@@ -48,12 +48,13 @@ export function TikTokEmbed(props: {
         src={`https://www.tiktok.com/player/v1/${tiktokId}?progress_bar=0&timestamp=0&fullscreen_button=0&volume_control=0`}
         title="TikTok Video"
         allowFullScreen
+        // className="rounded-md"
         style={{
           width: iframeWidth,
           height: iframeHeight,
           border: 'none',
+          borderRadius: '0.375rem',
         }}
-        className="rounded-md"
       />
     </div>
   );

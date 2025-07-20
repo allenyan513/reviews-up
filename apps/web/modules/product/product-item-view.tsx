@@ -12,14 +12,14 @@ export function ProductItemView(props: { product: ProductEntity }) {
       key={product.id}
       className="border border-gray-200 rounded-md bg-white shadow-md flex flex-col flex-grow"
     >
-      {product.screenshot ? (
+      {product.screenshots ? (
         <Link
           href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${product.slug}`}
           target="_blank"
         >
           <img
             className="w-full rounded-t-md border-b aspect-video object-cover"
-            src={product.screenshot}
+            src={product.screenshots[0]}
             alt={product.name}
           />
         </Link>

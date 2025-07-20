@@ -5,7 +5,16 @@ export const defaultUserData = {
   product: 'Default Product',
   form: 'Default Form',
   widget: 'Default Widget',
-  reviews: [],
+  reviews: [
+    {
+      reviewerName: 'Allen Yan',
+      reviewerImage: 'https://reviewsup.io/img/avatar4.png',
+      reviewerTitle: 'Developer of ReviewsUp.io',
+      rating: 5,
+      text: 'Welcome to ReviewsUp.io! This is a sample review to get you started. Feel free to customize it as needed.',
+      status: ReviewStatus.pending,
+    },
+  ],
 };
 
 const reviews = [

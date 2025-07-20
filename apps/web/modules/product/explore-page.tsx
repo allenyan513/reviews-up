@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { api } from '@/lib/api-client';
 import { DataTable } from '@/components/data-table';
-import { columns } from '@/modules/community/explore-columns';
+import { columns } from '@/modules/product/explore-columns';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { findAllRequestSchema, ProductStatus } from '@reviewsup/api/products';
 

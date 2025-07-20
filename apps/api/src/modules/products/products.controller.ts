@@ -14,8 +14,8 @@ import { JwtPayload } from '@src/app.types';
 import { ProductsService } from '@src/modules/products/products.service';
 import {
   CreateProductRequest,
-  findAllRequestSchema,
-  UpdateProductRequest,
+  findAllRequestSchema, SubmitProductRequest,
+  UpdateProductRequest
 } from '@reviewsup/api/products';
 import { RRResponse } from '@reviewsup/api/common';
 
@@ -23,14 +23,16 @@ import { RRResponse } from '@reviewsup/api/common';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @Post()
+  async create(@Jwt() jwt: JwtPayload, @Body() request: CreateProductRequest) {
+    return this.productsService.create(jwt.userId, request);
+  }
 
   @UseGuards(JwtAuthGuard)
-  @Post("setup")
-  async setup(
-    @Jwt() jwt: JwtPayload,
-    @Body() request: CreateProductRequest,
-  ) {
-    return this.productsService.setup(jwt.userId, request);
+  @Post('submit')
+  async submit(@Jwt() jwt: JwtPayload, @Body() request: SubmitProductRequest) {
+    return this.productsService.submit(jwt.userId, request);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -45,11 +47,6 @@ export class ProductsController {
     return this.productsService.crawlProductInfo(jwt.userId, url);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Post('submit')
-  async submit(@Jwt() jwt: JwtPayload, @Body() request: UpdateProductRequest) {
-    return this.productsService.submit(jwt.userId, request);
-  }
 
   @UseGuards(JwtAuthGuard)
   @Post('findAll')
@@ -62,7 +59,6 @@ export class ProductsController {
   async findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
   }
-
 
   @UseGuards(JwtAuthGuard)
   @Patch(':id')
@@ -90,5 +86,4 @@ export class ProductsController {
   async publicSlug(@Param('slug') slug: string) {
     return this.productsService.findOne(slug);
   }
-
 }
