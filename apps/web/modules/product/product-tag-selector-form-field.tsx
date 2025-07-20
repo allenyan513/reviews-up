@@ -11,7 +11,7 @@ import {
 } from '@reviewsup/ui/form';
 import { ProductCategory } from '@reviewsup/api/products';
 
-const categories = Object.entries(ProductCategory); // [['ai', 'ai'], ['analytics', 'analytics'], ...]
+const categories = Object.entries(ProductCategory);
 
 export function TagSelectorFormField({ form }: { form: any }) {
   const [open, setOpen] = useState(false);
@@ -59,36 +59,32 @@ export function TagSelectorFormField({ form }: { form: any }) {
                     <Command>
                       {categories.map(([key, value]) => (
                         <CommandItem
-                          key={value}
-                          value={value}
+                          key={key}
+                          value={key}
                           onSelect={() => {
-                            handleSelect(value);
+                            handleSelect(key);
                           }}
-                          disabled={selected.includes(value)}
+                          disabled={selected.includes(key)}
                         >
-                          {key
-                            .split(/(?=[A-Z])/)
-                            .map(
-                              (word) =>
-                                word.charAt(0).toUpperCase() +
-                                word.slice(1).toLowerCase(),
-                            )
-                            .join(' ')}
+                          {value}
                         </CommandItem>
                       ))}
                     </Command>
                   </PopoverContent>
                 </Popover>
                 <div className="mt-2 flex flex-wrap gap-2">
-                  {selected.map((tag: string) => (
+                  {selected.map((tagKey: string) => (
                     <div
-                      key={tag}
+                      key={tagKey}
                       className="flex items-center gap-1 bg-muted px-2 py-1 rounded-md text-sm"
                     >
-                      <span>{tag}</span>
+                      <span>{
+                        categories.find(([key]) => key === tagKey)?.[1] || tagKey
+
+                      }</span>
                       <button
                         type="button"
-                        onClick={() => handleRemove(tag)}
+                        onClick={() => handleRemove(tagKey)}
                         className="text-muted-foreground hover:text-red-500"
                       >
                         <X size={14} />

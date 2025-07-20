@@ -1,11 +1,5 @@
-import {
-  CreateReviewDto,
-  UpdateReviewDto,
-  ReviewEntity,
-  FindAllReviewRequest,
-} from '@reviewsup/api/reviews';
+import { UpdateReviewDto } from '@reviewsup/api/reviews';
 import { authFetch } from './auth-fetch';
-import { ProductEntity, FindAllRequest } from '@reviewsup/api/products';
 import {
   CreateOneTimePaymentDto,
   CreateOneTimePaymentResponse,

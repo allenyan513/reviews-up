@@ -1,11 +1,6 @@
 'use client';
 import React, { use, useEffect, useState } from 'react';
-import {
-  ProductCategory,
-  ProductEntity,
-  ProductStatus,
-  findAllRequestSchema,
-} from '@reviewsup/api/products';
+import { ProductCategory, ProductEntity } from '@reviewsup/api/products';
 import { Input } from '@reviewsup/ui/input';
 import { Checkbox } from '@reviewsup/ui/checkbox';
 import { Label } from '@reviewsup/ui/label';
@@ -19,10 +14,10 @@ export function ProductList(props: { status: string; lang: string }) {
   const [page, setPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [search, setSearch] = useState<string>('');
-  const [categories, setCategories] = useState<string[]>([]);
+  const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    fetchProductList(status, page, pageSize, categories)
+    fetchProductList(status, page, pageSize, tags)
       .then((response) => {
         setProducts(response.items);
         setOriginalProducts(response.items);
@@ -30,7 +25,7 @@ export function ProductList(props: { status: string; lang: string }) {
       .catch((error) => {
         console.error('Error fetching products:', error);
       });
-  }, [categories]);
+  }, [tags]);
 
   useEffect(() => {
     if (search.trim() === '') {
@@ -45,19 +40,19 @@ export function ProductList(props: { status: string; lang: string }) {
   }, [search, originalProducts]);
 
   return (
-    <div className="flex flex-col pt-32 px-32 gap-16">
-      <div className="flex flex-col gap-4 text-center">
-        <h1 className="text-5xl font-bold">
-          {/*  发现那些需要意见反馈的应用*/}
-          Join the Feedback Community
-        </h1>
-        <h2 className="text-xl text-gray-600 max-w-5xl mx-auto">
-          Support developers by trying out apps and sharing your reviews.
-          Together, we build better products.
-        </h2>
-      </div>
-      <div className="grid grid-cols-12 gap-16">
-        <div className="col-span-2 flex flex-col gap-4">
+    <div className="flex flex-col py-24 px-4 md:px-32 gap-16">
+      {/*<div className="flex flex-col gap-4 text-center">*/}
+      {/*  <h1 className="text-5xl font-bold">*/}
+      {/*    /!*  发现那些需要意见反馈的应用*!/*/}
+      {/*    Join the Feedback Community*/}
+      {/*  </h1>*/}
+      {/*  <h2 className="text-xl text-gray-600 max-w-5xl mx-auto">*/}
+      {/*    Support developers by trying out apps and sharing your reviews.*/}
+      {/*    Together, we build better products.*/}
+      {/*  </h2>*/}
+      {/*</div>*/}
+      <div className="flex flex-col md:grid md:grid-cols-12 gap-16">
+        <div className="hidden md:col-span-2 md:flex md:flex-col gap-4">
           <h2>Filter Products</h2>
           <Input
             type="text"
@@ -81,9 +76,9 @@ export function ProductList(props: { status: string; lang: string }) {
                   className="border-gray-400"
                   onCheckedChange={(checked) => {
                     if (checked) {
-                      setCategories((prev) => [...prev, key]);
+                      setTags((prev) => [...prev, key]);
                     } else {
-                      setCategories((prev) =>
+                      setTags((prev) =>
                         prev.filter((category) => category !== key),
                       );
                     }
@@ -103,13 +98,15 @@ export function ProductList(props: { status: string; lang: string }) {
             ))}
           </div>
         </div>
-
         {/*  产品grid*/}
-        <div className="col-span-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-start gap-4">
-          {products &&
-            products.map((product) => (
-              <ProductItemView key={product.id} product={product} />
-            ))}
+        <div className='flex flex-col md:col-span-10 gap-4'>
+          <h1 className='text-2xl font-bold'>Top Products Launching Today</h1>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 items-start gap-4">
+            {products &&
+              products.map((product) => (
+                <ProductItemView key={product.id} product={product} />
+              ))}
+          </div>
         </div>
       </div>
     </div>

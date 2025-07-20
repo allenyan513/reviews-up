@@ -9,14 +9,14 @@ export async function fetchProductList(
   status: string,
   page: number = 1,
   pageSize: number = 10,
-  categories: string[] = [],
+  tags: string[] = [],
 ): Promise<PaginateResponse<ProductEntity>> {
   const validatedRequest = findAllRequestSchema.parse({
     status: [status],
     page: page,
     pageSize: pageSize,
     search: undefined,
-    categories: categories,
+    tags: tags,
   });
 
   const response = await fetch(

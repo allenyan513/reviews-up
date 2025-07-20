@@ -1,7 +1,5 @@
 import { ProductList } from '@/modules/product/product-list';
 import { Metadata } from 'next';
-import { fetchProductList } from '@/actions/fetch-product-list';
-import { use } from 'react';
 import { ProductStatus } from '@reviewsup/api/products';
 
 export async function generateMetadata(props: {

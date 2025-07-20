@@ -23,10 +23,9 @@ export default function ExplorePage(props: {
       page: pageIndex + 1,
       pageSize: pageSize,
       search: undefined,
-      categories: undefined,
+      tags: [],
     });
     const res = await api.product.findAll(validatedRequest);
-    console.log(res);
     return {
       data: res.items,
       pageCount: 1,
