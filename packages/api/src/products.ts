@@ -57,6 +57,7 @@ export type UpdateProductRequest = Partial<CreateProductRequest>;
 export const submitProductSchema = z.object({
   id: z.string().optional(),
   bindingFormId: z.string().optional(),
+  skipVerify: z.boolean().default(false),
   submitOption: z
     .enum(['free-submit', 'paid-submit', 'crawl-product-info', 'update'])
     .optional(),

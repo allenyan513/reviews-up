@@ -329,18 +329,23 @@ export class ProductsService {
         data: null,
       };
     }
-    const verifyResult = await this.widgetsService.verifyWidgetEmbedding(uid, {
-      url: existingProduct.url,
-    });
-    if (verifyResult.code !== 200 || !verifyResult.data) {
-      this.logger.error(
-        `Widget embedding verification failed for user ${uid} with URL: ${existingProduct.url}`,
+    if (dto.skipVerify === false) {
+      const verifyResult = await this.widgetsService.verifyWidgetEmbedding(
+        uid,
+        {
+          url: existingProduct.url,
+        },
       );
-      return {
-        code: 400,
-        message: 'Widget embedding verification failed',
-        data: null,
-      };
+      if (verifyResult.code !== 200 || !verifyResult.data) {
+        this.logger.error(
+          `Widget embedding verification failed for user ${uid} with URL: ${existingProduct.url}`,
+        );
+        return {
+          code: 400,
+          message: 'Widget embedding verification failed',
+          data: null,
+        };
+      }
     }
     const taskReviewCountResult = await this.getTaskReviewCount(uid);
     const taskReviewCount = taskReviewCountResult.data || 0;

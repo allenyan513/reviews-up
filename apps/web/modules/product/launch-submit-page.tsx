@@ -198,7 +198,11 @@ function FreeSubmitOption(props: {
           form.setValue('submitOption', 'free-submit');
         }}
       >
-        {loading ? <LoadingText>Submitting...</LoadingText> : 'Verify and Submit'}
+        {loading ? (
+          <LoadingText>Submitting...</LoadingText>
+        ) : (
+          'Verify and Submit'
+        )}
       </Button>
     </div>
   );
@@ -322,6 +326,8 @@ export function LaunchSubmitOrEditPage(props: {
     defaultValues: {
       id: productId,
       bindingFormId: '',
+      //todo
+      skipVerify: true, // 测试阶段跳过
       submitOption: 'free-submit',
     },
   });
@@ -333,7 +339,9 @@ export function LaunchSubmitOrEditPage(props: {
   const [formsLoaded, setFormsLoaded] = useState(false); // New state to track if forms are loaded
   const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
   const [taskReviewCount, setTaskReviewCount] = useState<number>(0);
-  const [widgetShortId, setWidgetShortId] = useState<string | undefined>(undefined);
+  const [widgetShortId, setWidgetShortId] = useState<string | undefined>(
+    undefined,
+  );
 
   const handleUpdate = async () => {
     try {
@@ -392,6 +400,8 @@ export function LaunchSubmitOrEditPage(props: {
           form.reset({
             id: product.id,
             bindingFormId: product.bindingFormId || '',
+            //todo
+            skipVerify: true,
             submitOption: 'free-submit',
           });
         }
