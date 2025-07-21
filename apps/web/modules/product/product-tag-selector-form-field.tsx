@@ -27,8 +27,8 @@ export function TagSelectorFormField({ form }: { form: any }) {
         const handleSelect = (value: string) => {
           if (selected.includes(value)) return;
           if (selected.length >= 3) return;
-
           field.onChange([...selected, value]);
+          setOpen(false);
         };
 
         const handleRemove = (value: string) => {
@@ -59,6 +59,7 @@ export function TagSelectorFormField({ form }: { form: any }) {
                     <Command>
                       {categories.map(([key, value]) => (
                         <CommandItem
+                          className='text-md'
                           key={key}
                           value={key}
                           onSelect={() => {

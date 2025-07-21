@@ -400,14 +400,21 @@ export function LaunchSubmitOrEditPage(props: {
         console.error('Error fetching product details:', error);
       });
 
-    api.widget.getWidgets(productId).then((response) => {
-      if (response && response.items && response.items.length > 0) {
-        const firstWidget = response.items[0];
-        setWidgetId(firstWidget?.id);
-      } else {
-        setWidgetId(undefined); // Default widget ID
-      }
-    });
+    api.widget
+      .getWidgets({
+        productId: productId,
+        isProtected: true,
+        page: 1,
+        pageSize: 10,
+      })
+      .then((response) => {
+        if (response && response.items && response.items.length > 0) {
+          const firstWidget = response.items[0];
+          setWidgetId(firstWidget?.id);
+        } else {
+          setWidgetId(undefined); // Default widget ID
+        }
+      });
 
     api.form
       .getForms(productId)

@@ -1,5 +1,6 @@
 import { reviewEntitySchema } from './reviews';
 import { z } from 'zod';
+import { Param } from '@nestjs/common';
 
 export const createWidgetSchema = z.object({
   productId: z.string().min(1, 'ProductId is required'),
@@ -65,3 +66,15 @@ export const verifyWidgetEmbeddingSchema = z.object({
 export type VerifyWidgetEmbeddingRequest = z.infer<
   typeof verifyWidgetEmbeddingSchema
 >;
+
+
+export const findAllWidgetSchema = z.object({
+  productId: z.string().min(1, 'ProductId is required'),
+  isProtected: z.boolean().optional(),
+  page: z.number().int().min(1).default(1),
+  pageSize: z.number().int().min(1).max(100).default(10),
+  sortBy: z.string().optional().default('createdAt'),
+  sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
+})
+
+export type FindAllWidgetDto = z.infer<typeof findAllWidgetSchema>;

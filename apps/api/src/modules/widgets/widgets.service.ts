@@ -4,14 +4,11 @@ import {
   UpdateWidgetDto,
   WidgetConfig,
   WidgetEntity,
+  FindAllWidgetDto,
   VerifyWidgetEmbeddingRequest,
 } from '@reviewsup/api/widgets';
 import { PrismaService } from '../prisma/prisma.service';
-import {
-  PaginateRequest,
-  PaginateResponse,
-  RRResponse,
-} from '@reviewsup/api/common';
+import { PaginateResponse, RRResponse } from '@reviewsup/api/common';
 import { generateShortId } from '@src/libs/shortId';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { SortBy } from '@reviewsup/api/common';
@@ -30,7 +27,7 @@ export class WidgetsService {
     isImageEnabled: true,
     isVideoEnabled: true,
     isPoweredByEnabled: true,
-    isDoFollowEnabled:  true,
+    isDoFollowEnabled: true,
     sortBy: 'newest',
     count: 20,
     flow: {
@@ -68,37 +65,28 @@ export class WidgetsService {
     });
   }
 
-  async findAll(
-    uid: string,
-    productId: string,
-
-    paginateRequest: PaginateRequest,
-  ) {
-    this.logger.debug(
-      'Fetching widget for user',
-      uid,
-      productId,
-      paginateRequest,
-    );
-    if (!uid || !productId || !paginateRequest) {
+  async findAll(uid: string, request: FindAllWidgetDto) {
+    this.logger.debug('Fetching widget for user', uid, request);
+    if (!uid || !request) {
       throw new Error('Product ID is required to fetch reviews');
     }
     const total = await this.prismaService.widget.count({
       where: {
         userId: uid,
-        productId: productId,
+        productId: request.productId,
       },
     });
     const items = (await this.prismaService.widget.findMany({
       where: {
         userId: uid,
-        productId: productId,
+        productId: request.productId,
+        isProtected: request.isProtected,
       },
       orderBy: {
         createdAt: 'desc', // Order by creation date
       },
-      skip: (paginateRequest.page - 1) * paginateRequest.pageSize,
-      take: paginateRequest.pageSize,
+      skip: (request.page - 1) * request.pageSize,
+      take: request.pageSize,
     })) as WidgetEntity[];
 
     return {
@@ -109,8 +97,9 @@ export class WidgetsService {
         } as WidgetEntity;
       }),
       meta: {
-        page: paginateRequest.page,
-        pageSize: paginateRequest.pageSize,
+        page: request.page,
+        pageSize: request.pageSize,
+        pageCount: Math.ceil(total / request.pageSize),
         total: total,
       },
     } as PaginateResponse<WidgetEntity>;

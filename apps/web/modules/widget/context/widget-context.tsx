@@ -35,9 +35,16 @@ export function WidgetProvider(props: { children: React.ReactNode }) {
       });
   };
   const getWidgets = (productId: string) => {
-    api.widget.getWidgets(productId).then((response) => {
-      setWidgets(response);
-    });
+    api.widget
+      .getWidgets({
+        productId: productId,
+        isProtected: false,
+        page: 1,
+        pageSize: 20,
+      })
+      .then((response) => {
+        setWidgets(response);
+      });
   };
 
   const deleteWidget = async (widgetId: string) => {

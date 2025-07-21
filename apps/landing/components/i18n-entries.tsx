@@ -15,14 +15,14 @@ export function I18nEntries(props: { className?: string }) {
   return (
     <div
       className={cn(
-        'md:flex md:flex-row grid grid-cols-4 gap-1 md:gap-4',
+        'flex flex-row  flex-wrap items-center gap-2',
         props.className,
       )}
     >
       {i18nLanguages.map((item) => {
         const href = getLocalizedPath(item.code);
         return (
-          <Link href={href} className="flex items-center gap-2" key={item.name}>
+          <Link href={href} className="text-sm text-gray-500 hover:text-gray-600" key={item.name}>
             {item.name}
           </Link>
         );

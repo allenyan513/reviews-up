@@ -31,7 +31,6 @@ export default function WidgetListPage(props: {
         </div>
         <DialogNewWidget />
       </div>
-
       {/* Widget List */}
       <div className="space-y-4 w-full">
         {widgets.items &&

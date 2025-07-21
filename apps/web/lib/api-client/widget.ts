@@ -5,13 +5,18 @@ import {
   CreateWidgetDto,
   UpdateWidgetDto,
   VerifyWidgetEmbeddingRequest,
+  FindAllWidgetDto,
 } from '@reviewsup/api/widgets';
 
 export const widget = {
-  getWidgets: (productId: string): Promise<PaginateResponse<WidgetEntity>> =>
-    authFetch(`/widgets/productId/${productId}`, 'GET', {}),
+  getWidgets: (
+    request: FindAllWidgetDto,
+  ): Promise<PaginateResponse<WidgetEntity>> =>
+    authFetch(`/widgets/findAll`, 'POST', request),
+
   getWidget: (id: string): Promise<WidgetEntity> =>
     authFetch(`/widgets/${id}`, 'GET', {}),
+
   getWidgetByShortId: (shortId: string): Promise<WidgetEntity> =>
     authFetch(`/widgets/shortId/${shortId}`, 'GET', {}),
   createWidget: (dto: CreateWidgetDto) => authFetch('/widgets', 'POST', dto),

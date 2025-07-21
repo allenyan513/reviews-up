@@ -31,9 +31,9 @@ export class FormsService {
         url: '',
       },
       welcome: {
-        title: 'Would You mind to give us some feedback?',
+        title: 'We’d Love Your Feedback',
         message:
-          'We are always looking to improve our product. Your feedback is very important to us.',
+          'Help us improve by sharing your thoughts. Your feedback is invaluable to us.',
       },
       thankyou: {
         title: 'Thank You for Submitting',
