@@ -303,7 +303,7 @@ export class ProductsService {
     return {
       code: 200,
       message: 'Task review count retrieved successfully',
-      data: Math.min(3, pendingTasks), // Limit to a maximum of 10
+      data: Math.min(1, pendingTasks), // Limit to a maximum of 10
     };
   }
 

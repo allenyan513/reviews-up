@@ -2,7 +2,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import ReviewImportDialog from '@/modules/review/review-import-dialog';
-import { useUserContext } from '@/context/UserProvider';
 import { api } from '@/lib/api-client';
 import { DataTable } from '@/components/data-table';
 import { columns } from '@/modules/review/review-list-page-columns';
@@ -33,7 +32,6 @@ export default function ReviewsPage(props: {
         productId: productId,
       }),
     });
-    console.log(res);
     return {
       data: res.items,
       pageCount: res.meta.pageCount,

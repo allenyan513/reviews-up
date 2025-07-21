@@ -5,6 +5,7 @@ import { StarRatingServer } from '@reviewsup/embed-react';
 import { ProductCategory, ProductStatus } from '@reviewsup/api/products';
 import { StarRatingServerWrapper } from '@/modules/product/star-rating-server-wrapper';
 import { ReviewItemsWrapper } from './review-item-wrapper';
+import { LinkDoFollow } from '@reviewsup/ui/link-dofollow';
 import React from 'react';
 
 export function toLocalDateString(date: Date | string): string {
@@ -26,8 +27,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
     product.status === ProductStatus.waitingForAdminReview ||
     product.status === ProductStatus.rejected ||
     product.status === ProductStatus.draft ||
-    product.status === ProductStatus.pendingForSubmit ||
-    product.status === ProductStatus.pendingForReceive
+    product.status === ProductStatus.pendingForSubmit
   ) {
     return (
       <div className="flex flex-col items-center justify-center h-screen">
@@ -55,7 +55,14 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             )}
             {/*Name Tagline Rating*/}
             <div className="flex flex-col">
-              <h1 className="text-2xl font-semibold">{product.name}</h1>
+              <h1 className="text-2xl font-semibold">
+                {product.name}
+                {product.status === ProductStatus.pendingForReceive && (
+                  <span className="text-yellow-500 ml-2 uppercase">
+                    (Pending)
+                  </span>
+                )}
+              </h1>
               <h2 className="text-gray-500 line-clamp-1 max-w-lg">
                 {product.tagline}
               </h2>
@@ -83,14 +90,14 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
               <BsPencil />
               <span>Write a review</span>
             </Link>
-            <Link
+            <LinkDoFollow
               className="rounded-full bg-white text-black px-3 py-2 inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors duration-300"
-              href={product.url || ''}
-              target="_blank"
+              href={product.url || '#'}
+              isDoFollow={product.status === ProductStatus.listing}
+              isExternal={true}
             >
-              {/*<BsBoxArrowUp />*/}
               <span>Visit Website</span>
-            </Link>
+            </LinkDoFollow>
           </div>
         </div>
         {/*Tags*/}
@@ -102,9 +109,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
                 href={`/categories/${tag}`}
                 className="product-category"
               >
-                {
-                  ProductCategory[tag as keyof typeof ProductCategory]
-                }
+                {ProductCategory[tag as keyof typeof ProductCategory]}
               </Link>
             ))
           ) : (

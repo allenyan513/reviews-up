@@ -13,6 +13,7 @@ import {
   IconCheckbox,
   IconForbid2,
   IconList,
+  IconDashboard,
   IconUser,
   IconRocket,
 } from '@tabler/icons-react';
@@ -70,7 +71,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             {
               title: 'Overview',
               url: `/${lang}/${defaultProduct?.id}/overview`,
-              icon: IconUser,
+              icon: IconDashboard,
               active: path.includes('/overview'),
             },
             {
@@ -103,12 +104,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   icon: IconForbid2,
                   active: path.includes('/reviews/hidden'),
                 },
-                {
-                  title: 'My Submitted',
-                  url: `/${lang}/${defaultProduct?.id}/reviews/my`,
-                  icon: IconUser,
-                  active: path.includes('/reviews/my'),
-                },
+
               ],
             },
 

@@ -6,14 +6,13 @@ import ReviewListPage from '@/modules/review/review-list-page';
 export default function Page(props: {
   params: Promise<{
     lang: string;
-    productId: string;
   }>;
 }) {
-  const { lang, productId } = use(props.params);
+  const { lang } = use(props.params);
   return (
     <ReviewListPage
       lang={lang}
-      productId={productId}
+      productId={'1'}
       status={'all'}
       mode={'reviewerId'}
     />
