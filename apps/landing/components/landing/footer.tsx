@@ -35,25 +35,18 @@ export function Footer(props: {
   linkedinLink: string;
 }) {
   return (
-    <footer className="px-4 flex flex-col gap-4 py-8  w-full md:max-w-5xl">
-      <div className="flex flex-row gap-4 pt-8">
-        <div className="flex flex-col ">
-          <h2 className="text-lg font-semibold mb-2">Reviewsup</h2>
-          <ul className="text-sm space-y-1">
-            {sources.map((source, index) => (
-              <li key={index}>
-                <Link
-                  href={source.url}
-                  className="text-gray-500 hover:text-gray-900"
-                  target={source.external ? '_blank' : '_self'}
-                  {...(source.external ? { rel: 'noopener noreferrer' } : {})}
-                >
-                  {source.title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <footer className="px-4 flex flex-col gap-2 py-8  w-full md:max-w-5xl">
+      <div className="flex flex-row items-center gap-2">
+        {sources.map((source, index) => (
+          <Link
+            href={source.url}
+            className="text-sm text-gray-500 hover:text-gray-600"
+            target={source.external ? '_blank' : '_self'}
+            {...(source.external ? { rel: 'noopener noreferrer' } : {})}
+          >
+            {source.title}
+          </Link>
+        ))}
       </div>
       <I18nEntries className="" />
       <div className="container flex flex-col items-center justify-between gap-4 md:flex-row md:py-0">

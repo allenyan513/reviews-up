@@ -13,6 +13,7 @@ import {
   CreateWidgetDto,
   UpdateWidgetDto,
   verifyWidgetEmbeddingSchema,
+  findAllWidgetSchema,
 } from '@reviewsup/api/widgets';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
 import { JwtPayload } from '@src/app.types';
@@ -50,21 +51,10 @@ export class WidgetsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('productId/:productId')
-  findAll(
-    @Jwt() jwt: JwtPayload,
-    @Param('productId') productId: string,
-    @Param('page') page: number = 1,
-    @Param('pageSize') pageSize: number = 10,
-    @Param('sortBy') sortBy: string = 'createdAt',
-    @Param('sortOrder') sortOrder: 'asc' | 'desc' = 'desc',
-  ) {
-    return this.widgetsService.findAll(jwt.userId, productId, {
-      page,
-      pageSize,
-      sortBy,
-      sortOrder,
-    });
+  @Post('findAll')
+  findAll(@Jwt() jwt: JwtPayload, @Body() request: any) {
+    const validateRequest = findAllWidgetSchema.parse(request);
+    return this.widgetsService.findAll(jwt.userId, validateRequest);
   }
 
   @UseGuards(JwtAuthGuard)
