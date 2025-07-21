@@ -45,6 +45,7 @@ export const createProductSchema = z.object({
   icon: z.string().url('Invalid URL').min(1, 'Icon URL is required'),
   screenshots: z.array(z.string().url('Invalid URL')).optional(),
   tags: z.array(z.string()).optional(),
+  firstReview: z.string().optional(),
   submitOption: z
     .enum(['free-submit', 'paid-submit', 'crawl-product-info', 'update'])
     .optional(),

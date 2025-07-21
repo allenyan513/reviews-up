@@ -48,6 +48,7 @@ export default function ProductNewEditPage(props: {
       tagline: '',
       tags: [],
       screenshots: [],
+      firstReview: '',
     },
   });
 
@@ -68,6 +69,7 @@ export default function ProductNewEditPage(props: {
             tagline: product.tagline || '',
             screenshots: product.screenshots || [],
             tags: product.tags || [],
+            firstReview: '',
           });
         }
       })
@@ -136,7 +138,7 @@ export default function ProductNewEditPage(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900">
-            {mode === 'new' ? 'Submit a product' : 'Edit Product'}
+            {mode === 'new' ? 'Create a New Product' : 'Edit Product'}
           </h1>
           <p className="mt-1 text-gray-600">
             {mode === 'new'
@@ -162,9 +164,9 @@ export default function ProductNewEditPage(props: {
               }}
               className="flex flex-col gap-6"
             >
-              <h2 className="text-lg font-semibold">
-                Main Info <Required />
-              </h2>
+              {/*<h2 className="text-lg font-semibold">*/}
+              {/*  Main Info <Required />*/}
+              {/*</h2>*/}
               <FormField
                 control={form.control}
                 name="url"
@@ -177,7 +179,7 @@ export default function ProductNewEditPage(props: {
                       <div className="flex flex-row gap-2 items-center">
                         <Input
                           disabled={mode === 'edit'}
-                          placeholder="https://reviewsup.io"
+                          placeholder="https://your-product.url"
                           {...field}
                         />
                         <Button
@@ -210,7 +212,7 @@ export default function ProductNewEditPage(props: {
                     <FormControl>
                       <Input
                         disabled={mode === 'edit'}
-                        placeholder="ReviewsUp"
+                        placeholder="Your Product Name"
                         {...field}
                       />
                     </FormControl>
@@ -237,7 +239,9 @@ export default function ProductNewEditPage(props: {
                       </p>
                     </FormLabel>
                     <FormControl>
-                      <Input placeholder="" {...field} />
+                      <Input
+                        placeholder="Describe your product in a few words"
+                        {...field} />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -255,7 +259,9 @@ export default function ProductNewEditPage(props: {
                       </p>
                     </FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Short description" {...field} />
+                      <Textarea
+                        placeholder="Describe your product in detail"
+                        {...field} />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -301,7 +307,7 @@ export default function ProductNewEditPage(props: {
                   <div>
                     <FormLabel className="mb-2 text-md flex flex-col items-start">
                       <p>Gallery</p>
-                      <p className="text-sm text-gray-400">
+                      <p className="text-sm text-gray-500">
                         The first image will be used as the social preview when
                         your link is shared online. We recommend at least 3 or
                         more images.
@@ -357,6 +363,29 @@ export default function ProductNewEditPage(props: {
                   </div>
                 )}
               />
+
+              <FormField
+                control={form.control}
+                name="firstReview"
+                render={({ field }) => (
+                  <div>
+                    <FormLabel className="mb-2 text-md flex flex-col justify-between items-start">
+                      <p>Write the first review</p>
+                      <p className="text-sm text-gray-500">
+                        This first review will be posted upon launch. Adding a first review as example can help other users understand how to write a review.
+                      </p>
+                    </FormLabel>
+                    <FormControl>
+                      <Textarea
+                        className="h-60 text-gray-500"
+                        placeholder="What do you like about this product? What are the pros and cons? How does it compare to similar products?"
+                        {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </div>
+                )}
+              />
+
               {mode === 'new' && (
                 <Button
                   disabled={loading}
@@ -367,7 +396,7 @@ export default function ProductNewEditPage(props: {
                   size={'lg'}
                   className="w-full"
                 >
-                  Create Product
+                  Next Step: Submit Product
                 </Button>
               )}
 

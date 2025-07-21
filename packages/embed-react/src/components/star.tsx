@@ -13,7 +13,9 @@ export function Star(props: {
         cursor: onClick ? 'pointer' : 'default',
         width: size === 'sm' ? '1rem' : size === 'md' ? '1.5rem' : '4rem',
         height: size === 'sm' ? '1rem' : size === 'md' ? '1.5rem' : '4rem',
-        color: isActive ? '#fbbf24' : '#d1d5db', // yellow-400 and gray-300
+        borderRadius: '0.1rem',
+        backgroundColor: isActive ? '#FBBF24' : '#D1D5D8',
+        color: '#FFFFFF'
       }}
       fill="currentColor"
       viewBox="0 0 20 20"

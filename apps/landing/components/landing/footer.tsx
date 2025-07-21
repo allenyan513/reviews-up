@@ -39,6 +39,7 @@ export function Footer(props: {
       <div className="flex flex-row items-center gap-2">
         {sources.map((source, index) => (
           <Link
+            key={index}
             href={source.url}
             className="text-sm text-gray-500 hover:text-gray-600"
             target={source.external ? '_blank' : '_self'}
@@ -82,9 +83,9 @@ export function Footer(props: {
             ] as const
           ).map((link, index) => (
             <Link
+              key={index}
               href={link.href}
               className={buttonVariants({ variant: 'ghost', size: 'icon' })}
-              key={index}
             >
               {/*<link.icon className="h-6 w-6" />*/}
               {link.icon}

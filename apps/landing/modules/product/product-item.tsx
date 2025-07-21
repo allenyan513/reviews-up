@@ -41,14 +41,14 @@ export function ProductItemView(props: { product: ProductEntity }) {
             : 'YOUR PRODUCT DESCRIPTION'}
         </p>
         <div className="flex flex-row items-center gap-2 text-sm">
-          <span className="text-yellow-500 font-bold">
-            {product.reviewRatingStr}
-          </span>
           <StarRatingServer
             size={'sm'}
             value={product?.reviewRating || 0}
           />
-          <span className="text-black text-md">
+          <span className="font-semibold text-black">
+            {product.reviewRatingStr}
+          </span>
+          <span className="text-gray-500">
             ({product.reviewCount} reviews)
           </span>
         </div>

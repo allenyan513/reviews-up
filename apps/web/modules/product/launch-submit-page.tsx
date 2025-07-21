@@ -198,7 +198,7 @@ function FreeSubmitOption(props: {
           form.setValue('submitOption', 'free-submit');
         }}
       >
-        {loading ? <LoadingText>Submitting...</LoadingText> : 'Free Submit'}
+        {loading ? <LoadingText>Submitting...</LoadingText> : 'Verify and Submit'}
       </Button>
     </div>
   );
@@ -452,11 +452,11 @@ export function LaunchSubmitOrEditPage(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-            Submit it to Community
+            Submit the Product
           </h1>
           <p className="mt-1 text-gray-600 hidden md:flex">
             {/*绑定一个表单，并且从提交选择中选择一个，可以是免费提交，验证提交，或者付费提交，*/}
-            Bind a form to your product and select a submission option.
+            Bind a form and select a submission option to submit your product.
           </p>
         </div>
         <div className={'flex flex-row gap-1 md:gap-2'}></div>
@@ -568,9 +568,9 @@ export function LaunchSubmitOrEditPage(props: {
                 </div>
                 <Link
                   href={`/${lang}/${productId}/overview`}
-                  className="hover:underline cursor-pointer"
+                  className="text-gray-500  hover:text-gray-600 hover:underline cursor-pointer underline"
                 >
-                  <p className="mt-4">or Submit it later</p>
+                  <p className="mt-4 text-sm">or Submit it later</p>
                 </Link>
               </div>
             </div>

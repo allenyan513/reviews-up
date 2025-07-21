@@ -5,6 +5,7 @@ import { StarRatingServer } from '@reviewsup/embed-react';
 import { ProductCategory, ProductStatus } from '@reviewsup/api/products';
 import { StarRatingServerWrapper } from '@/modules/product/star-rating-server-wrapper';
 import { ReviewItemsWrapper } from './review-item-wrapper';
+import React from 'react';
 
 export function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
@@ -40,14 +41,14 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
   }
 
   return (
-    <div className="md:grid md:grid-cols-12 flex flex-col gap-4 py-24 min-w-0 max-w-7xl mx-auto">
-      <main className="md:col-span-9 flex flex-col gap-4 px-4 min-h-screen">
+    <div className="lg:grid lg:grid-cols-12 flex flex-col gap-4 py-24 w-full lg:w-7xl mx-auto">
+      <main className="lg:col-span-9 flex flex-col gap-4 px-4 min-h-screen">
         {/*header*/}
         <div className="flex flex-col lg:flex-row gap-2 items-start lg:items-center justify-between">
           <div className="flex flex-row items-center gap-4">
             {product.icon && (
               <img
-                className="w-16 h-16 rounded object-cover aspect-video"
+                className="w-18 h-18 rounded object-cover aspect-video"
                 src={product.icon}
                 alt={product.name}
               />
@@ -56,17 +57,17 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
             <div className="flex flex-col">
               <h1 className="text-2xl font-semibold">{product.name}</h1>
               <h2 className="text-gray-500 line-clamp-1 max-w-lg">
-                {product.description}
+                {product.tagline}
               </h2>
-              <div className="flex flex-row items-center gap-2 text-md">
+              <div className="flex flex-row items-center gap-2 text-md mt-1">
                 <StarRatingServerWrapper
                   value={parseFloat(product.reviewRatingStr || '0')}
                 />
-                <span className="text-black">
+                <span className="font-semibold text-black">
                   {product.reviewRatingStr}
                 </span>
-                <span className="ml-2 text-gray-500">
-                  {product.reviewCount} reviews
+                <span className="text-gray-500">
+                  ({product.reviewCount} reviews)
                 </span>
               </div>
             </div>
@@ -101,7 +102,6 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
                 href={`/categories/${tag}`}
                 className="product-category"
               >
-                {/*{tag}*/}
                 {
                   ProductCategory[tag as keyof typeof ProductCategory]
                 }
@@ -143,7 +143,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
         <h2 className="mt-8 text-lg font-semibold">{product.name} Reviews</h2>
         <ReviewItemsWrapper reviews={product.reviews || []} />
       </main>
-      <aside className="col-span-3 md:flex md:flex-col hidden">
+      <aside className="col-span-3 lg:flex lg:flex-col hidden">
         {/*<div className="flex flex-row items-center gap-4">*/}
         {/*  <p className="font-semibold">Added On:</p>*/}
         {/*  <p className="">{toLocalDateString(product.createdAt || '')}</p>*/}

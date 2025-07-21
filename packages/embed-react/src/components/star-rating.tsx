@@ -8,7 +8,7 @@ export function StarRating(props: {
   size?: 'sm' | 'md' | 'lg';
 }) {
   return (
-    <div style={{ display: 'flex', gap: '0.25rem' }}>
+    <div style={{ display: 'flex', gap: '0.2rem' }}>
       {[...Array(5)].map((_, i) => (
         <Star
           key={i}

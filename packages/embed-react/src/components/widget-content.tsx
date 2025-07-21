@@ -86,8 +86,7 @@ export function WidgetContent(props: {
   if (!reviews) {
     return null;
   }
-  // const url = `https://app.reviewsup.io/widgets/${widget.shortId}`;
-  const url = `http://localhost:5520/products/${widget.productId}`;
+  const url = `https://reviewsup.io/products/${widget.productId}`;
   return (
     <RootDiv>
       {type === 'flow' && (

@@ -62,6 +62,20 @@ export class ProductsService {
       );
       throw new BadRequestException(`Product with slug ${slug} already exists`);
     }
+    const creator = await this.prismaService.user.findUnique({
+      where: {
+        id: uid,
+      },
+      select: {
+        id: true,
+        name: true,
+        avatarUrl: true,
+      },
+    });
+    if (!creator) {
+      this.logger.error(`User with ID ${uid} not found`);
+      throw new BadRequestException(`User with ID ${uid} not found`);
+    }
     const newProduct = await this.prismaService.product.create({
       data: {
         userId: uid,
@@ -99,6 +113,22 @@ export class ProductsService {
         },
       });
     }
+    //add user's first review
+    if (dto.firstReview) {
+      await this.prismaService.review.create({
+        data: {
+          productId: newProduct.id,
+          formId: defaultForm.id,
+          reviewerName: creator.name,
+          reviewerImage: creator.avatarUrl,
+          reviewerTitle: '',
+          rating: 5,
+          text: dto.firstReview,
+          status: 'public', // 默认状态为 public
+        },
+      });
+    }
+
     //创建两个默认的widget，一个是badge类型，一个是
     const protectedBadgeWidget = await this.widgetsService.create(uid, {
       productId: newProduct.id,
@@ -397,11 +427,12 @@ export class ProductsService {
           { description: { contains: request.search, mode: 'insensitive' } },
         ],
       }),
-      ...(request.tags && request.tags.length > 0 && {
-        tags: {
-          hasSome: request.tags, // Filter by tags if provided
-        },
-      })
+      ...(request.tags &&
+        request.tags.length > 0 && {
+          tags: {
+            hasSome: request.tags, // Filter by tags if provided
+          },
+        }),
     };
     const total = await this.prismaService.product.count({
       where: {
