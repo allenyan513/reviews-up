@@ -39,7 +39,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Widget, getEmbedCode } from '@reviewsup/embed-react';
+import { Widget, getBadgeEmbedCode } from '@reviewsup/embed-react';
 
 function PaidSubmitOption(props: {
   form: any;
@@ -139,11 +139,25 @@ function PaidSubmitOption(props: {
 
 function FreeSubmitOption(props: {
   form: any;
+  productId: string;
   widgetShortId: string | undefined;
   loading: boolean;
   taskReviewCount: number;
 }) {
-  const { form, loading, taskReviewCount, widgetShortId } = props;
+  const { form, loading, taskReviewCount, widgetShortId, productId } = props;
+
+  const badgeEmbedCodeLight = getBadgeEmbedCode(
+    productId,
+    'light',
+    process.env.NEXT_PUBLIC_APP_URL as string,
+    process.env.NEXT_PUBLIC_API_URL as string,
+  );
+  const badgeEmbedCodeDark = getBadgeEmbedCode(
+    productId,
+    'dark',
+    process.env.NEXT_PUBLIC_APP_URL as string,
+    process.env.NEXT_PUBLIC_API_URL as string,
+  );
 
   return (
     <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
@@ -154,33 +168,37 @@ function FreeSubmitOption(props: {
 
       <div className="text-start py-4">
         <h4>1. Embed a widget on your website:</h4>
-        {widgetShortId && (
-          <div className="flex flex-col items-start gap-1 px-3 py-3">
-            <Widget
-              id={props.widgetShortId || ''}
-              options={{
-                url: process.env.NEXT_PUBLIC_API_URL as string,
-              }}
-            />
-            <textarea
-              className="text-sm text-gray-700 w-full border border-gray-300 rounded-md p-2 mt-2 bg-white h-24"
-              value={getEmbedCode(widgetShortId)}
-              readOnly
-            />
+        <div className="flex flex-col items-start gap-8 px-3 py-3">
+          <div className="flex flex-col gap-1">
+            <div dangerouslySetInnerHTML={{ __html: badgeEmbedCodeLight }} />
             <Button
-              variant="default"
-              size="lg"
-              className="mt-2"
+              variant="outline"
+              size="sm"
               onClick={(e) => {
                 e.preventDefault();
-                navigator.clipboard.writeText(getEmbedCode(widgetShortId));
+                navigator.clipboard.writeText(badgeEmbedCodeLight);
                 toast.success('Embed code copied to clipboard!');
               }}
             >
-              Copy Embed Code
+              Copy embed code
             </Button>
           </div>
-        )}
+
+          <div className="flex flex-col gap-1">
+            <div dangerouslySetInnerHTML={{ __html: badgeEmbedCodeDark }} />
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(badgeEmbedCodeDark);
+                toast.success('Embed code copied to clipboard!');
+              }}
+            >
+              Copy embed code
+            </Button>
+          </div>
+        </div>
         <h4>
           2. Write at least{' '}
           <span className="text-red-500 font-bold px-1">{taskReviewCount}</span>{' '}
@@ -326,8 +344,7 @@ export function LaunchSubmitOrEditPage(props: {
     defaultValues: {
       id: productId,
       bindingFormId: undefined,
-      //todo
-      skipVerify: true, // 测试阶段跳过
+      skipVerify: false, // 测试阶段跳过
       submitOption: 'free-submit',
     },
   });
@@ -400,8 +417,7 @@ export function LaunchSubmitOrEditPage(props: {
           form.reset({
             id: product.id,
             bindingFormId: product.bindingFormId || undefined,
-            //todo
-            skipVerify: true,
+            skipVerify: false,
             submitOption: 'free-submit',
           });
         }
@@ -563,6 +579,7 @@ export function LaunchSubmitOrEditPage(props: {
                 <div className={'grid grid-cols-1 md:grid-cols-2 gap-4'}>
                   <FreeSubmitOption
                     form={form}
+                    productId={productId}
                     widgetShortId={widgetShortId}
                     loading={loading}
                     taskReviewCount={taskReviewCount}

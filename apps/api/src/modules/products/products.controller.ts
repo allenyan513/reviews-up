@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
+  Res,
 } from '@nestjs/common';
 import { JwtAuthGuard } from '@src/modules/auth/guards/jwt-auth.guards';
 import { Jwt } from '@src/modules/auth/decorators/jwt.decorator';
@@ -14,10 +16,12 @@ import { JwtPayload } from '@src/app.types';
 import { ProductsService } from '@src/modules/products/products.service';
 import {
   CreateProductRequest,
-  findAllRequestSchema, SubmitProductRequest,
-  UpdateProductRequest
+  findAllRequestSchema,
+  SubmitProductRequest,
+  UpdateProductRequest,
 } from '@reviewsup/api/products';
 import { RRResponse } from '@reviewsup/api/common';
+import { Response } from 'express';
 
 @Controller('products')
 export class ProductsController {
@@ -47,7 +51,6 @@ export class ProductsController {
     return this.productsService.crawlProductInfo(jwt.userId, url);
   }
 
-
   @UseGuards(JwtAuthGuard)
   @Post('findAll')
   async findAll(@Jwt() jwt: JwtPayload, @Body() request: any) {
@@ -58,6 +61,20 @@ export class ProductsController {
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.productsService.findOne(id);
+  }
+
+  @Get(':id/badge.svg')
+  async getBadgeSvgById(
+    @Param('id') id: string,
+    @Query('theme') theme: 'light' | 'dark' = 'light',
+    @Res() res: Response,
+  ) {
+    const svgContent = await this.productsService.generateProductBadgeSvg(
+      id,
+      theme,
+    );
+    res.setHeader('Content-Type', 'image/svg+xml');
+    return res.send(svgContent);
   }
 
   @UseGuards(JwtAuthGuard)

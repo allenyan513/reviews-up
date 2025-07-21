@@ -27,6 +27,10 @@ import { hash } from '@src/libs/utils';
 import { defaultUserData } from '@src/modules/users/default-data';
 import { FormsService } from '../forms/forms.service';
 import { WidgetsService } from '../widgets/widgets.service';
+import { WidgetEntity } from '@reviewsup/api/widgets';
+import ReactDOMServer from 'react-dom/server';
+import { BadgeSvg } from './badge.svg';
+import * as React from 'react';
 
 @Injectable()
 export class ProductsService {
@@ -705,5 +709,21 @@ export class ProductsService {
     //   });
     // }
     this.logger.debug(`onReviewSubmitted completed for reviewId: ${reviewId}`);
+  }
+
+
+
+  async generateProductBadgeSvg(id: string, theme: 'light' | 'dark') {
+    const product = await this.findOne(id);
+    if (!product) {
+      throw new Error('Product not found');
+    }
+    const el = React.createElement(BadgeSvg, {
+      averageRating: product.reviewRating,
+      totalReviews: product.reviewCount,
+      theme: theme,
+    });
+    const svgString = ReactDOMServer.renderToStaticMarkup(el);
+    return `<?xml version="1.0" encoding="UTF-8"?>\n${svgString}`;
   }
 }
