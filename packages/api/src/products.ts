@@ -55,12 +55,15 @@ export type CreateProductRequest = z.infer<typeof createProductSchema>;
 export type UpdateProductRequest = Partial<CreateProductRequest>;
 
 export const submitProductSchema = z.object({
-  id: z.string().optional(),
-  bindingFormId: z.string().optional(),
+  id: z.string().min(1, 'Product ID is required'),
+  bindingFormId: z.string().min(1, 'Binding Form ID is required'),
   skipVerify: z.boolean().default(false),
-  submitOption: z
-    .enum(['free-submit', 'paid-submit', 'crawl-product-info', 'update'])
-    .optional(),
+  submitOption: z.enum([
+    'free-submit',
+    'paid-submit',
+    'crawl-product-info',
+    'update',
+  ]),
 });
 export type SubmitProductRequest = z.infer<typeof submitProductSchema>;
 

@@ -618,12 +618,13 @@ export class ProductsService {
       return;
     }
     if (review.reviewerId) {
-      //提交评价用户
+      //todo 如何用户有多个products,提交的review算到哪个产品上？
+      //提交评价用户, 查询处于pendingForReceive的产品，给它的submitReviewCount + 1
       const product = await this.prismaService.product.findFirst({
         where: {
           userId: review.reviewerId,
           status: {
-            in: ['pendingForReceive', 'listing'], // Only count products that are pending or under review
+            in: ['pendingForReceive'], // Only count products that are pending or under review
           },
         },
         select: {

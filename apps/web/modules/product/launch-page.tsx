@@ -59,13 +59,21 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
       return (
         <div className="flex flex-row items-center gap-2">
           <BsClock className="w-5 h-5 text-amber-500" />
-          <span className="text-amber-500">Writing reviews</span>
+          <span className="text-amber-500">
+            Writing{' '}
+            {(product?.taskReviewCount || 3) -
+              (product?.submitReviewCount || 0)}{' '}
+            reviews
+          </span>
           <Button
             variant="outline"
             size="sm"
             className=""
             onClick={() => {
-              router.push(`${process.env.NEXT_PUBLIC_WWW_URL}/products`);
+              window.open(
+                `${process.env.NEXT_PUBLIC_WWW_URL}/products`,
+                '_blank',
+              );
             }}
           >
             Explore Products
@@ -174,29 +182,28 @@ function MyProductItem(props: { lang: string; product: ProductEntity }) {
           </p>
           {renderProductStatus(product.status || '')}
           {/*<ProductStatusFlow status={product.status as StatusStep} />*/}
-          {product.status === ProductStatus.pendingForReceive && (
-            <div className="flex flex-col mt-4">
-              <p>Task:</p>
-              <ul className="list-decimal pl-4">
-                <li className="text-sm">
-                  Write at least <strong>{product.taskReviewCount}</strong>{' '}
-                  reviews for other products.
-                  <Link
-                    className="text-blue-500 hover:underline ml-2"
-                    href={`/${product.id}/community/explore`}
-                  >
-                    Explore Products
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          )}
+          {/*{product.status === ProductStatus.pendingForReceive && (*/}
+          {/*  <div className="flex flex-col mt-4">*/}
+          {/*    <p>Task:</p>*/}
+          {/*    <ul className="list-decimal pl-4">*/}
+          {/*      <li className="text-sm">*/}
+          {/*        Write at least <strong>{product.taskReviewCount}</strong>{' '}*/}
+          {/*        reviews for other products.*/}
+          {/*        <Link*/}
+          {/*          className="text-blue-500 hover:underline ml-2"*/}
+          {/*          href={`/${product.id}/community/explore`}*/}
+          {/*        >*/}
+          {/*          Explore Products*/}
+          {/*        </Link>*/}
+          {/*      </li>*/}
+          {/*    </ul>*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </div>
-
-        <div className="text-gray-600 col-span-3">
-          <p className="">Received:</p>
-          <p className="text-5xl mt-4">{product.receiveReviewCount}</p>
-        </div>
+        {/*<div className="text-gray-600 col-span-3">*/}
+        {/*  <p className="">Received:</p>*/}
+        {/*  <p className="text-5xl mt-4">{product.receiveReviewCount}</p>*/}
+        {/*</div>*/}
         <div className="text-gray-600 col-span-3">
           <p className="">Submitted:</p>
           <p className="text-5xl mt-4">

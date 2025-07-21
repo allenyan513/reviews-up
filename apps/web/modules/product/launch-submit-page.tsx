@@ -325,7 +325,7 @@ export function LaunchSubmitOrEditPage(props: {
     resolver: zodResolver(submitProductSchema),
     defaultValues: {
       id: productId,
-      bindingFormId: '',
+      bindingFormId: undefined,
       //todo
       skipVerify: true, // 测试阶段跳过
       submitOption: 'free-submit',
@@ -399,7 +399,7 @@ export function LaunchSubmitOrEditPage(props: {
         if (product) {
           form.reset({
             id: product.id,
-            bindingFormId: product.bindingFormId || '',
+            bindingFormId: product.bindingFormId || undefined,
             //todo
             skipVerify: true,
             submitOption: 'free-submit',
@@ -439,7 +439,7 @@ export function LaunchSubmitOrEditPage(props: {
         if (response && response.length > 0) {
           //find first item.isBindProduct is false
           const firstForm = response[0];
-          form.setValue('bindingFormId', firstForm?.id || '');
+          form.setValue('bindingFormId', firstForm?.id || undefined);
         }
       })
       .catch((error) => {
@@ -510,7 +510,7 @@ export function LaunchSubmitOrEditPage(props: {
                               if (selectedForm) {
                                 form.setValue(
                                   'bindingFormId',
-                                  selectedForm.id || '',
+                                  selectedForm.id || undefined,
                                 );
                               }
                             }}
