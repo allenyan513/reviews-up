@@ -14,6 +14,10 @@ export default function LoginPage(props: {
 }) {
   const { lang } = use(props.params);
   const { redirect } = use(props.searchParams);
+  const widgetIds = (process.env.NEXT_PUBLIC_WIDGET_IDS as string)
+    .split(',')
+    .map((id) => id.trim());
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="flex flex-col gap-4 p-6 md:p-10">
@@ -30,16 +34,7 @@ export default function LoginPage(props: {
         </div>
       </div>
       <div className="bg-muted relative hidden lg:block max-h-screen overflow-y-scroll p-4">
-        {/*<h2 className="text-2xl font-semibold mb-4 text-center">*/}
-        {/*  ReviewsUp.io Widget*/}
-        {/*</h2>*/}
-        <Widget
-          id={
-            process.env.NODE_ENV === 'development'
-              ? '25db6a933d3'
-              : '2c337712ccd'
-          }
-        />
+        <Widget id={widgetIds[0] || ''} />
       </div>
     </div>
   );
