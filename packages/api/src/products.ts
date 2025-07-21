@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { userEntitySchema } from './users';
 
 export const ProductCategory = {
   workProductivity: 'Work & Productivity',
@@ -99,6 +100,7 @@ export const productSchema = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   bindingFormId: z.string().optional(),
+  user: z.any().optional(),
   reviews: z.array(z.any()).optional(),
   reviewCount: z.number().int().default(0).optional(),
   reviewRating: z.number().min(0).max(5).default(0).optional(),

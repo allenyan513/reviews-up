@@ -7,6 +7,7 @@ import { StarRatingServerWrapper } from '@/modules/product/star-rating-server-wr
 import { ReviewItemsWrapper } from './review-item-wrapper';
 import { LinkDoFollow } from '@reviewsup/ui/link-dofollow';
 import React from 'react';
+import { ReviewsupAvatar } from '@reviewsup/ui/reviewsup-avatar';
 
 export function toLocalDateString(date: Date | string): string {
   const _date = new Date(date);
@@ -41,8 +42,8 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
   }
 
   return (
-    <div className="lg:grid lg:grid-cols-12 flex flex-col gap-4 py-24 w-full lg:w-7xl mx-auto">
-      <main className="lg:col-span-9 flex flex-col gap-4 px-4 min-h-screen">
+    <div className="lg:grid lg:grid-cols-12 flex flex-col gap-8 py-24 px-4 lg:px-48">
+      <main className="lg:col-span-9 flex flex-col gap-4 min-h-screen">
         {/*header*/}
         <div className="flex flex-col lg:flex-row gap-2 items-start lg:items-center justify-between">
           <div className="flex flex-row items-center gap-4">
@@ -148,7 +149,23 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
         <h2 className="mt-8 text-lg font-semibold">{product.name} Reviews</h2>
         <ReviewItemsWrapper reviews={product.reviews || []} />
       </main>
-      <aside className="col-span-3 lg:flex lg:flex-col hidden">
+      <aside className="col-span-3 lg:flex lg:flex-col hidden text-sm text-gray-500 gap-4">
+        <p>PUBLISHER</p>
+        <div className="flex flex-row gap-2 items-center">
+          <ReviewsupAvatar
+            uri={product.user?.avatarUrl}
+            name={product.user?.name}
+            size="lg"
+          />
+          <span className="text-gray-900">{product.user?.name}</span>
+        </div>
+        <div className="flex flex-row gap-2 items-center ">
+          <span className=''>LAUNCH DATE</span>
+          <hr className="border-gray-300 flex-1" />
+          <span className="text-gray-500 uppercase">
+            {toLocalDateString(product.createdAt || '')}
+          </span>
+        </div>
         {/*<div className="flex flex-row items-center gap-4">*/}
         {/*  <p className="font-semibold">Added On:</p>*/}
         {/*  <p className="">{toLocalDateString(product.createdAt || '')}</p>*/}

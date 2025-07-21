@@ -523,8 +523,19 @@ export class ProductsService {
     const reviewRating =
       publicReviews.reduce((sum, review) => sum + review.rating, 0) /
       (reviewCount || 1);
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id: product.userId,
+      },
+      select: {
+        id: true,
+        name: true,
+        avatarUrl: true,
+      },
+    })
     return {
       ...product,
+      user: user,
       reviews: publicReviews,
       reviewCount: reviewCount,
       reviewRating: reviewRating,
@@ -710,8 +721,6 @@ export class ProductsService {
     // }
     this.logger.debug(`onReviewSubmitted completed for reviewId: ${reviewId}`);
   }
-
-
 
   async generateProductBadgeSvg(id: string, theme: 'light' | 'dark') {
     const product = await this.findOne(id);
