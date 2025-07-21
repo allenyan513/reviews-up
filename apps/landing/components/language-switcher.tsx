@@ -5,12 +5,14 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { BiGlobe } from 'react-icons/bi';
 import Link from 'next/link';
+import { cn } from '@reviewsup/ui/lib/utils';
 
 export function LanguageSwitcher(props: {
   lang: string;
   className?: string;
   style?: React.CSSProperties;
 }) {
+  const { lang, className, style } = props;
   const [isOpen, setIsOpen] = useState(false);
 
   const pathname = usePathname();
@@ -22,7 +24,7 @@ export function LanguageSwitcher(props: {
   }
 
   return (
-    <div className="relative inline-block text-left">
+    <div className={cn('relative inline-block text-left', className)}>
       <button
         type="button"
         aria-expanded={isOpen}

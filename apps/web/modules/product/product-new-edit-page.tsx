@@ -120,7 +120,6 @@ export default function ProductNewEditPage(props: {
       const newProduct = await api.product.create(data);
       await syncSession();
       saveDefaultProduct(newProduct);
-
       setLoading(false);
       router.push(`/products/new/${newProduct.id}`);
     } catch (error) {
@@ -149,7 +148,7 @@ export default function ProductNewEditPage(props: {
       </div>
 
       <div className="grid grid-cols-12 gap-8">
-        <div className="col-span-5">
+        <div className="col-span-12 md:col-span-5">
           <Form {...form}>
             <form
               onSubmit={(e) => {
@@ -260,6 +259,7 @@ export default function ProductNewEditPage(props: {
                     </FormLabel>
                     <FormControl>
                       <Textarea
+                        className="h-24"
                         placeholder="Describe your product in detail"
                         {...field} />
                     </FormControl>
@@ -415,7 +415,7 @@ export default function ProductNewEditPage(props: {
             </form>
           </Form>
         </div>
-        <div className="col-span-4 space-y-4"></div>
+        <div className="hidden md:col-span-4 space-y-4"></div>
       </div>
     </div>
   );

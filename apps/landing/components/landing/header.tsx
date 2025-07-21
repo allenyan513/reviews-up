@@ -8,7 +8,7 @@ import { Button, buttonVariants } from '@reviewsup/ui/button';
 import { Logo } from './logo';
 import { cn } from '@reviewsup/ui/lib/utils';
 import { useState } from 'react';
-import { BsGithub, BsCaretDown } from 'react-icons/bs';
+import { BsGithub, BsCaretDown, BsPlus, BsPlusCircle } from 'react-icons/bs';
 import { LanguageSwitcher } from '@/components/language-switcher';
 import {
   DropdownMenu,
@@ -157,8 +157,15 @@ export function Header(props: NavProps) {
           {showMobileMenu && props.items && <MobileItems items={props.items} />}
         </div>
         <div className="flex gap-4 items-center">
-          <LanguageSwitcher lang={props.lang || 'en'} />
-          <Link href={props.githubLink || ''} target="_blank">
+          <LanguageSwitcher
+            lang={props.lang || 'en'}
+            className="hidden md:inline-flex"
+          />
+          <Link
+            className="hidden md:inline-flex"
+            href={props.githubLink || ''}
+            target="_blank"
+          >
             <BsGithub className="h-6 w-6" />
           </Link>
           {/*<Link*/}
@@ -177,11 +184,12 @@ export function Header(props: NavProps) {
             target="_blank"
             className={cn(
               buttonVariants({ size: 'lg' }),
-              'rounded-full hidden md:inline-flex',
+              'rounded-full inline-flex',
               'text-white bg-red-400',
             )}
           >
-            Get Started
+            <BsPlusCircle className="text-lg" />
+            <span className=''>Create Product</span>
           </Link>
         </div>
       </div>

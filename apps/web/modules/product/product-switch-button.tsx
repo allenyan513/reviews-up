@@ -30,7 +30,7 @@ export function ProductSwitchButton(props: {
           <BiSortAlt2 className="text-2xl text-gray-500" />
         </div>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md max-h-screen overflow-y-scroll">
         <DialogHeader>
           <DialogTitle>Switch Product</DialogTitle>
           <DialogDescription>
