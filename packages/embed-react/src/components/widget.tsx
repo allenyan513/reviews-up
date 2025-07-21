@@ -17,7 +17,7 @@ export const Widget = forwardRef<HTMLDivElement, WidgetProps>((props, ref) => {
     return null;
   }
   return (
-    <div ref={ref} {...rest}>
+    <div ref={ref} id={`reviewsup-embed-${id}`} {...rest}>
       <WidgetContent widget={widget} />
     </div>
   );
