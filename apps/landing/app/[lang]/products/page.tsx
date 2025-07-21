@@ -9,7 +9,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata | null> {
   const { lang } = await props.params;
   return {
-    title: `Product List`,
+    title: ` Top Products Launching Today`,
     description:
       'View all products here, you can filter products by categories and search.',
     alternates: {
@@ -24,5 +24,12 @@ export default async function Page(props: {
   }>;
 }) {
   const { lang } = await props.params;
-  return <ProductList status={ProductStatus.listing} lang={lang} />;
+  return (
+    <ProductList
+      title={'Top Products Launching Today'}
+      status={ProductStatus.listing}
+      lang={lang}
+      defaultTags={[]}
+    />
+  );
 }

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { ProductEntity } from '@reviewsup/api/products';
 import { StarRatingServer } from '@reviewsup/embed-react';
 
-export function ProductItemView(props: { product: ProductEntity }) {
+export function ProductGridItemView(props: { product: ProductEntity }) {
   const { product } = props;
   return (
     <div

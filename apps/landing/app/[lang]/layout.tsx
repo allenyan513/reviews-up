@@ -60,9 +60,14 @@ export default async function RootLayout(props: {
               href: `/products`,
               external: false,
             },
+            {
+              title: 'Categories',
+              href: `/categories`,
+              external: false,
+            },
           ]}
         />
-        <main className="flex-1">{props.children}</main>
+        <main className="flex-1 w-full">{props.children}</main>
         <Footer
           builtBy="Reviewsup.io"
           builtByLink={process.env.NEXT_PUBLIC_APP_URL as string}

@@ -178,22 +178,6 @@
     background-color: #D1D5DB; /* gray-300 */
     margin: 1rem 0;
 }
-
-/* 椭圆，边框，hover-cursor hover blue*/
-.product-category {
-    border-radius: 50px;
-    border: 1px solid #D1D5DB; /* gray-300 */
-    padding: 0.25rem 0.75rem;
-    display: inline-block;
-}
-
-.product-category:hover {
-    cursor: pointer;
-    /* gray-400*/
-    background-color: #D1D5DB;
-}
-
-
 /* Headers */
 .rich-text h1 {
     @apply text-4xl font-bold mb-4 ;

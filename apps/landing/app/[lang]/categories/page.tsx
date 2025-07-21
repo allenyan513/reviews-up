@@ -1,6 +1,6 @@
-import { ProductList } from '@/modules/product/product-list';
 import { Metadata } from 'next';
-import { ProductStatus } from '@reviewsup/api/products';
+import { ProductCategory, ProductStatus } from '@reviewsup/api/products';
+import { CategoryGrid } from '@/modules/product/category-grid';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -8,10 +8,11 @@ export async function generateMetadata(props: {
   }>;
 }): Promise<Metadata | null> {
   const { lang } = await props.params;
+  const categoriesCount = Object.keys(ProductCategory).length;
   return {
-    title: `Pending List`,
+    title: `${categoriesCount}+ Product Categories`,
     description:
-      'View all products here, you can filter products by categories and search.',
+      'Explore various product categories. You can filter products by categories and search for specific items.',
     alternates: {
       canonical: `${process.env.NEXT_PUBLIC_WWW_URL}/${lang}/products`,
     },
@@ -24,12 +25,5 @@ export default async function Page(props: {
   }>;
 }) {
   const { lang } = await props.params;
-  return (
-    <ProductList
-      title={'Pending Products'}
-      status={ProductStatus.pendingForReceive}
-      lang={lang}
-      defaultTags={[]}
-    />
-  );
+  return <CategoryGrid status={ProductStatus.listing} lang={lang} />;
 }

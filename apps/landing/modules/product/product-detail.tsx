@@ -48,14 +48,14 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
           <div className="flex flex-row items-center gap-4">
             {product.icon && (
               <img
-                className="w-18 h-18 rounded object-cover aspect-video"
+                className="w-18 h-18 rounded object-cover aspect-video "
                 src={product.icon}
                 alt={product.name}
               />
             )}
             {/*Name Tagline Rating*/}
             <div className="flex flex-col">
-              <h1 className="text-2xl font-semibold">
+              <h1 className="text-xl font-semibold">
                 {product.name}
                 {product.status === ProductStatus.pendingForReceive && (
                   <span className="text-yellow-500 ml-2 uppercase">
@@ -81,9 +81,9 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
           </div>
 
           {/*  Actions*/}
-          <div className="flex flex-row items-center gap-4">
+          <div className="flex flex-row items-center gap-2 text-sm">
             <Link
-              className="rounded-full bg-red-400 text-white px-3 py-2 inline-flex items-center gap-2 hover:bg-red-500 transition-colors duration-300"
+              className="rounded-md bg-red-400 text-white px-3 py-2 inline-flex items-center gap-2 hover:bg-red-500 transition-colors duration-300"
               href={`${process.env.NEXT_PUBLIC_APP_URL}/forms/${product.bindingFormId}`}
               target="_blank"
             >
@@ -91,7 +91,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
               <span>Write a review</span>
             </Link>
             <LinkDoFollow
-              className="rounded-full bg-white text-black px-3 py-2 inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors duration-300"
+              className="rounded-md bg-white text-black px-3 py-2 inline-flex items-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors duration-300"
               href={product.url || '#'}
               isDoFollow={product.status === ProductStatus.listing}
               isExternal={true}
@@ -107,7 +107,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
               <Link
                 key={index}
                 href={`/categories/${tag}`}
-                className="product-category"
+                className="rounded-md border border-gray-300 px-3 py-1 text-sm text-gray-700 hover:bg-gray-200 transition-colors duration-300"
               >
                 {ProductCategory[tag as keyof typeof ProductCategory]}
               </Link>
