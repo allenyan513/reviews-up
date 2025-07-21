@@ -164,7 +164,7 @@ function FreeSubmitOption(props: {
             />
             <textarea
               className="text-sm text-gray-700 w-full border border-gray-300 rounded-md p-2 mt-2 bg-white h-24"
-              value={getEmbedCode('7980448d249')}
+              value={getEmbedCode(widgetId)}
               readOnly
             />
             <Button
@@ -173,7 +173,7 @@ function FreeSubmitOption(props: {
               className="mt-2"
               onClick={(e) => {
                 e.preventDefault();
-                navigator.clipboard.writeText(getEmbedCode('7980448d249'));
+                navigator.clipboard.writeText(getEmbedCode(widgetId));
                 toast.success('Embed code copied to clipboard!');
               }}
             >
