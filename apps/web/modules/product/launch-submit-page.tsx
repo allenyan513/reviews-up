@@ -139,11 +139,11 @@ function PaidSubmitOption(props: {
 
 function FreeSubmitOption(props: {
   form: any;
-  widgetId: string | undefined;
+  widgetShortId: string | undefined;
   loading: boolean;
   taskReviewCount: number;
 }) {
-  const { form, loading, taskReviewCount, widgetId } = props;
+  const { form, loading, taskReviewCount, widgetShortId } = props;
 
   return (
     <div className="border border-gray-300 rounded-md p-4 bg-gray-50 text-center">
@@ -154,17 +154,17 @@ function FreeSubmitOption(props: {
 
       <div className="text-start py-4">
         <h4>1. Embed a widget on your website:</h4>
-        {widgetId && (
+        {widgetShortId && (
           <div className="flex flex-col items-start gap-1 px-3 py-3">
             <Widget
-              id={props.widgetId || ''}
+              id={props.widgetShortId || ''}
               options={{
                 url: process.env.NEXT_PUBLIC_API_URL as string,
               }}
             />
             <textarea
               className="text-sm text-gray-700 w-full border border-gray-300 rounded-md p-2 mt-2 bg-white h-24"
-              value={getEmbedCode(widgetId)}
+              value={getEmbedCode(widgetShortId)}
               readOnly
             />
             <Button
@@ -173,7 +173,7 @@ function FreeSubmitOption(props: {
               className="mt-2"
               onClick={(e) => {
                 e.preventDefault();
-                navigator.clipboard.writeText(getEmbedCode(widgetId));
+                navigator.clipboard.writeText(getEmbedCode(widgetShortId));
                 toast.success('Embed code copied to clipboard!');
               }}
             >
@@ -333,7 +333,7 @@ export function LaunchSubmitOrEditPage(props: {
   const [formsLoaded, setFormsLoaded] = useState(false); // New state to track if forms are loaded
   const [isCheckDialogOpen, setIsCheckDialogOpen] = useState(false);
   const [taskReviewCount, setTaskReviewCount] = useState<number>(0);
-  const [widgetId, setWidgetId] = useState<string | undefined>(undefined);
+  const [widgetShortId, setWidgetShortId] = useState<string | undefined>(undefined);
 
   const handleUpdate = async () => {
     try {
@@ -410,9 +410,9 @@ export function LaunchSubmitOrEditPage(props: {
       .then((response) => {
         if (response && response.items && response.items.length > 0) {
           const firstWidget = response.items[0];
-          setWidgetId(firstWidget?.id);
+          setWidgetShortId(firstWidget?.shortId);
         } else {
-          setWidgetId(undefined); // Default widget ID
+          setWidgetShortId(undefined);
         }
       });
 
@@ -553,7 +553,7 @@ export function LaunchSubmitOrEditPage(props: {
                 <div className={'grid grid-cols-1 md:grid-cols-2 gap-4'}>
                   <FreeSubmitOption
                     form={form}
-                    widgetId={widgetId}
+                    widgetShortId={widgetShortId}
                     loading={loading}
                     taskReviewCount={taskReviewCount}
                   />
