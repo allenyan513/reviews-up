@@ -149,13 +149,13 @@ function FreeSubmitOption(props: {
   const badgeEmbedCodeLight = getBadgeEmbedCode(
     productId,
     'light',
-    process.env.NEXT_PUBLIC_APP_URL as string,
+    process.env.NEXT_PUBLIC_WWW_URL as string,
     process.env.NEXT_PUBLIC_API_URL as string,
   );
   const badgeEmbedCodeDark = getBadgeEmbedCode(
     productId,
     'dark',
-    process.env.NEXT_PUBLIC_APP_URL as string,
+    process.env.NEXT_PUBLIC_WWW_URL as string,
     process.env.NEXT_PUBLIC_API_URL as string,
   );
 

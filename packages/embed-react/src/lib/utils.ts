@@ -15,7 +15,7 @@ const embedCodeTemplate2 = `
 `;
 
 const badgeEmbedCode = `
-<a href="{{appUrl}}/products/{{productIdOrSlug}}" target="_blank">
+<a href="{{wwwUrl}}/products/{{productIdOrSlug}}" target="_blank">
 <img src="{{apiUrl}}/products/{{productIdOrSlug}}/badge.svg?theme={{theme}}"
   style="width: 230px; height: 54px;"
   width="230"
@@ -32,14 +32,14 @@ export function getEmbedCode(widgetShortId: string): string {
 export function getBadgeEmbedCode(
   productIdOrSlug: string,
   theme: 'light' | 'dark' = 'light',
-  appUrl?: string,
+  wwwUrl?: string,
   apiUrl?: string,
 ): string {
-  const defaultAppUrl = appUrl ? appUrl : 'https://reviewsup.io';
+  const defaultWWWUrl = wwwUrl ? wwwUrl : 'https://reviewsup.io';
   const defaultApiUrl = apiUrl ? apiUrl : 'https://api.reviewsup.io';
   return badgeEmbedCode
     .replace(/{{productIdOrSlug}}/g, productIdOrSlug)
-    .replace(/{{appUrl}}/g, defaultAppUrl)
+    .replace(/{{wwwUrl}}/g, defaultWWWUrl)
     .replace(/{{apiUrl}}/g, defaultApiUrl)
     .replace(/{{theme}}/g, theme)
     .trim();
