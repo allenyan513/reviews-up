@@ -145,7 +145,6 @@ function FreeSubmitOption(props: {
   taskReviewCount: number;
 }) {
   const { form, loading, taskReviewCount, widgetShortId, productId } = props;
-
   const badgeEmbedCodeLight = getBadgeEmbedCode(
     productId,
     'light',

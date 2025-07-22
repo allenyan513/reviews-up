@@ -23,8 +23,4 @@ export const widget = {
   updateWidget: (id: string, dto: UpdateWidgetDto) =>
     authFetch(`/widgets/${id}`, 'PATCH', dto),
   deleteWidget: (id: string) => authFetch(`/widgets/${id}`, 'DELETE', {}),
-  verifyWidgetEmbedding: (
-    request: VerifyWidgetEmbeddingRequest,
-  ): Promise<RRResponse<boolean>> =>
-    authFetch('/widgets/verify', 'POST', request),
 };

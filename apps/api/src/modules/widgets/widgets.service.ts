@@ -13,7 +13,7 @@ import { generateShortId } from '@src/libs/shortId';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { SortBy } from '@reviewsup/api/common';
 import { BrowserlessService } from '@src/modules/browserless/browserless.service';
-import * as cheerio from 'cheerio';
+
 
 @Injectable()
 export class WidgetsService {
@@ -237,86 +237,5 @@ export class WidgetsService {
       sortedReviews = reviews;
     }
     return sortedReviews;
-  }
-
-  /**
-   * <div id="reviewsup-embed-6253dd1a86b">
-   * @param uid
-   * @param request
-   */
-  async verifyWidgetEmbedding(
-    uid: string,
-    request: VerifyWidgetEmbeddingRequest,
-  ): Promise<RRResponse<boolean>> {
-    const { url } = request;
-    const widgets = await this.prismaService.widget.findMany({
-      where: {
-        userId: uid,
-      },
-      select: {
-        shortId: true,
-      },
-    });
-    if (!widgets || widgets.length === 0) {
-      this.logger.warn('No widgets found for user', uid);
-      return {
-        code: 400,
-        message: 'No widgets found for user',
-        data: false,
-      } as RRResponse<boolean>;
-    }
-
-    const widgetShortIds = widgets.map((widget) => widget.shortId);
-    this.logger.debug('Verifying embended widget for widget', request);
-    const { content } = await this.browserlessService.extract(url, {
-      contentEnable: true,
-      faviconEnable: false,
-      screenshotEnable: false,
-    });
-    if (!content) {
-      this.logger.error('No content found for URL', url);
-      return {
-        code: 400,
-        message: 'No content found for URL',
-        data: false,
-      } as RRResponse<boolean>;
-    }
-
-    const $ = cheerio.load(content);
-    let verified = false;
-    for (const widgetShortId of widgetShortIds) {
-      const widgetId = `reviewsup-embed-${widgetShortId}`;
-      const idSelector = `#${widgetId}`;
-      const widgetExists = $(idSelector).length > 0;
-      if (widgetExists) {
-        verified = true;
-        this.logger.debug(
-          `Widget embedding verified for widgetShortId: ${widgetShortId}`,
-        );
-        break;
-      }
-
-      // const classSelector = `blockquote.reviewsup-embed`;
-      // const citeSelector = `blockquote.reviewsup-embed[cite="${process.env.NEXT_PUBLIC_APP_URL}/widgets/${widgetShortId}"]`;
-      // const dataWidgetIdSelector = `blockquote.reviewsup-embed[data-widget-id="${widgetShortId}"]`;
-      // const widgetExists =
-      //   $(classSelector).length > 0 &&
-      //   $(citeSelector).length > 0 &&
-      //   $(dataWidgetIdSelector).length > 0;
-      // if (widgetExists) {
-      //   verified = true;
-      //   this.logger.debug(
-      //     `Widget embedding verified for widgetShortId: ${widgetShortId}`,
-      //   );
-      //   break;
-      // }
-    }
-    return {
-      code: verified ? 200 : 400,
-      message: verified
-        ? 'Widget embedding verified successfully!'
-        : 'Widget embedding verification failed',
-      data: verified,
-    } as RRResponse<boolean>;
   }
 }

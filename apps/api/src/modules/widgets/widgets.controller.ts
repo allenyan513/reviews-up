@@ -23,16 +23,6 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 export class WidgetsController {
   constructor(private readonly widgetsService: WidgetsService) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Post('verify')
-  async verify(@Jwt() jwt: JwtPayload, @Body() request: any) {
-    const validatedRequest = verifyWidgetEmbeddingSchema.parse(request);
-    return this.widgetsService.verifyWidgetEmbedding(
-      jwt.userId,
-      validatedRequest,
-    );
-  }
-
   @Get('shortId/:shortId')
   async findOneByShortId(@Param('shortId') shortId: string) {
     return this.widgetsService.findOneByShortId(shortId);

@@ -31,6 +31,7 @@ import { WidgetEntity } from '@reviewsup/api/widgets';
 import ReactDOMServer from 'react-dom/server';
 import { BadgeSvg } from './badge.svg';
 import * as React from 'react';
+import * as cheerio from 'cheerio';
 
 @Injectable()
 export class ProductsService {
@@ -334,11 +335,10 @@ export class ProductsService {
       };
     }
     if (dto.skipVerify === false) {
-      const verifyResult = await this.widgetsService.verifyWidgetEmbedding(
-        uid,
-        {
-          url: existingProduct.url,
-        },
+      const targets = [process.env.NEXT_PUBLIC_WWW_URL];
+      const verifyResult = await this.verifyEmbedCode(
+        targets,
+        existingProduct.url,
       );
       if (verifyResult.code !== 200 || !verifyResult.data) {
         this.logger.error(
@@ -532,7 +532,7 @@ export class ProductsService {
         name: true,
         avatarUrl: true,
       },
-    })
+    });
     return {
       ...product,
       user: user,
@@ -734,5 +734,44 @@ export class ProductsService {
     });
     const svgString = ReactDOMServer.renderToStaticMarkup(el);
     return `<?xml version="1.0" encoding="UTF-8"?>\n${svgString}`;
+  }
+
+  /**
+   * @param targets
+   * @param url
+   */
+  async verifyEmbedCode(
+    targets: string[],
+    url: string,
+  ): Promise<RRResponse<boolean>> {
+    const { content } = await this.browserlessService.extract(url, {
+      contentEnable: true,
+      faviconEnable: false,
+      screenshotEnable: false,
+    });
+    if (!content) {
+      this.logger.error(`No content found for URL: ${url}`);
+      return {
+        code: 400,
+        message: 'No content found for the provided URL',
+        data: false,
+      };
+    }
+    const $ = cheerio.load(content);
+    let linkExists = false;
+    for (const target of targets) {
+      const linkSelector = `a[href*="${target}"]`;
+      if ($(linkSelector).length > 0) {
+        linkExists = true;
+        break; // 如果找到一个匹配的链接，就可以停止检查
+      }
+    }
+    return {
+      code: linkExists ? 200 : 400,
+      message: linkExists
+        ? 'Widget embedding verified successfully!'
+        : 'Widget embedding verification failed',
+      data: linkExists,
+    } as RRResponse<boolean>;
   }
 }
