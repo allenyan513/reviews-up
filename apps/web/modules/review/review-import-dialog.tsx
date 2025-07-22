@@ -25,7 +25,7 @@ export default function ReviewImportDialog() {
       <DialogTrigger asChild>
         <Button size={'lg'}>
           <BiPlus className="text-2xl" />
-          Import Reviews
+          Add Review
         </Button>
       </DialogTrigger>
       <DialogContent className="w-full md:min-w-2xl">

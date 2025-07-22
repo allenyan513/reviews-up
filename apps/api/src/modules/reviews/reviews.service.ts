@@ -162,18 +162,61 @@ export class ReviewsService {
     });
   }
 
-  async update(uid: string, id: string, updateReviewDto: UpdateReviewDto) {
+  async updateStatus(uid: string, id: string, dto: UpdateReviewDto) {
     return this.prismaService.review.update({
       where: {
         id: id,
       },
       data: {
-        ...updateReviewDto,
-        source: updateReviewDto.source as ReviewSource,
-        status: updateReviewDto.status as ReviewStatus,
+        status: dto.status as ReviewStatus,
         updatedAt: new Date(), // Update the timestamp
       },
     });
+  }
+
+  async update(uid: string, id: string, dto: UpdateReviewDto) {
+    const updateOne = await this.prismaService.review.update({
+      where: {
+        id: id,
+      },
+      data: {
+        reviewerName: dto.fullName,
+        reviewerImage: dto.avatarUrl,
+        reviewerEmail: dto.email,
+        reviewerUrl: dto.userUrl,
+        reviewerTitle: dto.title,
+        rating: dto.rating,
+        text: dto.message,
+        updatedAt: new Date(), // Update the timestamp
+      },
+    });
+    // Remove existing media entries for this review
+    await this.prismaService.reviewMedia.deleteMany({
+      where: {
+        reviewId: id,
+      },
+    });
+    if (dto.imageUrls && dto.imageUrls.length > 0) {
+      for (const imageUrl of dto.imageUrls) {
+        await this.prismaService.reviewMedia.create({
+          data: {
+            reviewId: id,
+            type: 'image',
+            url: imageUrl,
+          },
+        });
+      }
+    }
+    if (dto.videoUrl) {
+      await this.prismaService.reviewMedia.create({
+        data: {
+          reviewId: id,
+          type: 'video',
+          url: dto.videoUrl,
+        },
+      });
+    }
+    return updateOne;
   }
 
   async remove(uid: string, id: string) {

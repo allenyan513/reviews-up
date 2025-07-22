@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { renderItem } from '@reviewsup/embed-react';
 
-export default function ReviewLookupDialog(props: {
+export function ReviewLookupDialog(props: {
   review: ReviewEntity | null;
   children: React.ReactNode;
 }) {

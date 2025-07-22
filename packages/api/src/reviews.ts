@@ -52,6 +52,7 @@ export const createReviewSchema = z.object({
 });
 
 export type CreateReviewDto = z.infer<typeof createReviewSchema>;
+export type UpdateReviewDto = Partial<CreateReviewDto>;
 
 export const findAllReviewRequestSchema = z.object({
   page: z.coerce.number().int().min(1).default(1),
@@ -63,7 +64,6 @@ export const findAllReviewRequestSchema = z.object({
 
 export type FindAllReviewRequest = z.infer<typeof findAllReviewRequestSchema>;
 
-export type UpdateReviewDto = Partial<CreateReviewDto>;
 
 export const reviewEntitySchema = z.object({
   id: z.string().min(1, 'Review ID is required'),

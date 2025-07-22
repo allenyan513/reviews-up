@@ -11,7 +11,7 @@ export const defaultUserData = {
       reviewerImage: 'https://reviewsup.io/img/avatar4.png',
       reviewerTitle: 'Developer of ReviewsUp.io',
       rating: 5,
-      text: 'Welcome to ReviewsUp.io! This is a sample review to get you started. Feel free to customize it as needed.',
+      text: 'Welcome to ReviewsUp.io! This is a sample review to get you started.',
       status: ReviewStatus.pending,
     },
   ],

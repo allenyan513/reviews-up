@@ -20,7 +20,8 @@ import {
   BiShow,
   BiTrash,
 } from 'react-icons/bi';
-import ReviewLookupDialog from '@/modules/review/review-lookup-dialog';
+import {ReviewLookupDialog}from '@/modules/review/review-lookup-dialog';
+import { ReviewEditDialog } from './review-edit-dialog';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -72,7 +73,7 @@ export function columns(
       } else {
         throw new Error('Invalid review status');
       }
-      await api.review.updateReview(reviewId, { status: newStatus });
+      await api.review.updateReviewStatus(reviewId, { status: newStatus });
       setData((prevData: ReviewEntity[]) =>
         prevData.map((review) =>
           review.id === reviewId ? { ...review, status: newStatus } : review,
@@ -176,7 +177,7 @@ export function columns(
         const rating = row.getValue('rating') as number | null;
         return (
           <div className="flex items-center">
-            <StarRating size={'sm'} value={rating || 5}/>
+            <StarRating size={'sm'} value={rating || 5} />
           </div>
         );
       },
@@ -317,10 +318,18 @@ export function columns(
       cell: ({ row }) => {
         const review = row.original;
         return (
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center">
+            <ReviewEditDialog review={review}>
+              <Button variant={'ghost'} size="sm">
+                Edit
+              </Button>
+            </ReviewEditDialog>
             <AlertDialog>
               <AlertDialogTrigger asChild>
-                <BiTrash className={'text-2xl text-red-400 cursor-pointer'} />
+                {/*<BiTrash className={'text-2xl text-red-400 cursor-pointer'} />*/}
+                <Button variant={'ghost'} size="sm">
+                  Delete
+                </Button>
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>

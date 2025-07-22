@@ -74,6 +74,16 @@ export class ReviewsController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @Patch(':id/status')
+  async updateStatus(
+    @Jwt() jwt: JwtPayload,
+    @Param('id') id: string,
+    @Body() updateReviewDto: UpdateReviewDto,
+  ) {
+    return this.reviewsService.updateStatus(jwt.userId, id, updateReviewDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Jwt() jwt: JwtPayload, @Param('id') id: string) {
     return this.reviewsService.remove(jwt.userId, id);

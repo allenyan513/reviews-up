@@ -46,6 +46,9 @@ export const review = {
 
   updateReview: (id: string, dto: UpdateReviewDto) =>
     authFetch(`/reviews/${id}`, 'PATCH', dto),
+  updateReviewStatus: (id:string, dto: UpdateReviewDto) =>
+    authFetch(`/reviews/${id}/status`, 'PATCH', dto),
+
   deleteReview: (id: string) => authFetch(`/reviews/${id}`, 'DELETE', {}),
 
   parse: (request: YtDlpRequest): Promise<YtDlpResponse> =>
