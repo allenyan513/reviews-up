@@ -4,7 +4,6 @@ import { useState } from 'react';
 import { cn } from '@reviewsup/ui/lib/utils';
 import { CodeBlockClient } from '@/components/code-block-client';
 import { Button } from '@reviewsup/ui/button';
-import toast from 'react-hot-toast';
 
 export function WidgetSimpleWrapper(props: {
   title: string;

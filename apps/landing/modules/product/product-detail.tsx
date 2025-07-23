@@ -42,7 +42,7 @@ export async function ProductDetail(props: { lang: string; slug: string }) {
   }
 
   return (
-    <div className="lg:grid lg:grid-cols-12 flex flex-col gap-8 py-24 px-4 lg:px-48">
+    <div className="lg:grid lg:grid-cols-12 flex flex-col gap-8 py-24 px-4 max-w-7xl mx-auto">
       <main className="lg:col-span-9 flex flex-col gap-4 min-h-screen">
         {/*header*/}
         <div className="flex flex-col lg:flex-row gap-2 items-start lg:items-center justify-between">

@@ -4,9 +4,6 @@ import { Header } from '@/components/landing/header';
 import { Footer } from '@/components/landing/footer';
 import { cn } from '@reviewsup/ui/lib/utils';
 import { GoogleAnalytics } from '@next/third-parties/google';
-import { IconCirclesRelation } from '@tabler/icons-react';
-import { BiShare } from 'react-icons/bi';
-import { BsLink } from 'react-icons/bs';
 
 const openSans = Open_Sans({
   subsets: ['latin'],
@@ -40,6 +37,7 @@ export default async function RootLayout(props: {
             { title: 'Integrations', href: '#integrations' },
             // { title: 'Pricing', href: '/pricing' },
             { title: 'Products', href: `/products` },
+            { title: 'Categories', href: `/categories` },
           ]}
         />
         <main className="flex-1 w-full">{props.children}</main>

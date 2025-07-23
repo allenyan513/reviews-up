@@ -117,7 +117,7 @@ export default async function LandingPage(props: {
       <div id={'faqs'} />
       <FAQ data={faqData} />
 
-      <div id="badges"/>
+      <div id="badges" />
       <Badge />
     </div>
   );

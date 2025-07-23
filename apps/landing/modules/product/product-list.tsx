@@ -52,22 +52,10 @@ export function ProductList(props: {
     loadProducts(nextPage);
   };
 
-  // useEffect(() => {
-  //   fetchProductList(status, page, pageSize, tags)
-  //     .then((response) => {
-  //       setProducts((prev) => [...prev, ...response.items]);
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching products:', error);
-  //     });
-  // }, [status, page, pageSize, tags]);
-
   return (
-    //  <div className="lg:grid lg:grid-cols-12 flex flex-col gap-4 py-24 w-full lg:w-7xl mx-auto">
-    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 py-24 px-4 lg:px-48">
+    <div className="flex flex-col lg:grid lg:grid-cols-12 gap-16 py-24 px-4 max-w-7xl mx-auto">
       <div className="flex flex-col lg:col-span-9 gap-4">
         <h1 className="text-2xl font-semibold px-4">
-          {/*Top Products Launching Today*/}
           {title ? title : 'Top Products'}
         </h1>
         <div className="flex flex-col items-center">

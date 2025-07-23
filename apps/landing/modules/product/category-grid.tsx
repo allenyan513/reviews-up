@@ -42,8 +42,8 @@ export function CategoryGrid(props: { status: string; lang: string }) {
   }, [search, originalProducts]);
 
   return (
-    <div className="flex flex-col py-24 px-4 md:px-32 gap-16">
-      <div className="flex flex-col md:grid md:grid-cols-12 gap-16">
+    <div className="flex flex-col py-24 px-4 md:px-32">
+      <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
         <div className="hidden md:col-span-2 md:flex md:flex-col gap-4">
           <h2>Filter Products</h2>
           <Input
