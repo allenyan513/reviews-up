@@ -182,12 +182,12 @@ export function Header(props: NavProps) {
             target="_blank"
             className={cn(
               buttonVariants({ size: 'lg' }),
-              'rounded-full inline-flex',
+              'rounded-md inline-flex',
               'text-white bg-red-400',
             )}
           >
             <BsPlusCircle className="text-lg" />
-            <span className=''>Create Product</span>
+            <span className=''>Submit</span>
           </Link>
         </div>
       </div>

@@ -42,7 +42,7 @@ export function Hero(props: {
           href={props.primaryCtaLink}
           className={cn(
             buttonVariants({ size: 'lg' }),
-            'bg-red-400 hover:bg-red-500 rounded-md h-14 text-white font-semibold',
+            'bg-red-400 hover:bg-red-500 rounded-md h-12 text-white font-semibold',
           )}
         >
           {props.primaryCtaText}
@@ -50,10 +50,12 @@ export function Hero(props: {
 
         {props.secondaryCtaLink && (
           <Link
-            href={props.secondaryCtaLink}
             target="_blank"
-            rel="noreferrer"
-            className={cn(buttonVariants({ variant: 'outline', size: 'lg' }))}
+            href={props.secondaryCtaLink}
+            className={cn(
+              buttonVariants({ size: 'lg', }),
+              'bg-white rounded-md h-12 text-black font-semibold border border-gray-300 hover:bg-gray-100',
+            )}
           >
             {props.secondaryCtaText}
           </Link>
