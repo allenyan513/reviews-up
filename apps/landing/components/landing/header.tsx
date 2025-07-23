@@ -73,7 +73,7 @@ function DesktopItems(props: NavProps) {
       {props.items?.map((item, index) => {
         const isActive = item.href.startsWith(`/${segment}`);
         const baseClasses = cn(
-          'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm',
+          'flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-[1rem]',
           isActive ? 'text-foreground' : 'text-foreground/60',
           item.disabled && 'cursor-not-allowed opacity-60',
         );
@@ -132,7 +132,7 @@ export function Header(props: NavProps) {
   return (
     <header className="fixed w-full z-50 bg-background/80 px-4 md:px-8 backdrop-blur">
       <div className="flex h-18 items-center justify-between py-4">
-        <div className="flex items-center gap-4 md:gap-10">
+        <div className="flex flex-row justify-between items-center gap-4 md:gap-10">
           <Logo
             websiteLogo={props.websiteLogo}
             websiteName={props.websiteName}
@@ -152,8 +152,6 @@ export function Header(props: NavProps) {
               <Menu className="h-6 w-6" />
             )}
           </Button>
-          {/*<Logo className="md:hidden" />*/}
-
           {showMobileMenu && props.items && <MobileItems items={props.items} />}
         </div>
         <div className="flex gap-4 items-center">

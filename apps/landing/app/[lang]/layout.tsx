@@ -35,36 +35,11 @@ export default async function RootLayout(props: {
           appLink={process.env.NEXT_PUBLIC_APP_URL as string}
           launchLink={`${process.env.NEXT_PUBLIC_APP_URL}/launch`}
           items={[
-            { title: 'Home', href: '/' },
-            // { title: 'Widget', href: '/#widget' },
-            // { title: 'Form', href: '/#form' },
-            // { title: 'Features', href: '/#features' },
-            // { title: 'FAQ', href: '/#faq' },
-            {
-              title: 'Documents',
-              href: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
-              external: true,
-            },
-            // {
-            //   title: 'Blog',
-            //   href: `${process.env.NEXT_PUBLIC_DOCS_URL}/blog`,
-            //   external: true,
-            // },
-            // {
-            //   title: 'Launch',
-            //   href: `/launch`,
-            //   external: false,
-            // },
-            {
-              title: 'Products',
-              href: `/products`,
-              external: false,
-            },
-            {
-              title: 'Categories',
-              href: `/categories`,
-              external: false,
-            },
+            { title: 'Customers', href: '/customers' },
+            { title: 'Features', href: '/features' },
+            { title: 'Integrations', href: '/integrations' },
+            { title: 'Pricing', href: '/pricing' },
+            { title: 'Products', href: `/products` },
           ]}
         />
         <main className="flex-1 w-full">{props.children}</main>

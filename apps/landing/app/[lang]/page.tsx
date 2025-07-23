@@ -52,7 +52,8 @@ export default async function LandingPage(props: {
   const widgetData = getWidgetData();
 
   return (
-    <div className="flex flex-col w-full items-center gap-8 md:gap-12">
+    <div className="flex flex-col items-center gap-8 md:gap-12 px-4 lg:px-24">
+      <div id="hero" />
       <Hero
         capsuleText={t(hero3.capsuleText)}
         capsuleLink={hero3.capsuleLink}
@@ -72,23 +73,23 @@ export default async function LandingPage(props: {
         items={widgetData.items}
       />
 
-      <div id="form" />
-      <CollectingForm
-        title={t(collectingFormData.title)}
-        subtitle={collectingFormData.subtitle}
-        formId={collectingFormData.formId}
-        buttonText={collectingFormData.buttonText}
-      />
+      {/*<div id="form" />*/}
+      {/*<CollectingForm*/}
+      {/*  title={t(collectingFormData.title)}*/}
+      {/*  subtitle={collectingFormData.subtitle}*/}
+      {/*  formId={collectingFormData.formId}*/}
+      {/*  buttonText={collectingFormData.buttonText}*/}
+      {/*/>*/}
 
-      {/*<div id="how-it-works" />*/}
-      {/*<HowItWorks />*/}
+      {/*/!*<div id="how-it-works" />*!/*/}
+      {/*/!*<HowItWorks />*!/*/}
 
-      <div id="features" />
-      <FeatureGrid
-        title={t(featureData.title)}
-        subtitle={t(featureData.subtitle)}
-        items={featureData.items}
-      />
+      {/*<div id="features" />*/}
+      {/*<FeatureGrid*/}
+      {/*  title={t(featureData.title)}*/}
+      {/*  subtitle={t(featureData.subtitle)}*/}
+      {/*  items={featureData.items}*/}
+      {/*/>*/}
 
       {/*<div id="pricing" />*/}
       {/*<PricingGrid*/}
@@ -97,12 +98,11 @@ export default async function LandingPage(props: {
       {/*  items={pricingData.items}*/}
       {/*/>*/}
 
-      <div id={'faqs'} />
-      <FAQ data={faqData} />
+      {/*<div id={'faqs'} />*/}
+      {/*<FAQ data={faqData} />*/}
 
-      <div id="badges">
-        <Badge />
-      </div>
+      <div id="badges"/>
+      <Badge />
     </div>
   );
 }

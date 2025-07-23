@@ -25,10 +25,7 @@ export function WidgetWrapper(props: {
   const [mode, setMode] = useState<'mobile' | 'pad' | 'desktop'>('desktop');
 
   return (
-    <section
-      id="widget"
-      className="px-4 py-6 w-full md:max-w-5xl flex flex-col gap-4"
-    >
+    <section className="px-4 lg:px-32 py-6 w-full flex flex-col gap-4">
       <h2 className="w-full text-center text-4xl font-semibold">{title}</h2>
       <h3 className="text-muted-foreground sm:text-lg text-center mb-4">
         {subtitle}

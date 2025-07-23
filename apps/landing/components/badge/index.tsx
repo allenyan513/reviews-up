@@ -7,13 +7,13 @@ import { WidgetWrapper } from '@/components/badge/widget-wrapper';
 
 export function Badge() {
   return (
-    <div className="flex flex-row gap-2 px-4 w-full md:max-w-5xl">
+    <section className="flex flex-row gap-2 bg-red-50">
       <ProductHunt />
       <Startupfa />
       <Turbo0 />
       <Frogdr />
       <Twelve />
-      <WidgetWrapper/>
-    </div>
+      {/*<WidgetWrapper/>*/}
+    </section>
   );
 }
