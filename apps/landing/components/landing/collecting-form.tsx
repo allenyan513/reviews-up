@@ -9,13 +9,10 @@ export function CollectingForm(props: {
   formId: string;
   buttonText: string;
 }) {
-  const { title, subtitle, formId , buttonText} = props;
+  const { title, subtitle, formId, buttonText } = props;
 
   return (
-    <section
-      id="form"
-      className="max-w-5xl py-6 px-4 flex flex-col items-center w-full"
-    >
+    <section className="flex flex-col items-center w-full">
       <h2 className="w-full text-center text-4xl pb-4 font-semibold">
         {title}
       </h2>
@@ -27,7 +24,7 @@ export function CollectingForm(props: {
         target={'_blank'}
         className={cn(
           buttonVariants({ size: 'lg' }),
-          'bg-red-400 hover:bg-red-500 rounded-full h-14 text-white font-semibold',
+          'bg-red-400 hover:bg-red-500 rounded-md h-14 text-white font-semibold',
         )}
       >
         {buttonText}
@@ -41,9 +38,7 @@ export function CollectingForm(props: {
         />
         {/*从下往上 白色蒙层 一半*/}
         <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-white to-transparent pointer-events-none" />
-
       </div>
-
     </section>
   );
 }

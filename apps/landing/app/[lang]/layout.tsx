@@ -35,10 +35,10 @@ export default async function RootLayout(props: {
           appLink={process.env.NEXT_PUBLIC_APP_URL as string}
           launchLink={`${process.env.NEXT_PUBLIC_APP_URL}/launch`}
           items={[
-            { title: 'Customers', href: '/customers' },
-            { title: 'Features', href: '/features' },
-            { title: 'Integrations', href: '/integrations' },
-            { title: 'Pricing', href: '/pricing' },
+            { title: 'Customers', href: '#customers' },
+            { title: 'Features', href: '#features' },
+            { title: 'Integrations', href: '#integrations' },
+            // { title: 'Pricing', href: '/pricing' },
             { title: 'Products', href: `/products` },
           ]}
         />

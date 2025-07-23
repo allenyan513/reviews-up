@@ -15,6 +15,11 @@ import { pricingData } from '@/data/pricings';
 import { faqData } from '@/data/faqs';
 import { CollectingForm } from '@/components/landing/collecting-form';
 import { collectingFormData } from '@/data/collecting-form';
+import { WidgetSimpleWrapper } from '@/components/landing/widget-simple';
+import { IntegrationsGrid } from '@/components/landing/integrations';
+import { integrations } from '@/data/integrations';
+import { CustomersGrid } from '@/components/landing/customers';
+import { customers } from '@/data/customers';
 
 export async function generateMetadata(props: {
   params: Promise<{
@@ -52,7 +57,7 @@ export default async function LandingPage(props: {
   const widgetData = getWidgetData();
 
   return (
-    <div className="flex flex-col items-center gap-8 md:gap-12 px-4 lg:px-24">
+    <div className="flex flex-col items-center gap-8 md:gap-24 px-4 max-w-7xl mx-auto">
       <div id="hero" />
       <Hero
         capsuleText={t(hero3.capsuleText)}
@@ -67,29 +72,40 @@ export default async function LandingPage(props: {
       />
 
       <div id="widget" />
-      <WidgetWrapper
+      <WidgetSimpleWrapper
         title={t(widgetData.title)}
         subtitle={widgetData.subtitle}
         items={widgetData.items}
+        embedCode={widgetData.embedCode}
       />
 
-      {/*<div id="form" />*/}
-      {/*<CollectingForm*/}
-      {/*  title={t(collectingFormData.title)}*/}
-      {/*  subtitle={collectingFormData.subtitle}*/}
-      {/*  formId={collectingFormData.formId}*/}
-      {/*  buttonText={collectingFormData.buttonText}*/}
-      {/*/>*/}
+      <div id="form" />
+      <CollectingForm
+        title={t(collectingFormData.title)}
+        subtitle={collectingFormData.subtitle}
+        formId={collectingFormData.formId}
+        buttonText={collectingFormData.buttonText}
+      />
 
-      {/*/!*<div id="how-it-works" />*!/*/}
-      {/*/!*<HowItWorks />*!/*/}
+      <div id="customers" />
+      <CustomersGrid
+        title={t(customers.title)}
+        subtitle={t(customers.subtitle)}
+        items={customers.items}
+      />
 
-      {/*<div id="features" />*/}
-      {/*<FeatureGrid*/}
-      {/*  title={t(featureData.title)}*/}
-      {/*  subtitle={t(featureData.subtitle)}*/}
-      {/*  items={featureData.items}*/}
-      {/*/>*/}
+      <div id="features" />
+      <FeatureGrid
+        title={t(featureData.title)}
+        subtitle={t(featureData.subtitle)}
+        items={featureData.items}
+      />
+      <div id="integrations" />
+      <IntegrationsGrid
+        title={t(integrations.title)}
+        subtitle={t(integrations.subtitle)}
+        items={integrations.items}
+      />
 
       {/*<div id="pricing" />*/}
       {/*<PricingGrid*/}
@@ -98,8 +114,8 @@ export default async function LandingPage(props: {
       {/*  items={pricingData.items}*/}
       {/*/>*/}
 
-      {/*<div id={'faqs'} />*/}
-      {/*<FAQ data={faqData} />*/}
+      <div id={'faqs'} />
+      <FAQ data={faqData} />
 
       <div id="badges"/>
       <Badge />

@@ -1,5 +1,12 @@
 import { FileTreeItem } from '@/components/code-viewer';
 
+
+//todo fix this import
+const embedCodeTemplate2 = `
+<div id="reviewsup-embed-{{widgetId}}"></div>
+<script type="module" src="https://unpkg.com/@reviewsup/embed-react/dist/embed/embed.es.js" defer/>
+`;
+
 export const rawFileTree: FileTreeItem[] = [
   {
     name: 'app',
@@ -54,9 +61,10 @@ export default function Page() {
   `,
 };
 
-export function getWidgetData():{
+export function getWidgetData(): {
   title: string;
   subtitle: React.ReactNode;
+  embedCode: string;
   items: {
     title: string;
     widgetId: string;
@@ -68,14 +76,25 @@ export function getWidgetData():{
     .split(',')
     .map((id) => id.trim());
 
+  //Add testimonials to your website with no coding!
+  // Copy and paste our HTML code to add the Wall Of Love (👉 full version) to your website. We support any no-code platform (Webflow, WordPress, you name it!)
   return {
-    title: 'Build-in Review Widgets',
+    title: 'Embed reviews on your website with built-in widgets',
     subtitle: (
-      <span>
-        Seamlessly and quickly integrate a review widget into your website —{' '}
-        <span className="text-red-500 font-semibold">in just minutes.</span>
-      </span>
+      <p className="flex flex-col">
+        <span>
+          Easily integrate beautifully designed widgets into your site
+        </span>
+        <span>
+          just copy and paste a simple HTML snippet{' '}
+          <span className="text-red-500 font-semibold"> in just minutes.</span>
+        </span>
+      </p>
     ),
+    embedCode: embedCodeTemplate2.replace(
+      '{{widgetId}}',
+      widgetIds[0] || '',
+    ).trim(),
     items: [
       {
         title: 'Flow',
@@ -97,7 +116,7 @@ export function getWidgetData():{
       },
       {
         title: 'Avatar',
-        widgetId: widgetIds[3] ||'',
+        widgetId: widgetIds[3] || '',
         rawFileTree: rawFileTree,
         codeMap: codeMap,
       },

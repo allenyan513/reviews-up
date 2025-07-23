@@ -5,26 +5,25 @@ export default function FAQ(props: {
   }[];
 }) {
   return (
-    <section id="faq" className="w-full md:max-w-5xl p-4">
-      <div className="">
-        <h2 className="mb-10 text-center text-3xl font-bold text-gray-900">
-          FAQ
-        </h2>
-        <div className="w-full space-y-4">
-          {props.data?.map((item, index) => (
-            <details
-              key={index}
-              className="group rounded-xl bg-white p-4 shadow-md transition open:ring-2"
-            >
-              <summary className="cursor-pointer text-lg font-semibold">
-                {item.question}
-              </summary>
-              <p className="mt-2 text-gray-700 whitespace-normal">
-                {item.answer}
-              </p>
-            </details>
-          ))}
-        </div>
+    <section className="w-full">
+      <h2 className="mb-10 text-center text-3xl md:text-4xl font-semibold text-gray-900">
+        FAQ
+      </h2>
+      <div className="grid grid-cols-1 md:grid-cols-2">
+        {props.data?.map((item, index) => (
+          <details
+            key={index}
+            className="group p-4"
+            open={true}
+          >
+            <summary className="cursor-pointer text-lg font-semibold">
+              {item.question}
+            </summary>
+            <p className="mt-2 text-gray-700 whitespace-normal">
+              {item.answer}
+            </p>
+          </details>
+        ))}
       </div>
     </section>
   );

@@ -1,4 +1,4 @@
-export function FeatureGridItem(props: {
+export function CustomerGridItem(props: {
   icon: React.ReactNode;
   title: string;
   description: string;
@@ -16,7 +16,7 @@ export function FeatureGridItem(props: {
   );
 }
 
-export function FeatureGrid(props: {
+export function CustomersGrid(props: {
   title: string;
   subtitle: string;
   items: {
@@ -33,9 +33,9 @@ export function FeatureGrid(props: {
           {props.subtitle}
         </p>
       </div>
-      <div className="grid justify-center gap-4 sm:grid-cols-2 md:grid-cols-3">
+      <div className="grid justify-center gap-4 grid-cols-1 md:grid-cols-2">
         {props.items.map((item, index) => (
-          <FeatureGridItem key={index} {...item} />
+          <CustomerGridItem key={index} {...item} />
         ))}
       </div>
     </section>

@@ -3,6 +3,7 @@ import { buttonVariants } from '@reviewsup/ui/button';
 import Link from 'next/link';
 import { BsGithub, BsLinkedin, BsTwitterX } from 'react-icons/bs';
 import { I18nEntries } from '@/components/i18n-entries';
+import { ProductCategory } from '@reviewsup/api/products';
 
 const sources = [
   {
@@ -27,6 +28,53 @@ const sources = [
   },
 ];
 
+const howTo = [
+  {
+    title: 'How to embed reviews on Notion',
+    url: `/how-to/notion`,
+  },
+  {
+    title: 'How to embed reviews on WordPress',
+    url: `/how-to/wordpress`,
+  },
+  {
+    title: 'How to embed reviews on Wix',
+    url: `/how-to/wix`,
+  },
+  {
+    title: 'How to embed reviews on Webflow',
+    url: `/how-to/webflow`,
+  },
+  {
+    title: 'How to embed reviews on Shopify',
+    url: `/how-to/shopify`,
+  },
+  {
+    title: 'How to embed reviews on Squarespace',
+    url: `/how-to/squarespace`,
+  },
+  {
+    title: 'How to turn FB Messenger DMs into reviews',
+    url: `/how-to/facebook-messenger`,
+  },
+  {
+    title: 'How to turn Instagram Shoutouts on your website',
+    url: `/how-to/instagram-shoutouts`,
+  },
+  {
+    title: 'How to turn WhatsApp Messages into reviews',
+    url: `/how-to/whatsapp-dms`,
+  },
+  {
+    title: 'How to turn TikTok videos into reviews',
+    url: `/how-to/tiktok-videos`,
+  },
+  {
+    title: 'How to turn X (Twitter) posts into reviews',
+    url: `/how-to/x-posts`,
+  },
+];
+
 export function Footer(props: {
   builtBy: string;
   builtByLink: string;
@@ -35,19 +83,47 @@ export function Footer(props: {
   linkedinLink: string;
 }) {
   return (
-    <footer className="px-4 flex flex-col gap-2 py-8  w-full md:max-w-5xl">
-      <div className="flex flex-row items-center gap-2">
-        {sources.map((source, index) => (
-          <Link
-            key={index}
-            href={source.url}
-            className="text-sm text-gray-500 hover:text-gray-600"
-            target={source.external ? '_blank' : '_self'}
-            {...(source.external ? { rel: 'noopener noreferrer' } : {})}
-          >
-            {source.title}
-          </Link>
-        ))}
+    <footer className="flex flex-col gap-2 py-8 w-full px-4 max-w-7xl mx-auto">
+      <div className="grid grid-cols-2 md:grid-cols-4 text-sm">
+        <div className="flex flex-col gap-1">
+          <h2 className="uppercase font-semibold">Products</h2>
+          {sources.map((source, index) => (
+            <Link
+              key={index}
+              href={source.url}
+              className="text-gray-500 hover:text-gray-600"
+              target={source.external ? '_blank' : '_self'}
+              {...(source.external ? { rel: 'noopener noreferrer' } : {})}
+            >
+              {source.title}
+            </Link>
+          ))}
+        </div>
+        <div className="flex flex-col gap-1">
+          <h2 className="uppercase font-semibold">How to Use</h2>
+          {howTo.map((source, index) => (
+            <Link
+              key={index}
+              href={source.url}
+              className="text-gray-500 hover:text-gray-600"
+            >
+              {source.title}
+            </Link>
+          ))}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <h2 className="uppercase font-semibold">Categories</h2>
+          {Object.entries(ProductCategory).map(([key, value]) => (
+            <Link
+              key={key}
+              href={'/categories/' + key}
+              className="text-gray-500 hover:text-gray-600"
+            >
+              {value}
+            </Link>
+          ))}
+        </div>
       </div>
       <I18nEntries className="" />
       <div className="container flex flex-col items-center justify-between gap-4 md:flex-row md:py-0">

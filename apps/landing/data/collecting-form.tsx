@@ -12,5 +12,5 @@ export const collectingFormData: {
     </span>
   ),
   formId: process.env.NEXT_PUBLIC_FORM_ID as string,
-  buttonText: "Leave a Review -- it's quick and easy 😁",
+  buttonText: "Leave a review for us",
 };
