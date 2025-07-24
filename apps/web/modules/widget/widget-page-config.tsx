@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { useWidgetContext } from './context/widget-context';
 import { Input } from '@/components/ui/input';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Select,
   SelectContent,
@@ -9,7 +9,16 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
+} from '@reviewsup/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@reviewsup/ui/dialog';
 import {
   BsCaretDown,
   BsCaretUp,
@@ -28,6 +37,7 @@ import { SortBy } from '@/types/sortby';
 import { layoutOptions } from '@/modules/widget/layout-options';
 import { sortOptions } from './sort-options';
 import { WidgetConfig } from '@reviewsup/api/widgets';
+import { WidgetSelectReviewsDialog } from '@/modules/widget/widget-select-reviews-dialog';
 
 function LayoutToggleButton(props: {
   title: string;
@@ -110,11 +120,12 @@ export function WidgetPageConfig(props: { className?: string }) {
   const {
     widget,
     widgetConfig,
-    setWidget,
     setWidgetConfig,
+    setWidgetConfigAndRefresh,
     saveChange,
   } = useWidgetContext();
   const [isLayoutOpen, setIsLayoutOpen] = useState(true);
+  const [isDataOpen, setIsDataOpen] = useState(true);
   const [isSettingOpen, setIsSettingOpen] = useState(true);
 
   /**
@@ -285,6 +296,27 @@ export function WidgetPageConfig(props: { className?: string }) {
           </div>
 
           <LayoutToggleButton
+            title="Data"
+            icon={<BsLayers className="h-4 w-4" />}
+            isOpen={isDataOpen}
+            setIsOpen={setIsDataOpen}
+          />
+          <div className={cn('', isDataOpen ? '' : 'hidden')}>
+            <div className="flex flex-row items-center justify-between gap-2 w-full">
+              <p>{widget?.reviewCount || 0} reviews selected</p>
+              <WidgetSelectReviewsDialog
+                defaultSelectedRowIds={[...(widgetConfig.reviewIds || [])]}
+                onSelectionChange={(ids) => {
+                  setWidgetConfigAndRefresh(widget?.id || '', {
+                    ...widgetConfig,
+                    reviewIds: ids,
+                  });
+                }}
+              />
+            </div>
+          </div>
+
+          <LayoutToggleButton
             title="Settings"
             icon={<BsGear className="h-4 w-4" />}
             isOpen={isSettingOpen}
@@ -345,7 +377,16 @@ export function WidgetPageConfig(props: { className?: string }) {
                 </SelectContent>
               </Select>
             </div>
-
+            <ToggleOption
+              label="Show More Views"
+              checked={widgetConfig.isMoreViewsEnabled || false}
+              onChange={(checked) =>
+                setWidgetConfig({
+                  ...widgetConfig,
+                  isMoreViewsEnabled: checked,
+                })
+              }
+            />
             <ToggleOption
               label="Show Summary Rating"
               checked={widgetConfig.isRatingSummaryEnabled || false}
@@ -414,22 +455,29 @@ export function WidgetPageConfig(props: { className?: string }) {
                 })
               }
             />
-            <ToggleOption
-              label="Dofollow enabled"
-              checked={widgetConfig.isDoFollowEnabled || false}
-              onChange={(checked) =>
-                setWidgetConfig({
-                  ...widgetConfig,
-                  isDoFollowEnabled: checked,
-                })
-              }
-              information={'If enabled, the source link will be dofollow. If disabled, it will be nofollow.'}
-            />
+            {/*<ToggleOption*/}
+            {/*  label="Dofollow enabled"*/}
+            {/*  checked={widgetConfig.isDoFollowEnabled || false}*/}
+            {/*  onChange={(checked) =>*/}
+            {/*    setWidgetConfig({*/}
+            {/*      ...widgetConfig,*/}
+            {/*      isDoFollowEnabled: checked,*/}
+            {/*    })*/}
+            {/*  }*/}
+            {/*  information={*/}
+            {/*    'If enabled, the source link will be dofollow. If disabled, it will be nofollow.'*/}
+            {/*  }*/}
+            {/*/>*/}
           </div>
         </div>
       </div>
       <div className="w-full pr-4">
-        <Button className="w-full" onClick={saveChange}>
+        <Button
+          className="w-full"
+          onClick={() => {
+            saveChange();
+          }}
+        >
           Save
         </Button>
       </div>

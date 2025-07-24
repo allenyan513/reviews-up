@@ -3,12 +3,44 @@ import { WidgetConfig } from '@reviewsup/api/widgets';
 import { ReviewEntity } from '@reviewsup/api/reviews';
 import { toLocalDateString } from '../../lib/utils';
 import { StarRatingServer } from '../star-rating.server';
+import styled from 'styled-components';
+
+//  style={{
+//         boxSizing: 'border-box',
+//         backgroundColor: '#ffffff',
+//         padding: '1rem',
+//         border: '1px solid #e5e7eb',
+//         borderRadius: '0.375rem',
+//         display: 'flex',
+//         flexDirection: 'column',
+//         gap: '1rem',
+//         width: '100%',
+//       }}
+const ReviewItemRoot = styled.div`
+  box-sizing: border-box;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+  padding: 1rem;
+  cursor: pointer;
+`;
+
+const ReviewItemHeader = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`;
 
 export function ReviewItem(props: {
   review: ReviewEntity;
   config?: WidgetConfig;
 }) {
-  const { review, config} = props;
+  const { review, config } = props;
   const {
     isSourceEnabled,
     isVideoEnabled,
@@ -129,31 +161,9 @@ export function ReviewItem(props: {
   };
 
   return (
-    <div
-      key={review.id}
-      // className={`bg-white p-4 border border-gray-300 rounded-md shadow-sm flex flex-col gap-4 ${className}`}
-      style={{
-        boxSizing: 'border-box',
-        backgroundColor: '#ffffff',
-        padding: '1rem',
-        border: '1px solid #e5e7eb',
-        borderRadius: '0.375rem',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '1rem',
-        width: '100%',
-      }}
-    >
-      <div
-        // className="flex flex-row justify-between"
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-        }}
-      >
+    <ReviewItemRoot key={review.id}>
+      <ReviewItemHeader>
         <div
-          // className="flex flex-row w-full justify-between gap-2 overflow-x-auto items-center"
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -248,8 +258,10 @@ export function ReviewItem(props: {
             />
           )}
         </div>
-      </div>
-      {isRatingEnabled && <StarRatingServer value={review.rating || 5} />}
+      </ReviewItemHeader>
+      {isRatingEnabled && (
+        <StarRatingServer value={review.rating || 5} size={'sm'} />
+      )}
       {isImageEnabled && renderImageMedias()}
       {isVideoEnabled && renderVideoMedias()}
       <p
@@ -263,6 +275,6 @@ export function ReviewItem(props: {
       >
         {review.text}
       </p>
-    </div>
+    </ReviewItemRoot>
   );
 }

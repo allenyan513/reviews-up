@@ -62,17 +62,15 @@ export function ReviewItem1(props: {
         </p>
       </div>
       <div
-        // className="flex flex-col"
         style={{
           display: 'flex',
           flexDirection: 'column',
-        }}
-      >
+          gap: '0.5rem',
+        }} >
         {isRatingEnabled && (
-          <StarRatingServer value={review.rating} size={'md'} />
+          <StarRatingServer value={review.rating} size={'sm'} />
         )}
         <div
-          // className="flex flex-row justify-between items-center"
           style={{
             display: 'flex',
             flexDirection: 'row',
@@ -83,7 +81,6 @@ export function ReviewItem1(props: {
           <a
             target="_blank"
             href={review.reviewerUrl}
-            // className="flex flex-row justify-between "
             style={{
               display: 'flex',
               flexDirection: 'row',
@@ -91,7 +88,6 @@ export function ReviewItem1(props: {
             }}
           >
             <div
-              // className="flex flex-row gap-2 py-2 overflow-x-auto"
               style={{
                 display: 'flex',
                 flexDirection: 'row',
@@ -128,11 +124,11 @@ export function ReviewItem1(props: {
                     color: '#6B7280', // Tailwind's text-gray-500
                   }}
                 >
-                <span>
-                  {review.reviewerName
-                    ? review.reviewerName.charAt(0).toUpperCase()
-                    : 'U'}
-                </span>
+                  <span>
+                    {review.reviewerName
+                      ? review.reviewerName.charAt(0).toUpperCase()
+                      : 'U'}
+                  </span>
                 </div>
               )}
 

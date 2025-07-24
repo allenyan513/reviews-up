@@ -8,7 +8,6 @@ import {
   SidebarMenu,
 } from '@/components/ui/sidebar';
 import Link from 'next/link';
-import { ProductSwitchButton } from '@/modules/product/product-switch-button';
 import { cn } from '@/lib/utils';
 import { ProductEntity } from '@reviewsup/api/products';
 
@@ -28,9 +27,7 @@ export function NavMain(props: {
   return (
     <SidebarGroup>
       <SidebarGroupContent className="flex flex-col gap-2">
-        <ProductSwitchButton
-          product={product}
-        />
+
         <SidebarMenu
           className={product === null || product === undefined ? 'pointer-events-none' : ''}
         >

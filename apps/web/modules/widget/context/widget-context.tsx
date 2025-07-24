@@ -11,9 +11,10 @@ const WidgetContext = createContext<{
   setWidgets: (widgets: PaginateResponse<WidgetEntity>) => void;
   widgetConfig: WidgetConfig | undefined;
   setWidgetConfig: (config: WidgetConfig) => void;
+  setWidgetConfigAndRefresh: (widgetId: string, config: WidgetConfig) => void;
   getWidget: (widgetId: string) => void;
   getWidgets: (productId: string) => void;
-  saveChange: () => Promise<void>;
+  saveChange: (_widgetConfig?: WidgetConfig) => Promise<void>;
   deleteWidget: (widgetId: string) => Promise<void>;
   createWidget: (productId: string, workspaceName: string) => Promise<void>;
 } | null>(null);
@@ -22,6 +23,15 @@ export function WidgetProvider(props: { children: React.ReactNode }) {
   const [widgets, setWidgets] = useState<PaginateResponse<WidgetEntity>>();
   const [widget, setWidget] = useState<WidgetEntity>();
   const [widgetConfig, setWidgetConfig] = useState<WidgetConfig>();
+
+  const setWidgetConfigAndRefresh = async (
+    widgetId: string,
+    config: WidgetConfig,
+  ) => {
+    setWidgetConfig(config);
+    await saveChange(config);
+    getWidget(widgetId);
+  };
 
   const getWidget = (widgetId: string) => {
     api.widget
@@ -75,11 +85,14 @@ export function WidgetProvider(props: { children: React.ReactNode }) {
     }
   };
 
-  const saveChange = async () => {
+  const saveChange = async (_widgetConfig?: WidgetConfig) => {
+    const configToSave = _widgetConfig || widgetConfig;
+    console.log('Saving widget config:', configToSave);
+
     if (!widget || !widget.id) return;
     try {
       await api.widget.updateWidget(widget.id, {
-        config: widgetConfig,
+        config: configToSave,
       });
       toast.success('Form configuration updated successfully');
     } catch (error) {
@@ -97,6 +110,7 @@ export function WidgetProvider(props: { children: React.ReactNode }) {
 
         widgetConfig: widgetConfig,
         setWidgetConfig: setWidgetConfig,
+        setWidgetConfigAndRefresh: setWidgetConfigAndRefresh,
 
         getWidget: getWidget,
         getWidgets: getWidgets,

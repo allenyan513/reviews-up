@@ -168,10 +168,10 @@ export function CarouselLayout(props: {
           );
         })}
       </div>
-      {config.isRatingSummaryEnabled && (
-        <RatingSummary ratings={items.map((item) => item.rating || 0)} />
-      )}
-      {config.isPoweredByEnabled && <PoweredBy />}
+      {/*{config.isRatingSummaryEnabled && (*/}
+      {/*  <RatingSummary ratings={items.map((item) => item.rating || 0)} />*/}
+      {/*)}*/}
+      {/*{config.isPoweredByEnabled && <PoweredBy />}*/}
     </div>
   );
 }

@@ -16,10 +16,11 @@ import {
   IconDashboard,
   IconUser,
   IconRocket,
+  IconClipboard,
+  IconHeart,
 } from '@tabler/icons-react';
 
 import { NavMain } from '@/components/nav-main';
-import { NavSecondary } from '@/components/nav-secondary';
 import { NavUser } from '@/components/nav-user';
 import {
   Sidebar,
@@ -34,6 +35,7 @@ import { usePathname } from 'next/navigation';
 import { useUserContext } from '@/context/UserProvider';
 import { Logo } from '@/components/logo';
 import Link from 'next/link';
+import { NavProduct } from '@/components/nav-product';
 
 const data = {
   title: 'Reviewsup.io',
@@ -64,7 +66,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent className="justify-between">
         <NavMain
           product={defaultProduct}
           items={[
@@ -104,7 +106,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                   icon: IconForbid2,
                   active: path.includes('/reviews/hidden'),
                 },
-
               ],
             },
 
@@ -115,10 +116,24 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               active: path.includes('/widgets'),
             },
             {
-              title: 'Forms',
-              url: `/${lang}/${defaultProduct?.id}/forms`,
-              icon: IconTable,
-              active: path.includes('/forms'),
+              title: 'Pages',
+              url: `/${lang}/${defaultProduct?.id}/pages/wall-of-love`,
+              icon: IconClipboard,
+              active: false,
+              children: [
+                {
+                  title: 'Wall of Love',
+                  url: `/${lang}/${defaultProduct?.id}/pages/wall-of-love`,
+                  icon: IconHeart,
+                  active: path.includes('/pages/wall-of-love'),
+                },
+                {
+                  title: 'Collecting Form',
+                  url: `/${lang}/${defaultProduct?.id}/pages/collecting-form`,
+                  icon: IconTable,
+                  active: path.includes('/forms/'),
+                },
+              ],
             },
             {
               title: 'Settings',
@@ -128,24 +143,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
           ]}
         />
-        <NavSecondary
-          items={[
-            {
-              title: 'Documents',
-              url: `${process.env.NEXT_PUBLIC_DOCS_URL}/docs`,
-              icon: IconClipboardText,
-              external: true,
-            },
-            {
-              title: 'Contact Us',
-              url: 'mailto:support@reviewsup.io',
-              icon: IconMail,
-            },
-          ]}
-          className="mt-auto"
-        />
       </SidebarContent>
       <SidebarFooter>
+        <NavProduct />
         <NavUser
           user={{
             name: user?.name || '',

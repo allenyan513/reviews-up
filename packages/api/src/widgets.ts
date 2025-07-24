@@ -30,7 +30,16 @@ export type WidgetEntity = z.infer<typeof widgetEntitySchema>;
 
 export const widgetConfigSchema = z.object({
   type: z
-    .enum(['flow', 'grid', 'list', 'carousel', 'avatar-list', 'badge'])
+    .enum([
+      'flow',
+      'grid',
+      'list',
+      'carousel',
+      'avatar-list',
+      'avatars',
+      'badge',
+      'single',
+    ])
     .default('flow'),
   isRatingSummaryEnabled: z.boolean().default(true),
   isRatingEnabled: z.boolean().default(true),
@@ -40,6 +49,7 @@ export const widgetConfigSchema = z.object({
   isVideoEnabled: z.boolean().default(true),
   isPoweredByEnabled: z.boolean().default(true),
   isDoFollowEnabled: z.boolean().default(true),
+  isMoreViewsEnabled: z.boolean().default(true),
   count: z.number().int().min(1).max(100).default(20),
   sortBy: z.enum(['newest', 'oldest', 'random', 'rating']).default('newest'),
   flow: z
@@ -56,6 +66,10 @@ export const widgetConfigSchema = z.object({
     .optional(),
   rows: z.number().int().min(1).max(10).default(1),
   speed: z.number().int().min(0).max(100).default(40),
+  reviewIds: z.array(z.string()).optional().default(undefined),
+  avatarSize: z
+    .enum(['sm', 'md', 'lg', 'xl'])
+    .default('md'),
 });
 
 export type WidgetConfig = z.infer<typeof widgetConfigSchema>;
@@ -67,7 +81,6 @@ export type VerifyWidgetEmbeddingRequest = z.infer<
   typeof verifyWidgetEmbeddingSchema
 >;
 
-
 export const findAllWidgetSchema = z.object({
   productId: z.string().min(1, 'ProductId is required'),
   isProtected: z.boolean().optional(),
@@ -75,6 +88,6 @@ export const findAllWidgetSchema = z.object({
   pageSize: z.number().int().min(1).max(100).default(10),
   sortBy: z.string().optional().default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).optional().default('desc'),
-})
+});
 
 export type FindAllWidgetDto = z.infer<typeof findAllWidgetSchema>;

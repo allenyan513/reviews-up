@@ -8,6 +8,7 @@ import {
   BsMailbox2,
   BsMailboxFlag,
   BsSend,
+  BsCopy,
   BsStar,
 } from 'react-icons/bs';
 import { Button } from '@/components/ui/button';
@@ -60,9 +61,10 @@ export default function FormIdLayout(props: {
             href={`/${lang}/${productId}/forms`}
             className="flex flex-row items-center gap-2 "
           >
-            <BiArrowBack className="text-2xl" />
+            {/*<BiArrowBack className="text-2xl" />*/}
             <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-              Edit {form.name}
+              {/*Edit {form.name}*/}
+              Collecting Form
             </h1>
           </Link>
           <p className="mt-1 text-gray-600 hidden md:flex">
@@ -82,6 +84,19 @@ export default function FormIdLayout(props: {
           {/*  <BsSend className="text-2xl" />*/}
           {/*  <span className="hidden md:inline">Invite Reviews</span>*/}
           {/*</Button>*/}
+          {/*<Button*/}
+          {/*  onClick={() => {*/}
+          {/*    navigator.clipboard.writeText(*/}
+          {/*      `${window.location.origin}/forms/${form.shortId}`,*/}
+          {/*    );*/}
+          {/*    toast.success('Link copied to clipboard!');*/}
+          {/*  }}*/}
+          {/*  variant="outline"*/}
+          {/*  size={'lg'}*/}
+          {/*>*/}
+          {/*  <BsShare className="text-2xl" />*/}
+          {/*  <span className="hidden md:inline">Share</span>*/}
+          {/*</Button>*/}
           <Button
             onClick={() => {
               navigator.clipboard.writeText(
@@ -92,8 +107,18 @@ export default function FormIdLayout(props: {
             variant="outline"
             size={'lg'}
           >
-            <BsShare className="text-2xl" />
-            <span className="hidden md:inline">Share</span>
+            <BsCopy className="text-2xl" />
+            <span className="hidden md:inline">Copy Link</span>
+          </Button>
+          <Button
+            onClick={() => {
+              //todo
+            }}
+            variant="outline"
+            size={'lg'}
+          >
+            <BsCodeSlash className="text-2xl" />
+            <span className="hidden md:inline">Embed Page</span>
           </Button>
           <Button
             onClick={() => {
@@ -108,18 +133,17 @@ export default function FormIdLayout(props: {
         </div>
       </div>
 
-      <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
-        <div className="md:col-span-2 flex flex-col">
-          <h2 className="mb-4 uppercase">Pages</h2>
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-row gap-2">
           {pageItems.map((item) => (
             <Link
               key={item.title}
               href={`/${lang}/${productId}/forms/${id}/${item.url}`}
               className={cn(
-                'cursor-pointer flex flex-row gap-2 w-full items-center justify-start h-12 rounded px-4 font-semibold',
+                'cursor-pointer flex flex-row gap-2 items-center justify-start h-12 rounded px-4 font-semibold border',
                 path.includes(item.url)
-                  ? 'bg-red-100 text-red-400'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground',
+                  ? 'bg-red-100 text-red-400  border-red-300'
+                  : 'text-muted-foreground hover:bg-muted hover:text-foreground border-gray-300',
               )}
             >
               {item.icon && <item.icon />}
@@ -127,7 +151,7 @@ export default function FormIdLayout(props: {
             </Link>
           ))}
         </div>
-        <div className="md:col-span-10">{props.children}</div>
+        <div className="">{props.children}</div>
       </div>
     </div>
   );

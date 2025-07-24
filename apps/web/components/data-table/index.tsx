@@ -46,6 +46,8 @@ interface DataTableProps<TData, TValue> {
   ) => ColumnDef<TData, TValue>[];
   config: Record<string, any>;
   defaultColumnFilters?: ColumnFiltersState;
+  defaultSelectedRowIds?: string[];
+  onSelectionChange?: (ids: string[]) => void;
 }
 
 export function DataTable<TData, TValue>({
@@ -53,6 +55,8 @@ export function DataTable<TData, TValue>({
   columns,
   config,
   defaultColumnFilters = [],
+  defaultSelectedRowIds = [],
+  onSelectionChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] =
@@ -66,7 +70,7 @@ export function DataTable<TData, TValue>({
   const [isLoading, setIsLoading] = useState(false);
   const _columns = useMemo(() => {
     return columns(setData, config);
-  }, []);
+  }, [setData, config]);
 
   const table = useReactTable({
     data: data,
@@ -79,12 +83,27 @@ export function DataTable<TData, TValue>({
     onColumnFiltersChange: setColumnFilters,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    enableRowSelection: true,
     state: {
       sorting,
       columnFilters,
       pagination,
     },
   });
+
+  const getSelectedRowIds = () => {
+    return table.getSelectedRowModel().rows.map((row) => row.id);
+  };
+
+  useEffect(() => {
+    if (!onSelectionChange) return;
+    const selectedRowIds = Object.keys(table.getState().rowSelection);
+    const selectedIds = table
+      .getRowModel()
+      .rows.filter((row) => selectedRowIds.includes(row.id))
+      .map((row: any) => row.original.id);
+    onSelectionChange(selectedIds);
+  }, [table.getState().rowSelection]);
 
   useEffect(() => {
     const fetchDataFromServer = async () => {
@@ -118,7 +137,7 @@ export function DataTable<TData, TValue>({
   ]);
 
   return (
-    <div>
+    <>
       <DataTablePagination table={table} />
       <div className="rounded-md border">
         <Table>
@@ -171,6 +190,6 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
       <DataTablePagination table={table} />
-    </div>
+    </>
   );
 }

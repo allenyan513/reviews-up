@@ -38,10 +38,10 @@ export function GridLayout(props: {
           return renderItem(item, 'style-1', config, '100%', '300px');
         })}
       </div>
-      {config.isRatingSummaryEnabled && (
-        <RatingSummary ratings={items.map((item) => item.rating || 0)} />
-      )}
-      {config.isPoweredByEnabled && <PoweredBy />}
+      {/*{config.isRatingSummaryEnabled && (*/}
+      {/*  <RatingSummary ratings={items.map((item) => item.rating || 0)} />*/}
+      {/*)}*/}
+      {/*{config.isPoweredByEnabled && <PoweredBy />}*/}
     </div>
   );
 }

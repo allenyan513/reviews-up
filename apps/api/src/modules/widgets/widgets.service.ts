@@ -14,7 +14,6 @@ import { ReviewEntity } from '@reviewsup/api/reviews';
 import { SortBy } from '@reviewsup/api/common';
 import { BrowserlessService } from '@src/modules/browserless/browserless.service';
 
-
 @Injectable()
 export class WidgetsService {
   private logger = new Logger('WidgetsService');
@@ -175,10 +174,12 @@ export class WidgetsService {
    */
   async findByWidget(widget: WidgetEntity): Promise<WidgetEntity> {
     const productId = widget.productId;
-    const reviews = await this.prismaService.review.findMany({
+    const reviewsId = widget.config.reviewIds || undefined;
+    const whereCondition: any = {
       where: {
         productId: productId,
         status: 'public',
+        ...(reviewsId && reviewsId.length > 0 ? { id: { in: reviewsId } } : {}),
       },
       orderBy: {
         createdAt: 'desc',
@@ -186,7 +187,8 @@ export class WidgetsService {
       include: {
         medias: true,
       },
-    });
+    };
+    const reviews = await this.prismaService.review.findMany(whereCondition);
     const config = widget.config as WidgetConfig;
     const { count, sortBy } = config || {};
     // sort first then slice

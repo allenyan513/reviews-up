@@ -19,7 +19,7 @@ export default function FormThanksPage(props: {
   if (!form || !formConfig) return null;
   return (
     <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
-      <div className="md:col-span-4 border-l border-gray-300 px-4 flex flex-col gap-4">
+      <div className="md:col-span-4 flex flex-col gap-4">
         <FormThanksConfigView />
       </div>
       <div className="md:col-span-8 border border-gray-300 rounded-lg">

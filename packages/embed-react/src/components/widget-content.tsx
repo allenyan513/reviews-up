@@ -8,6 +8,9 @@ import { WidgetConfig, WidgetEntity } from '@reviewsup/api/widgets';
 import { GridLayout } from './layout/grid-layout';
 import { Badge } from './layout/badge.server';
 import styled from 'styled-components';
+import { SingleLayout } from './layout/single';
+import { AvatarsLayout } from './layout/avatars';
+import { MoreReviews } from './more-reviews';
 
 const RootDiv = styled.div`
   font-family: sans-serif;
@@ -99,11 +102,28 @@ export function WidgetContent(props: {
       {type === 'avatar-list' && (
         <AvatarListLayout items={reviews} config={defaultConfig} />
       )}
+
       {type === 'list' && (
         <ListLayoutServer items={reviews} config={defaultConfig} />
       )}
       {type === 'badge' && (
         <Badge items={reviews} config={defaultConfig} url={url} />
+      )}
+      {type === 'avatars' && (
+        <AvatarsLayout
+          items={reviews}
+          config={defaultConfig}
+          url={url}
+          reviewsCount={widget.reviewCount}
+        />
+      )}
+      {type === 'single' && (
+        <SingleLayout
+          items={reviews}
+          config={defaultConfig}
+          url={url}
+          reviewsCount={widget.reviewCount}
+        />
       )}
     </RootDiv>
   );
