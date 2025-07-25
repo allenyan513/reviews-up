@@ -181,13 +181,13 @@ export function Header(props: NavProps) {
             href={props.appLink || ''}
             target="_blank"
             className={cn(
-              buttonVariants({ size: 'lg' }),
+              buttonVariants({ size: 'default' }),
               'rounded-md inline-flex',
               'text-white bg-red-400',
             )}
           >
-            <BsPlusCircle className="text-lg" />
-            <span className=''>Submit</span>
+            {/*<BsPlusCircle className="text-lg" />*/}
+            <span className=''>Sign in</span>
           </Link>
         </div>
       </div>
