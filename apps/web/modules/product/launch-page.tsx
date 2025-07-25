@@ -17,66 +17,12 @@ import { useUserContext } from '@/context/UserProvider';
 import { Button, buttonVariants } from '@reviewsup/ui/button';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { ProductStatusLabel } from '@/modules/product/product-status-label';
 
 export function LaunchPage(props: { lang: string; productId: string }) {
   const { lang, productId } = props;
   const { defaultProduct } = useUserContext();
   const router = useRouter();
-
-  const renderProductStatus = (status: string) => {
-    if (status === ProductStatus.pendingForSubmit) {
-      return (
-        <div className="flex flex-row items-center gap-2">
-          <BsClock className="w-5 h-5 text-amber-500" />
-          <span className="text-amber-500">Waiting for Your Submit</span>
-          <Button
-            variant="outline"
-            size="sm"
-            className=""
-            onClick={() => {
-              router.push(`/products/new/${defaultProduct?.id}`);
-            }}
-          >
-            Submit
-          </Button>
-        </div>
-      );
-    } else if (status === ProductStatus.pendingForReceive) {
-      return (
-        <div className="flex flex-row items-center gap-2">
-          <BsClock className="w-5 h-5 text-amber-500" />
-          <span className="text-amber-500">
-            Writing{' '}
-            {(defaultProduct?.taskReviewCount || 3) -
-              (defaultProduct?.submitReviewCount || 0)}{' '}
-            reviews
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            className=""
-            onClick={() => {
-              window.open(
-                `${process.env.NEXT_PUBLIC_WWW_URL}/products`,
-                '_blank',
-              );
-            }}
-          >
-            Explore Products
-          </Button>
-        </div>
-      );
-    } else if (status === ProductStatus.listing) {
-      return (
-        <div className="flex flex-row items-center gap-2">
-          <BsCheckCircle className="w-5 h-5 text-green-500" />
-          <span className="text-green-500">Published</span>
-        </div>
-      );
-    } else {
-      return null;
-    }
-  };
 
   if (!defaultProduct) {
     return null;
@@ -128,7 +74,7 @@ export function LaunchPage(props: { lang: string; productId: string }) {
           <p>Product Status:</p>
           <Tooltip>
             <TooltipTrigger asChild>
-              {renderProductStatus(defaultProduct?.status || '')}
+              <ProductStatusLabel product={defaultProduct} />
             </TooltipTrigger>
             <TooltipContent className="text-md max-w-md">
               <strong>Waiting for Your Submit</strong>: You need to submit more

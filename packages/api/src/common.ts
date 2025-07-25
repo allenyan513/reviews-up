@@ -18,10 +18,11 @@ export type PaginateRequest = {
 };
 
 export enum SortBy {
+  default = 'default',
+  rating = 'rating',
   newest = 'newest',
   oldest = 'oldest',
-  random = 'random',
-  rating = 'rating',
+  // random = 'random',
 }
 
 export type RRResponse<T> = {

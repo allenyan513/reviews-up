@@ -28,7 +28,7 @@ export class WidgetsService {
     isPoweredByEnabled: true,
     isDoFollowEnabled: true,
     isMoreViewsEnabled: true,
-    sortBy: 'newest',
+    sortBy: SortBy.default,
     count: 20,
     flow: {
       columns: 4,
@@ -40,7 +40,7 @@ export class WidgetsService {
     },
     rows: 1,
     speed: 40,
-    avatarSize: 'md'
+    avatarSize: 'md',
   };
 
   constructor(
@@ -177,69 +177,56 @@ export class WidgetsService {
   async findByWidget(widget: WidgetEntity): Promise<WidgetEntity> {
     const productId = widget.productId;
     const reviewsId = widget.config.reviewIds || undefined;
+    const config = widget.config as WidgetConfig;
+    const { count, sortBy = SortBy.default } = config || {};
     const whereCondition: any = {
-      where: {
-        productId: productId,
-        status: 'public',
-        ...(reviewsId && reviewsId.length > 0 ? { id: { in: reviewsId } } : {}),
-      },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      productId: productId,
+      status: 'public',
+      ...(reviewsId && reviewsId.length > 0 ? { id: { in: reviewsId } } : {}),
+    };
+    const queryCondition: any = {
+      where: whereCondition,
       include: {
         medias: true,
       },
+      take: count || 20,
     };
-    const reviews = await this.prismaService.review.findMany(whereCondition);
-    const config = widget.config as WidgetConfig;
-    const { count, sortBy } = config || {};
-    // sort first then slice
-    let sortedReviews = this.sortReviewsBy(
-      reviews as ReviewEntity[],
-      sortBy as SortBy,
-    );
-    if (count && count > 0) {
-      sortedReviews = sortedReviews.slice(0, count);
+    // 根据 sortBy 设置排序条件
+    switch (sortBy) {
+      case SortBy.newest:
+        queryCondition.orderBy = { createdAt: 'desc' };
+        break;
+      case SortBy.oldest:
+        queryCondition.orderBy = { createdAt: 'asc' };
+        break;
+      case SortBy.rating:
+        queryCondition.orderBy = { rating: 'desc' }; // 假设有 rating 字段
+        break;
+      case SortBy.default:
+      default:
+        queryCondition.orderBy = [
+          { isPin: 'desc' }, // 先按是否置顶
+          { createdAt: 'desc' }, // 再按创建时间
+        ];
+        break;
     }
-    const reviewCount = sortedReviews.length;
+
+    const reviews = await this.prismaService.review.findMany(queryCondition);
+    const reviewCount = reviews.length;
     const reviewRating =
-      sortedReviews.reduce((acc, review) => acc + (review.rating || 0), 0) /
+      reviews.reduce((acc, review) => acc + (review.rating || 0), 0) /
       (reviewCount || 1); // Avoid division by zero
     return {
       ...widget,
       reviewRating: reviewRating,
       reviewCount: reviewCount,
-      reviews: sortedReviews.map(
-        (review) =>
+      reviews: reviews.map(
+        (review: any) =>
           ({
             ...review,
             medias: review.medias || [],
           }) as ReviewEntity,
       ),
     } as WidgetEntity;
-  }
-
-  sortReviewsBy(reviews: ReviewEntity[], sortBy: SortBy) {
-    let sortedReviews = [...reviews];
-    if (sortBy === SortBy.newest) {
-      sortedReviews = [...reviews].sort(
-        (a, b) =>
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-    } else if (sortBy === SortBy.oldest) {
-      sortedReviews = [...reviews].sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime(),
-      );
-    } else if (sortBy === SortBy.random) {
-      sortedReviews = [...reviews].sort(() => Math.random() - 0.5);
-    } else if (sortBy === SortBy.rating) {
-      sortedReviews = [...reviews].sort(
-        (a, b) => (b.rating || 0) - (a.rating || 0),
-      );
-    } else {
-      sortedReviews = reviews;
-    }
-    return sortedReviews;
   }
 }

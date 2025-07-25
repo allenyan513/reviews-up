@@ -125,15 +125,13 @@ export class ReviewsService {
             reviewerId: uid,
           }),
     };
-    console.log('Where conditions:', whereConditions);
     const total = await this.prismaService.review.count({
       where: whereConditions,
     });
     const items = await this.prismaService.review.findMany({
       where: whereConditions,
-      orderBy: {
-        createdAt: 'desc', // Order by creation date
-      },
+      // order By isPin and then createdAt
+      orderBy: [{ isPin: 'desc' }, { createdAt: 'desc' }],
       include: {
         medias: true,
       },
@@ -169,6 +167,18 @@ export class ReviewsService {
       },
       data: {
         status: dto.status as ReviewStatus,
+        updatedAt: new Date(), // Update the timestamp
+      },
+    });
+  }
+
+  async updatePin(uid: string, id: string, dto: UpdateReviewDto) {
+    return this.prismaService.review.update({
+      where: {
+        id: id,
+      },
+      data: {
+        isPin: dto.isPin,
         updatedAt: new Date(), // Update the timestamp
       },
     });
@@ -286,27 +296,4 @@ export class ReviewsService {
     });
   }
 
-  async findAllByReviewerId(reviewerId: string) {
-    const reviews = await this.prismaService.review.findMany({
-      where: {
-        reviewerId: reviewerId,
-      },
-      select: {
-        id: true,
-        reviewerId: true,
-        formId: true,
-        form: true,
-      },
-    });
-    return reviews.map((review) => {
-      return {
-        id: review.id,
-        reviewerId: review.reviewerId,
-        formId: review.formId,
-        form: {
-          shortId: review.form?.shortId,
-        },
-      };
-    });
-  }
 }

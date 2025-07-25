@@ -21,6 +21,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 import { useUserContext } from '@/context/UserProvider';
 import { BsPlusCircle } from 'react-icons/bs';
+import { ProductStatusLabelV2 } from '@/modules/product/product-status-label-v2';
 
 export function NavProduct(props: {}) {
   const router = useRouter();
@@ -50,9 +51,7 @@ export function NavProduct(props: {}) {
                   <span className="truncate font-medium">
                     {defaultProduct?.name}
                   </span>
-                  <span className="text-muted-foreground truncate text-xs">
-                    {defaultProduct?.status}
-                  </span>
+                  <ProductStatusLabelV2 product={defaultProduct} />
                 </div>
                 <IconDotsVertical className="ml-auto size-4" />
               </SidebarMenuButton>
@@ -93,9 +92,7 @@ export function NavProduct(props: {}) {
                           <span className="truncate font-medium">
                             {product?.name}
                           </span>
-                          <span className="text-muted-foreground truncate text-xs">
-                            {product?.status}
-                          </span>
+                          <ProductStatusLabelV2 product={product} />
                         </div>
                       </DropdownMenuItem>
                     ))}

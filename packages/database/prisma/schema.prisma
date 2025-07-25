@@ -219,6 +219,7 @@ model Review {
   sourceUrl     String?
   status        ReviewStatus  @default(pending)
   extra         Json?         @default("{}")
+  isPin         Boolean       @default(false)
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   form          Form?         @relation(fields: [formId], references: [id], onDelete: Cascade)

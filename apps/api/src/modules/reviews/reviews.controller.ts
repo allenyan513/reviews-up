@@ -52,12 +52,6 @@ export class ReviewsController {
     return this.reviewsService.create(jwt.userId, validatedDto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('findAllByReviewerId')
-  async findAllByReviewerId(@Jwt() jwt: JwtPayload) {
-    return this.reviewsService.findAllByReviewerId(jwt.userId);
-  }
-
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.reviewsService.findOne(id);
@@ -81,6 +75,16 @@ export class ReviewsController {
     @Body() updateReviewDto: UpdateReviewDto,
   ) {
     return this.reviewsService.updateStatus(jwt.userId, id, updateReviewDto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch(':id/pin')
+  async updatePin(
+    @Jwt() jwt: JwtPayload,
+    @Param('id') id: string,
+    @Body() updateReviewDto: UpdateReviewDto,
+  ) {
+    return this.reviewsService.updatePin(jwt.userId, id, updateReviewDto);
   }
 
   @UseGuards(JwtAuthGuard)

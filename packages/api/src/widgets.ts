@@ -1,6 +1,6 @@
 import { reviewEntitySchema } from './reviews';
 import { z } from 'zod';
-import { Param } from '@nestjs/common';
+import { SortBy } from './common';
 
 export const createWidgetSchema = z.object({
   productId: z.string().min(1, 'ProductId is required'),
@@ -51,7 +51,6 @@ export const widgetConfigSchema = z.object({
   isDoFollowEnabled: z.boolean().default(true),
   isMoreViewsEnabled: z.boolean().default(true),
   count: z.number().int().min(1).max(100).default(100),
-  sortBy: z.enum(['newest', 'oldest', 'random', 'rating']).default('newest'),
   flow: z
     .object({
       columns: z.number().int().min(1).max(6).default(4),
@@ -67,9 +66,8 @@ export const widgetConfigSchema = z.object({
   rows: z.number().int().min(1).max(10).default(1),
   speed: z.number().int().min(0).max(100).default(40),
   reviewIds: z.array(z.string()).optional().default(undefined),
-  avatarSize: z
-    .enum(['sm', 'md', 'lg', 'xl'])
-    .default('md'),
+  avatarSize: z.enum(['sm', 'md', 'lg', 'xl']).default('md'),
+  sortBy: z.nativeEnum(SortBy).default(SortBy.newest),
 });
 
 export type WidgetConfig = z.infer<typeof widgetConfigSchema>;

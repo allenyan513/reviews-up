@@ -49,6 +49,7 @@ export const createReviewSchema = z.object({
   sourceUrl: z.string().url().optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending).optional(),
   extra: z.any().optional(),
+  isPin: z.boolean().default(false).optional(),
 });
 
 export type CreateReviewDto = z.infer<typeof createReviewSchema>;
@@ -59,11 +60,10 @@ export const findAllReviewRequestSchema = z.object({
   pageSize: z.coerce.number().int().min(1).max(100).default(10),
   sortBy: z.string().default('createdAt'),
   sortOrder: z.enum(['asc', 'desc']).default('desc'),
-  productId: z.string().optional()
+  productId: z.string().optional(),
 });
 
 export type FindAllReviewRequest = z.infer<typeof findAllReviewRequestSchema>;
-
 
 export const reviewEntitySchema = z.object({
   id: z.string().min(1, 'Review ID is required'),
@@ -83,6 +83,7 @@ export const reviewEntitySchema = z.object({
   sourceUrl: z.string().url().optional(),
   status: z.nativeEnum(ReviewStatus).default(ReviewStatus.pending),
   extra: z.any().optional(),
+  isPin: z.boolean().default(false),
   createdAt: z.date(),
   updatedAt: z.date(),
   medias: z.array(z.lazy(() => reviewMediaEntitySchema)).optional(),
@@ -107,5 +108,5 @@ export const reviewMediaEntitySchema = z.object({
   reviewId: z.string().optional(),
   createdAt: z.date(),
   updatedAt: z.date(),
-})
+});
 export type ReviewMediaEntity = z.infer<typeof reviewMediaEntitySchema>;

@@ -33,11 +33,11 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
-import { SortBy } from '@/types/sortby';
 import { layoutOptions } from '@/modules/widget/layout-options';
 import { sortOptions } from './sort-options';
 import { WidgetConfig } from '@reviewsup/api/widgets';
 import { WidgetSelectReviewsDialog } from '@/modules/widget/widget-select-reviews-dialog';
+import { SortBy } from '@reviewsup/api/common';
 
 function LayoutToggleButton(props: {
   title: string;

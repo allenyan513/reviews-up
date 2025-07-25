@@ -5,7 +5,10 @@ import { Button } from '@/components/ui/button';
 import { ListLayoutClient } from '@reviewsup/embed-react';
 import { PoweredBy } from '@reviewsup/embed-react';
 
-export function UserProfilePage(props: { user: UserEntity; className?: string }) {
+export function UserProfilePage(props: {
+  user: UserEntity;
+  className?: string;
+}) {
   const { user, className } = props;
   const { avatarUrl, name, email } = user;
   return (
@@ -52,7 +55,6 @@ export function UserProfilePage(props: { user: UserEntity; className?: string })
             isImageEnabled: true,
             isVideoEnabled: true,
             count: 10,
-            sortBy: 'newest',
           }}
         />
       </div>

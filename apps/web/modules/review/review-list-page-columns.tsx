@@ -1,10 +1,10 @@
 'use client';
 
-import { ColumnDef, useReactTable } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { ReviewEntity, ReviewMediaEntity } from '@reviewsup/api/reviews';
 import React from 'react';
-import { BsCameraVideo, BsFilter, BsImage, BsSortDown } from 'react-icons/bs';
-import { BiSort, BiFilterAlt, BiSortAlt2 } from 'react-icons/bi';
+import { BsCameraVideo, BsImage, BsThreeDots, BsPin } from 'react-icons/bs';
+import { BiFilterAlt, BiSortAlt2 } from 'react-icons/bi';
 import { Button } from '@/components/ui/button';
 import { ArrowUpDown } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -13,14 +13,8 @@ import { api } from '@/lib/api-client';
 import { $Enums } from '@reviewsup/database/generated/client';
 import ReviewStatus = $Enums.ReviewStatus;
 import toast from 'react-hot-toast';
-import {
-  BiHide,
-  BiInfoCircle,
-  BiListCheck,
-  BiShow,
-  BiTrash,
-} from 'react-icons/bi';
-import {ReviewLookupDialog}from '@/modules/review/review-lookup-dialog';
+import { BiHide, BiInfoCircle, BiListCheck, BiShow } from 'react-icons/bi';
+import { ReviewLookupDialog } from '@/modules/review/review-lookup-dialog';
 import { ReviewEditDialog } from './review-edit-dialog';
 import {
   AlertDialog,
@@ -41,7 +35,8 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  DropdownMenuSeparator,
+} from '@reviewsup/ui/dropdown-menu';
 
 export function columns(
   setData: any,
@@ -85,6 +80,22 @@ export function columns(
     }
   };
 
+  const updatePin = async (reviewId: string, isPin: boolean) => {
+    try {
+      await api.review.updatePin(reviewId, {
+        isPin: isPin,
+      });
+      setData((prevData: ReviewEntity[]) =>
+        prevData.map((review) =>
+          review.id === reviewId ? { ...review, isPin: isPin } : review,
+        ),
+      );
+      toast.success('Review pinned successfully');
+    } catch (error) {
+      toast.error('Failed to pin review');
+    }
+  };
+
   return [
     {
       id: 'reviewer',
@@ -97,6 +108,7 @@ export function columns(
         reviewerImage: row.reviewerImage,
         reviewerTitle: row.reviewerTitle,
         rating: row.rating,
+        isPin: row.isPin,
       }),
       cell: ({ row, getValue }) => {
         const {
@@ -105,12 +117,14 @@ export function columns(
           reviewerTitle,
           reviewerImage,
           rating,
+          isPin,
         } = getValue<{
           reviewerName: string;
           reviewerEmail: string | null;
           reviewerTitle: string | null;
           reviewerImage: string | null;
           rating: number | null;
+          isPin: boolean;
         }>();
         return (
           <div className="flex flex-col gap-2 p-2">
@@ -125,8 +139,9 @@ export function columns(
                 </AvatarFallback>
               </Avatar>
               <div>
-                <div className="text-sm font-medium text-gray-900">
+                <div className="text-sm font-medium text-gray-900 flex flex-row items-center gap-1">
                   {reviewerName}
+                  {isPin && <BsPin className="text-red-400 font-bold" />}
                 </div>
                 <div className="text-sm text-gray-500">{reviewerTitle}</div>
                 <div className="text-sm text-gray-500">{reviewerEmail}</div>
@@ -318,40 +333,93 @@ export function columns(
       cell: ({ row }) => {
         const review = row.original;
         return (
-          <div className="flex items-center">
-            <ReviewEditDialog review={review}>
-              <Button variant={'ghost'} size="sm">
-                Edit
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="sm">
+                <BsThreeDots />
               </Button>
-            </ReviewEditDialog>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                {/*<BiTrash className={'text-2xl text-red-400 cursor-pointer'} />*/}
-                <Button variant={'ghost'} size="sm">
-                  Delete
-                </Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This action cannot be undone. This will permanently delete
-                    the review.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={() => {
-                      deleteReview(review.id);
-                    }}
-                  >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </div>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => {
+                  updatePin(review.id, !review.isPin);
+                }}
+              >
+                {review.isPin ? 'Unpin' : 'Pin'}
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  navigator.clipboard.writeText(
+                    `${window.location.origin}/reviews/${review.id}`,
+                  );
+                }}
+              >
+                Share
+              </DropdownMenuItem>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem className="text-red-500">
+                Delete
+              </DropdownMenuItem>
+              <AlertDialog>
+                <AlertDialogTrigger asChild></AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      the review.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel>Cancel</AlertDialogCancel>
+                    <AlertDialogAction
+                      onClick={() => {
+                        deleteReview(review.id);
+                      }}
+                    >
+                      Continue
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          // <div className="flex items-center">
+          //   <ReviewEditDialog review={review}>
+          //     <Button variant={'ghost'} size="sm">
+          //       Edit
+          //     </Button>
+          //   </ReviewEditDialog>
+          //   <AlertDialog>
+          //     <AlertDialogTrigger asChild>
+          //       {/*<BiTrash className={'text-2xl text-red-400 cursor-pointer'} />*/}
+          //       <Button variant={'ghost'} size="sm">
+          //         Delete
+          //       </Button>
+          //     </AlertDialogTrigger>
+          //     <AlertDialogContent>
+          //       <AlertDialogHeader>
+          //         <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+          //         <AlertDialogDescription>
+          //           This action cannot be undone. This will permanently delete
+          //           the review.
+          //         </AlertDialogDescription>
+          //       </AlertDialogHeader>
+          //       <AlertDialogFooter>
+          //         <AlertDialogCancel>Cancel</AlertDialogCancel>
+          //         <AlertDialogAction
+          //           onClick={() => {
+          //             deleteReview(review.id);
+          //           }}
+          //         >
+          //           Continue
+          //         </AlertDialogAction>
+          //       </AlertDialogFooter>
+          //     </AlertDialogContent>
+          //   </AlertDialog>
+          // </div>
         );
       },
     },

@@ -46,8 +46,10 @@ export const review = {
 
   updateReview: (id: string, dto: UpdateReviewDto) =>
     authFetch(`/reviews/${id}`, 'PATCH', dto),
-  updateReviewStatus: (id:string, dto: UpdateReviewDto) =>
+  updateReviewStatus: (id: string, dto: UpdateReviewDto) =>
     authFetch(`/reviews/${id}/status`, 'PATCH', dto),
+  updatePin: (id: string, dto: UpdateReviewDto) =>
+    authFetch(`/reviews/${id}/pin`, 'PATCH', dto),
 
   deleteReview: (id: string) => authFetch(`/reviews/${id}`, 'DELETE', {}),
 
@@ -59,7 +61,4 @@ export const review = {
 
   parseGoogleMap: (request: GoogleMapRequest): Promise<GoogleMapResponse> =>
     authFetch('/reviews/parse/google', 'POST', request),
-
-  findAllByReviewerId: (reviewerId: string): Promise<ReviewEntity[]> =>
-    authFetch(`/reviews/findAllByReviewerId`, 'GET', { reviewerId }),
 };
