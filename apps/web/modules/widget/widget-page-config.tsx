@@ -301,9 +301,11 @@ export function WidgetPageConfig(props: { className?: string }) {
             isOpen={isDataOpen}
             setIsOpen={setIsDataOpen}
           />
-          <div className={cn('', isDataOpen ? '' : 'hidden')}>
+          <div className={cn('space-y-2', isDataOpen ? '' : 'hidden')}>
             <div className="flex flex-row items-center justify-between gap-2 w-full">
-              <p>{widget?.reviewCount || 0} reviews selected</p>
+              <label className="text-sm">
+                {widget?.reviewCount || 0} reviews selected
+              </label>
               <WidgetSelectReviewsDialog
                 defaultSelectedRowIds={[...(widgetConfig.reviewIds || [])]}
                 onSelectionChange={(ids) => {
@@ -313,6 +315,65 @@ export function WidgetPageConfig(props: { className?: string }) {
                   });
                 }}
               />
+            </div>
+            <div className="flex flex-row items-center justify-between gap-2 w-full">
+              <label className="text-sm">Max Count:</label>
+              <Select
+                defaultValue={widgetConfig?.count?.toString() || '20'}
+                onValueChange={(value) => {
+                  const count = parseInt(value, 10);
+                  if (isNaN(count) || count < 1 || count > 100) {
+                    return;
+                  }
+                  setWidgetConfigAndRefresh(widget?.id || '', {
+                    ...widgetConfig,
+                    count: count,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Select max count" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {[...Array(20).keys()].map((i) => (
+                      <SelectItem key={i + 1} value={`${i + 1}`}>
+                        {i + 1}
+                      </SelectItem>
+                    ))}
+                    {[40, 60, 80, 100].map((i) => (
+                      <SelectItem key={i} value={`${i}`}>
+                        {i}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-row items-center justify-between gap-2 w-full">
+              <label className="text-sm">Sort by:</label>
+              <Select
+                defaultValue={widgetConfig.sortBy || 'newest'}
+                onValueChange={(value) => {
+                  setWidgetConfigAndRefresh(widget?.id || '', {
+                    ...widgetConfig,
+                    sortBy: value as SortBy,
+                  });
+                }}
+              >
+                <SelectTrigger className="">
+                  <SelectValue placeholder="Select sort option" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    {sortOptions.map((opt) => (
+                      <SelectItem key={opt.value} value={opt.value}>
+                        {opt.label}
+                      </SelectItem>
+                    ))}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </div>
 
@@ -328,55 +389,9 @@ export function WidgetPageConfig(props: { className?: string }) {
               isSettingOpen ? '' : 'hidden',
             )}
           >
-            {renderColumnsCount(widgetConfig)}
+            {/*{renderColumnsCount(widgetConfig)}*/}
             {renderRowsAndSpeed(widgetConfig)}
 
-            <div>
-              <label className="text-sm">Reviews Max Count:</label>
-              <Input
-                type="number"
-                placeholder="Enter max count of reviews"
-                min="1"
-                max="100"
-                className="w-full mt-2"
-                value={widgetConfig.count || 20}
-                onChange={(e) => {
-                  const value = parseInt(e.target.value, 10);
-                  if (!isNaN(value)) {
-                    setWidgetConfig({
-                      ...widgetConfig,
-                      count: value,
-                    });
-                  }
-                }}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm">Sort by:</label>
-              <Select
-                defaultValue={widgetConfig.sortBy || 'newest'}
-                onValueChange={(value) => {
-                  setWidgetConfig({
-                    ...widgetConfig,
-                    sortBy: value as SortBy,
-                  });
-                }}
-              >
-                <SelectTrigger className="w-full mt-2">
-                  <SelectValue placeholder="Select sort option" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {sortOptions.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
             <ToggleOption
               label="Show More Views"
               checked={widgetConfig.isMoreViewsEnabled || false}

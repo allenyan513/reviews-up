@@ -18,7 +18,7 @@ import { BrowserlessService } from '@src/modules/browserless/browserless.service
 export class WidgetsService {
   private logger = new Logger('WidgetsService');
   private defaultConfig: WidgetConfig = {
-    type: 'badge',
+    type: 'single',
     isRatingSummaryEnabled: true,
     isRatingEnabled: true,
     isSourceEnabled: true,
@@ -27,6 +27,7 @@ export class WidgetsService {
     isVideoEnabled: true,
     isPoweredByEnabled: true,
     isDoFollowEnabled: true,
+    isMoreViewsEnabled: true,
     sortBy: 'newest',
     count: 20,
     flow: {
@@ -39,6 +40,7 @@ export class WidgetsService {
     },
     rows: 1,
     speed: 40,
+    avatarSize: 'md'
   };
 
   constructor(

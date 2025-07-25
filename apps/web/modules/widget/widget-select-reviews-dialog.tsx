@@ -54,7 +54,7 @@ export function WidgetSelectReviewsDialog(props: {
           Select
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-full md:max-w-6xl overflow-y-scroll">
+      <DialogContent className="w-full md:max-w-6xl overflow-y-scroll md:max-h-screen">
         <DialogHeader>
           <DialogTitle>Manage Reviews</DialogTitle>
           <DialogDescription>

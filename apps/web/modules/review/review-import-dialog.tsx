@@ -18,7 +18,7 @@ import { ImportLinkedInDialog } from './linkedin';
 
 export default function ReviewImportDialog() {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultProduct, user } = useUserContext();
+  const { defaultProduct , defaultForm} = useUserContext();
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
@@ -37,7 +37,7 @@ export default function ReviewImportDialog() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
             <ReviewImportXDialog
               productId={defaultProduct?.id || ''}
-              formId={undefined}
+              formId={defaultForm?.id || ''}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('Twitter reviews imported successfully!');
@@ -49,7 +49,7 @@ export default function ReviewImportDialog() {
             />
             <ReviewImportTiktokDialog
               productId={defaultProduct?.id || ''}
-              formId={undefined}
+              formId={defaultForm?.id || ''}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('TikTok reviews imported successfully!');
@@ -61,7 +61,7 @@ export default function ReviewImportDialog() {
             ></ReviewImportTiktokDialog>
             <ReviewImportGoogleMapDialog
               productId={defaultProduct?.id || ''}
-              formId={undefined}
+              formId={defaultForm?.id || ''}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('TikTok reviews imported successfully!');
@@ -73,7 +73,7 @@ export default function ReviewImportDialog() {
             />
             <ImportLinkedInDialog
               productId={defaultProduct?.id || ''}
-              formId={undefined}
+              formId={defaultForm?.id || ''}
               onImportStart={() => {}}
               onImportSuccess={() => {
                 toast.success('TikTok reviews imported successfully!');

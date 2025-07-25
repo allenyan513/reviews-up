@@ -3,11 +3,13 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { ProductEntity } from '@reviewsup/api/products';
 import { UserEntity } from '@reviewsup/api/users';
 import { redirect, useRouter } from 'next/navigation';
+import { FormEntity } from '@reviewsup/api/forms';
 
 interface UserContextProps {
   user: UserEntity | null | undefined;
   defaultProduct: ProductEntity | null | undefined;
   saveDefaultProduct: (product: ProductEntity | null) => void;
+  defaultForm: FormEntity | undefined;
   googleSignIn: (redirect?: string) => void;
   githubSignIn: (redirect?: string) => void;
   twitterSignIn: (redirect?: string) => void;
@@ -31,6 +33,9 @@ export function UserProvider(props: { children: React.ReactNode }) {
   const [defaultProduct, setDefaultProduct] = useState<
     ProductEntity | null | undefined
   >(undefined);
+  const [defaultForm, setDefaultForm] = useState<FormEntity | undefined>(
+    undefined,
+  );
   const router = useRouter();
 
   /**
@@ -113,6 +118,12 @@ export function UserProvider(props: { children: React.ReactNode }) {
         user?.products?.[0] ||
         null;
       saveDefaultProduct(defaultProduct);
+      if (user?.forms && user?.forms?.length > 0) {
+        const defaultForm = user.forms.find(
+          (form) => form.productId === defaultProduct?.id,
+        );
+        setDefaultForm(defaultForm);
+      }
     } catch (error) {
       setUser(null);
     }
@@ -127,6 +138,7 @@ export function UserProvider(props: { children: React.ReactNode }) {
       value={{
         user,
         defaultProduct,
+        defaultForm,
         saveDefaultProduct,
         googleSignIn,
         githubSignIn,

@@ -7,7 +7,7 @@ import {
   IconNotification,
   IconUserCircle,
   IconTrash,
-  IconStar
+  IconStar,
 } from '@tabler/icons-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -38,27 +38,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { BiTrash } from 'react-icons/bi';
 import React from 'react';
 import { Input } from '@reviewsup/ui/input';
+import { useUserContext } from '@/context/UserProvider';
 
-export function NavUser({
-  user,
-  signOut,
-  deleteAccount,
-}: {
-  user: {
-    name: string;
-    email: string;
-    avatar: string;
-  };
-  signOut: () => void;
-  deleteAccount: () => void;
-}) {
+export function NavUser(props: {}) {
   const router = useRouter();
   const { isMobile } = useSidebar();
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
+  const { user, signOut, deleteAccount } = useUserContext();
 
   return (
     <>
@@ -71,13 +60,13 @@ export function NavUser({
                 className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
               >
                 <Avatar className="h-8 w-8 rounded-lg grayscale">
-                  <AvatarImage src={user.avatar} alt={user.name} />
+                  <AvatarImage src={user?.avatarUrl} alt={user?.name} />
                   <AvatarFallback className="rounded-lg">CN</AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
+                  <span className="truncate font-medium">{user?.name}</span>
                   <span className="text-muted-foreground truncate text-xs">
-                    {user.email}
+                    {user?.email}
                   </span>
                 </div>
                 <IconDotsVertical className="ml-auto size-4" />
@@ -89,42 +78,36 @@ export function NavUser({
               align="end"
               sideOffset={4}
             >
-              <DropdownMenuLabel className="p-0 font-normal">
-                <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage src={user.avatar} alt={user.name} />
-                    <AvatarFallback className="rounded-lg">CN</AvatarFallback>
-                  </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-medium">{user.name}</span>
-                    <span className="text-muted-foreground truncate text-xs">
-                      {user.email}
-                    </span>
-                  </div>
-                </div>
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/my/reviews');
+                    router.push('/account/profile');
+                  }}
+                >
+                  <IconUserCircle />
+                  Profile
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/account/my-reviews');
                   }}
                 >
                   <IconStar />
-                  My Submitted Reviews
+                  My Reviews
                 </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <IconUserCircle />
-                  Account
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/account/billing');
+                  }}
+                >
                   <IconCreditCard />
                   Billing
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    router.push('/account/notifications');
+                  }}
+                >
                   <IconNotification />
                   Notifications
                 </DropdownMenuItem>

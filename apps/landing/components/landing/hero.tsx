@@ -1,6 +1,7 @@
 import { buttonVariants } from '@reviewsup/ui/button';
 import { cn } from '@reviewsup/ui/lib/utils';
 import Link from 'next/link';
+import { WidgetWrapper } from './widget-wrapper';
 
 export function Hero(props: {
   capsuleText: string;
@@ -53,7 +54,7 @@ export function Hero(props: {
             target="_blank"
             href={props.secondaryCtaLink}
             className={cn(
-              buttonVariants({ size: 'lg', }),
+              buttonVariants({ size: 'lg' }),
               'bg-white rounded-md h-12 text-black font-semibold border border-gray-300 hover:bg-gray-100',
             )}
           >
@@ -61,6 +62,9 @@ export function Hero(props: {
           </Link>
         )}
       </div>
+
+      <p className="text-sm text-gray-500 mt-4 uppercase">Trust by</p>
+      <WidgetWrapper widgetId={'268b327534d'} />
 
       {props.credits && (
         <p className="text-sm text-muted-foreground mt-4">{props.credits}</p>

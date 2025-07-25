@@ -50,7 +50,7 @@ export const widgetConfigSchema = z.object({
   isPoweredByEnabled: z.boolean().default(true),
   isDoFollowEnabled: z.boolean().default(true),
   isMoreViewsEnabled: z.boolean().default(true),
-  count: z.number().int().min(1).max(100).default(20),
+  count: z.number().int().min(1).max(100).default(100),
   sortBy: z.enum(['newest', 'oldest', 'random', 'rating']).default('newest'),
   flow: z
     .object({

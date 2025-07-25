@@ -21,7 +21,7 @@ import { ManualImportView } from './manual-import-view';
 export default function ReviewImportManualDialog(props: {}) {
   const { user } = useSession();
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const { defaultProduct } = useUserContext();
+  const { defaultProduct, defaultForm } = useUserContext();
   const [formData, setFormData] = useState<CreateReviewDto | undefined>(
     undefined,
   );
@@ -34,6 +34,7 @@ export default function ReviewImportManualDialog(props: {}) {
       await api.review.createReview(
         {
           productId: defaultProduct?.id || '',
+          formId: defaultForm?.id || '',
           ...formData,
         },
         user,

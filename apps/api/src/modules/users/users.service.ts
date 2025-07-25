@@ -23,6 +23,7 @@ export class UsersService {
         avatarUrl: true,
         subscriptionTier: true,
         products: true,
+        forms: true,
       },
     });
     return user;

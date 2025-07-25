@@ -2,6 +2,7 @@ import { reviewEntitySchema } from './reviews';
 import { z } from 'zod';
 import { Decimal } from '@prisma/client/runtime/library';
 import { productSchema } from './products';
+import { formEntitySchema } from './forms';
 
 export const SubscriptionTier = {
   free: 'free',
@@ -23,6 +24,7 @@ export const userEntitySchema = z.object({
     })
     .transform((val) => new Decimal(val)),
   products: z.lazy(() => z.array(productSchema)).optional(),
+  forms: z.lazy(()=> z.array(formEntitySchema)).optional(),
   ownerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
   reviewerReviews: z.lazy(() => z.array(reviewEntitySchema)).optional(),
   createdAt: z.date(),

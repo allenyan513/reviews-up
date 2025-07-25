@@ -11,10 +11,8 @@ import {
 import slugify from 'slugify';
 import { $Enums } from '@reviewsup/database/generated/client';
 import ProductStatus = $Enums.ProductStatus;
-import ProductCategory = $Enums.ProductCategory;
 import { OrdersService } from '../orders/orders.service';
 import {
-  PaginateRequest,
   PaginateResponse,
   RRResponse,
 } from '@reviewsup/api/common';
@@ -133,21 +131,11 @@ export class ProductsService {
         },
       });
     }
-
-    //创建两个默认的widget，一个是badge类型，一个是
-    const protectedBadgeWidget = await this.widgetsService.create(uid, {
-      productId: newProduct.id,
-      name: defaultUserData.widget,
-      isProtected: true,
-      config: {
-        type: 'badge',
-      },
-    });
     const defaultWidget = await this.widgetsService.create(uid, {
       productId: newProduct.id,
       name: defaultUserData.widget,
     });
-    if (!defaultWidget || !protectedBadgeWidget) {
+    if (!defaultWidget) {
       throw new Error('Unable to create default showcase');
     }
     return newProduct as ProductEntity;
