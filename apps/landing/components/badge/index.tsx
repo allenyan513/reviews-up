@@ -12,8 +12,8 @@ export function Badge() {
       <Startupfa />
       <Turbo0 />
       <Frogdr />
-      <Twelve />
-      <MagicBox />
+      {/*<Twelve />*/}
+      {/*<MagicBox />*/}
     </section>
   );
 }
