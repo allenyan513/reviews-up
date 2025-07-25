@@ -3,17 +3,17 @@ import { Startupfa } from '@/components/badge/startupfa';
 import { ProductHunt } from '@/components/badge/product-hunt';
 import { Frogdr } from '@/components/badge/frogdr';
 import { Twelve } from '@/components/badge/twelve';
-import { WidgetWrapper } from '@/components/badge/widget-wrapper';
+import { MagicBox } from './magicbox';
 
 export function Badge() {
   return (
-    <section className="flex flex-row gap-2 bg-red-50">
+    <section className="flex flex-row gap-2">
       <ProductHunt />
       <Startupfa />
       <Turbo0 />
       <Frogdr />
       <Twelve />
-      {/*<WidgetWrapper/>*/}
+      <MagicBox />
     </section>
   );
 }

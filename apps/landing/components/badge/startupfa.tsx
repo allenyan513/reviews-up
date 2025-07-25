@@ -7,7 +7,7 @@ export function Startupfa() {
       <img
         style={{
           width: 'auto',
-          height: '44px',
+          height: '34px',
 
         }}
         className='object-contain'

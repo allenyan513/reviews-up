@@ -8,7 +8,7 @@ export function Frogdr() {
         src="https://frogdr.com/reviewsup.io/badge-white.svg"
         alt="Monitor your Domain Rating with FrogDR"
         style={{
-          height: '44px',
+          height: '34px',
           width: 'auto',
         }}
       />

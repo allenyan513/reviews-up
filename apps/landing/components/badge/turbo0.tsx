@@ -9,7 +9,7 @@ export function Turbo0() {
         src="https://img.turbo0.com/badge-listed-light.svg"
         alt="Listed on Turbo0"
         style={{
-          height: '44px',
+          height: '34px',
           width: 'auto',
         }}
       />

@@ -8,7 +8,7 @@ export function ProductHunt() {
         src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=986082&theme=light&t=1751303674707"
         alt="reviewsup&#0046;io - Open&#0045;source&#0032;platform&#0032;for&#0032;managing&#0032;reviews&#0032;and&#0032;testimonials | Product Hunt"
         style={{
-          height: '44px',
+          height: '34px',
           width: 'auto',
         }}
       />
