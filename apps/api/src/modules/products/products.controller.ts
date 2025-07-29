@@ -80,7 +80,7 @@ export class ProductsController {
   @UseGuards(JwtAuthGuard)
   @Post('verify')
   async verify(@Body('url') url: string) {
-    const targets = [process.env.NEXT_PUBLIC_WWW_URL];
+    const targets = [process.env.NEXT_PUBLIC_APP_URL];
     return this.productsService.verifyEmbedCode(targets, url);
   }
 
@@ -110,4 +110,5 @@ export class ProductsController {
   async publicSlug(@Param('slug') slug: string) {
     return this.productsService.findOne(slug);
   }
+
 }

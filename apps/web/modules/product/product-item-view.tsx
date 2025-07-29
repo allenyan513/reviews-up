@@ -14,7 +14,7 @@ export function ProductItemView(props: { product: ProductEntity }) {
     >
       {product.screenshots ? (
         <Link
-          href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${product.slug}`}
+          href={`${process.env.NEXT_PUBLIC_APP_URL}/products/${product.slug}`}
           target="_blank"
         >
           <img
@@ -27,7 +27,7 @@ export function ProductItemView(props: { product: ProductEntity }) {
         <div className="w-full rounded-t-md border-b aspect-video bg-gray-100 flex items-center justify-center"></div>
       )}
       <Link
-        href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${product.slug}`}
+        href={`${process.env.NEXT_PUBLIC_APP_URL}/products/${product.slug}`}
         target="_blank"
         className="flex flex-col flex-grow gap-2 p-4"
       >

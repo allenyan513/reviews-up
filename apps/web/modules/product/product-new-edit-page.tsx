@@ -15,7 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from '@reviewsup/ui/form';
-import { Required } from '@reviewsup/ui/required';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@reviewsup/ui/textarea';
@@ -25,6 +24,8 @@ import slugify from 'slugify';
 import { useUserContext } from '@/context/UserProvider';
 import { useRouter } from 'next/navigation';
 import { TagSelectorFormField } from '@/modules/product/product-tag-selector-form-field';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
+import { DashboardRoot } from '@/components/dashboard/dashboard-root';
 
 export default function ProductNewEditPage(props: {
   mode: 'new' | 'edit';
@@ -32,7 +33,7 @@ export default function ProductNewEditPage(props: {
   productId?: string;
 }) {
   const { mode, productId } = props;
-  const { syncSession , saveDefaultProduct} = useUserContext();
+  const { syncSession, saveDefaultProduct } = useUserContext();
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
   const [isCrawling, setIsCrawling] = useState<boolean>(false);
@@ -121,7 +122,7 @@ export default function ProductNewEditPage(props: {
       await syncSession();
       saveDefaultProduct(newProduct);
       setLoading(false);
-      router.push(`/products/new/${newProduct.id}`);
+      router.push(`/dashboard/products/new/${newProduct.id}`);
     } catch (error) {
       setLoading(false);
       toast.error('Failed to submit product. Please try again.');
@@ -133,20 +134,15 @@ export default function ProductNewEditPage(props: {
   };
 
   return (
-    <div className="min-h-screen p-6 md:p-8 w-full">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-900">
-            {mode === 'new' ? 'Create a New Product' : 'Edit Product'}
-          </h1>
-          <p className="mt-1 text-gray-600">
-            {mode === 'new'
-              ? 'Have you created an exciting product? Submit it and share it with others.'
-              : 'Edit the details of your product to keep it up-to-date.'}
-          </p>
-        </div>
-      </div>
-
+    <DashboardRoot>
+      <DashboardHeader
+        title={mode === 'new' ? 'Create a New Product' : 'Edit Product'}
+        subtitle={
+          mode === 'new'
+            ? 'Have you created an exciting product? Submit it and share it with others.'
+            : 'Edit the details of your product to keep it up-to-date.'
+        }
+      />
       <div className="grid grid-cols-12 gap-8">
         <div className="col-span-12 md:col-span-5">
           <Form {...form}>
@@ -217,7 +213,7 @@ export default function ProductNewEditPage(props: {
                     </FormControl>
                     <FormMessage />
                     <p className="text-sm text-gray-500 mt-2 mx-2">
-                      {process.env.NEXT_PUBLIC_WWW_URL}/products/
+                      {process.env.NEXT_PUBLIC_APP_URL}/products/
                       {slugify(form.watch('name') || '', {
                         lower: true,
                         strict: true,
@@ -240,7 +236,8 @@ export default function ProductNewEditPage(props: {
                     <FormControl>
                       <Input
                         placeholder="Describe your product in a few words"
-                        {...field} />
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -261,7 +258,8 @@ export default function ProductNewEditPage(props: {
                       <Textarea
                         className="h-24"
                         placeholder="Describe your product in detail"
-                        {...field} />
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -372,14 +370,17 @@ export default function ProductNewEditPage(props: {
                     <FormLabel className="mb-2 text-md flex flex-col justify-between items-start">
                       <p>Write the first review</p>
                       <p className="text-sm text-gray-500">
-                        This first review will be posted upon launch. Adding a first review as example can help other users understand how to write a review.
+                        This first review will be posted upon launch. Adding a
+                        first review as example can help other users understand
+                        how to write a review.
                       </p>
                     </FormLabel>
                     <FormControl>
                       <Textarea
                         className="h-60 text-gray-500"
                         placeholder="What do you like about this product? What are the pros and cons? How does it compare to similar products?"
-                        {...field} />
+                        {...field}
+                      />
                     </FormControl>
                     <FormMessage />
                   </div>
@@ -417,6 +418,6 @@ export default function ProductNewEditPage(props: {
         </div>
         <div className="hidden md:col-span-4 space-y-4"></div>
       </div>
-    </div>
+    </DashboardRoot>
   );
 }

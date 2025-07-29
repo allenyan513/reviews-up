@@ -39,7 +39,7 @@ export function CampaignIdPage(props: {
       <div className="flex justify-between items-center mb-8">
         <div>
           <Link
-            href={`/${lang}/${productId}/campaigns`}
+            href={`/dashboard/${productId}/campaigns`}
             className="flex flex-row items-center gap-2 "
           >
             <BiArrowBack className="text-2xl" />

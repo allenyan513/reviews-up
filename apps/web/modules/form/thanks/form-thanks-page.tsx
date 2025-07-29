@@ -13,9 +13,7 @@ export default function FormThanksPage(props: {
     id: string;
   }>;
 }) {
-  const { lang, id, productId } = use(props.params);
-  const { form, formConfig, setFormConfig, updateFormConfig } =
-    useFormContext();
+  const { form, formConfig } = useFormContext();
   if (!form || !formConfig) return null;
   return (
     <div className="flex flex-col md:grid md:grid-cols-12 gap-4">

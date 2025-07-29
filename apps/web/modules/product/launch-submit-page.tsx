@@ -148,13 +148,13 @@ function FreeSubmitOption(props: {
   const badgeEmbedCodeLight = getBadgeEmbedCode(
     productId,
     'light',
-    process.env.NEXT_PUBLIC_WWW_URL as string,
+    process.env.NEXT_PUBLIC_APP_URL as string,
     process.env.NEXT_PUBLIC_API_URL as string,
   );
   const badgeEmbedCodeDark = getBadgeEmbedCode(
     productId,
     'dark',
-    process.env.NEXT_PUBLIC_WWW_URL as string,
+    process.env.NEXT_PUBLIC_APP_URL as string,
     process.env.NEXT_PUBLIC_API_URL as string,
   );
 
@@ -244,7 +244,7 @@ function FreeSubmitOption(props: {
 //           reviews or testimonials for other products which listing in
 //           <Link
 //             target="_blank"
-//             href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/pending`}
+//             href={`${process.env.NEXT_PUBLIC_APP_URL}/products/pending`}
 //             className="text-blue-500 hover:underline px-1"
 //           >
 //             Pending
@@ -252,7 +252,7 @@ function FreeSubmitOption(props: {
 //           or
 //           <Link
 //             target="_blank"
-//             href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
+//             href={`${process.env.NEXT_PUBLIC_APP_URL}/products`}
 //             className="text-blue-500 hover:underline px-1"
 //           >
 //             Public
@@ -263,7 +263,7 @@ function FreeSubmitOption(props: {
 //           After completing the tasks, your product will be{' '}
 //           <Link
 //             target="_blank"
-//             href={`${process.env.NEXT_PUBLIC_WWW_URL}/products`}
+//             href={`${process.env.NEXT_PUBLIC_APP_URL}/products`}
 //             className="text-blue-500 hover:underline"
 //           >
 //             Public
@@ -302,10 +302,10 @@ function FreeSubmitOption(props: {
 //         <Link
 //           target="_blank"
 //           className="text-blue-500 w-full flex flex-row gap-2 items-center mt-4"
-//           href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${product.slug}`}
+//           href={`${process.env.NEXT_PUBLIC_APP_URL}/products/${product.slug}`}
 //         >
 //           <span>
-//             {process.env.NEXT_PUBLIC_WWW_URL}/products/{product.slug}
+//             {process.env.NEXT_PUBLIC_APP_URL}/products/{product.slug}
 //           </span>
 //           <BsBoxArrowUpRight />
 //         </Link>
@@ -383,7 +383,7 @@ export function LaunchSubmitOrEditPage(props: {
         setLoading(false);
         toast.success('Product Submitted Successfully!');
         await syncSession();
-        router.push(`/${lang}/${productId}/overview`);
+        router.push(`/dashboard/${productId}/overview`);
       } else if (response.code === 600) {
         const data = response.data as CreateOneTimePaymentResponse;
         const { sessionUrl } = data;
@@ -554,7 +554,7 @@ export function LaunchSubmitOrEditPage(props: {
                           />
                         )}
                         <Link
-                          href={`/${lang}/${productId}/forms/${form.watch('bindingFormId')}/default`}
+                          href={`/dashboard/${productId}/forms/${form.watch('bindingFormId')}/default`}
                           target="_blank"
                           className={cn(
                             buttonVariants({ variant: 'default' }),
@@ -593,7 +593,7 @@ export function LaunchSubmitOrEditPage(props: {
                   />
                 </div>
                 <Link
-                  href={`/${lang}/${productId}/overview`}
+                  href={`/dashboard/${productId}/overview`}
                   className="text-gray-500  hover:text-gray-600 hover:underline cursor-pointer underline"
                 >
                   <p className="mt-4 text-sm">or Submit it later</p>

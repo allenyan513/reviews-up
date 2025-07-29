@@ -24,6 +24,8 @@ export const product = {
     authFetch('/products/crawl', 'POST', { url }),
   findOne: (id: string): Promise<ProductEntity> =>
     authFetch(`/products/${id}`, 'GET', {}),
+  findBySlug: (slug: string): Promise<ProductEntity | null> =>
+    authFetch(`/products/public/slug/${slug}`, 'GET', {}),
   /**
    * Submit a product for review or listing.
    * @param dto

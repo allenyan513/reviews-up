@@ -18,6 +18,8 @@ import { Button, buttonVariants } from '@reviewsup/ui/button';
 import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ProductStatusLabel } from '@/modules/product/product-status-label';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
+import { DashboardRoot } from '@/components/dashboard/dashboard-root';
 
 export function LaunchPage(props: { lang: string; productId: string }) {
   const { lang, productId } = props;
@@ -29,46 +31,38 @@ export function LaunchPage(props: { lang: string; productId: string }) {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div className="flex flex-row items-center gap-2">
-          <Avatar className="h-8 w-8 rounded">
-            <AvatarImage
-              src={defaultProduct?.icon}
-              alt={defaultProduct?.name}
-            />
-            <AvatarFallback className="rounded">CN</AvatarFallback>
-          </Avatar>
-          <h1 className="text-3xl font-semibold text-gray-900 line-clamp-1">
-            {defaultProduct ? defaultProduct.name : 'My Product'}
-          </h1>
-        </div>
-        <div className={'flex flex-row gap-1 md:gap-2'}>
-          <Button
-            onClick={(e) => {
-              e.preventDefault();
-              router.push(`/${lang}/${defaultProduct?.id}/overview/edit`);
-            }}
-            variant="outline"
-          >
-            <BsPencil />
-            Edit
-          </Button>
-          <Button
-            variant="outline"
-            onClick={(e) => {
-              e.preventDefault();
-              window.open(
-                `${process.env.NEXT_PUBLIC_WWW_URL}/products/${defaultProduct?.slug}`,
-                '_blank',
-              );
-            }}
-          >
-            <BsBoxArrowUpRight />
-            View Product
-          </Button>
-        </div>
-      </div>
+    <DashboardRoot>
+      <DashboardHeader
+        title={defaultProduct?.name || 'My Product'}
+        subtitle={''}
+        buttons={
+          <>
+            <Button
+              onClick={(e) => {
+                e.preventDefault();
+                router.push(`/dashboard/${defaultProduct?.id}/overview/edit`);
+              }}
+              variant="outline"
+            >
+              <BsPencil />
+              Edit
+            </Button>
+            <Button
+              variant="outline"
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(
+                  `${process.env.NEXT_PUBLIC_APP_URL}/products/${defaultProduct?.slug}`,
+                  '_blank',
+                );
+              }}
+            >
+              <BsBoxArrowUpRight />
+              View Product
+            </Button>
+          </>
+        }
+      />
       <div className="flex flex-col gap-4">
         <div className="flex flex-row items-center gap-2">
           <p>Product Status:</p>
@@ -102,6 +96,6 @@ export function LaunchPage(props: { lang: string; productId: string }) {
           </p>
         </div>
       </div>
-    </div>
+    </DashboardRoot>
   );
 }

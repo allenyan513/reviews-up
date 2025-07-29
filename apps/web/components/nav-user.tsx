@@ -81,7 +81,7 @@ export function NavUser(props: {}) {
               <DropdownMenuGroup>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/account/profile');
+                    router.push('/dashboard/account/profile');
                   }}
                 >
                   <IconUserCircle />
@@ -89,7 +89,7 @@ export function NavUser(props: {}) {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/account/my-reviews');
+                    router.push('/dashboard/account/my-reviews');
                   }}
                 >
                   <IconStar />
@@ -97,7 +97,7 @@ export function NavUser(props: {}) {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/account/billing');
+                    router.push('/dashboard/account/billing');
                   }}
                 >
                   <IconCreditCard />
@@ -105,7 +105,7 @@ export function NavUser(props: {}) {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    router.push('/account/notifications');
+                    router.push('/dashboard/account/notifications');
                   }}
                 >
                   <IconNotification />
@@ -156,7 +156,7 @@ export function NavUser(props: {}) {
                 if (value.toUpperCase() === 'DELETE') {
                   deleteAccount();
                   setOpen(false);
-                  router.push('/');
+                  router.push('/dashboard');
                 } else {
                   alert('Please type DELETE to confirm.');
                 }

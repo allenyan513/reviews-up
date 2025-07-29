@@ -323,7 +323,7 @@ export class ProductsService {
       };
     }
     if (dto.skipVerify === false) {
-      const targets = [process.env.NEXT_PUBLIC_WWW_URL];
+      const targets = [process.env.NEXT_PUBLIC_APP_URL];
       const verifyResult = await this.verifyEmbedCode(
         targets,
         existingProduct.url,
