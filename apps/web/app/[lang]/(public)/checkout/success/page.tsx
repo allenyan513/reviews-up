@@ -26,7 +26,7 @@ export default function CheckoutSuccessPage() {
         <p className="mt-2 text-lg text-gray-600">
           You can close this window or return to the{' '}
           <Link href="/" className="text-blue-500 hover:underline">
-            app.reviewsup.io
+            reviewsup.io
           </Link>
         </p>
       </div>

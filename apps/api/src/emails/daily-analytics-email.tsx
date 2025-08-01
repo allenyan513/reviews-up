@@ -46,7 +46,7 @@ export const DailyAnalyticsEmail = (props: {
           <Section style={box}>
             <Img
               style={logo}
-              src="https://app.reviewsup.io/img/logo-128.png"
+              src="https://reviewsup.io/img/logo-128.png"
               width="49"
               height="49"
               alt="reviewsup.io logo"
@@ -94,7 +94,7 @@ export const DailyAnalyticsEmail = (props: {
               </tbody>
             </table>
             <Hr style={hr} />
-            <Button style={button} href="https://app.reviewsup.io">
+            <Button style={button} href="https://reviewsup.io">
               View Dashboard
             </Button>
             <Text style={footer}>
