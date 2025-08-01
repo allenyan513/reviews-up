@@ -71,6 +71,7 @@ export function FormProvider(props: { children: React.ReactNode }) {
       toast.error('Failed to update form configuration');
     }
   };
+
   const deleteForm = async (formId: string) => {
     if (!formId) return;
     try {

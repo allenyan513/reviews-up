@@ -55,10 +55,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <Link
-                target={'_blank'}
-                href={`${process.env.NEXT_PUBLIC_WWW_URL}`}
-              >
+              <Link href={`${process.env.NEXT_PUBLIC_APP_URL}`}>
                 <Logo />
                 <h1 className="text-base font-semibold">{data.title}</h1>
               </Link>
@@ -72,37 +69,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           items={[
             {
               title: 'Overview',
-              url: `/${lang}/${defaultProduct?.id}/overview`,
+              url: `/${lang}/dashboard/${defaultProduct?.id}/overview`,
               icon: IconDashboard,
               active: path.includes('/overview'),
             },
             {
               title: 'Reviews',
-              url: `/${lang}/${defaultProduct?.id}/reviews/all`,
+              url: `/${lang}/dashboard/${defaultProduct?.id}/reviews/all`,
               icon: IconStar,
               active: false,
               children: [
                 {
                   title: 'All',
-                  url: `/${lang}/${defaultProduct?.id}/reviews/all`,
+                  url: `/${lang}/dashboard/${defaultProduct?.id}/reviews/all`,
                   icon: IconList,
                   active: path.includes('/reviews/all'),
                 },
                 {
                   title: 'Pending',
-                  url: `/${lang}/${defaultProduct?.id}/reviews/pending`,
+                  url: `/${lang}/dashboard/${defaultProduct?.id}/reviews/pending`,
                   icon: IconHourglassEmpty,
                   active: path.includes('/reviews/pending'),
                 },
                 {
                   title: 'Public',
-                  url: `/${lang}/${defaultProduct?.id}/reviews/public`,
+                  url: `/${lang}/dashboard/${defaultProduct?.id}/reviews/public`,
                   icon: IconCheckbox,
                   active: path.includes('/reviews/public'),
                 },
                 {
                   title: 'Hidden',
-                  url: `/${lang}/${defaultProduct?.id}/reviews/hidden`,
+                  url: `/${lang}/dashboard/${defaultProduct?.id}/reviews/hidden`,
                   icon: IconForbid2,
                   active: path.includes('/reviews/hidden'),
                 },
@@ -111,25 +108,25 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
             {
               title: 'Widgets',
-              url: `/${lang}/${defaultProduct?.id}/widgets`,
+              url: `/${lang}/dashboard/${defaultProduct?.id}/widgets`,
               icon: IconCode,
               active: path.includes('/widgets'),
             },
             {
               title: 'Pages',
-              url: `/${lang}/${defaultProduct?.id}/pages/wall-of-love`,
+              url: `/${lang}/dashboard/${defaultProduct?.id}/pages/wall-of-love`,
               icon: IconClipboard,
               active: false,
               children: [
                 {
                   title: 'Wall of Love',
-                  url: `/${lang}/${defaultProduct?.id}/pages/wall-of-love`,
+                  url: `/${lang}/dashboard/${defaultProduct?.id}/pages/wall-of-love`,
                   icon: IconHeart,
                   active: path.includes('/pages/wall-of-love'),
                 },
                 {
                   title: 'Collecting Form',
-                  url: `/${lang}/${defaultProduct?.id}/pages/collecting-form`,
+                  url: `/${lang}/dashboard/${defaultProduct?.id}/pages/collecting-form`,
                   icon: IconTable,
                   active: path.includes('/forms/'),
                 },
@@ -137,7 +134,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             },
             {
               title: 'Settings',
-              url: `/${lang}/${defaultProduct?.id}/settings`,
+              url: `/${lang}/dashboard/${defaultProduct?.id}/settings`,
               icon: IconSettings,
               active: path.includes('/settings'),
             },

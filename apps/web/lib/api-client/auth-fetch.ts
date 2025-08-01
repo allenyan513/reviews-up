@@ -19,7 +19,6 @@ export async function authFetch(
   const config: RequestInit = {
     method,
     headers,
-    // credentials: 'include',
   };
   let url = `${process.env.NEXT_PUBLIC_API_URL}${endpoint}`;
   if (method === 'GET' || method === 'DELETE') {

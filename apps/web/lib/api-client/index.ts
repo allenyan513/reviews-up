@@ -7,6 +7,7 @@ import { user } from './user';
 import { campaign } from './campaign';
 import { product } from './product';
 import { order } from './order';
+import { wallOfLove } from './wall-of-love';
 
 export const api = {
   form: form,
@@ -18,4 +19,5 @@ export const api = {
   campaign: campaign,
   product: product,
   order: order,
+  wallOfLove: wallOfLove,
 };

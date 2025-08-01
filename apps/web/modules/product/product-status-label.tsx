@@ -27,7 +27,7 @@ export function ProductStatusLabel(props: {
           size="sm"
           className="ml-1"
           onClick={() => {
-            router.push(`/products/new/${product.id}`);
+            router.push(`/dashboard/products/new/${product.id}`);
           }}
         >
           Continue
@@ -49,7 +49,7 @@ export function ProductStatusLabel(props: {
           className="ml-1"
           onClick={() => {
             window.open(
-              `${process.env.NEXT_PUBLIC_WWW_URL}/products`,
+              `${process.env.NEXT_PUBLIC_APP_URL}/products`,
               '_blank',
             );
           }}

@@ -36,7 +36,7 @@ export function WidgetListItem(props: {
     >
       <Link
         key={item.id}
-        href={`/${lang}/${productId}/widgets/${item.id}`}
+        href={`/dashboard/${productId}/widgets/${item.id}`}
         className="flex items-center flex-1"
       >
         <div className="flex items-center">

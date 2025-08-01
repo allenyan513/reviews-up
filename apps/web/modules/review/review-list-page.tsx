@@ -6,6 +6,8 @@ import { api } from '@/lib/api-client';
 import { DataTable } from '@/components/data-table';
 import { columns } from '@/modules/review/review-list-page-columns';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
+import { DashboardHeader } from '@/components/dashboard/dashboard-header';
+import { DashboardRoot } from '@/components/dashboard/dashboard-root';
 
 export default function ReviewsPage(props: {
   lang: string;
@@ -40,18 +42,12 @@ export default function ReviewsPage(props: {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
-      <div className="flex justify-between items-center mb-8">
-        <div>
-          <h1 className="text-3xl font-semibold text-gray-900 mb-1">Reviews</h1>
-          <p className="hidden md:flex text-gray-600">
-            Organize the testimonials you have received or imported.
-          </p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <ReviewImportDialog />
-        </div>
-      </div>
+    <DashboardRoot>
+      <DashboardHeader
+        title={'Reviews'}
+        subtitle={'Organize the testimonials you have received or imported.'}
+        buttons={<ReviewImportDialog />}
+      />
       <DataTable
         fetchData={fetchReviews}
         columns={columns}
@@ -62,6 +58,6 @@ export default function ReviewsPage(props: {
           status === 'all' ? [] : [{ id: 'status', value: status }]
         }
       />
-    </div>
+    </DashboardRoot>
   );
 }

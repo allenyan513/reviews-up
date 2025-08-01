@@ -62,7 +62,7 @@ export function FormDefaultSubmitView(props: {
       .then(() => {
         toast.success('Review submitted successfully!');
         setIsSubmitting(false);
-        router.push(`/${lang}/forms/${shortId}/thanks`);
+        router.push(`/${lang}/dashboard/forms/${shortId}/thanks`);
       })
       .catch((error) => {
         toast.error(error.message);
@@ -100,7 +100,7 @@ export function FormDefaultSubmitView(props: {
             onImportSuccess={() => {
               toast.success('Review imported successfully from Twitter!');
               setIsSubmitting(false);
-              router.push(`/${lang}/forms/${shortId}/thanks`);
+              router.push(`/${lang}/dashboard/forms/${shortId}/thanks`);
             }}
             onImportFailed={(error) => {
               toast.error(error.message);
@@ -116,7 +116,7 @@ export function FormDefaultSubmitView(props: {
             onImportSuccess={() => {
               toast.success('Review imported successfully from Twitter!');
               setIsSubmitting(false);
-              router.push(`/${lang}/forms/${shortId}/thanks`);
+              router.push(`/${lang}/dashboard/forms/${shortId}/thanks`);
             }}
             onImportFailed={(error) => {
               toast.error(error.message);
@@ -132,7 +132,7 @@ export function FormDefaultSubmitView(props: {
             onImportSuccess={() => {
               toast.success('Review imported successfully from Twitter!');
               setIsSubmitting(false);
-              router.push(`/${lang}/forms/${shortId}/thanks`);
+              router.push(`/${lang}/dashboard/forms/${shortId}/thanks`);
             }}
             onImportFailed={(error) => {
               toast.error(error.message);
@@ -148,7 +148,7 @@ export function FormDefaultSubmitView(props: {
             onImportSuccess={() => {
               toast.success('Review imported successfully from Twitter!');
               setIsSubmitting(false);
-              router.push(`/${lang}/forms/${shortId}/thanks`);
+              router.push(`/${lang}/dashboard/forms/${shortId}/thanks`);
             }}
             onImportFailed={(error) => {
               toast.error(error.message);

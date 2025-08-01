@@ -150,7 +150,7 @@ export function columns(setData: any): ColumnDef<any>[] {
           <div className="flex items-center space-x-2">
             <Link
               target="_blank"
-              href={`${process.env.NEXT_PUBLIC_WWW_URL}/products/${slug}`}
+              href={`${process.env.NEXT_PUBLIC_APP_URL}/products/${slug}`}
               className="text-blue-500 hover:underline"
             >
               View

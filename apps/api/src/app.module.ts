@@ -20,6 +20,7 @@ import { ScheduleModule } from '@nestjs/schedule';
 import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { BrowserlessModule } from '@src/modules/browserless/browserless.module';
+import { WallOfLoveModule } from '@src/modules/walloflove/walloflove.module';
 
 @Module({
   imports: [
@@ -51,6 +52,7 @@ import { BrowserlessModule } from '@src/modules/browserless/browserless.module';
     ProductsModule,
     OrdersModule,
     BrowserlessModule,
+    WallOfLoveModule,
   ],
   controllers: [AppController],
   providers: [AppService],

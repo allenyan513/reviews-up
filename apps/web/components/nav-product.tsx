@@ -76,7 +76,7 @@ export function NavProduct(props: {}) {
                         onClick={() => {
                           saveDefaultProduct(product);
                           setOpen(false);
-                          router.push(`/${product.id}/overview`);
+                          router.push(`/dashboard/${product.id}/overview`);
                         }}
                       >
                         <Avatar className="h-8 w-8 rounded">
@@ -105,7 +105,7 @@ export function NavProduct(props: {}) {
                   className='cursor-pointer'
                   onClick={() => {
                     setOpen(false);
-                    router.push('/products/new');
+                    router.push('/dashboard/products/new');
                   }}
                 >
                   <BsPlusCircle /> Create New Product

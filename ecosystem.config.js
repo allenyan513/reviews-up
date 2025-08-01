@@ -12,11 +12,6 @@ module.exports = {
       script: './start.sh',
     },
     {
-      name: 'reviewsup-www',
-      cwd: './apps/landing',
-      script: './start.sh',
-    },
-    {
       name: 'reviewsup-docs',
       cwd: './apps/docs',
       script: './start.sh',

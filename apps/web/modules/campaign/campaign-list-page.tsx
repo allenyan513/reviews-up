@@ -27,7 +27,7 @@ export default function CampaignListPage(props: {
           </p>
         </div>
         <Link
-          href={`/${lang}/${productId}/campaigns/create`}
+          href={`/dashboard/${productId}/campaigns/create`}
           className={buttonVariants({
             size: 'lg',
           })}

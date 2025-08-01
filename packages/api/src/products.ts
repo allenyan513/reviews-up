@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import { userEntitySchema } from './users';
 
 export const ProductCategory = {
   workProductivity: 'Work & Productivity',

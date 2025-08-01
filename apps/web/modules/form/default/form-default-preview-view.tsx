@@ -41,13 +41,13 @@ export function FormDefaultPreviewView(props: {
 
   return (
     <div className={className}>
-      <div className="flex flex-row gap-2 items-center text-sm text-gray-600 w-full lg:max-w-2xl lg:mx-auto">
+      <div className="flex flex-row gap-2 items-center text-sm text-gray-600 w-full lg:max-w-2xl lg:mx-auto mb-2">
         {user ? (
-          <p className="bg-gray-50 border p-2 rounded-md mb-2">
+          <p className="bg-gray-50 border p-2 rounded-md">
             {user?.name} is submitting
           </p>
         ) : (
-          <p className="bg-gray-50 border p-2 rounded-md mb-2">
+          <p className="bg-gray-50 border p-2 rounded-md">
             Anonymous is submitting or{' '}
             <Link href="/auth/signin" className="text-blue-500 hover:underline">
               login
@@ -85,7 +85,7 @@ export function FormDefaultPreviewView(props: {
               window.open(defaultProduct?.url, '_blank');
             }}
             className="w-full md:w-auto"
-            variant={"outline"}
+            variant={'outline'}
           >
             Visit
           </Button>
@@ -103,7 +103,9 @@ export function FormDefaultPreviewView(props: {
           mode={mode}
         />
       </div>
-      <PoweredBy className="py-8" />
+      <div className="py-4">
+        <PoweredBy />
+      </div>
     </div>
   );
 }
