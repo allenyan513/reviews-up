@@ -27,7 +27,7 @@ export const EmailSigninEmail = (props: { url: string }) => {
           <Section style={box}>
             <Img
               style={logo}
-              src={`https://app.reviewsup.io/img/logo-128.png`}
+              src={`https://reviewsup.io/img/logo-128.png`}
               width="49"
               height="49"
               alt="reviewsup.io logo"

@@ -24,7 +24,7 @@ Collect and show your customer's reviews and testimonials
 
 **reviewsup.io** is an open-source review and testimonial management system that helps you **collect**, **manage**, and **showcase** customer feedback with ease. Whether you're a developer looking for a secure, self-hosted solution or a non-technical user needing a quick cloud-based setup, reviewsup.io is built for you.
 
-**Try it out in the cloud [app.reviewsup.io](https://app.reviewsup.io/api/auth/signin)**
+**Try it out in the cloud [reviewsup.io](https://reviewsup.io/api/auth/signin)**
 
 ---
 
@@ -67,7 +67,7 @@ Choose between our cloud-hosted or self-hosted setup:
 
 No installation required. Sign up and start collecting reviews in minutes:
 
-🔗 [https://app.reviewsup.io/api/auth/signin](https://app.reviewsup.io/api/auth/signin)
+🔗 [https://reviewsup.io/api/auth/signin](https://reviewsup.io/api/auth/signin)
 
 ### Option 2: Self-Host
 

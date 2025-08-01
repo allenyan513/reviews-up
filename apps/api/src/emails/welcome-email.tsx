@@ -29,7 +29,7 @@ export const WelcomeEmail = (props: { userName: string }) => {
           <Section style={box}>
             <Img
               style={logo}
-              src={`https://app.reviewsup.io/img/logo-128.png`}
+              src={`https://reviewsup.io/img/logo-128.png`}
               width="49"
               height="49"
               alt="reviewsup.io logo"
@@ -43,7 +43,7 @@ export const WelcomeEmail = (props: { userName: string }) => {
               You can submit issues and ask questions on our GitHub. If you want
               to support us, your ⭐ will make Tolgee shine more!
             </Text>
-            <Button style={button} href="https://app.reviewsup.io">
+            <Button style={button} href="https://reviewsup.io">
               Go to Dashboard
             </Button>
             <Text style={footer}>
