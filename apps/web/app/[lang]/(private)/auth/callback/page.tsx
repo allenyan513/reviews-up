@@ -21,10 +21,10 @@ export default function CallbackPage(props: {
     const encodedRedirectUrl = searchParams.get('redirect');
     const redirectUrl = encodedRedirectUrl
       ? decodeURIComponent(encodedRedirectUrl)
-      : '/';
+      : '/dashboard';
     if (!access_token) return;
     localStorage.setItem('access_token', access_token);
-    redirect(redirectUrl || '/');
+    redirect(redirectUrl);
   }, [searchParams, router]);
 
   return null;

@@ -5,6 +5,7 @@ export const defaultUserData = {
   product: 'Default Product',
   form: 'Default Form',
   widget: 'Default Widget',
+  wallOfLove: 'Default WallOfLove',
   reviews: [
     {
       reviewerName: 'Allen Yan',

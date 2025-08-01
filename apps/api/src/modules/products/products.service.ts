@@ -12,10 +12,7 @@ import slugify from 'slugify';
 import { $Enums } from '@reviewsup/database/generated/client';
 import ProductStatus = $Enums.ProductStatus;
 import { OrdersService } from '../orders/orders.service';
-import {
-  PaginateResponse,
-  RRResponse,
-} from '@reviewsup/api/common';
+import { PaginateResponse, RRResponse } from '@reviewsup/api/common';
 import { CreateOneTimePaymentResponse } from '@reviewsup/api/orders';
 import { BrowserlessService } from '@src/modules/browserless/browserless.service';
 import { S3Service } from '@src/modules/s3/s3.service';
@@ -30,6 +27,7 @@ import ReactDOMServer from 'react-dom/server';
 import { BadgeSvg } from './badge.svg';
 import * as React from 'react';
 import * as cheerio from 'cheerio';
+import { z } from 'zod/index';
 
 @Injectable()
 export class ProductsService {
@@ -101,6 +99,23 @@ export class ProductsService {
     });
     if (!defaultForm) {
       throw new Error('Unable to create default workspace');
+    }
+    const defaultWallOfLove = await this.prismaService.wallOfLove.create({
+      data: {
+        userId: uid,
+        productId: newProduct.id,
+        name: defaultUserData.wallOfLove,
+        config: {
+          backgroundUrl: undefined,
+          title: 'Wall of Love for ' + newProduct.name,
+          subtitle: newProduct.tagline,
+          ctaButtonHidden: false,
+          ctaButtonText: 'Submit your testimonial',
+        },
+      },
+    });
+    if (!defaultWallOfLove) {
+      throw new Error('Unable to create default wall of love');
     }
     for (const review of defaultUserData.reviews) {
       await this.prismaService.review.create({

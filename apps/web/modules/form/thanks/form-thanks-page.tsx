@@ -17,10 +17,11 @@ export default function FormThanksPage(props: {
   if (!form || !formConfig) return null;
   return (
     <div className="flex flex-col md:grid md:grid-cols-12 gap-4">
-      <div className="md:col-span-4 flex flex-col gap-4">
+      <div className="md:col-span-3 flex flex-col gap-4">
         <FormThanksConfigView />
       </div>
-      <div className="md:col-span-8 border border-gray-300 rounded-lg">
+      {/*<div className="md:col-span-9 flex flex-col w-full py-8 overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center justify-center">*/}
+      <div className="md:col-span-9 flex flex-col w-full py-8 overflow-y-auto border border-gray-300 rounded-lg bg-gray-50 items-center justify-center">
         <FormThanksPreviewView mode={'edit'} formConfig={formConfig} />
       </div>
     </div>

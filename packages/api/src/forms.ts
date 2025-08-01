@@ -10,20 +10,6 @@ export const createFormSchema = z.object({
 export type CreateFormDto = z.infer<typeof createFormSchema>;
 export type UpdateFormDto = Partial<CreateFormDto>;
 
-/**
- *   id        String     @id @default(uuid())
- *   shortId   String     @unique
- *   userId    String
- *   productId String
- *   name      String
- *   config    Json?      @default("{}")
- *   createdAt DateTime   @default(now())
- *   updatedAt DateTime   @updatedAt
- *   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
- *   product   Product    @relation(fields: [productId], references: [id], onDelete: Cascade)
- *   reviews   Review[]
- *   campains  Campaign[]
- */
 export const formEntitySchema = z.object({
   id: z.string(),
   shortId: z.string().min(1, 'Short ID is required'),

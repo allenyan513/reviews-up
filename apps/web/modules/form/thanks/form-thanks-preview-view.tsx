@@ -15,8 +15,8 @@ export function FormThanksPreviewView(props: {
     return null;
   }
   return (
-    <div className="flex flex-col items-center justify-center bg-gray-100 min-h-screen p-8">
-      <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg m-8 lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
+    <>
+      <div className="flex flex-col items-center p-8 border rounded-lg shadow-lg lg:w-3/4 lg:max-w-2xl lg:mx-auto gap-8 bg-white">
         <Lottie animationData={thanks} />
         <div className="flex flex-col gap-4">
           <h2 className="text-xl font-semibold text-center">
@@ -36,7 +36,9 @@ export function FormThanksPreviewView(props: {
           Go to Reviewsup.io
         </Link>
       </div>
-      <PoweredBy />
-    </div>
+      <div className="py-4">
+        <PoweredBy />
+      </div>
+    </>
   );
 }

@@ -1,4 +1,9 @@
-export function DashboardContent(props: { children: React.ReactNode }) {
-  const { children } = props;
-  return <div className="min-h-screen p-6 md:p-8">{children}</div>;
+import { cn } from '@reviewsup/ui/lib/utils';
+
+export function DashboardContent(props: {
+  children: React.ReactNode;
+  className?: string;
+}) {
+  const { children, className } = props;
+  return <div className={cn(className)}>{children}</div>;
 }

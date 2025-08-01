@@ -1,63 +1,66 @@
 import { useFormContext } from '@/modules/form/context/FormProvider';
 import { Button } from '@/components/ui/button';
+import { LayoutToggleButton } from '@/components/layout-toggle-button';
+import { BsGear } from 'react-icons/bs';
+import { cn } from '@reviewsup/ui/lib/utils';
+import React from 'react';
 
 export function FormThanksConfigView() {
   const { form, formConfig, setFormConfig, updateFormConfig } =
     useFormContext();
+  const [isSettingOpen, setIsSettingOpen] = React.useState<boolean>(true);
   if (!form || !formConfig) return null;
   return (
     <>
-      <div className="flex flex-col gap-1">
-        <h2 className="uppercase">Page Config</h2>
-        <p className="text-xs text-gray-500">
-          Change the title and message of the thanks page that users see after
-          submitting the form.
-        </p>
-      </div>
-
-      <div>
-        <label className="text-sm font-medium mb-2">
-          <span className="text-red-500">*</span>
-          Thanks Page Title
-        </label>
-        <input
-          type="text"
-          id="thanksTitle"
-          value={formConfig.thankyou?.title}
-          onChange={(e) =>
-            setFormConfig({
-              ...formConfig,
-              thankyou: {
-                ...formConfig.thankyou,
-                title: e.target.value,
-              },
-            })
-          }
-          placeholder="Enter thanks page title"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
-      </div>
-      <div>
-        <label className="text-sm font-medium mb-2">
-          <span className="text-red-500">*</span>
-          Thanks Page Message
-        </label>
-        <textarea
-          id="thanksMessage"
-          rows={4}
-          value={formConfig.thankyou?.message}
-          onChange={(e) =>
-            setFormConfig({
-              ...formConfig,
-              thankyou: {
-                ...formConfig.thankyou,
-                message: e.target.value,
-              },
-            })
-          }
-          placeholder="Enter thanks page message"
-          className="w-full p-2 border border-gray-300 rounded"
-        />
+      <LayoutToggleButton
+        title="Settings"
+        icon={<BsGear className="h-4 w-4" />}
+        isOpen={isSettingOpen}
+        setIsOpen={setIsSettingOpen}
+      />
+      <div className={cn('flex flex-col gap-4', isSettingOpen ? '' : 'hidden')}>
+        <div>
+          <label className="text-sm">
+            Thanks Page Title:
+          </label>
+          <input
+            type="text"
+            id="thanksTitle"
+            value={formConfig.thankyou?.title}
+            onChange={(e) =>
+              setFormConfig({
+                ...formConfig,
+                thankyou: {
+                  ...formConfig.thankyou,
+                  title: e.target.value,
+                },
+              })
+            }
+            placeholder="Enter thanks page title"
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+          />
+        </div>
+        <div>
+          <label className="text-sm">
+            Thanks Page Message:
+          </label>
+          <textarea
+            id="thanksMessage"
+            rows={4}
+            value={formConfig.thankyou?.message}
+            onChange={(e) =>
+              setFormConfig({
+                ...formConfig,
+                thankyou: {
+                  ...formConfig.thankyou,
+                  message: e.target.value,
+                },
+              })
+            }
+            placeholder="Enter thanks page message"
+            className="w-full p-2 border border-gray-300 rounded mt-2"
+          />
+        </div>
       </div>
       <Button onClick={updateFormConfig}>Save</Button>
     </>

@@ -1,7 +1,6 @@
 'use client';
-import { use, useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
-import { api } from '@/lib/api-client';
+import { use } from 'react';
+import { WallOfLoveIdPage } from '@/modules/wall-of-love/wall-of-love-id-page';
 
 export default function Page(props: {
   params: Promise<{
@@ -9,5 +8,6 @@ export default function Page(props: {
     productId: string;
   }>;
 }) {
-  return <div className='p-4'>Not yet implemented.</div>;
+  const { lang, productId } = use(props.params);
+  return <WallOfLoveIdPage lang={lang} productId={productId} />;
 }
