@@ -8,6 +8,7 @@ import { LinkDoFollow } from '@reviewsup/ui/link-dofollow';
 import React from 'react';
 import { ReviewsupAvatar } from '@reviewsup/ui/reviewsup-avatar';
 import { api } from '@reviewsup/api/api-client/index';
+import { toLocalDateString } from '@/lib/utils';
 
 export async function ProductWallOfLove(props: { lang: string; slug: string }) {
   const { lang, slug } = props;
