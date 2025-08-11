@@ -21,6 +21,7 @@ import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
 import { BrowserlessModule } from '@src/modules/browserless/browserless.module';
 import { WallOfLoveModule } from '@src/modules/walloflove/walloflove.module';
+import { SlackModule } from './modules/slack/slack.module';
 
 @Module({
   imports: [
@@ -53,6 +54,7 @@ import { WallOfLoveModule } from '@src/modules/walloflove/walloflove.module';
     OrdersModule,
     BrowserlessModule,
     WallOfLoveModule,
+    SlackModule,
   ],
   controllers: [AppController],
   providers: [AppService],
